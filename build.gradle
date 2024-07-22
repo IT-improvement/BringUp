@@ -45,6 +45,9 @@ dependencies {
     implementation 'com.mysql:mysql-connector-j:8.3.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+    //WebClient
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
     // Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
