@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Blogzine - Blog and Magazine Bootstrap 5 Theme</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Tokyo+Zoo&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/side-styles.css">
+    <link rel="stylesheet" href="assets/css/user-style.css">
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Webestica.com">
+    <meta name="description" content="Bootstrap based News, Magazine and Blog Theme">
+
+    <!-- Dark mode -->
+    <script>
+        const storedTheme = localStorage.getItem('theme')
+
+        const getPreferredTheme = () => {
+            if (storedTheme) {
+                return storedTheme
+            }
+            return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'light'
+        }
+
+        const setTheme = function (theme) {
+            if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-bs-theme', 'dark')
+            } else {
+                document.documentElement.setAttribute('data-bs-theme', theme)
+            }
+        }
+
+        setTheme(getPreferredTheme())
+
+        window.addEventListener('DOMContentLoaded', () => {
+            var el = document.querySelector('.theme-icon-active');
+            if(el != 'undefined' && el != null) {
+                const showActiveTheme = theme => {
+                    const activeThemeIcon = document.querySelector('.theme-icon-active use')
+                    const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
+                    const svgOfActiveBtn = btnToActive.querySelector('.mode-switch use').getAttribute('href')
+
+                    document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                        element.classList.remove('active')
+                    })
+
+                    btnToActive.classList.add('active')
+                    activeThemeIcon.setAttribute('href', svgOfActiveBtn)
+                }
+
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                    if (storedTheme !== 'light' || storedTheme !== 'dark') {
+                        setTheme(getPreferredTheme())
+                    }
+                })
+
+                showActiveTheme(getPreferredTheme())
+
+                document.querySelectorAll('[data-bs-theme-value]')
+                    .forEach(toggle => {
+                        toggle.addEventListener('click', () => {
+                            const theme = toggle.getAttribute('data-bs-theme-value')
+                            localStorage.setItem('theme', theme)
+                            setTheme(theme)
+                            showActiveTheme(theme)
+                        })
+                    })
+
+            }
+        })
+
+    </script>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/vendor/font-awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/vendor/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="assets/vendor/apexcharts/css/apexcharts.css">
+    <link rel="stylesheet" type="text/css" href="assets/vendor/quill/css/quill.snow.css">
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+
+</head>
+
+<!-- **************** MAIN CONTENT START **************** -->
+<!-- Left sidebar START -->
+    <!-- =======================
+Main contain START -->
+    <body>
+
+<main class="flex-grow-1">
+    <!--사이드바 start -->
+    <div class="l-navbar" id="navbar">
+        <nav class="nav">
+            <div>
+                <div class="nav__brand">
+                    <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
+                    <a href="#" class="nav__logo">BringUp</a>
+                </div>
+                <div class="nav__list">
+                    <a href="#" class="nav__link active">
+                        <img class="avatarr-img" width="24" height="24" src="https://img.icons8.com/ios/24/FFFFFF/about-me.png" alt="about-me"/>
+                        <span class="nav_name">마이 홈</span>
+                    </a>
+                    <div class="nav__link collapse" id="resumeMenu">
+                        <img class="avatar-img" width="24" height="24" src="https://img.icons8.com/ios-filled/24/FFFFFF/resume.png" alt="resume"/>
+                        <span class="nav_name">자소서/이력서</span>
+                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+                    </div>
+                    <ul class="collapse__menu" id="resumeSubmenu">
+                        <li><a href="resume_register.html" class="collapse__sublink">이력서 등록</a></li>
+                        <li><a href="resume_manage.html" class="collapse__sublink">이력서 관리</a></li>
+                        <li><a href="coverletter_manage.html" class="collapse__sublink">자소서 관리</a></li>
+                    </ul>
+                    <a href="#" class="nav__link">
+                        <img class="nav__icon" width="24" height="24" src="https://img.icons8.com/ios-filled/24/FFFFFF/document-1.png" alt="document-1"/>
+                        <span class="nav_name">스크랩/관심기업</span>
+                    </a>
+                    <div class="nav__link collapse">
+                        <ion-icon name="people-outline" class="nav__icon"></ion-icon>
+                        <span class="nav_name">Team</span>
+                        <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+                        <ul class="collapse__menu">
+                            <li><a href="#" class="collapse__sublink">Data</a></li>
+                            <li><a href="#" class="collapse__sublink">Group</a></li>
+                            <li><a href="#" class="collapse__sublink">Members</a></li>
+                        </ul>
+                    </div>
+                    <a href="#" class="nav__link">
+                        <img class="nav__icon" width="24" height="24" src="https://img.icons8.com/external-glyph-silhouettes-icons-papa-vector/24/FFFFFF/external-Feedback-black-glyph-icon-teamwork.-glyth.-silhouettes-glyph-silhouettes-icons-papa-vector.png" alt="external-Feedback-black-glyph-icon-teamwork.-glyth.-silhouettes-glyph-silhouettes-icons-papa-vector"/>
+                        <span class="nav_name">지원할 만할 공고</span>
+                    </a>
+                    <a href="#" class="nav__link">
+                        <img class="nav__icon" width="24" height="24" src="https://img.icons8.com/pastel-glyph/24/FFFFFF/mailing--v3.png" alt="mailing--v3"/>
+                        <span class="nav_name">받은 제안</span>
+                    </a>
+                    <a href="#" class="nav__link">
+                        <img class="nav__icon" width="24" height="24" src="https://img.icons8.com/ios/50/FFFFFF/order-history.png" alt="order-history"/>
+                        <span class="nav_name">지원 내역</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+<!--사이드바 end -->
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMenu">
+        <div class="offcanvas-header justify-content-end">
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column pt-0">
+            <div>
+                <img class="light-mode-item my-3" src="assets/images/logo.svg" alt="logo">
+                <img class="dark-mode-item my-3" src="assets/images/logo-light.svg" alt="logo">
+                <p>The next-generation blog, news, and magazine theme for you to start sharing your stories today! </p>
+                <!-- Nav START -->
+                <ul class="nav d-block flex-column my-4">
+                    <li class="nav-item h5">
+                        <a class="nav-link" href="index.html">Home</a>
+                    <li class="nav-item h5">
+                        <a class="nav-link" href="about-us.html">About</a>
+                    </li>
+                    <li class="nav-item h5">
+                        <a class="nav-link" href="post-grid.html">Our Journal</a>
+                    </li>
+                    <li class="nav-item h5">
+                        <a class="nav-link" href="contact-us.html">Contact Us</a>
+                    </li>
+                </ul>
+                <!-- Nav END -->
+                <div class="bg-primary bg-opacity-10 p-4 mb-4 text-center w-100 rounded">
+                    <span>The Blogzine</span>
+                    <h3>Save on Premium Membership</h3>
+                    <p>Get the insights report trusted by experts around the globe. Become a Member Today!</p>
+                    <a href="#" class="btn btn-warning">View pricing plans</a>
+                </div>
+            </div>
+            <div class="mt-auto pb-3">
+                <!-- Address -->
+                <p class="text-body mb-2 fw-bold">New York, USA (HQ)</p>
+                <address class="mb-0">750 Sing Sing Rd, Horseheads, NY, 14845</address>
+                <p class="mb-2">Call: <a href="#" class="text-body"><u>469-537-2410</u> (Toll-free)</a> </p>
+                <a href="#" class="text-body d-block">hello@blogzine.com</a>
+            </div>
+        </div>
+    </div>
+    <!-- Offcanvas END -->
+    <!-- =======================
+    Header START -->
+    <header class="navbar-light navbar-sticky header-static">
+
+        <div class="navbar-top d-none d-lg-block small">
+            <div class="container">
+                <div class="d-md-flex justify-content-between align-items-center my-2">
+                    <!-- Top bar left -->
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="navbar-brand" href="index.html">
+                                <img class="navbar-brand-item light-mode-item" src="./assets/image/BringUp.png" alt="logo">
+                                <img class="navbar-brand-item dark-mode-item" src="./assets/image/BringUp.png" alt="logo">
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- Top bar right -->
+                    <div class="d-flex align-items-center">
+                        <!-- Font size accessibility START -->
+                        <div class="btn-group me-3" role="group" aria-label="font size changer">
+                            <input type="radio" class="btn-check" name="fntradio" id="font-sm">
+                            <label class="btn btn-xs btn-outline-primary mb-0" for="font-sm">A-</label>
+
+                            <input type="radio" class="btn-check" name="fntradio" id="font-default" checked>
+                            <label class="btn btn-xs btn-outline-primary mb-0" for="font-default">A</label>
+
+                            <input type="radio" class="btn-check" name="fntradio" id="font-lg">
+                            <label class="btn btn-xs btn-outline-primary mb-0" for="font-lg">A+</label>
+                        </div>
+
+                        <!-- Dark mode options START -->
+                        <div class="nav-item dropdown mx-2">
+                            <!-- Switch button -->
+                            <button class="modeswitch" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static">
+                                <svg class="theme-icon-active"><use href="#"></use></svg>
+                            </button>
+                            <!-- Dropdown items -->
+                            <ul class="dropdown-menu min-w-auto dropdown-menu-end" aria-labelledby="bd-theme">
+                                <li class="mb-1">
+                                    <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light">
+                                        <svg width="16" height="16" fill="currentColor" class="bi bi-brightness-high-fill fa-fw mode-switch me-1" viewBox="0 0 16 16">
+                                            <path d="M12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+                                            <use href="#"></use>
+                                        </svg>Light
+                                    </button>
+                                </li>
+                                <li class="mb-1">
+                                    <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-moon-stars-fill fa-fw mode-switch me-1" viewBox="0 0 16 16">
+                                            <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+                                            <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
+                                            <use href="#"></use>
+                                        </svg>Dark
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle-half fa-fw mode-switch me-1" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+                                            <use href="#"></use>
+                                        </svg>Auto
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Dark mode options END -->
+
+                        <ul class="nav">
+                            <li class="nav-item">
+                                <a class="nav-link px-2 fs-5" href="#"><i class="fab fa-facebook-square"></i></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-2 fs-5" href="#"><i class="fab fa-twitter-square"></i></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-2 fs-5" href="#"><i class="fab fa-linkedin"></i></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link px-2 fs-5" href="#"><i class="fab fa-youtube-square"></i></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link ps-2 pe-0 fs-5" href="#"><i class="fab fa-vimeo"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Divider -->
+                <div class="border-bottom border-2 border-primary opacity-1"></div>
+            </div>
+        </div>
+
+        <!-- Logo Nav START -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <!-- Logo START -->
+                <div class="empty-box"></div>
+
+                <!--로고
+                <a class="navbar-brand" href="index.html">
+                    <img class="navbar-brand-item light-mode-item" src="./assets/image/BringUp.png" alt="logo">
+                    <img class="navbar-brand-item dark-mode-item" src="./assets/image/BringUp.png" alt="logo">
+                </a>-->
+                <!-- Logo END -->
+
+                <!-- Responsive navbar toggler -->
+
+
+
+
+                <!-- Nav right START -->
+
+            </div>
+        </nav>
+        <!-- Logo Nav END -->
+    </header>
+
+    <!-- 마이페이지 START -->
+    <section class="py-4">
+        <div class="container">
+
+            <div class="row g-4">
+                <!-- Profile cover and info START -->
+                <div class="col-12">
+                    <div class="card mb-4 position-relative z-index-9">
+                        <!-- Cover image -->
+                        <div class="card-body pt-3 pb-0">
+                            <div class="row d-flex justify-content-between">
+                                <!-- Avatar -->
+                                <div class="col-sm-12 col-md-auto text-center text-md-start">
+                                    <div class="avatar avatar-xxl mt-n5">
+                                        <img class="avatar-img rounded-circle border border-white border-3 shadow" src="assets/images/roopie.jpg" alt="">
+                                    </div>
+                                </div>
+                                <!-- Profile info -->
+                                <div class="col-sm-12 col-md text-center text-md-start d-md-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h4 class="my-1">잔망루피 <i class="bi bi-patch-check-fill text-info small"></i></h4>
+                                        <button id="myProfileCard" class="my-profile-card">프로필 카드</button>
+                                        <ul class="list-inline">
+                                            <li class="list-inline-item"><i class="bi bi-person-fill me-1"></i> abcd@naver.com </li>
+                                            <li class="list-inline-item"><i class="bi bi-geo-alt me-1"></i> 서울특별시 용산구 **동 **구 </li>
+                                            <li class="list-inline-item"><i class="bi bi-calendar2-plus me-1"></i> 2000년 10월 25일 </li>
+                                        </ul>
+                                        <p class="m-0"></p>
+                                    </div>
+                                    <!-- 스크랩 -->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Profile info END -->
+            </div>
+
+            <div class="row g-4">
+                <!-- Left sidebar START -->
+                <div class="cl7">
+                    <!-- Profile START -->
+                    <div class="card border mb-4">
+                        <div class="card-header border-bottom p-3">
+                            <h5 class="card-header-title mb-0">내 프로필</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Full name -->
+                            <div class="mb-3">
+                                <label class="form-label">이름</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" value="잔망루피" placeholder="First name">
+                                </div>
+                            </div>
+                             <!-- Username -->
+                            <div class="mb-3">
+                                <label class="form-label">e-mail</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">e-mail</span>
+                                    <input type="text" class="form-control" value="abcd@naver.com">
+                                </div>
+                            </div>
+                            <!-- Profile picture -->
+                            <div class="mb-3">
+                                <label class="form-label">프로필 사진 변경</label>
+                                <!-- Avatar upload START -->
+                                <div class="d-flex align-items-center">
+                                    <div class="position-relative me-3">
+                                        <!-- Avatar edit -->
+                                        <div class="position-absolute top-0 end-0  z-index-9">
+                                            <a class="btn btn-sm btn-light btn-round mb-0 mt-n1 me-n1" href="#"> <i class="bi bi-pencil"></i> </a>
+                                        </div>
+                                        <!-- Avatar preview -->
+                                        <div class="avatar avatar-xl">
+                                            <img class="avatar-img rounded-circle border border-white border-3 shadow" src="assets/images/roopie.jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <!-- Avatar remove button -->
+                                    <div class="avatar-remove">
+                                        <button type="button" class="btn btn-light">변경</button>
+                                    </div>
+                                </div>
+                                <!-- Avatar upload END -->
+                            </div>
+                            <!-- Job title -->
+                            <div class="mb-3">
+                                <label class="form-label">전화번호</label>
+                                <input class="form-control" type="text" value="010-5555-1111">
+                            </div>
+                            <!-- Location -->
+                            <div class="mb-3">
+                                <label class="form-label">집 주소</label>
+                                <input class="form-control" type="text" value="서울특별시 용산구 **동 **구">
+                            </div>
+                            <!-- Bio -->
+                            <div class="mb-3">
+                                <label class="form-label">한줄 소개</label>
+                                <textarea class="form-control">어떤일이든 항상 책임감있고 최선을 다하는 사원이 되겠습니다!</textarea>
+                            </div>
+                            <!-- Birthday -->
+                            <div>
+                                <label class="form-label">생년월일</label>
+                                <input type="text" class="form-control flatpickr-input" placeholder="DD/MM/YYYY" value="2000/10/25">
+                            </div>
+                            <!-- Save button -->
+                            <div class="d-flex justify-content-end mt-4">
+                                <a href="#" class="btn text-secondary border-0 me-2">Discard</a>
+                                <a href="#" class="btn btn-primary">Save changes</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Profile END -->
+                    <div class="card bg-transparent border rounded-3 mt-4">
+                        <!-- Card header -->
+                        <div class="card-header bg-transparent border-bottom p-3">
+                            <h5 class="card-header-title mb-0">로그인중인 계정</h5>
+                        </div>
+                        <!-- Card body START -->
+                        <div class="card-body">
+                            <!-- Google -->
+                            <div class="position-relative mb-3 mt-3 d-sm-flex bg-success bg-opacity-10 border border-success p-3 rounded">
+                                <!-- Title and content -->
+                                <h2 class="fs-1 mb-0 me-3"><i class="fab fa-google text-google-icon"></i></h2>
+                                <div>
+                                    <div class="position-absolute top-0 start-100 translate-middle bg-white rounded-circle lh-1 h-15">
+                                        <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                                    </div>
+                                    <h6 class="mb-1">Google</h6>
+                                    <p class="mb-1 small">You are successfully connected to your Google account</p>
+                                    <!-- Button -->
+                                    <button type="button" class="btn btn-sm btn-danger mb-0 me-2">Invoke</button>
+                                    <a href="#" class="btn btn-sm btn-link text-body mb-0">Learn more</a>
+                                </div>
+                            </div>
+
+                            <!-- Blogger -->
+                            <div class="mb-3 d-sm-flex border p-3 rounded">
+                                <!-- Title and content -->
+                                <h2 class="fs-1 mb-0 me-3"><i class="fab fa-blogger text-warning"></i></h2>
+                                <div>
+                                    <h6 class="mb-1">Blogger</h6>
+                                    <p class="mb-1 small">Connect with Blogger account for a personalized experience</p>
+                                    <!-- Button -->
+                                    <button type="button" class="btn btn-sm btn-primary mb-0 me-2">Connect Blogger </button>
+                                    <a href="#" class="btn btn-sm btn-link text-body mb-0">Learn more</a>
+                                </div>
+                            </div>
+
+                            <!-- Facebook -->
+                            <div class="d-sm-flex border p-3 rounded mb-2">
+                                <!-- Title and content -->
+                                <h2 class="fs-1 mb-0 me-3"><i class="fab fa-facebook text-facebook"></i></h2>
+                                <div>
+                                    <h6 class="mb-1">Facebook</h6>
+                                    <p class="mb-1 small">Connect with Facebook account for a personalized experience</p>
+                                    <!-- Button -->
+                                    <button type="button" class="btn btn-sm btn-primary mb-0 me-2">Connect Facebook</button>
+                                    <a href="#" class="btn btn-sm btn-link text-body mb-0">Learn more</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card body END -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =======================
+    Main contain END -->
+</main>
+
+<!-- **************** MAIN CONTENT END **************** -->
+<!-- =======================
+Footer START -->
+
+<!-- =======================
+Footer END -->
+
+<!-- Back to top -->
+<div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
+
+<!-- =======================
+JS libraries, plugins and custom scripts -->
+
+<!-- Bootstrap JS -->
+<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Vendors -->
+<script src="assets/vendor/apexcharts/js/apexcharts.min.js"></script>
+<script src="assets/vendor/quill/js/quill.min.js"></script>
+
+<!-- Template Functions -->
+
+<!-- IONICONS -->
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+
+<!-- JS -->
+<script src="assets/js/main.js"></script>
+    <script>
+        document.getElementById("myProfileCard").addEventListener("click", function() {
+            window.location.href = "profile-card.html";
+        });
+    </script>
+
+</body>
+</html>
