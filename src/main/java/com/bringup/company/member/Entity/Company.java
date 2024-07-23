@@ -68,7 +68,7 @@ public class Company {
     @Column(name = "companylogo", nullable = true, length = 255)
     private String companyLogo;
 
-    @Column(name = "openCVkey", nullable = false, columnDefinition = "INT DEFAULT 0")
+    @Column(name = "opencvkey", nullable = false, columnDefinition = "INT DEFAULT 0")
     private int openCVKey;
 
 }
