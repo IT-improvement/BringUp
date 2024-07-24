@@ -7,8 +7,8 @@
             <div class="container">
                 <!-- 로고 시작 -->
                 <a class="navbar-brand me-3" href="/company/main.html">
-                    <img class="navbar-brand-item light-mode-item" src="/test/assets/images/Logo.png" alt="로고">
-                    <img class="navbar-brand-item dark-mode-item" src="/test/assets/images/Logo_darkmode.png" alt="로고">
+                    <img class="navbar-brand-item light-mode-item" src="/assets/images/Logo.png" alt="로고">
+                    <img class="navbar-brand-item dark-mode-item" src="/assets/images/Logo_darkmode.png" alt="로고">
                 </a>
                 <!-- 로고 끝 -->
 
