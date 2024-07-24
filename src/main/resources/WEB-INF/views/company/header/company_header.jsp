@@ -1,3 +1,4 @@
+ <%@ page contentType="text/html;charset=UTF-8" language="java" %>
  <!-- =======================
 헤더 시작 -->
     <header class="navbar-light navbar-sticky header-static border-bottom navbar-dashboard">
@@ -6,8 +7,8 @@
             <div class="container">
                 <!-- 로고 시작 -->
                 <a class="navbar-brand me-3" href="/company/main.html">
-                    <img class="navbar-brand-item light-mode-item" src="/images/Logo.png" alt="로고">
-                    <img class="navbar-brand-item dark-mode-item" src="/images/darkmode_Logo.png" alt="로고">
+                    <img class="navbar-brand-item light-mode-item" src="/test/assets/images/Logo.png" alt="로고">
+                    <img class="navbar-brand-item dark-mode-item" src="/test/assets/images/Logo_darkmode.png" alt="로고">
                 </a>
                 <!-- 로고 끝 -->
 
@@ -146,7 +147,7 @@
                                             <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
                                                 <div>
                                                     <h6 class="mb-1">설정이 업데이트되었습니다</h6>
-                                                    <span class="small"> <i class="bi bi-clock"></i> 어제</span>
+                                                    <span class="small"> < i class="bi bi-clock"></i> 어제</span>
                                                 </div>
                                                 <div class="ms-auto">
                                                     <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
