@@ -8,7 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
+import org.json.JSONObject;
 @Service
 public class GithubService {
 
@@ -29,6 +29,11 @@ public class GithubService {
 
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
         return response.getBody();
+    }
+    public String getUserLogin(String githubToken) {
+        String userData = getUserData(githubToken);
+        JSONObject jsonObject = new JSONObject(userData);
+        return jsonObject.getString("login");
     }
 
     public String getOrgRepos(String org,String githubToken) {
