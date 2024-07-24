@@ -1,9 +1,6 @@
 package com.bringup.company.member.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +11,10 @@ import lombok.Setter;
 public class Company {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "company_id")
+    private Long companyId;
+
     @Column(name = "manageremail", nullable = false, length = 255)
     private String managerEmail;
 
