@@ -1,6 +1,4 @@
-<head>
-    <link rel="stylesheet" href="/static/style/company/footer/company_footer.css">
-</head>
+
 <footer class="mb-3">
     <div class="container">
         <div class="card card-body bg-light">
