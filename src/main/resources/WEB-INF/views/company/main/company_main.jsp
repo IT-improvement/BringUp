@@ -11,8 +11,8 @@
 	<meta name="description" content="Bootstrap 기반 뉴스, 매거진 및 블로그 테마">
 
 	<!-- Dark mode -->
-	<script src="/test/assets/js/darkmode.js"></script>
-    <script src="/test/assets/js/notification.js"></script>
+	<script src="/assets/js/darkmode.js"></script>
+    <script src="/assets/js/notification.js"></script>
 	<!-- Favicon -->
 	<link rel="shortcut icon" href="/assets/images/favicon.ico">
 
@@ -21,13 +21,13 @@
 	<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
 
 	<!-- Plugins CSS -->
-	<link rel="stylesheet" type="text/css" href="/test/assets/vendor/font-awesome/css/all.min.css">
-	<link rel="stylesheet" type="text/css" href="/test/assets/vendor/bootstrap-icons/bootstrap-icons.css">
-	<link rel="stylesheet" type="text/css" href="/test/assets/vendor/apexcharts/css/apexcharts.css">
-	<link rel="stylesheet" type="text/css" href="/test/assets/vendor/overlay-scrollbar/css/OverlayScrollbars.min.css">
+	<link rel="stylesheet" type="text/css" href="/assets/vendor/font-awesome/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="/assets/vendor/bootstrap-icons/bootstrap-icons.css">
+	<link rel="stylesheet" type="text/css" href="/assets/vendor/apexcharts/css/apexcharts.css">
+	<link rel="stylesheet" type="text/css" href="/assets/vendor/overlay-scrollbar/css/OverlayScrollbars.min.css">
 
 	<!-- Theme CSS -->
-	<link rel="stylesheet" type="text/css" href="/test/assets/css/style.css">
+	<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
 
 </head>
 <body>
@@ -45,14 +45,14 @@
 JS libraries, plugins and custom scripts -->
 
 <!-- Bootstrap JS -->
-<script src="/test/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Vendors -->
-<script src="/test/assets/vendor/apexcharts/js/apexcharts.min.js"></script>
-<script src="/test/assets/vendor/overlay-scrollbar/js/OverlayScrollbars.min.js"></script>
+<script src="/assets/vendor/apexcharts/js/apexcharts.min.js"></script>
+<script src="/assets/vendor/overlay-scrollbar/js/OverlayScrollbars.min.js"></script>
 
 <!-- Template Functions -->
-<script src="/test/assets/js/functions.js"></script>
+<script src="/assets/js/functions.js"></script>
 
 </body>
 </html>
