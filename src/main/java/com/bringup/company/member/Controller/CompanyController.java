@@ -3,11 +3,14 @@ package com.bringup.company.member.Controller;
 
 import com.bringup.common.response.BfResponse;
 import com.bringup.company.member.DTO.request.JoinDto;
+import com.bringup.company.member.DTO.request.LoginDto;
 import com.bringup.company.member.DTO.request.ValidationRequestDto;
+import com.bringup.company.member.DTO.response.LoginTokenDto;
 import com.bringup.company.member.Service.CompanyService;
 import com.bringup.company.member.Service.VerificationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +44,13 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new BfResponse<>(CREATE,
                         Map.of("Company_name", companyService.joinCompany(joinDTO))));
+    }
+
+    // 로그인
+    @PostMapping("/login")
+    public ResponseEntity<BfResponse<LoginTokenDto>> login(@Valid @RequestBody LoginDto loginDto) {
+        return ResponseEntity.ok(new BfResponse<>(companyService.login(loginDto)));
+        //return userService.login(loginDto);
     }
 
 

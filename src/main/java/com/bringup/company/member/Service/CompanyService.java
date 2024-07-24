@@ -1,8 +1,10 @@
 package com.bringup.company.member.Service;
 
 import com.bringup.company.member.DTO.request.JoinDto;
+import com.bringup.company.member.DTO.request.LoginDto;
 import com.bringup.company.member.DTO.request.ValidationRequestDto;
 import com.bringup.company.member.DTO.request.ValidationRequestInfo;
+import com.bringup.company.member.DTO.response.LoginTokenDto;
 import com.bringup.company.member.DTO.response.ValidationResponseDto;
 import com.bringup.company.member.Entity.Company;
 import com.bringup.company.member.Repository.CompanyRepository;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -55,5 +58,24 @@ public class CompanyService {
         //String id = companyRepository.save(company).getCompanyName();
 
         return null;
+    }
+
+    /**
+     * 로그인
+     */
+    public LoginTokenDto login(LoginDto loginDto) {
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                loginDto.getUserid(),
+                loginDto.getPassword()
+        );
+
+        String accessToken = jwtUtil.createJwt("access", userDetail.getId(),
+                Collections.singletonList(userDetail.getAuthorities().toString()), TokenExpirationTime.ACCESS_TIME);
+
+
+        LoginTokenDto loginTokenDto = LoginTokenDto.builder()
+                .accessToken(accessToken)
+                .id(userDetail.getId)
+                .build();
     }
 }
