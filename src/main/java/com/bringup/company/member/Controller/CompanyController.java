@@ -35,6 +35,7 @@ public class CompanyController {
                 Map.of("isValid", verificationService.verifyCompanyInfo(businessNumberValidateRequestDto))));
     }
 
+    // 회원가입 2단계 ( 정보 작성 )
     @PostMapping("/join/second")
     public ResponseEntity<BfResponse<?>> registerUser(@RequestBody JoinDto joinDTO) {
         return ResponseEntity.status(HttpStatus.CREATED)
