@@ -1,15 +1,11 @@
 package com.bringup.company.page.Controller;
 
-
-import com.bringup.common.response.BfResponse;
-import com.bringup.company.member.DTO.request.ValidationRequestDto;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
@@ -20,8 +16,9 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 @RequestMapping("/company")
 public class PageController {
 
-    @PostMapping("/")
-    public String mainPage(){
-        return "company_main_content.jsp";
+    @GetMapping("/")
+    public ModelAndView mainPage(){
+        System.out.println("들어왔다");
+        return new ModelAndView("/");
     }
 }
