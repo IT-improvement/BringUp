@@ -4,55 +4,56 @@
 <head>
 	<title>BringUp</title>
 
-	<!-- Meta Tags -->
+	<!-- 메타 태그 -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="author" content="Webestica.com">
 	<meta name="description" content="Bootstrap 기반 뉴스, 매거진 및 블로그 테마">
 
-	<!-- Dark mode -->
-	<script src="/assets/js/darkmode.js"></script>
-    <script src="/assets/js/notification.js"></script>
-	<!-- Favicon -->
-	<link rel="shortcut icon" href="/assets/images/favicon.ico">
+	<!-- 다크 모드 -->
+    <script src="/resources/script/common/darkmode/darkmode.js"></script>
 
-	<!-- Google Font -->
+    <script src="/resources/script/common/notification/notification.js"></script>
+	<!-- 파비콘 -->
+	<link rel="shortcut icon" href="/resources/style/common/images/favicon.ico">
+
+	<!-- 구글 폰트 -->
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
 
-	<!-- Plugins CSS -->
-	<link rel="stylesheet" type="text/css" href="/assets/vendor/font-awesome/css/all.min.css">
-	<link rel="stylesheet" type="text/css" href="/assets/vendor/bootstrap-icons/bootstrap-icons.css">
-	<link rel="stylesheet" type="text/css" href="/assets/vendor/apexcharts/css/apexcharts.css">
-	<link rel="stylesheet" type="text/css" href="/assets/vendor/overlay-scrollbar/css/OverlayScrollbars.min.css">
+	<!-- 플러그인 CSS -->
+	<link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/font-awesome/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/bootstrap-icons/bootstrap-icons.css">
+	<link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/apexcharts/css/apexcharts.css">
+	<link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/overlay-scrollbar/css/OverlayScrollbars.min.css">
 
-	<!-- Theme CSS -->
-	<link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+	<!-- 테마 CSS -->
+	<link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
 
 </head>
 <body>
-<jsp:include page="/views/company/header/company_header.jsp" flush="true" />
+<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
-<jsp:include page="/views/company/main/company_main_content.jsp" flush="true" />
+<jsp:include page="/WEB-INF/views/company/main/company_main_content.jsp" flush="true" />
 
 
-<jsp:include page="/views/company/footer/company_footer.jsp" flush="true" />
+<jsp:include page="/WEB-INF/views/company/footer/company_footer.jsp" flush="true" />
 
-<!-- Back to top -->
+<!-- 맨 위로 -->
 <div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
 
 <!-- =======================
-JS libraries, plugins and custom scripts -->
+JS 라이브러리, 플러그인 및 사용자 정의 스크립트 -->
 
 <!-- Bootstrap JS -->
-<script src="/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/resources/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Vendors -->
-<script src="/assets/vendor/apexcharts/js/apexcharts.min.js"></script>
-<script src="/assets/vendor/overlay-scrollbar/js/OverlayScrollbars.min.js"></script>
+<!-- 벤더 -->
+<script src="/resources/style/common/vendor/apexcharts/js/apexcharts.min.js"></script>
+<script src="/resources/style/common/vendor/overlay-scrollbar/js/OverlayScrollbars.min.js"></script>
 
-<!-- Template Functions -->
-<script src="/assets/js/functions.js"></script>
+<!-- 테마 JS -->
+<script src="/resources/script/common/function/functions.js"></script>
 
 </body>
 </html>

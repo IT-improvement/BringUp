@@ -7,8 +7,8 @@
             <div class="container">
                 <!-- 로고 시작 -->
                 <a class="navbar-brand me-3" href="/company/main.html">
-                    <img class="navbar-brand-item light-mode-item" src="/assets/images/Logo.png" alt="로고">
-                    <img class="navbar-brand-item dark-mode-item" src="/assets/images/Logo_darkmode.png" alt="로고">
+                    <img class="navbar-brand-item light-mode-item" src="/resources/style/common/images/Logo.png" alt="로고">
+                    <img class="navbar-brand-item dark-mode-item" src="/resources/style/common/images/Logo_darkmode.png" alt="로고">
                 </a>
                 <!-- 로고 끝 -->
 
@@ -147,7 +147,7 @@
                                             <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
                                                 <div>
                                                     <h6 class="mb-1">설정이 업데이트되었습니다</h6>
-                                                    <span class="small"> < i class="bi bi-clock"></i> 어제</span>
+                                                    <span class="small"> <i class="bi bi-clock"></i> 어제</span>
                                                 </div>
                                                 <div class="ms-auto">
                                                     <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
@@ -171,8 +171,8 @@
                     <!-- 프로필 드롭다운 시작 -->
                     <div class="nav-item ms-2 ms-md-3 dropdown">
                         <!-- 아바타 -->
-                        <a class="avatar avatar-sm p-0" href="#" id="profileDropdown" role="button" data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img class="avatar-img rounded-circle" src="assets/images/avatar/03.jpg" alt="아바타">
+                        <a href="#" id="profileDropdown" role="button" data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">
+                            00기업
                         </a>
 
                         <!-- 프로필 드롭다운 시작 -->
@@ -180,13 +180,8 @@
                             <!-- 프로필 정보 -->
                             <li class="px-3">
                                 <div class="d-flex align-items-center">
-                                    <!-- 아바타 -->
-                                    <div class="avatar me-3">
-                                        <img class="avatar-img rounded-circle shadow" src="assets/images/avatar/03.jpg" alt="아바타">
-                                    </div>
                                     <div>
-                                        <a class="h6 mt-2 mt-sm-0" href="/company/auth/profile/profile.html"> Louis Ferguson</a>
-                                        <p class="small m-0">example@gmail.com</p>
+                                        <a class="h6 mt-2 mt-sm-0" href="/company/auth/profile/profile.html"> 00기업</a>
                                     </div>
                                 </div>
                                 <hr>
@@ -198,7 +193,6 @@
                             <li><a class="dropdown-item" href="/"><i class="bi bi-power fa-fw me-2"></i>로그아웃</a></li>
                             <li class="dropdown-divider mb-2"></li>
                             <li>
-
                             </li>
                         </ul>
                         <!-- 프로필 드롭다운 끝 -->
