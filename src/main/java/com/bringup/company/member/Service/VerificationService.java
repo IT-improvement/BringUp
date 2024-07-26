@@ -21,7 +21,6 @@ import java.util.Map;
 import static com.bringup.common.enums.MemberErrorCode.BUSINESS_VALIDATE_ERROR;
 
 @Service
-@ComponentScan(basePackages={"config"})
 public class VerificationService {
     @Value("${vendor.validURL}")
     private String url;
@@ -42,7 +41,7 @@ public class VerificationService {
         URI uri = UriComponentsBuilder
                 .fromHttpUrl(url + "/validate")
                 .queryParam("serviceKey", key)
-                .build(true).toUri(); // encoded:true -> 이중 인코딩 방지
+                .build().toUri(); // encoded:true -> 이중 인코딩 방지
 
         ValidationRequestInfo requestInfo = ValidationRequestInfo.from(requestDto);
 

@@ -33,9 +33,9 @@ public class CompanyService {
     @Transactional
     public String joinCompany(JoinDto joinDto) {
         // 아이디 중복 체크
-        if (companyRepository.existsByUserid(joinDto.getId())) {
+        if (companyRepository.existsByManagerEmail(joinDto.getId())) {
             throw new CompanyException(DUPLICATED_MEMBER_EMAIL);
-        } else if (companyRepository.existsByEmail(joinDto.getManager_phone())) {
+        } else if (companyRepository.existsByManagerPhonenumber(joinDto.getManager_phone())) {
             throw new CompanyException(DUPLICATED_MEMBER_PHONE_NUMBER);
         }
 
