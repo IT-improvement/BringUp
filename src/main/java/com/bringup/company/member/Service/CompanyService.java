@@ -63,7 +63,7 @@ public class CompanyService {
     /**
      * 로그인
      */
-    public LoginTokenDto login(LoginDto loginDto) {
+/*    public LoginTokenDto login(LoginDto loginDto) {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 loginDto.getUserid(),
                 loginDto.getPassword()
@@ -77,5 +77,5 @@ public class CompanyService {
                 .accessToken(accessToken)
                 .id(userDetail.getId)
                 .build();
-    }
+    }*/
 }

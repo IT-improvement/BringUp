@@ -10,20 +10,19 @@ import com.bringup.company.member.Service.CompanyService;
 import com.bringup.company.member.Service.VerificationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
 import static com.bringup.common.enums.GlobalSuccessCode.CREATE;
 import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/company")
 public class CompanyController {
@@ -47,11 +46,11 @@ public class CompanyController {
     }
 
     // 로그인
-    @PostMapping("/login")
+    /*@PostMapping("/login")
     public ResponseEntity<BfResponse<LoginTokenDto>> login(@Valid @RequestBody LoginDto loginDto) {
         return ResponseEntity.ok(new BfResponse<>(companyService.login(loginDto)));
         //return userService.login(loginDto);
-    }
+    }*/
 
 
 }
