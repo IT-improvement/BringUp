@@ -17,8 +17,8 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 public class PageController {
 
     @GetMapping("/")
-    public ModelAndView mainPage(){
+    public String mainPage(){
         System.out.println("들어왔다");
-        return new ModelAndView("/");
+        return "company/main/company_main";
     }
 }
