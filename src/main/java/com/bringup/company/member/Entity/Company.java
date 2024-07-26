@@ -28,13 +28,13 @@ public class Company {
     private String companyScale;
 
     @Column(name = "company_opendate")
-    private String companyOpenDate;
+    private String companyOpendate;
 
     @Column(name = "company_license", nullable = false)
     private String companyLicense;
 
     @Column(name = "company_phonenumber")
-    private String companyPhoneNumber;
+    private String companyPhonenumber;
 
     @Column(name = "company_adress", nullable = false)
     private String companyAdress;
@@ -42,16 +42,16 @@ public class Company {
     @Column(name = "company_category", nullable = false)
     private String companyCategory;
 
-    @Column(name = "company_content", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "company_content", nullable = false)
     private String companyContent;
 
-    @Column(name = "company_welfare", columnDefinition = "TEXT")
+    @Column(name = "company_welfare", nullable = false)
     private String companyWelfare;
 
-    @Column(name = "company_vision", columnDefinition = "TEXT")
+    @Column(name = "company_vision", nullable = false)
     private String companyVision;
 
-    @Column(name = "company_history", columnDefinition = "TEXT")
+    @Column(name = "company_history", nullable = false)
     private String companyHistory;
 
     @Column(name = "master_name", nullable = false)
@@ -61,7 +61,7 @@ public class Company {
     private String managerName;
 
     @Column(name = "manager_phonenumber", nullable = false)
-    private String managerPhoneNumber;
+    private String managerPhonenumber;
 
     @Column(name = "company_size", nullable = false)
     private int companySize;
@@ -69,7 +69,9 @@ public class Company {
     @Column(name = "company_logo")
     private String companyLogo;
 
-    @Column(name = "opencv_key", nullable = false)
-    private int openCVKey;
+    @Column(name = "opencv_key", nullable = false, columnDefinition = "int default 0")
+    private int opencvKey;
 
+    @Column(name = "status", nullable = false)
+    private String status;
 }
