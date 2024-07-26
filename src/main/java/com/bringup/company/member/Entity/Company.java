@@ -15,61 +15,61 @@ public class Company {
     @Column(name = "company_id")
     private Long companyId;
 
-    @Column(name = "manageremail", nullable = false, length = 255)
+    @Column(name = "manager_email", nullable = false)
     private String managerEmail;
 
-    @Column(name = "companyname", nullable = false, length = 255)
+    @Column(name = "company_name", nullable = false)
     private String companyName;
 
-    @Column(name = "companypassword", nullable = false, length = 20)
+    @Column(name = "company_password", nullable = false)
     private String companyPassword;
 
-    @Column(name = "companyscale", nullable = false, length = 30)
+    @Column(name = "company_scale", nullable = false)
     private String companyScale;
 
-    @Column(name = "companyopendate", nullable = true, length = 30)
+    @Column(name = "company_opendate")
     private String companyOpenDate;
 
-    @Column(name = "companylicense", nullable = false, length = 11)
+    @Column(name = "company_license", nullable = false)
     private String companyLicense;
 
-    @Column(name = "companyphonenumber", nullable = true, length = 11)
+    @Column(name = "company_phonenumber")
     private String companyPhoneNumber;
 
-    @Column(name = "companyadress", nullable = false, length = 255)
-    private String companyAddress;
+    @Column(name = "company_adress", nullable = false)
+    private String companyAdress;
 
-    @Column(name = "companycategory", nullable = false, length = 30)
+    @Column(name = "company_category", nullable = false)
     private String companyCategory;
 
-    @Column(name = "companycontent", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "company_content", nullable = false, columnDefinition = "TEXT")
     private String companyContent;
 
-    @Column(name = "companywelfare", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "company_welfare", columnDefinition = "TEXT")
     private String companyWelfare;
 
-    @Column(name = "companyvision", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "company_vision", columnDefinition = "TEXT")
     private String companyVision;
 
-    @Column(name = "companyhistory", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "company_history", columnDefinition = "TEXT")
     private String companyHistory;
 
-    @Column(name = "mastername", nullable = false, length = 10)
+    @Column(name = "master_name", nullable = false)
     private String masterName;
 
-    @Column(name = "managername", nullable = false, length = 10)
+    @Column(name = "manager_name", nullable = false)
     private String managerName;
 
-    @Column(name = "managerphonenumber", nullable = false, length = 10)
+    @Column(name = "manager_phonenumber", nullable = false)
     private String managerPhoneNumber;
 
-    @Column(name = "companysize", nullable = false)
+    @Column(name = "company_size", nullable = false)
     private int companySize;
 
-    @Column(name = "companylogo", nullable = true, length = 255)
+    @Column(name = "company_logo")
     private String companyLogo;
 
-    @Column(name = "opencvkey", nullable = false, columnDefinition = "INT DEFAULT 0")
+    @Column(name = "opencv_key", nullable = false)
     private int openCVKey;
 
 }
