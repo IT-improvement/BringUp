@@ -1,7 +1,10 @@
 plugins {
     id 'java'
+    id 'war'
+
     id 'org.springframework.boot' version '3.3.1'
-    id 'io.spring.dependency-management' version '1.1.5'
+
+    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
 }
 
 group = 'com'
@@ -24,7 +27,14 @@ repositories {
 }
 
 dependencies {
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    //jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     //password
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -34,10 +44,18 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+    //json
+    implementation group: 'org.json', name: 'json', version: '20231013'
 
     // JSP
-    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.87'
-    implementation 'javax.servlet:jstl:1.2'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    implementation 'jakarta.servlet:jakarta.servlet-api'
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
     implementation 'taglibs:standard:1.1.2'
 
     // Database
