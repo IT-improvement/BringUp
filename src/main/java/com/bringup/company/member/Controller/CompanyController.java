@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,6 +51,20 @@ public class CompanyController {
     public ResponseEntity<BfResponse<LoginTokenDto>> login(@Valid @RequestBody LoginDto loginDto) {
         return ResponseEntity.ok(new BfResponse<>(companyService.login(loginDto)));
         //return userService.login(loginDto);
+    }*/
+
+    // Id 중복 체크
+    @PostMapping("/checkId")
+    public ResponseEntity<BfResponse<?>> checkId(@RequestBody Map<String, String> requestBody) {
+        String companyEmail = requestBody.get("company_email");
+        boolean isAvailable = companyService.checkId(companyEmail);
+        return ResponseEntity.ok(new BfResponse<>(isAvailable));
+    }
+
+    // CompanyName 헤더에 삽입 ( UserDetailsImpl이 작성되어있다는 가정하에 작성 )
+    /*@PostMapping("/companyName")
+    public ResponseEntity<BfResponse<?>> companyName(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return ResponseEntity.ok(new BfResponse<>(userDetails.getCompanyName));
     }*/
 
 
