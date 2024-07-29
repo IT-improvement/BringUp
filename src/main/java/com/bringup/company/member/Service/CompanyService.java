@@ -9,6 +9,8 @@ import com.bringup.company.member.DTO.response.ValidationResponseDto;
 import com.bringup.company.member.Entity.Company;
 import com.bringup.company.member.Repository.CompanyRepository;
 import com.bringup.company.member.exception.CompanyException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,8 @@ import java.util.Map;
 import static com.bringup.common.enums.MemberErrorCode.*;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class CompanyService {
 
     CompanyRepository companyRepository;
@@ -78,4 +82,12 @@ public class CompanyService {
                 .id(userDetail.getId)
                 .build();
     }*/
+
+    /**
+     * ID(companyEmail) Check
+     */
+    public boolean checkId(String company_email){
+        log.debug("user id : " + company_email);
+        return !companyRepository.existsByManagerEmail(company_email);
+    }
 }
