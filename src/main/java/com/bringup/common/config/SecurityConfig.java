@@ -4,6 +4,8 @@ import com.bringup.common.jwt.JWTFilter;
 import com.bringup.common.jwt.JWTUtil;
 import com.bringup.common.jwt.MemberLoginFilter;
 import com.bringup.common.jwt.CompanyLoginFilter;
+import com.bringup.company.member.Service.CompanyUserDetailsService;
+import com.bringup.member.user.domain.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,10 +23,14 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
+    private final CustomUserDetailsService memberUserDetailsService;
+    private final CompanyUserDetailsService companyUserDetailsService;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, CustomUserDetailsService memberUserDetailsService, CompanyUserDetailsService companyUserDetailsService) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
+        this.memberUserDetailsService = memberUserDetailsService;
+        this.companyUserDetailsService = companyUserDetailsService;
     }
 
     @Bean
@@ -47,8 +53,8 @@ public class SecurityConfig {
                         .requestMatchers("/member/login", "/company/login", "/", "/join").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAt(new MemberLoginFilter(authenticationManager(), jwtUtil), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAt(new CompanyLoginFilter(authenticationManager(), jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new MemberLoginFilter(authenticationManager(), jwtUtil, memberUserDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new CompanyLoginFilter(authenticationManager(), jwtUtil, companyUserDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();

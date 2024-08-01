@@ -2,6 +2,7 @@ package com.bringup.common.jwt;
 
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.dto.CustomUserDetails;
+import com.bringup.company.member.Entity.Company;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-public class JWTFilter extends OncePerRequestFilter { //OncePerRequestFilter 강제로 한번 생성해줌 토큰을
+public class JWTFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
 
     public JWTFilter(JWTUtil jwtUtil) {
@@ -42,16 +43,29 @@ public class JWTFilter extends OncePerRequestFilter { //OncePerRequestFilter 강
         String username = jwtUtil.getUsername(token);
         String role = jwtUtil.getRole(token);
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUserEmail(username);
-        userEntity.setUserPassword("temppassword");
-        userEntity.setRole(role);
+        Authentication authToken;
+        if (role.equals("ROLE_USER")) {
+            UserEntity userEntity = new UserEntity();
+            userEntity.setUserEmail(username);
+            userEntity.setUserPassword("temppassword");
+            userEntity.setRole(role);
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);
+            CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);
+            authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+        } else if (role.equals("ROLE_COMPANY")) {
+            Company company = new Company();
+            company.setManagerEmail(username);
+            company.setCompanyPassword("temppassword");
+            company.setRole(role);
 
-        Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+            Authentication customUserDetails = new UsernamePasswordAuthenticationToken(company, null, company.getAuthorities());
+            authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, company.getAuthorities());
+        } else {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         SecurityContextHolder.getContext().setAuthentication(authToken);
-
         filterChain.doFilter(request, response);
     }
 }

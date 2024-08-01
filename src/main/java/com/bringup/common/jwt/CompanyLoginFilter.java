@@ -1,6 +1,7 @@
 package com.bringup.common.jwt;
 
-import com.bringup.member.user.dto.CustomUserDetails;
+import com.bringup.company.member.DTO.request.CompanyDetails;
+import com.bringup.company.member.Service.CompanyUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,11 +19,12 @@ public class CompanyLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
+    private final CompanyUserDetailsService companyUserDetailsService;
 
-    public CompanyLoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
+    public CompanyLoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, CompanyUserDetailsService companyUserDetailsService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
-        setFilterProcessesUrl("/company/login"); // Company 엔드포인트 설정
+        this.companyUserDetailsService = companyUserDetailsService;
     }
 
     @Override
@@ -39,18 +41,24 @@ public class CompanyLoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String userEmail = obtainUsername(request);
         String password = obtainPassword(request);
+
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userEmail, password, null);
+
         return authenticationManager.authenticate(authToken);
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
-        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        CompanyDetails customUserDetails = (CompanyDetails) authentication.getPrincipal();
+
         String userEmail = customUserDetails.getUsername();
+
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
+
         String role = auth.getAuthority();
+
         String token = jwtUtil.createJwt(userEmail, role, 60 * 60 * 10L);
         response.addHeader("Authorization", "Bearer " + token);
     }

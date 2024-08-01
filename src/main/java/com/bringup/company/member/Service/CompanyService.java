@@ -1,25 +1,22 @@
 package com.bringup.company.member.Service;
 
+import com.bringup.common.jwt.JWTUtil;
+import com.bringup.company.member.DTO.request.CompanyDetails;
 import com.bringup.company.member.DTO.request.JoinDto;
 import com.bringup.company.member.DTO.request.LoginDto;
-import com.bringup.company.member.DTO.request.ValidationRequestDto;
-import com.bringup.company.member.DTO.request.ValidationRequestInfo;
 import com.bringup.company.member.DTO.response.LoginTokenDto;
-import com.bringup.company.member.DTO.response.ValidationResponseDto;
 import com.bringup.company.member.Entity.Company;
 import com.bringup.company.member.Repository.CompanyRepository;
 import com.bringup.company.member.exception.CompanyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 import static com.bringup.common.enums.MemberErrorCode.*;
 
@@ -28,7 +25,11 @@ import static com.bringup.common.enums.MemberErrorCode.*;
 @RequiredArgsConstructor
 public class CompanyService {
 
-    CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
+    private final JWTUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
+    private final CompanyUserDetailsService companyUserDetailsService;
 
 
     /**
@@ -43,45 +44,64 @@ public class CompanyService {
             throw new CompanyException(DUPLICATED_MEMBER_PHONE_NUMBER);
         }
 
-        /*Company company = ConvertUtil.toDtoOrEntity(joinDto, Company.class);
+        Company company = new Company();
         company.setManagerEmail(joinDto.getId());
         company.setCompanyPassword(passwordEncoder.encode(joinDto.getPassword()));
         company.setCompanyName(joinDto.getCompany_name());
-        company.setCompanyPhoneNumber(joinDto.getCompany_phone());
-        company.setCompanyAddress(joinDto.getAddress());
+        company.setCompanyPhonenumber(joinDto.getCompany_phone());
+        company.setCompanyAdress(joinDto.getAddress());
         company.setCompanyContent(joinDto.getContent());
         company.setCompanyWelfare(joinDto.getWelfare());
         company.setCompanyVision(joinDto.getVision());
         company.setCompanyHistory(joinDto.getHistory());
         company.setManagerName(joinDto.getManager_name());
-        company.setManagerPhoneNumber(joinDto.getManager_phone());
+        company.setManagerPhonenumber(joinDto.getManager_phone());
         company.setCompanySize(joinDto.getCompanysize());
         company.setCompanyLogo(joinDto.getLogo());
-        company.setOpenCVKey(joinDto.getCv_key());*/
+        company.setOpencvKey(joinDto.getCv_key());
 
-        //String id = companyRepository.save(company).getCompanyName();
-
-        return null;
+        companyRepository.save(company);
+        return company.getCompanyName();
     }
 
     /**
      * 로그인
      */
-/*    public LoginTokenDto login(LoginDto loginDto) {
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+    public LoginTokenDto login(LoginDto loginDto) {
+        // 디버그 로그 추가
+        System.out.println("Service: login method called with " + loginDto.getUserid());
+
+        if (loginDto == null) {
+            throw new IllegalArgumentException("loginDto cannot be null");
+        }
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginDto.getUserid(),
                 loginDto.getPassword()
         );
 
-        String accessToken = jwtUtil.createJwt("access", userDetail.getId(),
-                Collections.singletonList(userDetail.getAuthorities().toString()), TokenExpirationTime.ACCESS_TIME);
+        // 디버그 로그 추가
+        System.out.println("Service: authentication token created for " + loginDto.getUserid());
 
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        LoginTokenDto loginTokenDto = LoginTokenDto.builder()
+        CompanyDetails companyDetails = (CompanyDetails) authentication.getPrincipal();
+        String accessToken = jwtUtil.createJwt(
+                companyDetails.getUsername(),
+                companyDetails.getAuthorities().toString(),
+                60 * 60 * 10L // 10시간 동안 유효한 토큰
+        );
+
+        // 디버그 로그 추가
+        System.out.println("Service: JWT token created for " + companyDetails.getUsername());
+
+        return LoginTokenDto.builder()
                 .accessToken(accessToken)
-                .id(userDetail.getId)
                 .build();
-    }*/
+    }
+
+
 
     /**
      * ID(companyEmail) Check

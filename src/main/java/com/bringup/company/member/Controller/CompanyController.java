@@ -47,11 +47,12 @@ public class CompanyController {
     }
 
     // 로그인
-    /*@PostMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<BfResponse<LoginTokenDto>> login(@Valid @RequestBody LoginDto loginDto) {
+        // 디버그 로그 추가
+        System.out.println("Controller: login method called with " + loginDto.getUserid());
         return ResponseEntity.ok(new BfResponse<>(companyService.login(loginDto)));
-        //return userService.login(loginDto);
-    }*/
+    }
 
     // Id 중복 체크
     @PostMapping("/checkId")

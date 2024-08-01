@@ -3,19 +3,24 @@ package com.bringup.company.member.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "company")
-public class Company {
+public class Company implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
     private Long companyId;
 
-    @Column(name = "manager_email", nullable = false)
+    @Column(name = "manager_email", nullable = false, unique = true)
     private String managerEmail;
 
     @Column(name = "company_name", nullable = false)
@@ -74,4 +79,44 @@ public class Company {
 
     @Column(name = "status", nullable = false)
     private String status;
+
+    @Column(name = "role", nullable = false)
+    private String role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add((GrantedAuthority) () -> this.role);
+        return authorities;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.companyPassword;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.managerEmail;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
