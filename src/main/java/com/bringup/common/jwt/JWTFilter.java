@@ -1,4 +1,4 @@
-package com.bringup.member.user.jwt;
+package com.bringup.common.jwt;
 
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.dto.CustomUserDetails;

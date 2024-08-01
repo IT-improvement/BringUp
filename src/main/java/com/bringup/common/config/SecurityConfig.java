@@ -1,8 +1,8 @@
 package com.bringup.common.config;
 
-import com.bringup.member.user.jwt.JWTFilter;
-import com.bringup.member.user.jwt.JWTUtil;
-import com.bringup.member.user.jwt.LoginFilter;
+import com.bringup.common.jwt.JWTFilter;
+import com.bringup.common.jwt.JWTUtil;
+import com.bringup.common.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
