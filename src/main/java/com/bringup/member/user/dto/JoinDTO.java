@@ -10,7 +10,7 @@ public class JoinDTO {
     private String userPassword;
     private String userName;
     private String userAddress;
-    private String userPhoneNumber;
+    private String userPhonenumber;
     private String userBirthday;
     private boolean freelancer;
     private String status;
