@@ -14,18 +14,12 @@ public class JoinController {
     @Autowired
     private JoinService joinService; //원래는 생성자로 하는게 좋음
 
-    @GetMapping("/join")
-    public String join(){
-        return "member/join";
-    }
-
-   @PostMapping("/joinProc")
+   @PostMapping("/join")
    public String joinPocess(JoinDTO joinDTO){
-
         System.out.println(joinDTO.getUserEmail());
 
         joinService.joinProcess(joinDTO);
 
-        return "redirect:/login";
+        return "ok";
    }
 }

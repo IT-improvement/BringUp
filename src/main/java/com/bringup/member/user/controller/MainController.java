@@ -2,12 +2,16 @@ package com.bringup.member.user.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@ResponseBody
 public class MainController {
+
     @GetMapping("/")
-    public String main() {
-        return "member/main"; // 실제 파일명은 main.jsp
+    public String mainP() {
+
+        return "main Controller";
     }
 }
 
