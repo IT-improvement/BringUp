@@ -1,4 +1,4 @@
-package com.bringup.member.user.jwt;
+package com.bringup.common.jwt;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
