@@ -16,9 +16,15 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 @RequestMapping("/company")
 public class PageController {
 
-    @GetMapping("/")
+    @GetMapping("")
     public String mainPage(){
         System.out.println("들어왔다");
         return "company/main/company_main";
+    }
+
+    @GetMapping("/admin")
+    public String adminP() {
+
+        return "admin Controller";
     }
 }

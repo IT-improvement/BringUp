@@ -29,7 +29,6 @@ public class CompanyService {
     private final JWTUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-    private final CompanyUserDetailsService companyUserDetailsService;
 
 
     /**
@@ -100,8 +99,6 @@ public class CompanyService {
                 .accessToken(accessToken)
                 .build();
     }
-
-
 
     /**
      * ID(companyEmail) Check

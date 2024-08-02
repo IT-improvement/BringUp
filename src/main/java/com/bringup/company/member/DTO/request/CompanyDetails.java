@@ -17,7 +17,12 @@ public class CompanyDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(() -> company.getStatus());
+        authorities.add(new GrantedAuthority() {
+            @Override
+            public String getAuthority() {
+                return company.getRole();
+            }
+        });
         return authorities;
     }
 
