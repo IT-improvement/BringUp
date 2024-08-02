@@ -13,7 +13,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Table(name = "company")
-public class Company implements UserDetails {
+public class Company{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,41 +82,4 @@ public class Company implements UserDetails {
 
     @Column(name = "role", nullable = false)
     private String role;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add((GrantedAuthority) () -> this.role);
-        return authorities;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.companyPassword;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.managerEmail;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }
