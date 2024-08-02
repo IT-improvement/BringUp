@@ -66,6 +66,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/company/login", "/company", "/company/join/", "/company/**").permitAll()
                         .requestMatchers("/WEB-INF/views/**").permitAll()
+                        .requestMatchers("/resources/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
