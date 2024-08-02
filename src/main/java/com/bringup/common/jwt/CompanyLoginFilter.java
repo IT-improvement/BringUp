@@ -14,8 +14,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.util.Collection;
 import java.util.Iterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CompanyLoginFilter extends UsernamePasswordAuthenticationFilter {
+
+    private static final Logger logger = LoggerFactory.getLogger(CompanyLoginFilter.class);
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
@@ -29,18 +33,20 @@ public class CompanyLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected String obtainUsername(HttpServletRequest request) {
-        return request.getParameter("userEmail");
+        return request.getParameter("userid");
     }
 
     @Override
     protected String obtainPassword(HttpServletRequest request) {
-        return request.getParameter("userPassword");
+        return request.getParameter("password");
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String userEmail = obtainUsername(request);
         String password = obtainPassword(request);
+
+        logger.debug("Attempting authentication for user: {}", userEmail);
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userEmail, password, null);
 
@@ -61,10 +67,13 @@ public class CompanyLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String token = jwtUtil.createJwt(userEmail, role, 60 * 60 * 10L);
         response.addHeader("Authorization", "Bearer " + token);
+
+        logger.debug("Successfully authenticated user: {}", userEmail);
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
         response.setStatus(401);
+        logger.debug("Failed to authenticate user: {}", obtainUsername(request));
     }
 }
