@@ -27,7 +27,7 @@
                 <label for="startDate"><i class="fas fa-calendar-alt"></i> 설립일</label>
                 <input id="startDate" type="date" name="startDate" class="form-control" required/>
             </div>
-            <button type="submit" class="btn btn-primary btn-block">가입하기</button>
+            <button type="submit" class="btn btn-primary btn-block">사업자 인증</button>
         </form>
     </div>
 
