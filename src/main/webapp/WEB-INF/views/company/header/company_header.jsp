@@ -27,8 +27,8 @@
                             <a class="nav-link dropdown-toggle" href="#" id="jobPostingMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">공고</a>
                             <ul class="dropdown-menu" aria-labelledby="jobPostingMenu">
                                 <!-- 드롭다운 서브메뉴 -->
-                                <li> <a class="dropdown-item" href="/company/job_posting/management.html">공고 관리</a> </li>
-                                <li> <a class="dropdown-item" href="/company/job_posting/registration.html">공고 등록</a> </li>
+                                <li> <a class="dropdown-item" href="/company/job_posting/management.jsp">공고 관리</a> </li>
+                                <li> <a class="dropdown-item" href="/company/job_posting/registration.jsp">공고 등록</a> </li>
 
                             </ul>
                         </li>
@@ -37,21 +37,21 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="pagesMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">상품</a>
                             <ul class="dropdown-menu" aria-labelledby="pagesMenu">
-                                <li> <a class="dropdown-item" href="/company/product/management.html">상품 관리</a></li>
-                                <li> <a class="dropdown-item" href="/company/product/premium_job_posting.html">프리미엄 공고</a></li>
-                                <li> <a class="dropdown-item" href="/company/product/advertising_banner.html">광고 배너</a></li>
-                                <li> <a class="dropdown-item" href="/company/product/resume_key.html">이력서 열람</a></li></ul>
+                                <li> <a class="dropdown-item" href="/company/product/management.jsp">상품 관리</a></li>
+                                <li> <a class="dropdown-item" href="/company/product/premium_job_posting.jsp">프리미엄 공고</a></li>
+                                <li> <a class="dropdown-item" href="/company/product/advertising_banner.jsp">광고 배너</a></li>
+                                <li> <a class="dropdown-item" href="/company/product/resume_key.jsp">이력서 열람</a></li></ul>
                         </li>
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="reviewMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">리뷰</a>
                             <ul class="dropdown-menu" aria-labelledby="postMenu">
                                 <!-- 드롭다운 서브메뉴 -->
-                                <li> <a class="dropdown-item" href="/company/review/corporation.html">기업 리뷰</a> </li>
-                                <li> <a class="dropdown-item" href="/company/review/interview.html">면접 리뷰</a> </li>
+                                <li> <a class="dropdown-item" href="/company/review/corporation.jsp">기업 리뷰</a> </li>
+                                <li> <a class="dropdown-item" href="/company/review/interview.jsp">면접 리뷰</a> </li>
                             </ul>
                         </li>
-                        <a class="nav-link" href="/company/recommendation.html" id="recommendMenu">인재 추천</a>
+                        <a class="nav-link" href="/company/recommendation/recommendation.jsp" id="recommendMenu">인재 추천</a>
 
 
                     </ul>
