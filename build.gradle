@@ -50,6 +50,8 @@ dependencies {
 
     //json
     implementation group: 'org.json', name: 'json', version: '20231013'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.4.1'
+
 
     // JSP
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
