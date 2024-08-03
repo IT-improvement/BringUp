@@ -15,9 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -57,8 +55,9 @@ public class CompanyController {
             joinDTO.setCompany_opendate(businessInfo.getStart_dt());
             joinDTO.setCompany_licence(businessInfo.getB_no());
         }
+        companyService.joinCompany(joinDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new BfResponse<>(CREATE, Map.of("Company_name", companyService.joinCompany(joinDTO))));
+                .body(new BfResponse<>(CREATE, Map.of("Company_name", joinDTO.getC_name())));
     }
 
     // 로그인
@@ -83,5 +82,29 @@ public class CompanyController {
         return ResponseEntity.ok(new BfResponse<>(userDetails.getCompanyName));
     }*/
 
+    // 회원 정보 수정
+    @PutMapping("/user")
+    public ResponseEntity<BfResponse<?>> updateUser(
+            @RequestHeader("Authorization") String token,
+            @RequestParam Map<String, String> requestBody) {
+        companyService.updateUser(token, requestBody);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "Company update successful")));
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("/user")
+    public ResponseEntity<BfResponse<?>> deleteUser(@RequestHeader("Authorization") String token) {
+        companyService.deleteUser(token);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "DELETE successful")));
+    }
+
+    // 로그아웃
+    /*@PostMapping("/logout")
+    public ResponseEntity<BfResponse<?>> logout(
+            @RequestHeader("Authorization") String token,
+            @RequestParam Map<String, String> requestBody) {
+        companyService.logout(token, requestBody);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "Logout successful")));
+    }*/
 
 }
