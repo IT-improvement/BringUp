@@ -8,6 +8,7 @@ import com.bringup.company.member.DTO.request.ValidationRequestDto;
 import com.bringup.company.member.DTO.response.LoginTokenDto;
 import com.bringup.company.member.Service.CompanyService;
 import com.bringup.company.member.Service.VerificationService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,17 +34,31 @@ public class CompanyController {
     //회원가입 1단계 ( 진위여부 파악 )
     @PostMapping("/join/first")
     public ResponseEntity<BfResponse<?>> validateBusinessNumber(
-            @Valid @RequestBody ValidationRequestDto businessNumberValidateRequestDto) {
-        return ResponseEntity.ok().body(new BfResponse<>(SUCCESS,
-                Map.of("isValid", verificationService.verifyCompanyInfo(businessNumberValidateRequestDto))));
+            @RequestBody Map<String, String> payload, HttpSession session) {
+        ValidationRequestDto businessNumberValidateRequestDto = ValidationRequestDto.builder()
+                .b_no(payload.get("company_licence"))
+                .start_dt(payload.get("company_opendate"))
+                .p_nm(payload.get("master_name"))
+                .build();
+
+        boolean isValid = verificationService.verifyCompanyInfo(businessNumberValidateRequestDto);
+        if (isValid) {
+            session.setAttribute("businessInfo", businessNumberValidateRequestDto);
+        }
+        return ResponseEntity.ok().body(new BfResponse<>(SUCCESS, Map.of("isValid", isValid)));
     }
 
     // 회원가입 2단계 ( 정보 작성 )
     @PostMapping("/join/second")
-    public ResponseEntity<BfResponse<?>> registerUser(@RequestBody JoinDto joinDTO) {
+    public ResponseEntity<BfResponse<?>> registerUser(@RequestBody JoinDto joinDTO, HttpSession session) {
+        ValidationRequestDto businessInfo = (ValidationRequestDto) session.getAttribute("businessInfo");
+        if (businessInfo != null) {
+            joinDTO.setMaster_name(businessInfo.getP_nm());
+            joinDTO.setCompany_opendate(businessInfo.getStart_dt());
+            joinDTO.setCompany_licence(businessInfo.getB_no());
+        }
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new BfResponse<>(CREATE,
-                        Map.of("Company_name", companyService.joinCompany(joinDTO))));
+                .body(new BfResponse<>(CREATE, Map.of("Company_name", companyService.joinCompany(joinDTO))));
     }
 
     // 로그인
