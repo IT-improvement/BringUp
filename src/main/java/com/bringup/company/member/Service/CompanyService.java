@@ -35,33 +35,37 @@ public class CompanyService {
      * 회원 등록
      */
     @Transactional
-    public String joinCompany(JoinDto joinDto) {
-        // 아이디 중복 체크
-        if (companyRepository.existsByManagerEmail(joinDto.getId())) {
-            throw new CompanyException(DUPLICATED_MEMBER_EMAIL);
-        } else if (companyRepository.existsByManagerPhonenumber(joinDto.getManager_phone())) {
-            throw new CompanyException(DUPLICATED_MEMBER_PHONE_NUMBER);
-        }
-
+    public Company joinCompany(JoinDto joinDto) {
+        // DTO 데이터를 사용하여 엔티티 생성 및 기본값 설정
         Company company = new Company();
+
         company.setManagerEmail(joinDto.getId());
         company.setCompanyPassword(passwordEncoder.encode(joinDto.getPassword()));
-        company.setCompanyName(joinDto.getCompany_name());
         company.setCompanyPhonenumber(joinDto.getCompany_phone());
-        company.setCompanyAdress(joinDto.getAddress());
-        company.setCompanyContent(joinDto.getContent());
-        company.setCompanyWelfare(joinDto.getWelfare());
-        company.setCompanyVision(joinDto.getVision());
-        company.setCompanyHistory(joinDto.getHistory());
+        company.setCompanyName(joinDto.getCompany_name());
         company.setManagerName(joinDto.getManager_name());
         company.setManagerPhonenumber(joinDto.getManager_phone());
-        company.setCompanySize(joinDto.getCompanysize());
-        company.setCompanyLogo(joinDto.getLogo());
-        company.setOpencvKey(joinDto.getCv_key());
+        company.setCompanyAddress(joinDto.getCompany_address());
+        company.setCompanyCategory(joinDto.getCompany_category());
+        company.setCompanyContent(joinDto.getCompany_content());
+        company.setCompanyWelfare(joinDto.getCompany_welfare());
+        company.setCompanyHistory(joinDto.getCompany_history());
+        company.setCompanyScale(joinDto.getCompany_scale());
+        company.setCompanyVision(joinDto.getCompany_vision());
+        company.setCompanyLogo(joinDto.getCompany_logo());
+        company.setCompanySize(joinDto.getCompany_size());
+        company.setCompany_Opendate(joinDto.getCompany_opendate());
+        company.setCompanyLicense(joinDto.getCompany_licence());
+        company.setMasterName(joinDto.getMaster_name());
 
-        companyRepository.save(company);
-        return company.getCompanyName();
+        // 기본값 설정
+        company.setRole("COMPANY"); // 기본 Role 설정
+        company.setOpencvKey(0); // 이력서 열람 키 기본값 설정
+        company.setStatus("ACTIVE"); // 회사 상태 기본값 설정
+
+        return companyRepository.save(company);
     }
+
 
     /**
      * 로그인
@@ -107,4 +111,6 @@ public class CompanyService {
         log.debug("user id : " + company_email);
         return !companyRepository.existsByManagerEmail(company_email);
     }
+
+
 }

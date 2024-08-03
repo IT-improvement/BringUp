@@ -33,7 +33,7 @@ public class Company{
     private String companyScale;
 
     @Column(name = "company_opendate")
-    private String companyOpendate;
+    private String company_Opendate;
 
     @Column(name = "company_license", nullable = false)
     private String companyLicense;
@@ -41,8 +41,8 @@ public class Company{
     @Column(name = "company_phonenumber")
     private String companyPhonenumber;
 
-    @Column(name = "company_adress", nullable = false)
-    private String companyAdress;
+    @Column(name = "company_address", nullable = false)
+    private String companyAddress;
 
     @Column(name = "company_category", nullable = false)
     private String companyCategory;
