@@ -77,11 +77,11 @@ public class CompanyController {
         return ResponseEntity.ok(new BfResponse<>(isAvailable));
     }
 
-    // CompanyName 헤더에 삽입 ( UserDetailsImpl이 작성되어있다는 가정하에 작성 )
-    /*@PostMapping("/companyName")
-    public ResponseEntity<BfResponse<?>> companyName(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return ResponseEntity.ok(new BfResponse<>(userDetails.getCompanyName));
-    }*/
+    // 기업명 헤더 삽입
+    @PostMapping("/companyName")
+    public ResponseEntity<BfResponse<?>> companyName(@RequestHeader("Authorization") String token){
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, companyService.companyName(token)));
+    }
 
     // 회원 정보 수정
     @PutMapping("/user")

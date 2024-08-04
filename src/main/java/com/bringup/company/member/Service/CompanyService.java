@@ -201,6 +201,11 @@ public class CompanyService {
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
     }
 
+    public String companyName(String token) {
+        String username = jwtUtil.getUsername(token);
+        return username;
+    }
+
     /*// 로그아웃
     public void logout(String token, Map<String, String> requestBody) {
         // 로그아웃 처리 로직 (예: 토큰 무효화, 세션 종료 등)
