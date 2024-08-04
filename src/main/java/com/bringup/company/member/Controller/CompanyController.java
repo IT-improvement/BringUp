@@ -6,6 +6,7 @@ import com.bringup.company.member.DTO.request.JoinDto;
 import com.bringup.company.member.DTO.request.LoginDto;
 import com.bringup.company.member.DTO.request.ValidationRequestDto;
 import com.bringup.company.member.DTO.response.LoginTokenDto;
+import com.bringup.company.member.Entity.Company;
 import com.bringup.company.member.Service.CompanyService;
 import com.bringup.company.member.Service.VerificationService;
 import jakarta.servlet.http.HttpSession;
@@ -96,6 +97,13 @@ public class CompanyController {
     public ResponseEntity<BfResponse<?>> deleteUser(@RequestHeader("Authorization") String token) {
         companyService.deleteUser(token);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "DELETE successful")));
+    }
+
+    // 회원 정보 조회
+    @GetMapping("/companyInfo/post")
+    public ResponseEntity<BfResponse<Company>> getUserInfo(@RequestHeader("Authorization") String token) {
+        Company company = companyService.getUserInfo(token);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, company));
     }
 
     // 로그아웃

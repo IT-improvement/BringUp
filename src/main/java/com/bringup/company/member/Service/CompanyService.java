@@ -195,6 +195,12 @@ public class CompanyService {
         companyRepository.delete(company);
     }
 
+    public Company getUserInfo(String token) {
+        String username = jwtUtil.getUsername(token);
+        return companyRepository.findByManagerEmail(username)
+                .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
+    }
+
     /*// 로그아웃
     public void logout(String token, Map<String, String> requestBody) {
         // 로그아웃 처리 로직 (예: 토큰 무효화, 세션 종료 등)
