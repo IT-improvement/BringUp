@@ -1,8 +1,12 @@
 package com.bringup.company.member.Entity;
 
+import com.bringup.common.enums.RolesType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -84,6 +88,28 @@ public class Company {
     @Column(name = "status", nullable = false)
     private String status;
 
-    @Column(name = "role", nullable = false)
-    private String role;
+    @Setter
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(20)")
+    private RolesType role = RolesType.ROLE_COMPANY;
+
+    public void setLogo(String url) {
+        this.companyLogo = url;
+    }
+
+    public void updateCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public void updateManagerPhoneNumber(String managerPhonenumber) {
+        this.managerPhonenumber = managerPhonenumber;
+    }
+
+    public void inactiveMember() {
+        this.status = "삭제";
+    }
+
+    public void resetPassword(String password) {
+        this.companyPassword = password;
+    }
 }

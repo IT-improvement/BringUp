@@ -1,8 +1,9 @@
 package com.bringup.company.recruitment.Service;
 
-import com.bringup.common.jwt.JWTUtil;
+import com.bringup.common.security.service.CompanyDetailsImpl;
 import com.bringup.company.member.Entity.Company;
 import com.bringup.company.member.Repository.CompanyRepository;
+import com.bringup.company.member.exception.CompanyException;
 import com.bringup.company.recruitment.DTO.request.RecruitmentRequestDto;
 import com.bringup.company.recruitment.DTO.response.RecruitmentResponseDto;
 import com.bringup.company.recruitment.Entity.Recruitment;
@@ -11,28 +12,29 @@ import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.bringup.common.enums.MemberErrorCode.BAD_REQUEST;
 
 @Service
 @RequiredArgsConstructor
 public class RecruitmentService {
     private final RecruitmentRepository recruitmentRepository;
     private final CompanyRepository companyRepository;
-    private final JWTUtil jwtUtil;
 
-    public List<RecruitmentResponseDto> getRecruitments(Long companyId) {
-        return recruitmentRepository.findAllByCompanyCompanyId(companyId).stream()
+    public List<RecruitmentResponseDto> getRecruitments(CompanyDetailsImpl userDetails) {
+        return recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId()).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public void createRecruitment(String token, RecruitmentRequestDto requestDto) {
-        String username = jwtUtil.getUsername(token);
-        Company company = companyRepository.findByManagerEmail(username)
+    public void createRecruitment(CompanyDetailsImpl userDetails, RecruitmentRequestDto requestDto) {
+        Company company = companyRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new RuntimeException("Company not found"));
 
         Recruitment recruitment = new Recruitment();
@@ -56,10 +58,13 @@ public class RecruitmentService {
     }
 
     @Transactional
-    public void updateRecruitment(String token, Integer recruitmentIndex, RecruitmentRequestDto requestDto) {
-        String username = jwtUtil.getUsername(token);
+    public void updateRecruitment(CompanyDetailsImpl userDetails, Integer recruitmentIndex, RecruitmentRequestDto requestDto) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+
+        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+            throw new CompanyException(BAD_REQUEST);
+        }
 
         recruitment.setRecruitmentType(requestDto.getRecruitmentType());
         recruitment.setCategory(requestDto.getCategory());
@@ -76,10 +81,13 @@ public class RecruitmentService {
     }
 
     @Transactional
-    public void deleteRecruitment(String token, Integer recruitmentIndex, String reason) {
-        String username = jwtUtil.getUsername(token);
+    public void deleteRecruitment(CompanyDetailsImpl userDetails, Integer recruitmentIndex, String reason) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+
+        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+            throw new CompanyException(BAD_REQUEST);
+        }
 
         recruitment.setStatus("삭제 대기");
         recruitmentRepository.save(recruitment);

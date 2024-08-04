@@ -1,6 +1,6 @@
 package com.bringup.company.review.Service;
 
-import com.bringup.common.jwt.JWTUtil;
+import com.bringup.common.security.service.CompanyDetailsImpl;
 import com.bringup.company.review.Entity.CompanyReview;
 import com.bringup.company.review.Repository.CompanyReviewRepository;
 import com.bringup.member.user.domain.entity.UserEntity;
@@ -16,21 +16,16 @@ import java.util.List;
 public class CompanyReviewService {
     private final CompanyReviewRepository companyReviewRepository;
     private final UserRepository userRepository;
-    private final JWTUtil jwtUtil;
 
-    public List<CompanyReview> getCompanyReviews(String token) {
-        String username = jwtUtil.getUsername(token);
-        UserEntity user = userRepository.findByUserEmail(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return companyReviewRepository.findAllByCompanyCompanyId((long) user.getUserIndex());
+    public List<CompanyReview> getCompanyReviews(CompanyDetailsImpl userDetails) {
+        return companyReviewRepository.findAllByCompanyCompanyId(userDetails.getId());
     }
 
     @Transactional
-    public void deleteCompanyReview(String token, Integer reviewIndex, String reason) {
-        String username = jwtUtil.getUsername(token);
+    public void deleteCompanyReview(CompanyDetailsImpl userDetails, Integer reviewIndex, String reason) {
         CompanyReview review = companyReviewRepository.findById(reviewIndex)
                 .orElseThrow(() -> new RuntimeException("Review not found"));
-        if (review.getUser().getUserEmail().equals(username)) {
+        if (review.getUser().getUserEmail().equals(userDetails.getUsername())) {
             companyReviewRepository.delete(review);
             System.out.println("Deletion reason: " + reason);
         } else {

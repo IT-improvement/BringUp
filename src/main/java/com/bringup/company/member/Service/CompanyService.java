@@ -1,7 +1,8 @@
 package com.bringup.company.member.Service;
 
-import com.bringup.common.jwt.JWTUtil;
-import com.bringup.company.member.DTO.request.CompanyDetails;
+import com.bringup.common.enums.RolesType;
+import com.bringup.common.security.jwt.JwtProvider;
+import com.bringup.common.security.service.CompanyDetailsImpl;
 import com.bringup.company.member.DTO.request.JoinDto;
 import com.bringup.company.member.DTO.request.LoginDto;
 import com.bringup.company.member.DTO.request.SalaryDto;
@@ -19,6 +20,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,10 +38,9 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
     private final SalaryRepository salaryRepository;
-    private final JWTUtil jwtUtil;
+    private final JwtProvider jwtProvider;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-    private final ObjectMapper objectMapper; // Jackson ObjectMapper
 
     /**
      * 회원 등록
@@ -47,6 +48,9 @@ public class CompanyService {
     @Transactional
     public Company joinCompany(JoinDto joinDto) {
         Company company = new Company();
+
+        String encodedPassword = passwordEncoder.encode(joinDto.getPassword());
+        System.out.println("Encoded Password: " + encodedPassword);
 
         company.setManagerEmail(joinDto.getId());
         company.setCompanyPassword(passwordEncoder.encode(joinDto.getPassword()));
@@ -71,8 +75,8 @@ public class CompanyService {
         company.setCompanyFinancialStatements(joinDto.getFinancial_stat());
         company.setOpencvKey(joinDto.getCv_key());
 
-        company.setRole("COMPANY");
-        company.setStatus("ACTIVE");
+        company.setRole(RolesType.ROLE_COMPANY);
+        company.setStatus("활성");
 
         Company savedCompany = companyRepository.save(company);
 
@@ -99,33 +103,25 @@ public class CompanyService {
      * 로그인
      */
     public LoginTokenDto login(LoginDto loginDto) {
-        // 디버그 로그 추가
-        System.out.println("Service: login method called with " + loginDto.getUserid());
-
-        if (loginDto == null) {
-            throw new IllegalArgumentException("loginDto cannot be null");
-        }
-
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginDto.getUserid(),
                 loginDto.getPassword()
         );
 
-        // 디버그 로그 추가
-        System.out.println("Service: authentication token created for " + loginDto.getUserid());
+        System.out.println("Service: login method called with " + loginDto.getUserid());
+        System.out.println("authenticationToken : " + authenticationToken);
+
+        if (loginDto == null) {
+            throw new IllegalArgumentException("loginDto cannot be null");
+        }
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        CompanyDetailsImpl userDetails = (CompanyDetailsImpl) authentication.getPrincipal();
+        System.out.println("userDetails : " + userDetails);
 
-        CompanyDetails companyDetails = (CompanyDetails) authentication.getPrincipal();
-        String accessToken = jwtUtil.createJwt(
-                companyDetails.getUsername(),
-                companyDetails.getAuthorities().toString(),
-                60 * 60 * 10L // 10시간 동안 유효한 토큰
-        );
-
-        // 디버그 로그 추가
-        System.out.println("Service: JWT token created for " + companyDetails.getUsername());
+        String accessToken = jwtProvider.createAccessToken(userDetails);
+        System.out.println("Service: JWT token created for " + userDetails.getUsername());
 
         return LoginTokenDto.builder()
                 .accessToken(accessToken)
@@ -142,9 +138,8 @@ public class CompanyService {
 
     // 회원 정보 수정
     @Transactional
-    public void updateUser(String token, Map<String, String> requestBody) {
-        String username = jwtUtil.getUsername(token);
-        Company company = companyRepository.findByManagerEmail(username)
+    public void updateUser(CompanyDetailsImpl userDetails, Map<String, String> requestBody) {
+        Company company = companyRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
 
         company.setManagerEmail(requestBody.get("m_email"));
@@ -187,29 +182,19 @@ public class CompanyService {
 
     // 회원 탈퇴
     @Transactional
-    public void deleteUser(String token) {
-        String username = jwtUtil.getUsername(token);
-        Company company = companyRepository.findByManagerEmail(username)
+    public void deleteUser(CompanyDetailsImpl userDetails) {
+        Company company = companyRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
 
         companyRepository.delete(company);
     }
 
-    public Company getUserInfo(String token) {
-        String username = jwtUtil.getUsername(token);
-        return companyRepository.findByManagerEmail(username)
+    public Company getUserInfo(CompanyDetailsImpl userDetails) {
+        return companyRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
     }
 
-    public String companyName(String token) {
-        String username = jwtUtil.getUsername(token);
-        return username;
+    public String companyName(CompanyDetailsImpl userDetails) {
+        return userDetails.getUsername();
     }
-
-    /*// 로그아웃
-    public void logout(String token, Map<String, String> requestBody) {
-        // 로그아웃 처리 로직 (예: 토큰 무효화, 세션 종료 등)
-        // 현재는 JWT 기반이므로 서버 측 로그아웃 처리가 불필요.
-        // 필요한 경우 추가 구현.
-    }*/
 }
