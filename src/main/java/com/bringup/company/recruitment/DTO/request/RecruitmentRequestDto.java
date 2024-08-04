@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecruitmentRequestDto {
-    private String managerEmail;
     private String recruitmentType;
     private String category;
     private String skill;
