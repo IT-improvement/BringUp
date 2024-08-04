@@ -18,9 +18,9 @@ public class ValidationRequestInfo{
 
     public static ValidationRequestInfo from(ValidationRequestDto dto) {
         return ValidationRequestInfo.builder()
-                .b_no(dto.businessNumber())
-                .start_dt(dto.startDate())
-                .p_nm(dto.name())
+                .b_no(dto.getB_no())
+                .start_dt(dto.getStart_dt())
+                .p_nm(dto.getP_nm())
                 .build();
     }
 }
