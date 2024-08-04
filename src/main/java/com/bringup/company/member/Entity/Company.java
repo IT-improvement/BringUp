@@ -3,24 +3,19 @@ package com.bringup.company.member.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-@Entity
 @Getter
 @Setter
+@Entity
 @Table(name = "company")
-public class Company{
+public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
     private Long companyId;
 
-    @Column(name = "manager_email", nullable = false, unique = true)
+    @Column(name = "manager_email", nullable = false)
     private String managerEmail;
 
     @Column(name = "company_name", nullable = false)
@@ -41,8 +36,8 @@ public class Company{
     @Column(name = "company_phonenumber")
     private String companyPhonenumber;
 
-    @Column(name = "company_adress", nullable = false)
-    private String companyAdress;
+    @Column(name = "company_address", nullable = false)
+    private String companyAddress;
 
     @Column(name = "company_category", nullable = false)
     private String companyCategory;
@@ -73,6 +68,15 @@ public class Company{
 
     @Column(name = "company_logo")
     private String companyLogo;
+
+    @Column(name = "company_homepage")
+    private String companyHomepage;
+
+    @Column(name = "company_subsidiary")
+    private String companySubsidiary;
+
+    @Column(name = "company_financial_statements")
+    private String companyFinancialStatements;
 
     @Column(name = "opencv_key", nullable = false, columnDefinition = "int default 0")
     private int opencvKey;
