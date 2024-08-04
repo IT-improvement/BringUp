@@ -6,7 +6,7 @@
         <nav class="navbar navbar-expand-xl">
             <div class="container">
                 <!-- 로고 시작 -->
-                <a class="navbar-brand me-3" href="/company/main.html">
+                <a class="navbar-brand me-3" href="/company">
                     <img class="navbar-brand-item light-mode-item" src="/resources/style/common/images/Logo.png" alt="로고">
                     <img class="navbar-brand-item dark-mode-item" src="/resources/style/common/images/Logo_darkmode.png" alt="로고">
                 </a>
@@ -27,8 +27,8 @@
                             <a class="nav-link dropdown-toggle" href="#" id="jobPostingMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">공고</a>
                             <ul class="dropdown-menu" aria-labelledby="jobPostingMenu">
                                 <!-- 드롭다운 서브메뉴 -->
-                                <li> <a class="dropdown-item" href="/company/job_posting/management.jsp">공고 관리</a> </li>
-                                <li> <a class="dropdown-item" href="/company/job_posting/registration.jsp">공고 등록</a> </li>
+                                <li> <a class="dropdown-item" href="/company/jobpost/management">공고 관리</a> </li>
+                                <li> <a class="dropdown-item" href="/company/jobpost/registration">공고 등록</a> </li>
 
                             </ul>
                         </li>
@@ -37,21 +37,21 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="pagesMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">상품</a>
                             <ul class="dropdown-menu" aria-labelledby="pagesMenu">
-                                <li> <a class="dropdown-item" href="/company/product/management.jsp">상품 관리</a></li>
-                                <li> <a class="dropdown-item" href="/company/product/premium_job_posting.jsp">프리미엄 공고</a></li>
-                                <li> <a class="dropdown-item" href="/company/product/advertising_banner.jsp">광고 배너</a></li>
-                                <li> <a class="dropdown-item" href="/company/product/resume_key.jsp">이력서 열람</a></li></ul>
+                                <li> <a class="dropdown-item" href="/company/product/management">상품 관리</a></li>
+                                <li> <a class="dropdown-item" href="/company/product/premium_job_posting">프리미엄 공고</a></li>
+                                <li> <a class="dropdown-item" href="/company/product/advertising_banner">광고 배너</a></li>
+                                <li> <a class="dropdown-item" href="/company/product/resume_key">이력서 열람</a></li></ul>
                         </li>
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="reviewMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">리뷰</a>
                             <ul class="dropdown-menu" aria-labelledby="postMenu">
                                 <!-- 드롭다운 서브메뉴 -->
-                                <li> <a class="dropdown-item" href="/company/review/corporation.jsp">기업 리뷰</a> </li>
-                                <li> <a class="dropdown-item" href="/company/review/interview.jsp">면접 리뷰</a> </li>
+                                <li> <a class="dropdown-item" href="/company/review/corporation">기업 리뷰</a> </li>
+                                <li> <a class="dropdown-item" href="/company/review/interview">면접 리뷰</a> </li>
                             </ul>
                         </li>
-                        <a class="nav-link" href="/company/recommendation/recommendation.jsp" id="recommendMenu">인재 추천</a>
+                        <a class="nav-link" href="/company/recommendation" id="recommendMenu">인재 추천</a>
 
 
                     </ul>
@@ -181,15 +181,14 @@
                             <li class="px-3">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <a class="h6 mt-2 mt-sm-0" href="/company/auth/profile/profile.html"> 00기업</a>
+                                        <a class="h6 mt-2 mt-sm-0" href="/company/auth/profile"> 00기업</a>
                                     </div>
                                 </div>
                                 <hr>
                             </li>
                             <!-- 링크 -->
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-person fa-fw me-2"></i>프로필 수정</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear fa-fw me-2"></i>계정 설정</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-info-circle fa-fw me-2"></i>도움말</a></li>
+                            <li><a class="dropdown-item" href="/company/auth/updateProfile"><i class="bi bi-person fa-fw me-2"></i>프로필 수정</a></li>
+                            <li><a class="dropdown-item" href="/company/auth/updateAuth"><i class="bi bi-gear fa-fw me-2"></i>계정 설정</a></li>
                             <li><a class="dropdown-item" href="/"><i class="bi bi-power fa-fw me-2"></i>로그아웃</a></li>
                             <li class="dropdown-divider mb-2"></li>
                             <li>
@@ -198,7 +197,6 @@
                         <!-- 프로필 드롭다운 끝 -->
                     </div>
                     <!-- 프로필 드롭다운 끝 -->
-
                     <!-- 네비 오른쪽 끝 -->
                 </div>
             </div>
