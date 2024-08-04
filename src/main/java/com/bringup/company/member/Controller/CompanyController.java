@@ -2,6 +2,7 @@ package com.bringup.company.member.Controller;
 
 
 import com.bringup.common.response.BfResponse;
+import com.bringup.common.security.service.CompanyDetailsImpl;
 import com.bringup.company.member.DTO.request.JoinDto;
 import com.bringup.company.member.DTO.request.LoginDto;
 import com.bringup.company.member.DTO.request.ValidationRequestDto;
@@ -79,30 +80,30 @@ public class CompanyController {
 
     // 기업명 헤더 삽입
     @PostMapping("/companyName")
-    public ResponseEntity<BfResponse<?>> companyName(@RequestHeader("Authorization") String token){
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, companyService.companyName(token)));
+    public ResponseEntity<BfResponse<?>> companyName(@AuthenticationPrincipal CompanyDetailsImpl userDetails) {
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, companyService.companyName(userDetails)));
     }
 
     // 회원 정보 수정
     @PutMapping("/user")
     public ResponseEntity<BfResponse<?>> updateUser(
-            @RequestHeader("Authorization") String token,
+            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
             @RequestParam Map<String, String> requestBody) {
-        companyService.updateUser(token, requestBody);
+        companyService.updateUser(userDetails, requestBody);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "Company update successful")));
     }
 
     // 회원 탈퇴
     @DeleteMapping("/user")
-    public ResponseEntity<BfResponse<?>> deleteUser(@RequestHeader("Authorization") String token) {
-        companyService.deleteUser(token);
+    public ResponseEntity<BfResponse<?>> deleteUser(@AuthenticationPrincipal CompanyDetailsImpl userDetails) {
+        companyService.deleteUser(userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "DELETE successful")));
     }
 
     // 회원 정보 조회
     @GetMapping("/companyInfo/post")
-    public ResponseEntity<BfResponse<Company>> getUserInfo(@RequestHeader("Authorization") String token) {
-        Company company = companyService.getUserInfo(token);
+    public ResponseEntity<BfResponse<Company>> getUserInfo(@AuthenticationPrincipal CompanyDetailsImpl userDetails) {
+        Company company = companyService.getUserInfo(userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, company));
     }
 
