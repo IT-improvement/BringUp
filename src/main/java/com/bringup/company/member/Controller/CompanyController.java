@@ -1,6 +1,7 @@
 package com.bringup.company.member.Controller;
 
 
+import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.CompanyDetailsImpl;
 import com.bringup.company.member.DTO.request.JoinDto;
@@ -10,6 +11,7 @@ import com.bringup.company.member.DTO.response.LoginTokenDto;
 import com.bringup.company.member.Entity.Company;
 import com.bringup.company.member.Service.CompanyService;
 import com.bringup.company.member.Service.VerificationService;
+import com.bringup.company.member.exception.CompanyException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +59,8 @@ public class CompanyController {
             joinDTO.setCompany_opendate(businessInfo.getStart_dt());
             joinDTO.setCompany_licence(businessInfo.getB_no());
         }
+        //프로젝트 발표 전까지는 주석처리 ( 진위여부 파악 실패시 회원가입 안됨 )
+        //else throw new CompanyException(MemberErrorCode.NOT_FOUND_1st);
         companyService.joinCompany(joinDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new BfResponse<>(CREATE, Map.of("Company_name", joinDTO.getC_name())));
