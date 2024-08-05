@@ -113,4 +113,73 @@ public class RecruitmentService {
                 .recruitmentClass(recruitment.getRecruitmentClass())
                 .build();
     }
+
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 어드민 완성시 사용할 로직 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    /*
+    @Transactional
+    public void updateRecruitment(CompanyDetailsImpl userDetails, Integer recruitmentIndex, RecruitmentRequestDto requestDto) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
+                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+
+        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+            throw new CompanyException(BAD_REQUEST);
+        }
+
+        // 어드민에게 수정 승인 요청을 보냅니다. (예: 이메일, 알림 등)
+        sendUpdateRequestToAdmin(userDetails, recruitment, requestDto);
+    }
+
+    @Transactional
+    public void deleteRecruitment(CompanyDetailsImpl userDetails, Integer recruitmentIndex, String reason) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
+                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+
+        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+            throw new CompanyException(BAD_REQUEST);
+        }
+
+        // 어드민에게 삭제 승인 요청을 보냅니다. (예: 이메일, 알림 등)
+        sendDeleteRequestToAdmin(userDetails, recruitment, reason);
+    }
+
+    private void sendUpdateRequestToAdmin(CompanyDetailsImpl userDetails, Recruitment recruitment, RecruitmentRequestDto requestDto) {
+        // 어드민에게 수정 요청을 보내는 로직을 작성합니다.
+        // 예시로 HTTP 클라이언트를 사용하여 어드민에게 요청을 보낼 수 있습니다.
+
+        // JSON 형태로 전송할 데이터를 구성합니다.
+        String jsonData = constructUpdateJson(userDetails, recruitment, requestDto);
+
+        // 실제 HTTP 요청을 통해 어드민에게 데이터를 전송합니다.
+        sendHttpRequestToAdmin(jsonData);
+    }
+
+    private void sendDeleteRequestToAdmin(CompanyDetailsImpl userDetails, Recruitment recruitment, String reason) {
+        // 어드민에게 삭제 요청을 보내는 로직을 작성합니다.
+        // 예시로 HTTP 클라이언트를 사용하여 어드민에게 요청을 보낼 수 있습니다.
+
+        // JSON 형태로 전송할 데이터를 구성합니다.
+        String jsonData = constructDeleteJson(userDetails, recruitment, reason);
+
+        // 실제 HTTP 요청을 통해 어드민에게 데이터를 전송합니다.
+        sendHttpRequestToAdmin(jsonData);
+    }
+
+    private String constructUpdateJson(CompanyDetailsImpl userDetails, Recruitment recruitment, RecruitmentRequestDto requestDto) {
+        // JSON 데이터를 생성하는 로직을 작성합니다.
+        return "{ \"action\": \"update\", \"recruitmentId\": " + recruitment.getRecruitmentIndex() + ", \"companyId\": " + recruitment.getCompany().getCompanyId() +
+                ", \"request\": " + requestDto.toString() + ", \"userId\": " + userDetails.getId() + " }";
+    }
+
+    private String constructDeleteJson(CompanyDetailsImpl userDetails, Recruitment recruitment, String reason) {
+        // JSON 데이터를 생성하는 로직을 작성합니다.
+        return "{ \"action\": \"delete\", \"recruitmentId\": " + recruitment.getRecruitmentIndex() + ", \"companyId\": " + recruitment.getCompany().getCompanyId() +
+                ", \"reason\": \"" + reason + "\", \"userId\": " + userDetails.getId() + " }";
+    }
+
+    private void sendHttpRequestToAdmin(String jsonData) {
+        // 실제 HTTP 요청을 통해 어드민에게 데이터를 전송하는 로직을 작성합니다.
+        // 예: HttpClient, RestTemplate, WebClient 등을 사용하여 HTTP 요청을 보낼 수 있습니다.
+    }
+    */
 }
