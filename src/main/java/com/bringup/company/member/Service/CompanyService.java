@@ -221,6 +221,11 @@ public class CompanyService {
     }
 
     public String companyName(CompanyDetailsImpl userDetails) {
-        return userDetails.getUsername();
+        Optional<Company> companyOptional = companyRepository.findByManagerEmail(userDetails.getUsername());
+        if (companyOptional.isPresent()) {
+            return companyOptional.get().getCompanyName();
+        } else {
+            throw new IllegalArgumentException("Company not found for username: " + userDetails.getUsername());
+        }
     }
 }
