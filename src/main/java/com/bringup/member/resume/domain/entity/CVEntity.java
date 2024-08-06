@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "CV")
+@Table(name = "cv")
 @Entity
 public class CVEntity {
 
@@ -19,14 +19,16 @@ public class CVEntity {
     private boolean mainCv;
     private String education;
     private String skill;
-    private String useremail;
+    private String userIndex;
+    private String status;
 
     public CVEntity(CVInsertRequestDto dto){
         this.cvImage = dto.getCvimage();
         this.mainCv = dto.isMaincv();
         this.education=dto.getEducation();
         this.skill=dto.getSkill();
-        this.useremail=dto.getUseremail();
+        this.userIndex=dto.getUserIndex();
+        this.status=dto.getStatus();
     }
 
 }
