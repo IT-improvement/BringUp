@@ -24,10 +24,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.bringup.common.enums.MemberErrorCode.*;
 
@@ -46,7 +52,7 @@ public class CompanyService {
      * 회원 등록
      */
     @Transactional
-    public Company joinCompany(JoinDto joinDto) {
+    public Company joinCompany(JoinDto joinDto, MultipartFile logo) {
         Company company = new Company();
 
         String encodedPassword = passwordEncoder.encode(joinDto.getPassword());
@@ -65,7 +71,7 @@ public class CompanyService {
         company.setCompanyHistory(joinDto.getC_history());
         company.setCompanyScale(joinDto.getC_scale());
         company.setCompanyVision(joinDto.getC_vision());
-        company.setCompanyLogo(joinDto.getC_logo());
+        company.setCompanyLogo(saveLogoImage(logo));
         company.setCompanySize(joinDto.getC_size());
         company.setCompanyOpendate(joinDto.getCompany_opendate());
         company.setCompanyLicense(joinDto.getCompany_licence());
@@ -87,6 +93,26 @@ public class CompanyService {
         }
 
         return savedCompany;
+    }
+
+    private String saveLogoImage(MultipartFile logo) {
+        if (logo.isEmpty()) {
+            return null;
+        }
+
+        try {
+            // 이미지 저장 경로 지정
+            String uploadDir = "src/main/resources/static/logos/";
+            String fileName = "Logo_" + UUID.randomUUID().toString() + "_" + logo.getOriginalFilename();
+            Path path = Paths.get(uploadDir + fileName);
+
+            Files.createDirectories(path.getParent());
+            Files.write(path, logo.getBytes());
+
+            return fileName;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to store logo image", e);
+        }
     }
 
     private void saveSalary(Long companyId, SalaryDto salaryDto) {
