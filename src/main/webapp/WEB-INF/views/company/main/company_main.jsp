@@ -178,5 +178,10 @@ JS 라이브러리, 플러그인 및 사용자 정의 스크립트 -->
 <!-- 테마 JS -->
 <script src="/resources/script/common/function/functions.js"></script>
 
+<!-- 메인 JS -->
+<script src="/resources/script/company/main.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </body>
 </html>

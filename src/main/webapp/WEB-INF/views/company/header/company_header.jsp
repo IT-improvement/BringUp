@@ -172,7 +172,7 @@
                     <div class="nav-item ms-2 ms-md-3 dropdown">
                         <!-- 아바타 -->
                         <a href="#" id="profileDropdown" role="button" data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">
-                            00기업
+                            <span id="companyNameSpan">${companyName}</span>
                         </a>
 
                         <!-- 프로필 드롭다운 시작 -->
@@ -181,7 +181,7 @@
                             <li class="px-3">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <a class="h6 mt-2 mt-sm-0" href="/company/auth/profile"> 00기업</a>
+                                        <a class="h6 mt-2 mt-sm-0" href="/company/auth/profile"> <span id="companyNameLink"></span></a>
                                     </div>
                                 </div>
                                 <hr>
@@ -205,3 +205,45 @@
     </header>
     <!-- =======================
     헤더 끝 -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const accessToken = sessionStorage.getItem('accessToken');
+    if (!accessToken) {
+        console.error('액세스 토큰을 찾을 수 없습니다.');
+        return;
+    }
+    console.log('Authorization: Bearer ' + accessToken);
+    fetch('/company/companyName', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('서버 응답이 올바르지 않습니다.');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('서버 응답:', data);
+        if (data.data) {
+            const companyName = data.data;
+            const companyNameSpan = document.getElementById('companyNameSpan');
+            const companyNameLink = document.getElementById('companyNameLink');
+            
+            if (companyNameSpan) companyNameSpan.textContent = companyName;
+            if (companyNameLink) companyNameLink.textContent = companyName;
+            
+            console.log('회사 이름:', companyName);
+        } else {
+            console.error('회사 이름 데이터가 올바르지 않습니다:', data);
+        }
+    })
+    .catch(error => {
+        console.error('회사 이름을 가져오는 데 실패했습니다:', error);
+    });
+});
+</script>
