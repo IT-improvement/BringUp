@@ -15,12 +15,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 password: password
             })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                console.log('서버 응답:', data);
+                throw new Error('서버 응답이 올바르지 않습니다.');
+            }
+            return response.json();
+        })
         .then(data => {
-            if (data.success) {
-                console.log('로그인 성공:', data);
-                // 액세스 토큰을 쿠키에 저장
-                document.cookie = `accessToken=${data.data.accessToken}; path=/; secure; samesite=strict`;
+            console.log('서버 응답:', data);
+            if (data.code === 200 && data.data && data.data.accessToken) {
+                console.log('로그인 성공11:', data.code);
+                // 액세스 토큰을 세션 스토리지에 저장
+                sessionStorage.setItem('accessToken', data.data.accessToken);
                 window.location.href = '/company';
             } else {
                 console.error('로그인 실패:', data);
