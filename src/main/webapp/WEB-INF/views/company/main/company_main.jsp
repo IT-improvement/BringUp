@@ -29,7 +29,6 @@
 
 	<!-- 테마 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
-
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />

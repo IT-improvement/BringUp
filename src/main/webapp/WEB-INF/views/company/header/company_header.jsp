@@ -14,14 +14,12 @@
 
                 <!-- 반응형 네비게이션 토글러 -->
                 <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="네비게이션 토글">
-                    <span class="text-body h6 d-none d-sm-inline-block">메뉴</span>
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <!-- 메인 네비게이션 시작 -->
                 <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="navbar-nav navbar-nav-scroll mx-auto">
-
+                    <ul class="navbar-nav mx-auto">
                         <!-- 네비 아이템 2 공고 -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="jobPostingMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">공고</a>
@@ -29,7 +27,6 @@
                                 <!-- 드롭다운 서브메뉴 -->
                                 <li> <a class="dropdown-item" href="/company/jobpost/management">공고 관리</a> </li>
                                 <li> <a class="dropdown-item" href="/company/jobpost/registration">공고 등록</a> </li>
-
                             </ul>
                         </li>
 
@@ -51,9 +48,9 @@
                                 <li> <a class="dropdown-item" href="/company/review/interview">면접 리뷰</a> </li>
                             </ul>
                         </li>
-                        <a class="nav-link" href="/company/recommendation" id="recommendMenu">인재 추천</a>
-
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="/company/recommendation" id="recommendMenu">인재 추천</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- 메인 네비게이션 끝 -->
@@ -96,67 +93,69 @@
                                     <a class="small" href="#">모두 지우기</a>
                                 </div>
                                 <div class="card-body p-0">
-                                    <ul class="list-group list-unstyled list-group-flush">
-                                        <!-- 알림 아이템 -->
-                                        <li>
-                                            <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
-                                                <div>
-                                                    <h6 class="mb-1">12명의 새로운 멤버가 가입했습니다</h6>
-                                                    <span class="small"> <i class="bi bi-clock"></i> 3분 전</span>
-                                                </div>
-                                                <div class="ms-auto">
-                                                    <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
-                                                        <i class="bi bi-x"></i>
-                                                    </button>
-                                                </div>
-                                            </a>
-                                        </li>
+                                    <div class="scrollable-notifications" style="max-height: 300px; overflow-y: auto;">
+                                        <ul class="list-group list-unstyled list-group-flush">
+                                            <!-- 알림 아이템 -->
+                                            <li>
+                                                <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
+                                                    <div>
+                                                        <h6 class="mb-1">12명의 새로운 멤버가 가입했습니다</h6>
+                                                        <span class="small"> <i class="bi bi-clock"></i> 3분 전</span>
+                                                    </div>
+                                                    <div class="ms-auto">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
+                                                            <i class="bi bi-x"></i>
+                                                        </button>
+                                                    </div>
+                                                </a>
+                                            </li>
 
-                                        <!-- 알림 아이템 -->
-                                        <li>
-                                            <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
-                                                <div>
-                                                    <h6 class="mb-1">Larry Lawson이 계정을 삭제했습니다</h6>
-                                                    <span class="small"> <i class="bi bi-clock"></i> 6분 전</span>
-                                                </div>
-                                                <div class="ms-auto">
-                                                    <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
-                                                        <i class="bi bi-x"></i>
-                                                    </button>
-                                                </div>
-                                            </a>
-                                        </li>
+                                            <!-- 알림 아이템 -->
+                                            <li>
+                                                <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
+                                                    <div>
+                                                        <h6 class="mb-1">Larry Lawson이 계정을 삭제했습니다</h6>
+                                                        <span class="small"> <i class="bi bi-clock"></i> 6분 전</span>
+                                                    </div>
+                                                    <div class="ms-auto">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
+                                                            <i class="bi bi-x"></i>
+                                                        </button>
+                                                    </div>
+                                                </a>
+                                            </li>
 
-                                        <!-- 알림 아이템 -->
-                                        <li>
-                                            <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
-                                                <div>
-                                                    <h6 class="mb-1">Byan이 당신의 게시물에 댓글을 달았습니다</h6>
-                                                    <span class="small"> <i class="bi bi-clock"></i> 10분 전</span>
-                                                </div>
-                                                <div class="ms-auto">
-                                                    <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
-                                                        <i class="bi bi-x"></i>
-                                                    </button>
-                                                </div>
-                                            </a>
-                                        </li>
+                                            <!-- 알림 아이템 -->
+                                            <li>
+                                                <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
+                                                    <div>
+                                                        <h6 class="mb-1">Byan이 당신의 게시물에 댓글을 달았습니다</h6>
+                                                        <span class="small"> <i class="bi bi-clock"></i> 10분 전</span>
+                                                    </div>
+                                                    <div class="ms-auto">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
+                                                            <i class="bi bi-x"></i>
+                                                        </button>
+                                                    </div>
+                                                </a>
+                                            </li>
 
-                                        <!-- 알림 아이템 -->
-                                        <li>
-                                            <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
-                                                <div>
-                                                    <h6 class="mb-1">설정이 업데이트되었습니다</h6>
-                                                    <span class="small"> <i class="bi bi-clock"></i> 어제</span>
-                                                </div>
-                                                <div class="ms-auto">
-                                                    <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
-                                                        <i class="bi bi-x"></i>
-                                                    </button>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                            <!-- 알림 아이템 -->
+                                            <li>
+                                                <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
+                                                    <div>
+                                                        <h6 class="mb-1">설정이 업데이트되었습니다</h6>
+                                                        <span class="small"> <i class="bi bi-clock"></i> 어제</span>
+                                                    </div>
+                                                    <div class="ms-auto">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
+                                                            <i class="bi bi-x"></i>
+                                                        </button>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                                 <!-- 버튼 -->
                                 <div class="card-footer bg-transparent border-0 py-3 text-center position-relative">
@@ -172,7 +171,7 @@
                     <div class="nav-item ms-2 ms-md-3 dropdown">
                         <!-- 아바타 -->
                         <a href="#" id="profileDropdown" role="button" data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span id="companyNameSpan">${companyName}</span>
+                            <span id="companyNameSpan" style="display: none;">로딩 중...</span>
                         </a>
 
                         <!-- 프로필 드롭다운 시작 -->
@@ -181,7 +180,7 @@
                             <li class="px-3">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <a class="h6 mt-2 mt-sm-0" href="/company/auth/profile"> <span id="companyNameLink"></span></a>
+                                        <a class="h6 mt-2 mt-sm-0" href="/company/auth/profile"><span id="companyNameLink">로딩 중...</span></a>
                                     </div>
                                 </div>
                                 <hr>
@@ -189,7 +188,7 @@
                             <!-- 링크 -->
                             <li><a class="dropdown-item" href="/company/auth/updateProfile"><i class="bi bi-person fa-fw me-2"></i>프로필 수정</a></li>
                             <li><a class="dropdown-item" href="/company/auth/updateAuth"><i class="bi bi-gear fa-fw me-2"></i>계정 설정</a></li>
-                            <li><a class="dropdown-item" href="/"><i class="bi bi-power fa-fw me-2"></i>로그아웃</a></li>
+                            <li><a class="dropdown-item" href="#" id="logoutButton"><i class="bi bi-power fa-fw me-2"></i>로그아웃</a></li>
                             <li class="dropdown-divider mb-2"></li>
                             <li>
                             </li>
@@ -206,44 +205,8 @@
     <!-- =======================
     헤더 끝 -->
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const accessToken = sessionStorage.getItem('accessToken');
-    if (!accessToken) {
-        console.error('액세스 토큰을 찾을 수 없습니다.');
-        return;
-    }
-    console.log('Authorization: Bearer ' + accessToken);
-    fetch('/company/companyName', {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Bearer ' + accessToken,
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('서버 응답이 올바르지 않습니다.');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('서버 응답:', data);
-        if (data.data) {
-            const companyName = data.data;
-            const companyNameSpan = document.getElementById('companyNameSpan');
-            const companyNameLink = document.getElementById('companyNameLink');
-            
-            if (companyNameSpan) companyNameSpan.textContent = companyName;
-            if (companyNameLink) companyNameLink.textContent = companyName;
-            
-            console.log('회사 이름:', companyName);
-        } else {
-            console.error('회사 이름 데이터가 올바르지 않습니다:', data);
-        }
-    })
-    .catch(error => {
-        console.error('회사 이름을 가져오는 데 실패했습니다:', error);
-    });
-});
-</script>
+<script src="/resources/script/company/header.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/resources/style/company/header/header.css">
+
+
