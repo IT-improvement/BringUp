@@ -141,6 +141,7 @@ public class SpringSecurityConfig {
                 antMatcher(POST, "/company/checkId"),          // ID 중복 체크
                 antMatcher(GET, "/WEB-INF/views/**"),          // 웹 리소스
                 antMatcher(GET, "/resources/**"),
+                antMatcher(GET, "/company/page/**"),              // 기업 페이지
                 antMatcher("/member/**"),
                 antMatcher("/github/**")// 정적 리소스
         );
