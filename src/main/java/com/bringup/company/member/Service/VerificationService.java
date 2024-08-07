@@ -41,29 +41,32 @@ public class VerificationService {
         URI uri = UriComponentsBuilder
                 .fromHttpUrl(url + "/validate")
                 .queryParam("serviceKey", key)
-                .build().toUri(); // encoded:true -> 이중 인코딩 방지
+                .build(true).toUri();
 
         ValidationRequestInfo requestInfo = ValidationRequestInfo.from(requestDto);
+
+        System.out.println("Request Body: " + Map.of("businesses", List.of(requestInfo)));
 
         ValidationResponseDto response = getWebClient().post()
                 .uri(uri)
                 .bodyValue(Map.of("businesses", List.of(requestInfo)))
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> {
+                    clientResponse.bodyToMono(String.class).subscribe(System.out::println);
                     throw new CompanyException(BUSINESS_VALIDATE_ERROR);
                 })
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> {
+                    clientResponse.bodyToMono(String.class).subscribe(System.out::println);
                     throw new CompanyException(BUSINESS_VALIDATE_ERROR);
                 })
                 .bodyToMono(ValidationResponseDto.class)
-                .block(); // 동기적
+                .block();
 
-        System.out.println("Request Body: " + response);
+        System.out.println("Response: " + response);
 
         if (response != null && response.data() != null && !response.data().isEmpty()) {
-            return response.data().get(0).valid().equals("01");
+            return "01".equals(response.data().get(0).valid());
         } else {
-            // 알 수 없는 요인에 의해 실패한 요청
             throw new CompanyException(BUSINESS_VALIDATE_ERROR);
         }
     }

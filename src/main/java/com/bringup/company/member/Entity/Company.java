@@ -1,12 +1,16 @@
 package com.bringup.company.member.Entity;
 
+import com.bringup.common.enums.RolesType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @Getter
 @Setter
+@Entity
 @Table(name = "company")
 public class Company {
 
@@ -36,8 +40,8 @@ public class Company {
     @Column(name = "company_phonenumber")
     private String companyPhonenumber;
 
-    @Column(name = "company_adress", nullable = false)
-    private String companyAdress;
+    @Column(name = "company_address", nullable = false)
+    private String companyAddress;
 
     @Column(name = "company_category", nullable = false)
     private String companyCategory;
@@ -69,9 +73,43 @@ public class Company {
     @Column(name = "company_logo")
     private String companyLogo;
 
+    @Column(name = "company_homepage")
+    private String companyHomepage;
+
+    @Column(name = "company_subsidiary")
+    private String companySubsidiary;
+
+    @Column(name = "company_financial_statements")
+    private String companyFinancialStatements;
+
     @Column(name = "opencv_key", nullable = false, columnDefinition = "int default 0")
     private int opencvKey;
 
     @Column(name = "status", nullable = false)
     private String status;
+
+    @Setter
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "VARCHAR(20)")
+    private RolesType role = RolesType.ROLE_COMPANY;
+
+    public void setLogo(String url) {
+        this.companyLogo = url;
+    }
+
+    public void updateCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public void updateManagerPhoneNumber(String managerPhonenumber) {
+        this.managerPhonenumber = managerPhonenumber;
+    }
+
+    public void inactiveMember() {
+        this.status = "삭제";
+    }
+
+    public void resetPassword(String password) {
+        this.companyPassword = password;
+    }
 }

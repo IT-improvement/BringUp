@@ -6,7 +6,7 @@
         <nav class="navbar navbar-expand-xl">
             <div class="container">
                 <!-- 로고 시작 -->
-                <a class="navbar-brand me-3" href="/company/main.html">
+                <a class="navbar-brand me-3" href="/company">
                     <img class="navbar-brand-item light-mode-item" src="/resources/style/common/images/Logo.png" alt="로고">
                     <img class="navbar-brand-item dark-mode-item" src="/resources/style/common/images/Logo_darkmode.png" alt="로고">
                 </a>
@@ -14,22 +14,19 @@
 
                 <!-- 반응형 네비게이션 토글러 -->
                 <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="네비게이션 토글">
-                    <span class="text-body h6 d-none d-sm-inline-block">메뉴</span>
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <!-- 메인 네비게이션 시작 -->
                 <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="navbar-nav navbar-nav-scroll mx-auto">
-
+                    <ul class="navbar-nav mx-auto">
                         <!-- 네비 아이템 2 공고 -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="jobPostingMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">공고</a>
                             <ul class="dropdown-menu" aria-labelledby="jobPostingMenu">
                                 <!-- 드롭다운 서브메뉴 -->
-                                <li> <a class="dropdown-item" href="/company/job_posting/management.html">공고 관리</a> </li>
-                                <li> <a class="dropdown-item" href="/company/job_posting/registration.html">공고 등록</a> </li>
-
+                                <li> <a class="dropdown-item" href="/company/jobpost/management">공고 관리</a> </li>
+                                <li> <a class="dropdown-item" href="/company/jobpost/registration">공고 등록</a> </li>
                             </ul>
                         </li>
 
@@ -37,23 +34,23 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="pagesMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">상품</a>
                             <ul class="dropdown-menu" aria-labelledby="pagesMenu">
-                                <li> <a class="dropdown-item" href="/company/product/management.html">상품 관리</a></li>
-                                <li> <a class="dropdown-item" href="/company/product/premium_job_posting.html">프리미엄 공고</a></li>
-                                <li> <a class="dropdown-item" href="/company/product/advertising_banner.html">광고 배너</a></li>
-                                <li> <a class="dropdown-item" href="/company/product/resume_key.html">이력서 열람</a></li></ul>
+                                <li> <a class="dropdown-item" href="/company/product/management">상품 관리</a></li>
+                                <li> <a class="dropdown-item" href="/company/product/premium_job_posting">프리미엄 공고</a></li>
+                                <li> <a class="dropdown-item" href="/company/product/advertising_banner">광고 배너</a></li>
+                                <li> <a class="dropdown-item" href="/company/product/resume_key">이력서 열람</a></li></ul>
                         </li>
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="reviewMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">리뷰</a>
                             <ul class="dropdown-menu" aria-labelledby="postMenu">
                                 <!-- 드롭다운 서브메뉴 -->
-                                <li> <a class="dropdown-item" href="/company/review/corporation.html">기업 리뷰</a> </li>
-                                <li> <a class="dropdown-item" href="/company/review/interview.html">면접 리뷰</a> </li>
+                                <li> <a class="dropdown-item" href="/company/review/corporation">기업 리뷰</a> </li>
+                                <li> <a class="dropdown-item" href="/company/review/interview">면접 리뷰</a> </li>
                             </ul>
                         </li>
-                        <a class="nav-link" href="/company/recommendation.html" id="recommendMenu">인재 추천</a>
-
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="/company/recommendation" id="recommendMenu">인재 추천</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- 메인 네비게이션 끝 -->
@@ -96,67 +93,69 @@
                                     <a class="small" href="#">모두 지우기</a>
                                 </div>
                                 <div class="card-body p-0">
-                                    <ul class="list-group list-unstyled list-group-flush">
-                                        <!-- 알림 아이템 -->
-                                        <li>
-                                            <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
-                                                <div>
-                                                    <h6 class="mb-1">12명의 새로운 멤버가 가입했습니다</h6>
-                                                    <span class="small"> <i class="bi bi-clock"></i> 3분 전</span>
-                                                </div>
-                                                <div class="ms-auto">
-                                                    <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
-                                                        <i class="bi bi-x"></i>
-                                                    </button>
-                                                </div>
-                                            </a>
-                                        </li>
+                                    <div class="scrollable-notifications" style="max-height: 300px; overflow-y: auto;">
+                                        <ul class="list-group list-unstyled list-group-flush">
+                                            <!-- 알림 아이템 -->
+                                            <li>
+                                                <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
+                                                    <div>
+                                                        <h6 class="mb-1">12명의 새로운 멤버가 가입했습니다</h6>
+                                                        <span class="small"> <i class="bi bi-clock"></i> 3분 전</span>
+                                                    </div>
+                                                    <div class="ms-auto">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
+                                                            <i class="bi bi-x"></i>
+                                                        </button>
+                                                    </div>
+                                                </a>
+                                            </li>
 
-                                        <!-- 알림 아이템 -->
-                                        <li>
-                                            <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
-                                                <div>
-                                                    <h6 class="mb-1">Larry Lawson이 계정을 삭제했습니다</h6>
-                                                    <span class="small"> <i class="bi bi-clock"></i> 6분 전</span>
-                                                </div>
-                                                <div class="ms-auto">
-                                                    <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
-                                                        <i class="bi bi-x"></i>
-                                                    </button>
-                                                </div>
-                                            </a>
-                                        </li>
+                                            <!-- 알림 아이템 -->
+                                            <li>
+                                                <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
+                                                    <div>
+                                                        <h6 class="mb-1">Larry Lawson이 계정을 삭제했습니다</h6>
+                                                        <span class="small"> <i class="bi bi-clock"></i> 6분 전</span>
+                                                    </div>
+                                                    <div class="ms-auto">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
+                                                            <i class="bi bi-x"></i>
+                                                        </button>
+                                                    </div>
+                                                </a>
+                                            </li>
 
-                                        <!-- 알림 아이템 -->
-                                        <li>
-                                            <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
-                                                <div>
-                                                    <h6 class="mb-1">Byan이 당신의 게시물에 댓글을 달았습니다</h6>
-                                                    <span class="small"> <i class="bi bi-clock"></i> 10분 전</span>
-                                                </div>
-                                                <div class="ms-auto">
-                                                    <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
-                                                        <i class="bi bi-x"></i>
-                                                    </button>
-                                                </div>
-                                            </a>
-                                        </li>
+                                            <!-- 알림 아이템 -->
+                                            <li>
+                                                <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
+                                                    <div>
+                                                        <h6 class="mb-1">Byan이 당신의 게시물에 댓글을 달았습니다</h6>
+                                                        <span class="small"> <i class="bi bi-clock"></i> 10분 전</span>
+                                                    </div>
+                                                    <div class="ms-auto">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
+                                                            <i class="bi bi-x"></i>
+                                                        </button>
+                                                    </div>
+                                                </a>
+                                            </li>
 
-                                        <!-- 알림 아이템 -->
-                                        <li>
-                                            <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
-                                                <div>
-                                                    <h6 class="mb-1">설정이 업데이트되었습니다</h6>
-                                                    <span class="small"> <i class="bi bi-clock"></i> 어제</span>
-                                                </div>
-                                                <div class="ms-auto">
-                                                    <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
-                                                        <i class="bi bi-x"></i>
-                                                    </button>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                            <!-- 알림 아이템 -->
+                                            <li>
+                                                <a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
+                                                    <div>
+                                                        <h6 class="mb-1">설정이 업데이트되었습니다</h6>
+                                                        <span class="small"> <i class="bi bi-clock"></i> 어제</span>
+                                                    </div>
+                                                    <div class="ms-auto">
+                                                        <button type="button" class="btn btn-sm btn-outline-danger remove-notification">
+                                                            <i class="bi bi-x"></i>
+                                                        </button>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                                 <!-- 버튼 -->
                                 <div class="card-footer bg-transparent border-0 py-3 text-center position-relative">
@@ -172,7 +171,7 @@
                     <div class="nav-item ms-2 ms-md-3 dropdown">
                         <!-- 아바타 -->
                         <a href="#" id="profileDropdown" role="button" data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">
-                            00기업
+                            <span id="companyNameSpan" style="display: none;">로딩 중...</span>
                         </a>
 
                         <!-- 프로필 드롭다운 시작 -->
@@ -181,16 +180,15 @@
                             <li class="px-3">
                                 <div class="d-flex align-items-center">
                                     <div>
-                                        <a class="h6 mt-2 mt-sm-0" href="/company/auth/profile/profile.html"> 00기업</a>
+                                        <a class="h6 mt-2 mt-sm-0" href="/company/auth/profile"><span id="companyNameLink">로딩 중...</span></a>
                                     </div>
                                 </div>
                                 <hr>
                             </li>
                             <!-- 링크 -->
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-person fa-fw me-2"></i>프로필 수정</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear fa-fw me-2"></i>계정 설정</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-info-circle fa-fw me-2"></i>도움말</a></li>
-                            <li><a class="dropdown-item" href="/"><i class="bi bi-power fa-fw me-2"></i>로그아웃</a></li>
+                            <li><a class="dropdown-item" href="/company/auth/updateProfile"><i class="bi bi-person fa-fw me-2"></i>프로필 수정</a></li>
+                            <li><a class="dropdown-item" href="/company/auth/updateAuth"><i class="bi bi-gear fa-fw me-2"></i>계정 설정</a></li>
+                            <li><a class="dropdown-item" href="#" id="logoutButton"><i class="bi bi-power fa-fw me-2"></i>로그아웃</a></li>
                             <li class="dropdown-divider mb-2"></li>
                             <li>
                             </li>
@@ -198,7 +196,6 @@
                         <!-- 프로필 드롭다운 끝 -->
                     </div>
                     <!-- 프로필 드롭다운 끝 -->
-
                     <!-- 네비 오른쪽 끝 -->
                 </div>
             </div>
@@ -207,3 +204,9 @@
     </header>
     <!-- =======================
     헤더 끝 -->
+
+<script src="/resources/script/company/header.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/resources/style/company/header/header.css">
+
+
