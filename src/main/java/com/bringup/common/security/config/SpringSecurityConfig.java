@@ -41,18 +41,18 @@ public class SpringSecurityConfig {
 
     private final JwtProvider jwtProvider;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
-
+/*
     @Qualifier("companyDetailsService")
     private final UserDetailsService companyDetailsService;
 
     @Qualifier("customUserDetailsService")
-    private final UserDetailsService customUserDetailsService;
+    private final UserDetailsService customUserDetailsService;*/
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+/*
     @Bean
     public DaoAuthenticationProvider companyAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -72,7 +72,7 @@ public class SpringSecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager() {
         return new ProviderManager(List.of(companyAuthenticationProvider(), customAuthenticationProvider()));
-    }
+    }*/
 
     /**
      * public http
@@ -134,7 +134,9 @@ public class SpringSecurityConfig {
                 antMatcher(POST, "/company/join/second"),      // 회원가입 2단계
                 antMatcher(POST, "/company/checkId"),          // ID 중복 체크
                 antMatcher(GET, "/WEB-INF/views/**"),          // 웹 리소스
-                antMatcher(GET, "/resources/**")               // 정적 리소스
+                antMatcher(GET, "/resources/**"),
+                antMatcher("/member/**"),
+                antMatcher("/github/**")// 정적 리소스
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
