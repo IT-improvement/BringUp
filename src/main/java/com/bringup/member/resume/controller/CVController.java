@@ -8,10 +8,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,5 +29,15 @@ public class CVController {
     public ResponseEntity<? super CVInsertResponseDto> insertPortfolio(@RequestParam @Valid CVPortfolioRequestDto requestBody){
         ResponseEntity<? super CVInsertResponseDto> response = cvService.insertPortfolio(requestBody);
         return response;
+    }
+
+    @GetMapping("/cv")
+    public String listCv(@AuthenticationPrincipal String userIndex){
+        return "member/resume/list";
+    }
+
+    @GetMapping("/cv/{cvindex}")
+    public String readCv(@AuthenticationPrincipal String userIndex, @PathVariable(name = "cvindex") String cvindex, Model model){
+        return "member/resume/cv";
     }
 }
