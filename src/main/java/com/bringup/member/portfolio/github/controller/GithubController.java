@@ -1,6 +1,6 @@
-package com.bringup.member.github.controller;
+package com.bringup.member.portfolio.github.controller;
 
-import com.bringup.member.github.domain.service.GithubService;
+import com.bringup.member.portfolio.github.domain.service.GithubService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
