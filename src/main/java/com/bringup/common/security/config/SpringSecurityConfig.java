@@ -36,23 +36,29 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class SpringSecurityConfig {
 
     private final JwtProvider jwtProvider;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
-/*
+
     @Qualifier("companyDetailsService")
     private final UserDetailsService companyDetailsService;
 
     @Qualifier("customUserDetailsService")
-    private final UserDetailsService customUserDetailsService;*/
+    private final UserDetailsService customUserDetailsService;
+
+    public SpringSecurityConfig(JwtProvider jwtProvider, CustomAccessDeniedHandler customAccessDeniedHandler, UserDetailsService companyDetailsService, UserDetailsService customUserDetailsService) {
+        this.jwtProvider = jwtProvider;
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
+        this.companyDetailsService = companyDetailsService;
+        this.customUserDetailsService = customUserDetailsService;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-/*
+
     @Bean
     public DaoAuthenticationProvider companyAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -72,7 +78,7 @@ public class SpringSecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager() {
         return new ProviderManager(List.of(companyAuthenticationProvider(), customAuthenticationProvider()));
-    }*/
+    }
 
     /**
      * public http
