@@ -1,4 +1,4 @@
-package com.bringup.member.github.domain.service;
+package com.bringup.member.portfolio.github.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
