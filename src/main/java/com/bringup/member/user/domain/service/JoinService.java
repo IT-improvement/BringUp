@@ -9,28 +9,40 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class JoinService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    public JoinService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+
+        this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     public void joinProcess(JoinDTO joinDTO) {
         // db에 이미 동일한 이메일을 가진 회원이 존재하는지 확인
-        if (userRepository.findByUserEmail(joinDTO.getUserEmail()).isPresent()) {
-            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+
+        String email = joinDTO.getUserEmail();
+        String password = joinDTO.getUserPassword();
+
+        Boolean isExist = userRepository.existsByUserEmail(email);
+
+        if (isExist) {
+
+            return;
         }
 
         UserEntity userEntity = new UserEntity();
+
         userEntity.setUserEmail(joinDTO.getUserEmail());
-        userEntity.setUserPassword(bCryptPasswordEncoder.encode(joinDTO.getUserPassword()));
+        userEntity.setUserPassword(bCryptPasswordEncoder.encode(password)); //joinDTO의 데이터를 꺼내 암호화
         userEntity.setUserName(joinDTO.getUserName());
         userEntity.setUserAddress(joinDTO.getUserAddress());
-        userEntity.setUserPhoneNumber(joinDTO.getUserPhoneNumber());
+        userEntity.setUserPhonenumber(joinDTO.getUserPhonenumber());
         userEntity.setUserBirthday(joinDTO.getUserBirthday());
         userEntity.setFreelancer(joinDTO.isFreelancer());
         userEntity.setStatus(joinDTO.getStatus());
+        userEntity.setRole("ROLE_ADMIN");
 
-        userRepository.save(userEntity);
+        userRepository.save(userEntity); // 디비에 저장
     }
 }

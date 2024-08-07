@@ -1,19 +1,17 @@
 package com.bringup.member.user.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
 @Entity
+@Table(name = "user")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userIndex;
+    private int userIndex;
 
     private String userEmail;
 
@@ -23,7 +21,7 @@ public class UserEntity {
 
     private String userAddress;
 
-    private String userPhoneNumber;
+    private String userPhonenumber;
 
     private String userBirthday;
 
@@ -32,5 +30,4 @@ public class UserEntity {
     private String status;
 
     private String role;
-
 }

@@ -3,22 +3,91 @@ package com.bringup.company.page.Controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Map;
-
-import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/company")
 public class PageController {
 
-    @GetMapping("/")
+    @GetMapping("")
     public String mainPage(){
-        System.out.println("들어왔다");
         return "company/main/company_main";
+    }
+
+    @GetMapping("/admin")
+    public String adminP() {
+
+        return "admin Controller";
+    }
+
+    @GetMapping("/jobpost/management")
+    public String jobpostingManagement(){
+        return "company/jobposting/management";
+    }
+
+    @GetMapping("/jobpost/registration")
+    public String jobpostingRegistration(){
+        return "company/jobposting/registration";
+    }
+
+    @GetMapping("/product/management")
+    public String productManagement(){
+        return "company/product/management";
+    }
+
+    @GetMapping("/product/premium_job_posting")
+    public String productPremiumJobPosting(){
+        return "company/product/premium_job_posting";
+    }
+
+    @GetMapping("/product/advertising_banner")
+    public String productAdvertisingBanner(){
+        return "company/product/advertising_banner";
+    }
+
+    @GetMapping("/product/resume_key")
+    public String productResumeKey(){
+        return "company/product/resume_key";
+    }
+
+    @GetMapping("/review/corporation")
+    public String reviewCorporation(){
+        return "company/review/corporation";
+    }
+
+    @GetMapping("/review/interview")
+    public String reviewInterview(){
+        return "company/review/interview";
+    }
+
+    @GetMapping("/recommendation")
+    public String recommendation(){
+        return "company/recommendation/recommendation";
+    }
+
+    @GetMapping("/auth/profile")
+    public String profile(){
+        return "company/auth/profile/profile";
+    }
+
+    @GetMapping("/auth/login")
+    public String login(){
+        return "company/auth/login/login";
+    }
+
+    @GetMapping("/auth/signup")
+    public String signup(){
+        return "company/auth/signup/signup";
+    }
+
+    @GetMapping("/auth/updateProfile")
+    public String updateProfile(){
+        return "company/auth/profile/updateProfile";
+    }
+
+    @GetMapping("/auth/updateAuth")
+    public String updateAuth(){
+        return "company/auth/profile/updateAuth";
     }
 }

@@ -8,11 +8,12 @@ import java.util.Optional;
 
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Long> {
-    Optional<Company> findBymanagerEmail(String managerEmail);
-
-    Optional<Company> findBycompanyPassword(String companyPassword);
+    Optional<Company> findByCompanyPassword(String companyPassword);
+    Optional<Company> findByManagerEmail(String managerEmail);
 
     boolean existsByManagerEmail(String managerEmail);
 
     boolean existsByManagerPhonenumber(String managerPhone);
+
+
 }
