@@ -44,7 +44,7 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
     private final SalaryRepository salaryRepository;
     private final JwtProvider jwtProvider;
-    private final AuthenticationManager authenticationManager;
+//    private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -127,31 +127,31 @@ public class CompanyService {
     /**
      * 로그인
      */
-    public LoginTokenDto login(LoginDto loginDto) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                loginDto.getUserid(),
-                loginDto.getPassword()
-        );
-
-        System.out.println("Service: login method called with " + loginDto.getUserid());
-        System.out.println("authenticationToken : " + authenticationToken);
-
-        if (loginDto == null) {
-            throw new IllegalArgumentException("loginDto cannot be null");
-        }
-
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        CompanyDetailsImpl userDetails = (CompanyDetailsImpl) authentication.getPrincipal();
-        System.out.println("userDetails : " + userDetails);
-
-        String accessToken = jwtProvider.createAccessToken(userDetails);
-        System.out.println("Service: JWT token created for " + userDetails.getUsername());
-
-        return LoginTokenDto.builder()
-                .accessToken(accessToken)
-                .build();
-    }
+//    public LoginTokenDto login(LoginDto loginDto) {
+//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+//                loginDto.getUserid(),
+//                loginDto.getPassword()
+//        );
+//
+//        System.out.println("Service: login method called with " + loginDto.getUserid());
+//        System.out.println("authenticationToken : " + authenticationToken);
+//
+//        if (loginDto == null) {
+//            throw new IllegalArgumentException("loginDto cannot be null");
+//        }
+//
+//        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        CompanyDetailsImpl userDetails = (CompanyDetailsImpl) authentication.getPrincipal();
+//        System.out.println("userDetails : " + userDetails);
+//
+//        String accessToken = jwtProvider.createAccessToken(userDetails);
+//        System.out.println("Service: JWT token created for " + userDetails.getUsername());
+//
+//        return LoginTokenDto.builder()
+//                .accessToken(accessToken)
+//                .build();
+//    }
 
     /**
      * ID(companyEmail) Check
