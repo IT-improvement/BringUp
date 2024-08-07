@@ -1,18 +1,15 @@
 package com.bringup.company.recruitment.Service;
 
 import com.bringup.common.security.service.CompanyDetailsImpl;
-import com.bringup.company.member.Entity.Company;
-import com.bringup.company.member.Repository.CompanyRepository;
-import com.bringup.company.member.exception.CompanyException;
+import com.bringup.company.user.Entity.Company;
+import com.bringup.company.user.Repository.CompanyRepository;
+import com.bringup.company.user.exception.CompanyException;
 import com.bringup.company.recruitment.DTO.request.RecruitmentRequestDto;
 import com.bringup.company.recruitment.DTO.response.RecruitmentResponseDto;
 import com.bringup.company.recruitment.Entity.Recruitment;
 import com.bringup.company.recruitment.Repository.RecruitmentRepository;
-import com.bringup.member.user.domain.entity.UserEntity;
-import com.bringup.member.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

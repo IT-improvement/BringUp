@@ -1,4 +1,4 @@
-package com.bringup.company.member.exception;
+package com.bringup.company.user.exception;
 
 import com.bringup.common.enums.MemberErrorCode;
 import lombok.Getter;

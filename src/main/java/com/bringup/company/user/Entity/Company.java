@@ -1,12 +1,9 @@
-package com.bringup.company.member.Entity;
+package com.bringup.company.user.Entity;
 
 import com.bringup.common.enums.RolesType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter

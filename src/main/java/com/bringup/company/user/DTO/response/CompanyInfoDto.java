@@ -1,4 +1,4 @@
-package com.bringup.company.member.DTO.response;
+package com.bringup.company.user.DTO.response;
 
 import lombok.Builder;
 

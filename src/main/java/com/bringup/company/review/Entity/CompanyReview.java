@@ -1,6 +1,6 @@
 package com.bringup.company.review.Entity;
 
-import com.bringup.company.member.Entity.Company;
+import com.bringup.company.user.Entity.Company;
 import com.bringup.member.user.domain.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
