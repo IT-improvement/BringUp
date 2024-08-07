@@ -1,4 +1,4 @@
-package com.bringup.company.member.DTO.request;
+package com.bringup.company.user.DTO.request;
 
 import lombok.Getter;
 import lombok.Setter;

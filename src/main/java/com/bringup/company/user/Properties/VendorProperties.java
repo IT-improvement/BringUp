@@ -1,4 +1,4 @@
-package com.bringup.company.member.Properties;
+package com.bringup.company.user.Properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

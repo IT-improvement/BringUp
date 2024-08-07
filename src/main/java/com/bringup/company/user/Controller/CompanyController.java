@@ -1,17 +1,15 @@
-package com.bringup.company.member.Controller;
+package com.bringup.company.user.Controller;
 
 
-import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.CompanyDetailsImpl;
-import com.bringup.company.member.DTO.request.JoinDto;
-import com.bringup.company.member.DTO.request.LoginDto;
-import com.bringup.company.member.DTO.request.ValidationRequestDto;
-import com.bringup.company.member.DTO.response.LoginTokenDto;
-import com.bringup.company.member.Entity.Company;
-import com.bringup.company.member.Service.CompanyService;
-import com.bringup.company.member.Service.VerificationService;
-import com.bringup.company.member.exception.CompanyException;
+import com.bringup.company.user.DTO.request.JoinDto;
+import com.bringup.company.user.DTO.request.LoginDto;
+import com.bringup.company.user.DTO.request.ValidationRequestDto;
+import com.bringup.company.user.DTO.response.LoginTokenDto;
+import com.bringup.company.user.Entity.Company;
+import com.bringup.company.user.Service.CompanyService;
+import com.bringup.company.user.Service.VerificationService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

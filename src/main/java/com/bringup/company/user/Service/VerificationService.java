@@ -1,12 +1,11 @@
-package com.bringup.company.member.Service;
+package com.bringup.company.user.Service;
 
 
-import com.bringup.company.member.DTO.request.ValidationRequestDto;
-import com.bringup.company.member.DTO.request.ValidationRequestInfo;
-import com.bringup.company.member.DTO.response.ValidationResponseDto;
-import com.bringup.company.member.exception.CompanyException;
+import com.bringup.company.user.DTO.request.ValidationRequestDto;
+import com.bringup.company.user.DTO.request.ValidationRequestInfo;
+import com.bringup.company.user.DTO.response.ValidationResponseDto;
+import com.bringup.company.user.exception.CompanyException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;

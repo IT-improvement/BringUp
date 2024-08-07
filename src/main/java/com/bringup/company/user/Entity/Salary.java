@@ -1,4 +1,4 @@
-package com.bringup.company.member.Entity;
+package com.bringup.company.user.Entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

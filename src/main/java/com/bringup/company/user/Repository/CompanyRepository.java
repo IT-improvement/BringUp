@@ -1,6 +1,6 @@
-package com.bringup.company.member.Repository;
+package com.bringup.company.user.Repository;
 
-import com.bringup.company.member.Entity.Company;
+import com.bringup.company.user.Entity.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package com.bringup.company.recruitment.Entity;
 
-import com.bringup.company.member.Entity.Company;
+import com.bringup.company.user.Entity.Company;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
