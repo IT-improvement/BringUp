@@ -1,4 +1,4 @@
-package com.bringup.member.github.domain;
+package com.bringup.member.portfolio.github.domain;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
