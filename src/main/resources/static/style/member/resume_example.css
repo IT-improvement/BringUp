@@ -36,14 +36,24 @@
 .resume{
     border-bottom: 1px solid rgba(0, 0, 0, 0.8);
     min-height: 15%;
-}
-.resume-user-info{
-    font-family: GongGothicMedium;
     display: flex;
     padding: 15px;
     width: 100%;
+}
+.resume-button-add{
+    width: 50px;
+    height: 30px;
+    text-decoration: none;
+    border: none;
+    background-color:white;
+}
+.resume-button-add:hover{
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+.resume-user-info{
+    font-family: GongGothicMedium;
     height: 10%;
-    background-color: antiquewhite;
 }
 .resume-user-info-left{
     width: 100%;
@@ -76,5 +86,73 @@
 .resume-user-info-right{
     margin-right: 10px;
     width: 14%;
-    background-color: aqua;
+}
+.resume-image-box{
+    width: 100%;
+    height: 100%;
+    background-image: url('/src/main/resources/static/assets/member/default-profile-image.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+.resume-user-portfolio{
+    height: 25%;
+}
+.resume-user-portfolio-title-box{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.resume-user-portfolio-title{
+    font-family: GongGothicMedium;
+    font-size: 25px;
+    font-weight: 500;
+}
+.academic{
+    display: flex;
+}
+.resume-user-academic-title-box{
+    height:10%;
+    width: 100%;
+    justify-content: space-between;
+}
+.resume-user-academic-title-content{
+    gap: 10px;
+}
+.resume-user-academic-title-content-left{
+    font-family: GongGothicMedium;
+    font-size: 25px;
+    font-weight: 500;
+}
+.resume-user-academic-result-content{
+    border-radius: 10px;
+    font-family: GongGothicMedium;
+    align-items: center;
+    font-size: 13px;
+    height: 20px;
+    padding: 3px;
+    color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.resume-user-academic-title-content-right{
+    width: 160px;
+    gap: 10px;
+}
+.resume-user-academic-result-image-box{
+    align-items: center;
+    width: 20%;
+    height: 90%;
+}
+.resume-user-academic-result-image-box:hover{
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+.resume-user-academic-result-image{
+    width: 100%;
+    height: 100%;
+    background-image: url('/src/main/resources/static/assets/member/pencil.png');
+    background-size: 50% 50%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    color: antiquewhite;
 }
