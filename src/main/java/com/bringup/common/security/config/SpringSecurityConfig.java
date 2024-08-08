@@ -41,13 +41,14 @@ public class SpringSecurityConfig {
     private final JwtProvider jwtProvider;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
-    @Qualifier("companyDetailsService")
     private final UserDetailsService companyDetailsService;
-
-    @Qualifier("customUserDetailsService")
+    
     private final UserDetailsService customUserDetailsService;
 
-    public SpringSecurityConfig(JwtProvider jwtProvider, CustomAccessDeniedHandler customAccessDeniedHandler, UserDetailsService companyDetailsService, UserDetailsService customUserDetailsService) {
+    public SpringSecurityConfig(JwtProvider jwtProvider,
+                                CustomAccessDeniedHandler customAccessDeniedHandler,
+                                @Qualifier("companyDetailsService") UserDetailsService companyDetailsService,
+                                @Qualifier("customUserDetailsService") UserDetailsService customUserDetailsService) {
         this.jwtProvider = jwtProvider;
         this.customAccessDeniedHandler = customAccessDeniedHandler;
         this.companyDetailsService = companyDetailsService;
