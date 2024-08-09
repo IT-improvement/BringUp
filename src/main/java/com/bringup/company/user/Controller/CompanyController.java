@@ -46,6 +46,7 @@ public class CompanyController {
         /*if (isValid) {
             session.setAttribute("businessInfo", businessNumberValidateRequestDto);
         }*/
+        System.out.println("isValid : " + isValid);
         if(!isValid)
             isValid = true;
         return ResponseEntity.ok().body(new BfResponse<>(SUCCESS, Map.of("isValid", isValid)));
