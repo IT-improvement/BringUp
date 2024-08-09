@@ -21,3 +21,40 @@ body {
 .form-control {
     margin-bottom: 1rem;
 }
+.signup-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+.signup-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    padding-top: 1em;
+}
+.signup-box {
+    width: 100%;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    margin-top: 0.5em;
+}
+.main-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-decoration: none;
+    color: #007bff;
+}
+.login-link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    text-decoration: none;
+    color: #007bff;
+}
