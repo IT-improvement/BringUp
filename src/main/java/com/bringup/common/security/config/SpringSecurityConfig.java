@@ -106,6 +106,7 @@ public class SpringSecurityConfig {
                 .securityMatchers(matcher -> matcher
                         .requestMatchers(AuthRequestMatchers()))
                 .authorizeHttpRequests(auth -> auth
+                        //.requestMatchers("/company/**").hasAuthority(ROLE_COMPANY.name()) // ROLE이 Company인것만 /company 에 접근가능
                         .requestMatchers(AuthRequestMatchers())
                         .hasAnyAuthority(ROLE_MEMBER.name(), ROLE_ADMIN.name(), ROLE_COMPANY.name())
                         .anyRequest().authenticated()
