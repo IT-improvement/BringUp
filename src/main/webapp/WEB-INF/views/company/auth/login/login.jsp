@@ -26,12 +26,14 @@
 	<!-- 테마 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
 
+	<link rel="stylesheet" type="text/css" href="/resources/style/company/login/login.css">
 </head>
 <body>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
+<div class="login-container">
+    <div class="login-wrapper">
+        <a href="/" class="main-link">메인으로</a>
+        <div class="login-box">
             <h2 class="text-center mb-4">기업 회원 로그인</h2>
             <form id="loginForm">
                 <div class="mb-3">
@@ -44,6 +46,10 @@
                 </div>
                 <button type="submit" class="btn btn-primary w-100">로그인</button>
             </form>
+            <div class="additional-links">
+                <a href="/company/auth/findauth">아이디/비밀번호 찾기</a>
+                <a href="/company/auth/signup">회원가입</a>
+            </div>
         </div>
     </div>
 </div>
