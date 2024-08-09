@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/company/page")
+@RequestMapping("/company")
 public class PageController {
 
     @GetMapping("")
