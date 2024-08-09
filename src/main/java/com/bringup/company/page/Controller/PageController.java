@@ -90,4 +90,9 @@ public class PageController {
     public String updateAuth(){
         return "company/auth/profile/updateAuth";
     }
+
+    @GetMapping("/auth/findauth")
+    public String findauth(){
+        return "company/auth/findauth/findauth";
+    }
 }
