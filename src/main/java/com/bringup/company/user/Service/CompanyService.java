@@ -1,6 +1,10 @@
 package com.bringup.company.user.Service;
 
+import com.bringup.common.enums.CertificateErrorCode;
+import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.enums.RolesType;
+import com.bringup.common.event.Service.CertificateService;
+import com.bringup.common.event.exception.CertificateException;
 import com.bringup.common.security.jwt.JwtProvider;
 import com.bringup.common.security.service.CompanyDetailsImpl;
 import com.bringup.company.user.DTO.request.JoinDto;
@@ -46,18 +50,32 @@ public class CompanyService {
     private final JwtProvider jwtProvider;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final CertificateService certificateService;
 
     /**
      * 회원 등록
      */
     @Transactional
     public Company joinCompany(JoinDto joinDto, MultipartFile logo) {
+
+        String email = joinDto.getId();
+
+        // 이메일 인증 여부 확인
+        if (!certificateService.isEmailVerified(email)) {
+            throw new CertificateException(CertificateErrorCode.INVALID_CERTIFCATE_NUMBER);
+        }
+
+        // 이메일 중복 체크
+        if (companyRepository.existsByManagerEmail(email)) {
+            throw new CompanyException(MemberErrorCode.DUPLICATED_MEMBER_EMAIL);
+        }
+
         Company company = new Company();
 
         String encodedPassword = passwordEncoder.encode(joinDto.getPassword());
         System.out.println("Encoded Password: " + encodedPassword);
 
-        company.setManagerEmail(joinDto.getId());
+        company.setManagerEmail(email);
         company.setCompanyPassword(passwordEncoder.encode(joinDto.getPassword()));
         company.setCompanyPhonenumber(joinDto.getC_phone());
         company.setCompanyName(joinDto.getC_name());
@@ -90,6 +108,8 @@ public class CompanyService {
                 saveSalary(savedCompany.getCompanyId(), salaryDto);
             }
         }
+
+        certificateService.deleteVerificationTokenByEmail(email);
 
         return savedCompany;
     }
