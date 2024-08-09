@@ -13,7 +13,7 @@
 </head>
 <body>
     <div class="signup-container">
-        <form action="/v1/company/join/first" method="post" name="companySignupForm">
+        <form id="companySignupForm" name="companySignupForm">
             <h2 id="companySignupTitle">기업 회원 가입</h2>
             <div class="form-group">
                 <label for="businessNumber"><i class="fas fa-building"></i> 사업자 번호</label>
@@ -32,5 +32,6 @@
     </div>
 
     <script src="/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/resources/script/company/signupfirst.js"></script>
 </body>
 </html>
