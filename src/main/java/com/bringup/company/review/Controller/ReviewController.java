@@ -26,7 +26,7 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/company")
+@RequestMapping("/com")
 public class ReviewController {
 
     private final CompanyReviewService companyReviewService;

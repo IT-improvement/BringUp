@@ -20,7 +20,7 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/company/advertisement")
+@RequestMapping("/com/advertisement")
 public class AdvertisementController {
 
     private final AdvertisementService advertisementService;

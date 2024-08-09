@@ -27,7 +27,7 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/company")
+@RequestMapping("/com")
 public class CompanyController {
     private final CompanyService companyService;
     private final VerificationService verificationService;
@@ -46,7 +46,7 @@ public class CompanyController {
         /*if (isValid) {
             session.setAttribute("businessInfo", businessNumberValidateRequestDto);
         }*/
-        if(isValid == false)
+        if(!isValid)
             isValid = true;
         return ResponseEntity.ok().body(new BfResponse<>(SUCCESS, Map.of("isValid", isValid)));
     }
