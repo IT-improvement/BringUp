@@ -1,5 +1,6 @@
 package com.bringup.member.user.domain.service;
 
+import com.bringup.common.enums.RolesType;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import com.bringup.member.user.dto.JoinDTO;
@@ -41,7 +42,7 @@ public class JoinService {
         userEntity.setUserBirthday(joinDTO.getUserBirthday());
         userEntity.setFreelancer(joinDTO.isFreelancer());
         userEntity.setStatus(joinDTO.getStatus());
-        userEntity.setRole("ROLE_ADMIN");
+        userEntity.setRole(RolesType.valueOf("ROLE_ADMIN"));
 
         userRepository.save(userEntity); // 디비에 저장
     }
