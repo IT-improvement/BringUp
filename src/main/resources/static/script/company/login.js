@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const userid = document.getElementById('userid').value;
         const password = document.getElementById('password').value;
         
-        fetch('/company/login', {
+        fetch('/com/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

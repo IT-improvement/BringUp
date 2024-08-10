@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (companyNameLink) companyNameLink.textContent = companyName;
     }
 
-    fetch('/company/companyName', {
+    fetch('/com/companyName', {
         method: 'POST',
         headers: {
             'Authorization': 'Bearer ' + accessToken,
