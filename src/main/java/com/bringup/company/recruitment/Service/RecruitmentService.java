@@ -10,8 +10,14 @@ import com.bringup.company.recruitment.Entity.Recruitment;
 import com.bringup.company.recruitment.Repository.RecruitmentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,8 +45,16 @@ public class RecruitmentService {
         recruitment.setRecruitmentType(requestDto.getRecruitmentType());
         recruitment.setCategory(requestDto.getCategory());
         recruitment.setSkill(requestDto.getSkill());
-        recruitment.setStartDate(requestDto.getStartDate());
-        recruitment.setPeriod(requestDto.getPeriod());
+
+        // DateTimeFormatter를 사용하여 String을 LocalDate로 변환
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startDate = LocalDate.parse(requestDto.getStartDate(), formatter);
+
+        // 광고 기간에 따라 Period를 계산
+        LocalDate periodEndDate = calculatePeriod(startDate, requestDto.getPeriod());
+        recruitment.setStartDate(requestDto.getStartDate());  // String 그대로 저장
+        recruitment.setPeriod(periodEndDate.format(formatter));  // 계산된 LocalDate를 다시 String으로 변환하여 저장
+
         recruitment.setStatus("생성 대기");
         recruitment.setRecruitmentClass(requestDto.getRecruitmentClass());
 
@@ -50,6 +64,25 @@ public class RecruitmentService {
         notifyAdminForApproval(recruitment);
     }
 
+    private LocalDate calculatePeriod(LocalDate startDate, String periodDuration) {
+        int durationInMonths = Integer.parseInt(periodDuration.replace("months", "").trim());
+        return startDate.plusMonths(durationInMonths);
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행
+    @Transactional
+    public void updateRecruitmentStatus() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String today = LocalDate.now().format(formatter);
+
+        // 오늘 날짜와 일치하는 Period를 가진 Recruitment 조회
+        List<Recruitment> recruitments = recruitmentRepository.findAllByPeriod(today);
+
+        for (Recruitment recruitment : recruitments) {
+            recruitment.setStatus("삭제");
+            recruitmentRepository.save(recruitment);
+        }
+    }
     private void notifyAdminForApproval(Recruitment recruitment) {
         // 어드민에게 승인 요청을 보내는 로직을 작성합니다.
     }
