@@ -80,6 +80,10 @@ public class PageController {
     public String signup(){
         return "company/auth/signup/signup";
     }
+    @GetMapping("/auth/signup/second")
+    public String signupSecond(){
+        return "company/auth/signup/signupsecond";
+    }
 
     @GetMapping("/auth/updateProfile")
     public String updateProfile(){
