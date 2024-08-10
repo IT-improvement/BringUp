@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -30,7 +31,9 @@ public class CertificateService {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
     public String createEmailVerificationToken(String email) {
-        String token = UUID.randomUUID().toString();
+        Random random = new Random();
+        int randomNumber = 100000 + random.nextInt(900000); // 100000 ~ 999999 범위의 숫자 생성
+        String token = String.valueOf(randomNumber);
         String expiryDate = LocalDateTime.now().plusMinutes(10).format(formatter);  // 토큰 유효 기간 10분
 
         EmailVerificationToken verificationToken = EmailVerificationToken.builder()
