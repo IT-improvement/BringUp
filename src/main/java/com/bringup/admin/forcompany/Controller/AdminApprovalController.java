@@ -1,7 +1,7 @@
-package com.bringup.company.recruitment.Controller;
+package com.bringup.admin.forcompany.Controller;
 
 import com.bringup.common.response.BfResponse;
-import com.bringup.company.recruitment.Service.AdminApprovalService;
+import com.bringup.admin.forcompany.Service.AdminApprovalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
