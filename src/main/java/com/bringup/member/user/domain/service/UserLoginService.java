@@ -1,23 +1,24 @@
 package com.bringup.member.user.domain.service;
 
 import com.bringup.common.security.jwt.JwtProvider;
-import com.bringup.company.user.DTO.request.LoginDto;
-import com.bringup.company.user.DTO.response.LoginTokenDto;
+
+
 import com.bringup.member.user.domain.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import com.bringup.member.user.dto.UserLoginDTO;
+import com.bringup.member.user.dto.UserLoginTokenDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-
-public class LoginService {
+@Service
+public class UserLoginService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
 
-    public LoginService(UserRepository userRepository, AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
+    public UserLoginService(UserRepository userRepository, AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.jwtProvider = jwtProvider;
@@ -25,16 +26,16 @@ public class LoginService {
     /**
      * 로그인
      */
-    public LoginTokenDto login(LoginDto loginDto) {
+    public UserLoginTokenDTO login(UserLoginDTO userLoginDTO) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                loginDto.getUserEmail(),
-                loginDto.getUserPassword()
+                userLoginDTO.getUserEmail(),
+                userLoginDTO.getUserPassword()
         );
 
-        System.out.println("Service: login method called with " + loginDto.getUserEmail());
+        System.out.println("Service: login method called with " + userLoginDTO.getUserEmail());
         System.out.println("authenticationToken : " + authenticationToken);
 
-        if (loginDto == null) {
+        if (userLoginDTO == null) {
             throw new IllegalArgumentException("loginDto cannot be null");
         }
 
@@ -46,7 +47,7 @@ public class LoginService {
         String accessToken = jwtProvider.createAccessToken(userDetails);
         System.out.println("Service: JWT token created for " + userDetails.getUsername());
 
-        return LoginTokenDto.builder()
+        return UserLoginTokenDTO.builder()
                 .accessToken(accessToken)
                 .build();
     }
