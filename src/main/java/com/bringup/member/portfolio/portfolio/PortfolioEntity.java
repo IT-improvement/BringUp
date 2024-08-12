@@ -14,4 +14,8 @@ public class PortfolioEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int portfolioindex;
+    private String portfolioType;
+    private String url;
+    private int userIndex;
+    private String status;
 }
