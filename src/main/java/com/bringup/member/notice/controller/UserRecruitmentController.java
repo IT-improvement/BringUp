@@ -21,4 +21,9 @@ public class UserRecruitmentController {
     public List<UserRecruitmentEntity> getAllRecruitments() {
         return userRecruitmentService.getAllRecruitments();
     }
+
+    @GetMapping("/view")
+    public String View() {
+        return "/member/recruitment";
+    }
 }
