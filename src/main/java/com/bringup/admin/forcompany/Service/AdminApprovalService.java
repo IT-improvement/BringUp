@@ -1,4 +1,4 @@
-package com.bringup.company.recruitment.Service;
+package com.bringup.admin.forcompany.Service;
 
 import com.bringup.company.recruitment.Entity.Recruitment;
 import com.bringup.company.recruitment.Repository.RecruitmentRepository;
