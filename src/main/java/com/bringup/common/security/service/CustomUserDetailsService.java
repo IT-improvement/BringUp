@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements org.springframework.security.co
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("CompanyDetailsService: loadUserByUsername called with " + username);
+        System.out.println("CustomUserDetailsService: loadUserByUsername called with " + username);
         UserEntity user = userRepository.findByUserEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
         return CustomUserDetails.from(user);
