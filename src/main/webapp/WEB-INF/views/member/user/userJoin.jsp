@@ -79,7 +79,7 @@
 <body>
 <div class="container">
     <h2>회원가입</h2>
-    <form>
+    <form id="userJoin">
         <div class="form-group">
             <label for="userEmail">이메일</label>
             <input type="email" id="userEmail" name="userEmail" required>
@@ -122,5 +122,7 @@
         <p>이미 회원이신가요? <a href="#">로그인</a></p>
     </div>
 </div>
+<script src="/resources/script/member/userSingup.js"></script>
+
 </body>
 </html>
