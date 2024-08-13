@@ -2,6 +2,7 @@ package com.bringup.company.recruitment.Service;
 
 import com.bringup.admin.notify.Service.NotificationService;
 import com.bringup.common.enums.NotificationType;
+import com.bringup.common.enums.RolesType;
 import com.bringup.common.security.service.CompanyDetailsImpl;
 import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.company.user.Entity.Company;
@@ -71,8 +72,8 @@ public class RecruitmentService {
         // 알림 생성
         notificationService.createNotification(
                 userDetails.getId(),
-                "ROLE_COMPANY",
-                NotificationType.RECRUITMENT_APPROVAL.name(),
+                RolesType.ROLE_COMPANY,
+                NotificationType.RECRUITMENT_APPROVAL,
                 "Your recruitment request has been created and is awaiting approval."
         );
     }
@@ -102,8 +103,8 @@ public class RecruitmentService {
         // 알림 생성
         notificationService.createNotification(
                 userDetails.getId(),
-                "ROLE_COMPANY",
-                NotificationType.RECRUITMENT_REJECTION.name(),
+                RolesType.ROLE_COMPANY,
+                NotificationType.RECRUITMENT_REJECTION,
                 "Your recruitment request has been updated and is awaiting approval."
         );
     }
@@ -126,8 +127,8 @@ public class RecruitmentService {
         // 알림 생성
         notificationService.createNotification(
                 userDetails.getId(),
-                "ROLE_COMPANY",
-                NotificationType.RECRUITMENT_REJECTION.name(),
+                RolesType.ROLE_COMPANY,
+                NotificationType.RECRUITMENT_REJECTION,
                 "Your recruitment request has been deleted."
         );
     }
