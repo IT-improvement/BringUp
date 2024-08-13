@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -85,7 +84,7 @@
 <body>
 <div class="container">
     <h2>로그인</h2>
-    <form>
+    <form id="userLoginForm">
         <div class="form-group">
             <label for="userEmail">이메일</label>
             <input type="text" id="userEmail" name="userEmail" required>
@@ -102,6 +101,6 @@
         <a href="/member/join">회원가입</a> <!-- 회원가입 페이지로 이동 -->
     </div>
 </div>
-
+<script src="/resources/script/member/userLogin.js"></script>
 </body>
 </html>
