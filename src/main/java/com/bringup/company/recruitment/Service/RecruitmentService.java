@@ -10,6 +10,7 @@ import com.bringup.company.recruitment.Entity.Recruitment;
 import com.bringup.company.recruitment.Repository.RecruitmentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +27,10 @@ import static com.bringup.common.enums.MemberErrorCode.BAD_REQUEST;
 @Service
 @RequiredArgsConstructor
 public class RecruitmentService {
+
     private final RecruitmentRepository recruitmentRepository;
     private final CompanyRepository companyRepository;
+    private final RabbitTemplate rabbitTemplate;
 
     public List<RecruitmentResponseDto> getRecruitments(CompanyDetailsImpl userDetails) {
         return recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId()).stream()
@@ -46,45 +49,19 @@ public class RecruitmentService {
         recruitment.setCategory(requestDto.getCategory());
         recruitment.setSkill(requestDto.getSkill());
 
-        // DateTimeFormatter를 사용하여 String을 LocalDate로 변환
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate startDate = LocalDate.parse(requestDto.getStartDate(), formatter);
-
-        // 광고 기간에 따라 Period를 계산
         LocalDate periodEndDate = calculatePeriod(startDate, requestDto.getPeriod());
-        recruitment.setStartDate(requestDto.getStartDate());  // String 그대로 저장
-        recruitment.setPeriod(periodEndDate.format(formatter));  // 계산된 LocalDate를 다시 String으로 변환하여 저장
+        recruitment.setStartDate(requestDto.getStartDate());
+        recruitment.setPeriod(periodEndDate.format(formatter));
 
         recruitment.setStatus("생성 대기");
         recruitment.setRecruitmentClass(requestDto.getRecruitmentClass());
 
         recruitmentRepository.save(recruitment);
 
-        // 어드민에게 승인 요청을 보냅니다. (예: 이메일, 알림 등)
-        notifyAdminForApproval(recruitment);
-    }
-
-    private LocalDate calculatePeriod(LocalDate startDate, String periodDuration) {
-        int durationInMonths = Integer.parseInt(periodDuration.replace("months", "").trim());
-        return startDate.plusMonths(durationInMonths);
-    }
-
-    @Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행
-    @Transactional
-    public void updateRecruitmentStatus() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String today = LocalDate.now().format(formatter);
-
-        // 오늘 날짜와 일치하는 Period를 가진 Recruitment 조회
-        List<Recruitment> recruitments = recruitmentRepository.findAllByPeriod(today);
-
-        for (Recruitment recruitment : recruitments) {
-            recruitment.setStatus("삭제");
-            recruitmentRepository.save(recruitment);
-        }
-    }
-    private void notifyAdminForApproval(Recruitment recruitment) {
-        // 어드민에게 승인 요청을 보내는 로직을 작성합니다.
+        // 메시지를 RabbitMQ로 전송
+        sendApprovalRequestToAdmin(recruitment, "create");
     }
 
     @Transactional
@@ -106,8 +83,8 @@ public class RecruitmentService {
 
         recruitmentRepository.save(recruitment);
 
-        // 어드민에게 승인 요청을 보냅니다. (예: 이메일, 알림 등)
-        notifyAdminForApproval(recruitment);
+        // 어드민에게 승인 요청을 보냅니다.
+        sendApprovalRequestToAdmin(recruitment, "update");
     }
 
     @Transactional
@@ -122,12 +99,42 @@ public class RecruitmentService {
         recruitment.setStatus("삭제 대기");
         recruitmentRepository.save(recruitment);
 
-        // 어드민에게 삭제 승인 요청을 보냅니다. (예: 이메일, 알림 등)
-        notifyAdminForDeletionApproval(recruitment, reason);
+        // 어드민에게 삭제 승인 요청을 보냅니다.
+        sendApprovalRequestToAdmin(recruitment, "delete");
     }
 
-    private void notifyAdminForDeletionApproval(Recruitment recruitment, String reason) {
-        // 어드민에게 삭제 승인 요청을 보내는 로직을 작성합니다.
+    private void sendApprovalRequestToAdmin(Recruitment recruitment, String actionType) {
+        String exchange = "approvalExchange";
+        String routingKey = "approval." + actionType;
+        rabbitTemplate.convertAndSend(exchange, routingKey, recruitment);
+    }
+
+    private LocalDate calculatePeriod(LocalDate startDate, String periodDuration) {
+        int durationInMonths = Integer.parseInt(periodDuration.replace("months", "").trim());
+        return startDate.plusMonths(durationInMonths);
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행
+    @Transactional
+    public void updateRecruitmentStatus() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String today = LocalDate.now().format(formatter);
+
+        // 오늘 날짜와 일치하는 Period를 가진 Recruitment 조회
+        List<Recruitment> recruitments = recruitmentRepository.findAllByPeriod(today);
+
+        for (Recruitment recruitment : recruitments) {
+            recruitment.setStatus("삭제");
+            recruitmentRepository.save(recruitment);
+        }
+
+        // "삭제 대기" 상태를 "삭제" 상태로 변경
+        List<Recruitment> pendingDeletions = recruitmentRepository.findAllByStatus("삭제 대기");
+
+        for (Recruitment recruitment : pendingDeletions) {
+            recruitment.setStatus("삭제");
+            recruitmentRepository.save(recruitment);
+        }
     }
 
     private RecruitmentResponseDto convertToDto(Recruitment recruitment) {
@@ -143,73 +150,4 @@ public class RecruitmentService {
                 .recruitmentClass(recruitment.getRecruitmentClass())
                 .build();
     }
-
-    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 어드민 완성시 사용할 로직 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
-    /*
-    @Transactional
-    public void updateRecruitment(CompanyDetailsImpl userDetails, Integer recruitmentIndex, RecruitmentRequestDto requestDto) {
-        Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
-                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
-
-        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
-            throw new CompanyException(BAD_REQUEST);
-        }
-
-        // 어드민에게 수정 승인 요청을 보냅니다. (예: 이메일, 알림 등)
-        sendUpdateRequestToAdmin(userDetails, recruitment, requestDto);
-    }
-
-    @Transactional
-    public void deleteRecruitment(CompanyDetailsImpl userDetails, Integer recruitmentIndex, String reason) {
-        Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
-                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
-
-        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
-            throw new CompanyException(BAD_REQUEST);
-        }
-
-        // 어드민에게 삭제 승인 요청을 보냅니다. (예: 이메일, 알림 등)
-        sendDeleteRequestToAdmin(userDetails, recruitment, reason);
-    }
-
-    private void sendUpdateRequestToAdmin(CompanyDetailsImpl userDetails, Recruitment recruitment, RecruitmentRequestDto requestDto) {
-        // 어드민에게 수정 요청을 보내는 로직을 작성합니다.
-        // 예시로 HTTP 클라이언트를 사용하여 어드민에게 요청을 보낼 수 있습니다.
-
-        // JSON 형태로 전송할 데이터를 구성합니다.
-        String jsonData = constructUpdateJson(userDetails, recruitment, requestDto);
-
-        // 실제 HTTP 요청을 통해 어드민에게 데이터를 전송합니다.
-        sendHttpRequestToAdmin(jsonData);
-    }
-
-    private void sendDeleteRequestToAdmin(CompanyDetailsImpl userDetails, Recruitment recruitment, String reason) {
-        // 어드민에게 삭제 요청을 보내는 로직을 작성합니다.
-        // 예시로 HTTP 클라이언트를 사용하여 어드민에게 요청을 보낼 수 있습니다.
-
-        // JSON 형태로 전송할 데이터를 구성합니다.
-        String jsonData = constructDeleteJson(userDetails, recruitment, reason);
-
-        // 실제 HTTP 요청을 통해 어드민에게 데이터를 전송합니다.
-        sendHttpRequestToAdmin(jsonData);
-    }
-
-    private String constructUpdateJson(CompanyDetailsImpl userDetails, Recruitment recruitment, RecruitmentRequestDto requestDto) {
-        // JSON 데이터를 생성하는 로직을 작성합니다.
-        return "{ \"action\": \"update\", \"recruitmentId\": " + recruitment.getRecruitmentIndex() + ", \"companyId\": " + recruitment.getCompany().getCompanyId() +
-                ", \"request\": " + requestDto.toString() + ", \"userId\": " + userDetails.getId() + " }";
-    }
-
-    private String constructDeleteJson(CompanyDetailsImpl userDetails, Recruitment recruitment, String reason) {
-        // JSON 데이터를 생성하는 로직을 작성합니다.
-        return "{ \"action\": \"delete\", \"recruitmentId\": " + recruitment.getRecruitmentIndex() + ", \"companyId\": " + recruitment.getCompany().getCompanyId() +
-                ", \"reason\": \"" + reason + "\", \"userId\": " + userDetails.getId() + " }";
-    }
-
-    private void sendHttpRequestToAdmin(String jsonData) {
-        // 실제 HTTP 요청을 통해 어드민에게 데이터를 전송하는 로직을 작성합니다.
-        // 예: HttpClient, RestTemplate, WebClient 등을 사용하여 HTTP 요청을 보낼 수 있습니다.
-    }
-    */
 }
