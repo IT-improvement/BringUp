@@ -31,6 +31,7 @@ public class RecruitmentService {
     private final RecruitmentRepository recruitmentRepository;
     private final CompanyRepository companyRepository;
     private final RabbitTemplate rabbitTemplate;
+    private final NotificationService notificationService;
 
     public List<RecruitmentResponseDto> getRecruitments(CompanyDetailsImpl userDetails) {
         return recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId()).stream()
@@ -62,6 +63,14 @@ public class RecruitmentService {
 
         // 메시지를 RabbitMQ로 전송
         sendApprovalRequestToAdmin(recruitment, "create");
+
+        // 알림 생성
+        notificationService.createNotification(
+                userDetails.getId(),
+                "ROLE_COMPANY",
+                NotificationType.RECRUITMENT_APPROVAL.name(),
+                "Your recruitment request has been created and is awaiting approval."
+        );
     }
 
     @Transactional
@@ -85,6 +94,14 @@ public class RecruitmentService {
 
         // 어드민에게 승인 요청을 보냅니다.
         sendApprovalRequestToAdmin(recruitment, "update");
+
+        // 알림 생성
+        notificationService.createNotification(
+                userDetails.getId(),
+                "ROLE_COMPANY",
+                NotificationType.RECRUITMENT_REJECTION.name(),
+                "Your recruitment request has been updated and is awaiting approval."
+        );
     }
 
     @Transactional
@@ -101,6 +118,14 @@ public class RecruitmentService {
 
         // 어드민에게 삭제 승인 요청을 보냅니다.
         sendApprovalRequestToAdmin(recruitment, "delete");
+
+        // 알림 생성
+        notificationService.createNotification(
+                userDetails.getId(),
+                "ROLE_COMPANY",
+                NotificationType.RECRUITMENT_REJECTION.name(),
+                "Your recruitment request has been deleted."
+        );
     }
 
     private void sendApprovalRequestToAdmin(Recruitment recruitment, String actionType) {
