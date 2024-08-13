@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import com.bringup.member.user.dto.CustomUserDetails;
 
 @Service
 public class UserLoginService {
@@ -41,7 +42,9 @@ public class UserLoginService {
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        // 수정된 부분: CustomUserDetails 사용
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         System.out.println("userDetails : " + userDetails);
 
         String accessToken = jwtProvider.createAccessToken(userDetails);
@@ -59,7 +62,5 @@ public class UserLoginService {
         System.out.println("Service: checkEmail method called with " + userEmail);
         return !userRepository.existsByUserEmail(userEmail);
     }
-
-
-
 }
+
