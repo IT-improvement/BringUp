@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const accessToken = sessionStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
         window.location.href = '/company/auth/login';
     }

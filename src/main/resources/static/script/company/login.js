@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.code === 200 && data.data && data.data.accessToken) {
                 console.log('로그인 성공11:', data.code);
                 // 액세스 토큰을 세션 스토리지에 저장
-                sessionStorage.setItem('accessToken', data.data.accessToken);
+                localStorage.setItem('accessToken', data.data.accessToken);
                 window.location.href = '/company';
             } else {
                 console.error('로그인 실패:', data);

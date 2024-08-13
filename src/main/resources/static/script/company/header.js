@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    const accessToken = sessionStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
         console.error('액세스 토큰을 찾을 수 없습니다.');
         return;
