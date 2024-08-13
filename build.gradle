@@ -56,6 +56,9 @@ dependencies {
     implementation group: 'org.json', name: 'json', version: '20231013'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.16.1'
 
+    // Message Queue
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
 
     // JSP
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
