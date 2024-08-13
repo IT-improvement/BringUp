@@ -1,13 +1,13 @@
-package com.bringup.admin.user.exception;
+package com.bringup.company.recruitment.exception;
 
 import com.bringup.common.enums.MemberErrorCode;
 import lombok.Getter;
 
 @Getter
-public class AdminException extends RuntimeException {
+public class RecruitmentException extends RuntimeException {
     private final MemberErrorCode errorCode;
 
-    public AdminException(MemberErrorCode errorCode) {
+    public RecruitmentException(MemberErrorCode errorCode) {
         super(errorCode.getErrorMessage());
         this.errorCode = errorCode;
     }

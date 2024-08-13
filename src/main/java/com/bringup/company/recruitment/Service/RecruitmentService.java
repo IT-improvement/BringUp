@@ -1,6 +1,9 @@
 package com.bringup.company.recruitment.Service;
 
+import com.bringup.admin.notify.Service.NotificationService;
+import com.bringup.common.enums.NotificationType;
 import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.company.user.Entity.Company;
 import com.bringup.company.user.Repository.CompanyRepository;
 import com.bringup.company.user.exception.CompanyException;
@@ -23,6 +26,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.bringup.common.enums.MemberErrorCode.BAD_REQUEST;
+import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_RECRUITMENT;
 
 @Service
 @RequiredArgsConstructor
@@ -107,7 +111,7 @@ public class RecruitmentService {
     @Transactional
     public void deleteRecruitment(CompanyDetailsImpl userDetails, Integer recruitmentIndex, String reason) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
-                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+                .orElseThrow(() -> new RecruitmentException(NOT_FOUND_RECRUITMENT));
 
         if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
             throw new CompanyException(BAD_REQUEST);

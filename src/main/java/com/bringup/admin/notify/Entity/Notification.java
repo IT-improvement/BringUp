@@ -1,5 +1,7 @@
 package com.bringup.admin.notify.Entity;
 
+import com.bringup.common.enums.NotificationType;
+import com.bringup.common.enums.RolesType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,18 +22,24 @@ public class Notification {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 30)
-    private String role;
+    private RolesType role;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false, length = 50)
-    private String type;
+    private NotificationType type;
 
     @Column(name = "message", nullable = false, length = 255)
     private String message;
 
     @Column(name = "is_read", nullable = false)
-    private Boolean isRead = false;
+    private boolean isRead = false;  // 읽음 여부
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    public void markAsRead() {
+        this.isRead = true;
+    }
 }
