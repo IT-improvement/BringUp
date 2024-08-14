@@ -29,37 +29,82 @@
 
 	<!-- 테마 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
-	<link rel="stylesheet" type="text/css" href="/resources/style/company/jobposting/management/management.css">
 
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
-
-<div class="recruitment-list">
-    <h2 class="list-title">공고 목록</h2>
-    <div class="table-container">
-        <table class="recruitment-table">
-            <thead>
-                <tr>
-                    <th class="table-header">공고 ID</th>
-                    <th class="table-header">담당자 Email</th>
-                    <th class="table-header">채용형태</th>
-                    <th class="table-header">직군</th>
-                    <th class="table-header">기술스택</th>
-                    <th class="table-header">시작날짜</th>
-                    <th class="table-header">기간</th>
-                    <th class="table-header">상태값</th>
-                    <th class="table-header">광고등급</th>
-                </tr>
-            </thead>
-            <tbody id="recruitment-list-body">
-            </tbody>
-        </table>
+<!-- 메인 컨텐츠 시작 -->
+<main class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <!-- 검색 섹션 수정 -->
+            <div class="col-12 mb-4">
+                <div class="card border">
+                    <div class="card-header border-bottom">
+                        <h5 class="card-header-title">공고 검색</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="search-form" class="row g-3">
+                            <div class="col-md-4">
+                                <label for="search-category" class="form-label">카테고리</label>
+                                <select class="form-select" id="search-category">
+                                    <option value="jobPostingId">공고 ID</option>
+                                    <option value="managerEmail">담당자 Email</option>
+                                    <option value="employmentType">채용형태</option>
+                                    <option value="jobGroup">직군</option>
+                                    <option value="techStack">기술스택</option>
+                                    <option value="startDate">시작날짜</option>
+                                    <option value="duration">기간</option>
+                                    <option value="status">상태값</option>
+                                    <option value="adGrade">광고등급</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="search-keyword" class="form-label">검색어</label>
+                                <input type="text" class="form-control" id="search-keyword">
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">검색</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 기존 공고 목록 -->
+            <div class="col-12">
+                <div class="card border">
+                    <div class="card-header border-bottom">
+                        <h5 class="card-header-title">공고 목록</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive border-0">
+                            <table class="table table-hover align-middle p-4 mb-0 table-shrink">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col" class="border-0 rounded-start">공고 ID</th>
+                                        <th scope="col" class="border-0">담당자 Email</th>
+                                        <th scope="col" class="border-0">채용형태</th>
+                                        <th scope="col" class="border-0">직군</th>
+                                        <th scope="col" class="border-0">기술스택</th>
+                                        <th scope="col" class="border-0">시작날짜</th>
+                                        <th scope="col" class="border-0">기간</th>
+                                        <th scope="col" class="border-0">상태값</th>
+                                        <th scope="col" class="border-0 rounded-end">광고등급</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recruitment-list-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-
-
+</main>
+<!-- 메인 컨텐츠 끝 -->
 
 <jsp:include page="/WEB-INF/views/company/footer/company_footer.jsp" flush="true" />
 

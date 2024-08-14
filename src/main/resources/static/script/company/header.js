@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (logoutButton) {
         logoutButton.addEventListener('click', function(event) {
             event.preventDefault();
-            sessionStorage.removeItem('accessToken');
+            localStorage.removeItem('accessToken');
             window.location.href = '/';
         });
     }
@@ -56,4 +56,38 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('회사 이름을 가져오는 데 실패했습니다:', error);
         updateCompanyName('알 수 없음'); // 에러 시 기본값 설정
     });
+
+    // 테마 모드 전환 기능
+    const lightModeBtn = document.getElementById('lightMode');
+    const darkModeBtn = document.getElementById('darkMode');
+
+    function setTheme(themeName) {
+        localStorage.setItem('theme', themeName);
+        document.documentElement.setAttribute('data-bs-theme', themeName);
+    }
+
+    function toggleTheme() {
+        if (localStorage.getItem('theme') === 'dark') {
+            setTheme('light');
+            lightModeBtn.checked = true;
+        } else {
+            setTheme('dark');
+            darkModeBtn.checked = true;
+        }
+    }
+
+    // 초기 테마 설정
+    (function () {
+        if (localStorage.getItem('theme') === 'dark') {
+            setTheme('dark');
+            darkModeBtn.checked = true;
+        } else {
+            setTheme('light');
+            lightModeBtn.checked = true;
+        }
+    })();
+
+    // 이벤트 리스너 추가
+    lightModeBtn.addEventListener('change', () => setTheme('light'));
+    darkModeBtn.addEventListener('change', () => setTheme('dark'));
 });

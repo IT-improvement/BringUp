@@ -34,66 +34,52 @@
 <jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
 <section class="py-4">
-	<div class="container">
-		<div class="row g-4">
-			<div class="col-12">
-				<div class="row g-4">
-					<div class="col-sm-6 col-lg-3">
-						<div class="card card-body border p-3">
-							<div class="d-flex align-items-center">
-								<div class="icon-xl fs-1 bg-dark bg-opacity-10 rounded-3 text-dark">
-									<i class="bi bi-people-fill"></i>
-								</div>
-								<div class="ms-3">
-									<h3>10명</h3>
-									<h6 class="mb-0">지원자</h6>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-6 col-lg-3">
-						<div class="card card-body border p-3">
-							<div class="d-flex align-items-center">
-								<div class="icon-xl fs-1 bg-primary bg-opacity-10 rounded-3 text-primary">
-									<i class="bi bi-file-earmark-text-fill"></i>
-								</div>
-								<div class="ms-3">
-									<h3>3개</h3>
-									<h6 class="mb-0">공고</h6>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-6 col-lg-3">
-						<div class="card card-body border p-3">
-							<div class="d-flex align-items-center">
-								<div class="icon-xl fs-1 bg-danger bg-opacity-10 rounded-3 text-danger">
-									<i class="bi bi-suit-heart-fill"></i>
-								</div>
-								<div class="ms-3">
-									<h3>100명</h3>
-									<h6 class="mb-0">관심/스크랩</h6>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-sm-6 col-lg-3">
-						<div class="card card-body border p-3">
-							<div class="d-flex align-items-center">
-								<div class="icon-xl fs-1 bg-success bg-opacity-10 rounded-3 text-success">
-									<i class="bi bi-currency-dollar"></i>
-								</div>
-								<div class="ms-3">
-									<h3>15만원</h3>
-									<h6 class="mb-0">이번달 비용</h6>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-12">
+    <div class="container" style="max-width: 1260px;">
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="row g-4">
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card card-body border p-3">
+                            <div class="d-flex align-items-center">
+                                <div class="icon-xl fs-1 bg-dark bg-opacity-10 rounded-3 text-dark">
+                                    <i class="bi bi-people-fill"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h3>10명</h3>
+                                    <h6 class="mb-0">지원자</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card card-body border p-3">
+                            <div class="d-flex align-items-center">
+                                <div class="icon-xl fs-1 bg-primary bg-opacity-10 rounded-3 text-primary">
+                                    <i class="bi bi-file-earmark-text-fill"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h3>3개</h3>
+                                    <h6 class="mb-0">공고</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="card card-body border p-3">
+                            <div class="d-flex align-items-center">
+                                <div class="icon-xl fs-1 bg-danger bg-opacity-10 rounded-3 text-danger">
+                                    <i class="bi bi-suit-heart-fill"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h3>100명</h3>
+                                    <h6 class="mb-0">관심/스크랩</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
 				<div class="card border bg-transparent rounded-3">
 					<div class="card-header bg-transparent border-bottom p-3">
 						<div class="d-sm-flex justify-content-between align-items-center">
@@ -133,7 +119,7 @@
 									<th scope="col" class="border-0 rounded-end">비고</th>
 								</tr>
 								</thead>
-								<tbody class="border-top-0">
+								<tbody id="recruitment-list-body" class="border-top-0">
 								</tbody>
 							</table>
 						</div>
