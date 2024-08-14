@@ -19,7 +19,8 @@ public class AdminRecruitmentService {
     private final RecruitmentRepository recruitmentRepository;
     private final NotificationService notificationService;
 
-    @RabbitListener(queues = "approvalQueue")
+    // localhost:5672에서 RabbitMQ가 실행되야함. Docker에서 실행시키는게 제일 편해보임 일단 전체적으로 시스템 설정전에 사용하는거 주석처리해놓음.
+    //@RabbitListener(queues = "approvalQueue")
     public void handleApprovalRequest(Recruitment recruitment) {
         // RabbitMQ 큐에서 승인 요청 메시지를 수신
         System.out.println("Received approval request for Recruitment ID: " + recruitment.getRecruitmentIndex());
