@@ -52,8 +52,7 @@ public class JoinService {
     /**
      * ID(userEmail) Check
      */
-    public boolean checkId(String user_email){
-        log.debug("user id : " + user_email);
-        return !userRepository.existsByManagerEmail(user_email);
+    public boolean checkId(String userEmail){
+        return !userRepository.findByUserEmail(userEmail).isPresent();
     }
 }

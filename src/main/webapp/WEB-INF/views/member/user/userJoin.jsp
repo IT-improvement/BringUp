@@ -157,7 +157,7 @@
     </div>
 </div>
 <script src="/resources/script/member/userSingup.js"></script>
-
+<script src="/resources/script/member/userIdCheck.js"></script>
 <script>
 
 </script>
