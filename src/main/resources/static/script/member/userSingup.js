@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const userAddress = document.getElementById('userAddress').value;
         const userPhonenumber = document.getElementById('userPhonenumber').value;
         const userBirthday = document.getElementById('userBirthday').value;
-        const freelancer = document.getElementById('freelancer').checked; // 체크박스는 .checked로 가져옵니다.
+        const freelancer = document.getElementById('freelancer').checked;
         const status = document.getElementById('status').value;
 
         // 서버에 보낼 데이터 객체를 만듭니다.
@@ -28,19 +28,19 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch('/member/joinProc', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json', // JSON 형식으로 데이터를 전송합니다.
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(formData) // 데이터를 JSON 문자열로 변환하여 전송합니다.
+            body: JSON.stringify(formData)
         })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('서버 응답이 올바르지 않습니다.');
                 }
-                return response.json(); // 서버로부터의 응답을 JSON으로 변환합니다.
+                return response.text(); // 서버 응답을 텍스트로 처리
             })
             .then(data => {
                 console.log('서버 응답:', data);
-                if (data.code === 200) {
+                if (data.includes("회원가입이 성공적으로 완료되었습니다.")) {
                     const modal = document.createElement('div');
                     modal.style.cssText = `
                     position: fixed;
@@ -88,8 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         // 모달 닫기
                         modal.remove();
 
-                        // 다음 페이지로 이동
-                        window.location.href = '/member/userLoginForm'; // 로그인 성공 후 리다이렉트할 페이지
+                        // 로그인 페이지로 이동
+                        window.location.href = '/member/userLoginForm';
                     });
                 } else {
                     console.error('회원가입 실패:', data);

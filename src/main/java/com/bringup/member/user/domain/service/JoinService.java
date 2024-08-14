@@ -1,5 +1,6 @@
 package com.bringup.member.user.domain.service;
 
+import com.bringup.common.enums.RolesType;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import com.bringup.member.user.dto.JoinDTO;
@@ -43,8 +44,16 @@ public class JoinService {
         userEntity.setUserBirthday(joinDTO.getUserBirthday());
         userEntity.setFreelancer(joinDTO.isFreelancer());
         userEntity.setStatus(joinDTO.getStatus());
-        userEntity.setRole("ROLE_ADMIN");
+        userEntity.setRole(RolesType.ROLE_MEMBER);
 
         userRepository.save(userEntity);
+    }
+
+    /**
+     * ID(userEmail) Check
+     */
+    public boolean checkId(String user_email){
+        log.debug("user id : " + user_email);
+        return !userRepository.existsByManagerEmail(user_email);
     }
 }

@@ -32,10 +32,38 @@
             font-weight: bold;
             color: #333;
         }
-        input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="tel"], select {
-            width: calc(100% - 20px); /* 양쪽 간격을 동일하게 설정 */
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .input-group input[type="email"] {
+            flex: 1;
             padding: 10px;
-            margin: 0 auto 15px auto; /* 하단 여백을 주고 상단은 고정 */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .input-group button {
+            margin-left: 10px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .input-group button:hover {
+            background-color: #218838;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="password"], input[type="date"], input[type="tel"], select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 0 auto 15px auto;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
@@ -44,11 +72,8 @@
         input[type="checkbox"] {
             margin-right: 10px;
         }
-        .form-group {
-            margin-bottom: 20px;
-        }
         .btn {
-            width: calc(100% - 20px); /* 양쪽 간격을 동일하게 설정 */
+            width: calc(100% - 20px);
             padding: 15px;
             background-color: #007BFF;
             color: white;
@@ -74,6 +99,11 @@
         .footer a:hover {
             text-decoration: underline;
         }
+        #emailCheckResult {
+            margin-top: 5px;
+            font-size: 14px;
+            color: red; /* 기본 색상: 빨간색 (에러 시) */
+        }
     </style>
 </head>
 <body>
@@ -82,7 +112,11 @@
     <form id="userJoin">
         <div class="form-group">
             <label for="userEmail">이메일</label>
-            <input type="email" id="userEmail" name="userEmail" required>
+            <div class="input-group">
+                <input type="email" id="userEmail" name="userEmail" required>
+                <button type="button" id="checkEmailBtn">중복 체크</button>
+            </div>
+            <span id="emailCheckResult"></span>
         </div>
         <div class="form-group">
             <label for="userPassword">비밀번호</label>
@@ -123,6 +157,10 @@
     </div>
 </div>
 <script src="/resources/script/member/userSingup.js"></script>
+
+<script>
+
+</script>
 
 </body>
 </html>
