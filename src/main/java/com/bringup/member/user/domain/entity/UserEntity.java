@@ -1,5 +1,6 @@
 package com.bringup.member.user.domain.entity;
 
+import com.bringup.common.enums.RolesType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,7 @@ public class UserEntity {
     private boolean freelancer;
 
     private String status;
+    @Enumerated(EnumType.STRING) //@Enumerated(EnumType.STRING)
+    private RolesType role = RolesType.ROLE_MEMBER;
 
-    private String role;
 }
