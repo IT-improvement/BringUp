@@ -28,6 +28,12 @@ public class LoginController {
         return "member/user/login";
     }
 
+
+    @GetMapping("/test")
+    public String loginA(){
+        return "member/user/test";
+    }
+
     /* 클라이언트의 로그인 요청
     클라이언트가 사용자의 이메일(userEmail)과 비밀번호(userPassword)를 POST 요청으로 /member/userLogin 엔드포인트에 보냅니다.
      */
