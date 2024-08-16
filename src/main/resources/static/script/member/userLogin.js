@@ -24,7 +24,9 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 console.log('서버 응답:', data);
                 if (data.code === 200 && data.data && data.data.accessToken) {
-                    sessionStorage.setItem('accessToken', data.data.accessToken);
+                    // 로컬 스토리지에 accessToken 저장
+                    localStorage.setItem('accessToken', data.data.accessToken);
+
                     const modal = document.createElement('div');
                     modal.style.cssText = `
                     position: fixed;
