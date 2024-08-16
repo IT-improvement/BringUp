@@ -1,4 +1,4 @@
-package com.bringup.member.portfolio.portfolio;
+package com.bringup.member.portfolio.portfolio.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
