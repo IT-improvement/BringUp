@@ -91,3 +91,40 @@ document.addEventListener('DOMContentLoaded', function() {
     lightModeBtn.addEventListener('change', () => setTheme('light'));
     darkModeBtn.addEventListener('change', () => setTheme('dark'));
 });
+
+function getCurrentTheme() {
+    return document.documentElement.getAttribute('data-bs-theme');
+}
+
+function setNotificationButtonStyle(element) {
+    const currentTheme = getCurrentTheme();
+    if (currentTheme === 'dark') {
+        element.style.backgroundColor = '#192233';
+    } else {
+        element.style.backgroundColor = '#E8F0FC';
+    }
+}
+
+function resetNotificationButtonStyle(element) {
+    element.style.backgroundColor = '';
+}
+
+// 테마 변경 시 이벤트 리스너 추가
+document.addEventListener('themeChanged', function(e) {
+    const notificationButton = document.querySelector('.btn-round');
+    if (notificationButton && notificationButton.matches(':hover')) {
+        setNotificationButtonStyle(notificationButton);
+    }
+});
+
+// 반응형 네비게이션 처리
+document.addEventListener('DOMContentLoaded', function() {
+    const navbarToggler = document.querySelector('.navbar-toggler');
+    const navbarCollapse = document.querySelector('.navbar-collapse');
+
+    if (navbarToggler && navbarCollapse) {
+        navbarToggler.addEventListener('click', function() {
+            navbarCollapse.classList.toggle('show');
+        });
+    }
+});

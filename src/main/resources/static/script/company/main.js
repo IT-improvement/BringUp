@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td>${recruitment.startDate}</td>
                     <td>${recruitment.category}</td>
                     <td>${recruitment.status}</td>
-                    <td><a href="/jobpost/management/detail_${recruitment.recruitmentIndex}">상세보기</a></td>
+                    <td><a href="/company/jobpost/detail?recruitmentIndex=${recruitment.recruitmentIndex}">상세보기</a></td>
                 `;
                 recruitmentListBody.appendChild(row);
             });

@@ -1,65 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- =======================
 헤더 시작 -->
-<header class="navbar-light navbar-sticky header-static border-bottom navbar-dashboard">
-    <!-- 로고 네비게이션 시작 -->
+<header class="header-static border-bottom" style="z-index: 9999;">
+    <!-- 상단 헤더 -->
     <nav class="navbar navbar-expand-xl">
         <div class="container-fluid px-3" style="max-width: 1260px;">
             <!-- 로고 시작 -->
-            <a class="navbar-brand me-3" href="/company">
+            <a class="navbar-brand justify-content-center" href="/company">
                 <img class="navbar-brand-item light-mode-item" src="/resources/style/common/images/Logo.png" alt="로고">
                 <img class="navbar-brand-item dark-mode-item" src="/resources/style/common/images/Logo_darkmode.png" alt="로고">
             </a>
             <!-- 로고 끝 -->
-
-            <!-- 반응형 네비게이션 토글러 -->
-            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="네비게이션 토글">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- 메인 네비게이션 시작 -->
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav mx-auto">
-                    <!-- 네비 아이템 2 공고 -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="jobPostingMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">공고</a>
-                        <ul class="dropdown-menu" aria-labelledby="jobPostingMenu">
-                            <li><a class="dropdown-item" href="/company/jobpost/management">공고 관리</a></li>
-                            <li><a class="dropdown-item" href="/company/jobpost/registration">공고 등록</a></li>
-                        </ul>
-                    </li>
-
-                    <!-- 네비 아이템 3 상품 -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="pagesMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">상품</a>
-                        <ul class="dropdown-menu" aria-labelledby="pagesMenu">
-                            <li><a class="dropdown-item" href="/company/product/management">상품 관리</a></li>
-                            <li><a class="dropdown-item" href="/company/product/premium_job_posting">프리미엄 공고</a></li>
-                            <li><a class="dropdown-item" href="/company/product/advertising_banner">광고 배너</a></li>
-                            <li><a class="dropdown-item" href="/company/product/resume_key">이력서 열람</a></li>
-                        </ul>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="reviewMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">리뷰</a>
-                        <ul class="dropdown-menu" aria-labelledby="postMenu">
-                            <li><a class="dropdown-item" href="/company/review/corporation">기업 리뷰</a></li>
-                            <li><a class="dropdown-item" href="/company/review/interview">면접 리뷰</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/company/recommendation" id="recommendMenu">인재 추천</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- 메인 네비게이션 끝 -->
-
             <!-- 네비 오른쪽 시작 -->
-            <div class="nav flex-nowrap align-items-center">
+            <div class="nav flex-nowrap align-items-center ms-auto">
                 <!-- 알림 드롭다운 시작 -->
                 <div class="nav-item ms-2 ms-md-3 dropdown">
                     <!-- 알림 버튼 -->
-                    <a class="btn btn-primary-soft btn-round mb-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                    <a class="btn btn-round mb-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" onmouseover="setNotificationButtonStyle(this)" onmouseout="resetNotificationButtonStyle(this)">
                         <i class="bi bi-bell fa-fw"></i>
                     </a>
                     <!-- 알림 점 -->
@@ -142,10 +99,10 @@
                                 <a href="#" class="stretched-link">모든 활동 보기</a>
                             </div>
                         </div>
+                        <!-- 알림 드롭다운 메뉴 내용 -->
                     </div>
                     <!-- 알림 드롭다운 메뉴 끝 -->
                 </div>
-                <!-- 알림 드롭다운 끝 -->
 
                 <!-- 프로필 드롭다운 시작 -->
                 <div class="nav-item ms-2 ms-md-3 dropdown">
@@ -189,14 +146,58 @@
                     <!-- 프로필 드롭다운 끝 -->
                 </div>
                 <!-- 프로필 드롭다운 끝 -->
-                <!-- 네비 오른쪽 끝 -->
             </div>
+            <!-- 네비 오른쪽 끝 -->
         </div>
     </nav>
-    <!-- 로고 네비게이션 끝 -->
 </header>
-<!-- =======================
-헤더 끝 -->
+<!-- 알림 프로필 부분 끝 -->
+
+<!-- 메인 네비게이션 부분 시작 -->
+<middle_header class="border-bottom">
+    <!-- 하단 헤더 (메인 네비게이션) -->
+    <nav class="navbar navbar-expand-lg navbar-dashboard">
+        <div class="container px-3" style="max-width: 1260px;">
+            <!-- 메인 네비게이션 시작 -->
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mx-auto">
+                    <!-- 네비 아이템 2 공고 -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="jobPostingMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">공고</a>
+                        <ul class="dropdown-menu" aria-labelledby="jobPostingMenu">
+                            <li><a class="dropdown-item" href="/company/jobpost/management">공고 관리</a></li>
+                            <li><a class="dropdown-item" href="/company/jobpost/registration">공고 등록</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- 네비 아이템 3 상품 -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="pagesMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">상품</a>
+                        <ul class="dropdown-menu" aria-labelledby="pagesMenu">
+                            <li><a class="dropdown-item" href="/company/product/management">상품 관리</a></li>
+                            <li><a class="dropdown-item" href="/company/product/premium_job_posting">프리미엄 공고</a></li>
+                            <li><a class="dropdown-item" href="/company/product/advertising_banner">광고 배너</a></li>
+                            <li><a class="dropdown-item" href="/company/product/resume_key">이력서 열람</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="reviewMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">리뷰</a>
+                        <ul class="dropdown-menu" aria-labelledby="postMenu">
+                            <li><a class="dropdown-item" href="/company/review/corporation">기업 리뷰</a></li>
+                            <li><a class="dropdown-item" href="/company/review/interview">면접 리뷰</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/company/recommendation" id="recommendMenu">인재 추천</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- 메인 네비게이션 끝 -->
+        </div>
+    </nav>
+</middle_header>
+<!-- 메인 네비게이션 부분 끝 -->
+<link rel="stylesheet" href="/resources/style/company/header/header.css">
 
 <script src="/resources/script/company/header.js"></script>
-

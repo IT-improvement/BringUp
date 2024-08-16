@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td>${recruitment.recruitmentClass}</td>
                 `;
                 row.addEventListener('click', function() {
-                    window.location.href = `/jobpost/management/detail`;
+                    window.location.href = `/company/jobpost/detail?recruitmentIndex=${recruitment.recruitmentIndex}`;
                 });
                 recruitmentListBody.appendChild(row);
             });

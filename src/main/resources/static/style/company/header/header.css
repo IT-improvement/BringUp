@@ -1,0 +1,60 @@
+.header-static {
+    height: 50px; /* 헤더의 높이를 50px로 설정 */
+}
+
+.navbar {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.navbar-brand {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.navbar-brand .navbar-brand-item {
+    height: 30px; /* 로고 크기 조정 */
+}
+
+.navbar-dashboard .navbar-nav .nav-link {
+    line-height: 40px; /* 네비게이션 링크의 줄 높이 조정 */
+}
+
+.nav-item {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.dropdown-menu {
+    margin-top: 0;
+}
+
+/* 하단 헤더의 메인 네비게이션바의 세로 크기를 절반으로 줄이도록 수정 */
+.middle_header .navbar {
+    height: 25px; /* 하단 헤더의 메인 네비게이션바의 높이를 절반으로 줄임 */
+}
+
+@media (max-width: 1199.98px) {
+    .navbar-dashboard .navbar {
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+}
+@media (max-width: 991.98px) {
+    .navbar-toggler {
+        display: block;
+    }
+
+    .middle_header {
+        display: none;
+    }
+
+    .navbar-collapse {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: inherit;
+        border-top: 1px solid rgba(0,0,0,.1);
+    }
+}

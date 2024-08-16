@@ -29,57 +29,35 @@
 
 	<!-- 테마 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
-	<link rel="stylesheet" type="text/css" href="/resources/style/company/jobposting/management/management.css">
 
+    <!-- Bootstrap JS -->
+    <script src="/resources/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- 벤더 -->
+    <script src="/resources/style/common/vendor/apexcharts/js/apexcharts.min.js"></script>
+    <script src="/resources/style/common/vendor/overlay-scrollbar/js/OverlayScrollbars.min.js"></script>
+
+    <!-- 테마 JS -->
+    <script src="/resources/script/common/function/functions.js"></script>
+
+    <!-- 메인 JS -->
+    <!-- <script src="/resources/script/company/main.js"></script> -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body>
-<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
+<body class="d-flex flex-column min-vh-100">
 
-<div class="recruitment-list">
-    <h2 class="list-title">공고 목록</h2>
-    <div class="table-container">
-        <table class="recruitment-table">
-            <thead>
-                <tr>
-                    <th class="table-header">공고 ID</th>
-                    <th class="table-header">담당자 Email</th>
-                    <th class="table-header">채용형태</th>
-                    <th class="table-header">직군</th>
-                    <th class="table-header">기술스택</th>
-                    <th class="table-header">시작날짜</th>
-                    <th class="table-header">기간</th>
-                    <th class="table-header">상태값</th>
-                    <th class="table-header">광고등급</th>
-                </tr>
-            </thead>
-            <tbody id="recruitment-list-body">
-            </tbody>
-        </table>
-    </div>
-</div>
+	<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
+    <main class="flex-grow-1">
+		<p>공고 상세 페이지</p>
+    </main>
 
+	<jsp:include page="/WEB-INF/views/company/footer/company_footer.jsp" flush="true" />
 
-<jsp:include page="/WEB-INF/views/company/footer/company_footer.jsp" flush="true" />
-
-<!-- 맨 위로 -->
-<div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
-
-<!-- =======================
-JS 라이브러리, 플러그인 및 사용자 정의 스크립트 -->
-
-<!-- Bootstrap JS -->
-<script src="/resources/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- 벤더 -->
-<script src="/resources/style/common/vendor/apexcharts/js/apexcharts.min.js"></script>
-<script src="/resources/style/common/vendor/overlay-scrollbar/js/OverlayScrollbars.min.js"></script>
-
-<!-- 테마 JS -->
-<script src="/resources/script/common/function/functions.js"></script>
-
-<script src="/resources/script/company/jobposting/management.js"></script>
+    <!-- 맨 위로 -->
+    <div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
 
 </body>
 </html>
