@@ -1,16 +1,14 @@
 package com.bringup.member.portfolio.github.controller;
 
 import com.bringup.member.portfolio.github.domain.service.GithubService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 public class GithubController {
 
     private final GithubService gitHubService;
-
-    public GithubController(GithubService gitHubService) {
-        this.gitHubService = gitHubService;
-    }
 
     @GetMapping("/github/user")
     public String getGitHubUserData(@RequestParam("token") String githubToken) {
