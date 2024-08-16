@@ -13,11 +13,11 @@ public class PortfolioReponseDto{
 
     private List<PortfolioEntity> list;
 
-    public PortfolioReponseDto(ArrayList<PortfolioEntity> list) {
+    public PortfolioReponseDto(List<PortfolioEntity> list) {
         this.list = list;
     }
 
-    public static ResponseEntity<PortfolioReponseDto> success(ArrayList<PortfolioEntity> list){
+    public static ResponseEntity<PortfolioReponseDto> success(List<PortfolioEntity> list){
         PortfolioReponseDto response = new PortfolioReponseDto(list);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
