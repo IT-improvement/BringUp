@@ -1,4 +1,4 @@
-package com.bringup.member.portfolio.portfolio;
+package com.bringup.member.portfolio.notion.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,12 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "portfolio")
-@Entity
-public class PortfolioEntity {
+@NoArgsConstructor
+@Table
+@Entity(name = "notion")
+public class NotionEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int portfolioindex;
+    private int notionIndex;
 }
