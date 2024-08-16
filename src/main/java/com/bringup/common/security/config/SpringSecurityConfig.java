@@ -140,9 +140,11 @@ public class SpringSecurityConfig {
                 antMatcher(POST, "/company/join/first"),       // 회원가입 1단계
                 antMatcher(POST, "/company/join/second"),      // 회원가입 2단계
                 antMatcher(POST, "/company/checkId"),          // ID 중복 체크
-                antMatcher(GET, "/WEB-INF/views/**"),          // 웹 리소스
+                antMatcher(GET, "/WEB-INF/views/**"),
+                // 웹 리소스
                 antMatcher(GET, "/resources/**"),
                 antMatcher("/member/**"),
+                antMatcher("/recruitment/**"),
                 antMatcher("/github/**")// 정적 리소스
         );
 

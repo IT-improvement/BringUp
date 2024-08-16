@@ -26,4 +26,7 @@ public interface ResponseMessage {
 
     // HTTP Status 500
     String DATABASE_ERROR= "Database error.";
+
+    String EMAIL_AVAILABLE = "사용 가능한 이메일입니다.";
+    String EMAIL_TAKEN = "이미 사용 중인 이메일입니다.";
 }
