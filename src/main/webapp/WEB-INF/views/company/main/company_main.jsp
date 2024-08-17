@@ -76,7 +76,7 @@
                                             <i class="bi bi-file-earmark-text-fill"></i>
                                         </div>
                                         <div class="ms-3">
-                                            <h3>3개</h3>
+                                            <h3 id="jobCount"></h3>
                                             <h6 class="mb-0">공고</h6>
                                         </div>
                                     </div>
@@ -102,7 +102,7 @@
                             <div class="card-header bg-transparent border-bottom p-3">
                                 <div class="d-sm-flex justify-content-between align-items-center">
                                     <h5 class="mb-2 mb-sm-0">내 공고 <span id="jobCount" class="badge bg-primary bg-opacity-10 text-primary"></span></h5>
-                                    <a href="/company/job_posting/registration.html" class="btn btn-sm btn-primary mb-0">Add New</a>
+                                    <a href="/company/jobpost/registration" class="btn btn-sm btn-primary mb-0">추가</a>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -134,7 +134,6 @@
                                             <th scope="col" class="border-0">게시일</th>
                                             <th scope="col" class="border-0">모집 분야</th>
                                             <th scope="col" class="border-0">상태</th>
-                                            <th scope="col" class="border-0 rounded-end">비고</th>
                                         </tr>
                                         </thead>
                                         <tbody id="recruitment-list-body" class="border-top-0">
