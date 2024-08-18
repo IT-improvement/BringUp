@@ -1,5 +1,6 @@
 package com.bringup.company.recruitment.DTO.request;
 
+import com.bringup.common.enums.RecruitmentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecruitmentRequestDto {
-    private String recruitmentType;
+    private RecruitmentType recruitmentType; // 정규직, 비정규직, 아르바이트 중 하나
     private String category;
     private String skill;
     private String startDate;

@@ -1,5 +1,6 @@
 package com.bringup.company.recruitment.Entity;
 
+import com.bringup.common.enums.RecruitmentType;
 import com.bringup.company.user.Entity.Company;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -20,8 +21,9 @@ public class Recruitment {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "recruitment_type", nullable = false, length = 30)
-    private String recruitmentType;
+    private RecruitmentType recruitmentType = RecruitmentType.REGULAR_WORKER; // 기본값 정규직
 
     @Column(name = "category", nullable = false, length = 30)
     private String category;
