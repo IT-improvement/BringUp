@@ -6,10 +6,7 @@ import com.bringup.common.event.DTO.response.CertificateMailResponseDto;
 import com.bringup.common.event.Entity.EmailVerificationToken;
 import com.bringup.common.event.Repository.EmailVerificationTokenRepository;
 import com.bringup.common.event.exception.CertificateException;
-import com.bringup.company.user.Entity.Company;
-import com.bringup.company.user.Repository.CompanyRepository;
 import jakarta.mail.MessagingException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Random;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

@@ -1,7 +1,7 @@
 package com.bringup.common.security.service;
 
-import com.bringup.company.user.Entity.Company;
-import com.bringup.company.user.Repository.CompanyRepository;
+import com.bringup.company.user.entity.Company;
+import com.bringup.company.user.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;

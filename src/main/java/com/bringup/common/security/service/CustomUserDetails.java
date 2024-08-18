@@ -1,6 +1,5 @@
 package com.bringup.common.security.service;
 
-import com.bringup.company.user.Entity.Company;
 import com.bringup.member.user.domain.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
