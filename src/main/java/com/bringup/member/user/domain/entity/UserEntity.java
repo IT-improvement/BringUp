@@ -1,5 +1,6 @@
 package com.bringup.member.user.domain.entity;
 
+import com.bringup.common.enums.RolesType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,5 +30,5 @@ public class UserEntity {
 
     private String status;
 
-    private String role;
+    private RolesType role = RolesType.ROLE_MEMBER;
 }

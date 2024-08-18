@@ -20,7 +20,7 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/company/advertisement")
+@RequestMapping("/com/advertisement")
 public class AdvertisementController {
 
     private final AdvertisementService advertisementService;
@@ -28,7 +28,7 @@ public class AdvertisementController {
     @PostMapping("/select")
     public ResponseEntity<BfResponse<?>> selectAdvertisement(@RequestBody AdvertisementRequestDto requestDto) {
         advertisementService.createAdvertisement(requestDto);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "Advertisement selected successfully"));
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 선택 완료"));
     }
 
     @PostMapping("/upload")
@@ -36,31 +36,31 @@ public class AdvertisementController {
             @RequestParam("recruitmentIndex") int recruitmentIndex,
             @RequestPart("image") MultipartFile image) {
         advertisementService.uploadAdvertisementImage(recruitmentIndex, image);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "Image uploaded successfully"));
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "이미지 업로드 성공"));
     }
 
     @PostMapping("/type")
     public ResponseEntity<BfResponse<?>> selectAdvertisementType(@RequestBody AdvertisementRequestDto requestDto) {
         advertisementService.updateAdvertisementType(requestDto);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "Advertisement type selected successfully"));
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 타입 선택 완료"));
     }
 
     @PostMapping("/display-time")
     public ResponseEntity<BfResponse<?>> selectDisplayTime(@RequestBody AdvertisementRequestDto requestDto) {
         advertisementService.updateAdvertisementDisplayTime(requestDto);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "Display time set successfully"));
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 게시 시간 설정완료"));
     }
 
     @PostMapping("/extend")
     public ResponseEntity<BfResponse<?>> extendAdvertisement(@RequestBody AdvertisementRequestDto requestDto) {
         advertisementService.extendAdvertisement(requestDto);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "Advertisement extension requested successfully"));
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 게시 시간 연장 완료"));
     }
 
     @PostMapping("/delete")
     public ResponseEntity<BfResponse<?>> deleteAdvertisement(@RequestBody AdvertisementRequestDto requestDto) {
         advertisementService.deleteAdvertisement(requestDto);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "Advertisement deleted successfully"));
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 삭제 완료"));
     }
 
     @PostMapping("/updateImage")
@@ -68,6 +68,6 @@ public class AdvertisementController {
             @RequestParam("recruitmentIndex") int recruitmentIndex,
             @RequestPart("image") MultipartFile image) {
         advertisementService.uploadAdvertisementImage(recruitmentIndex, image);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "Advertisement updated successfully"));
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 업로드 완료"));
     }
 }

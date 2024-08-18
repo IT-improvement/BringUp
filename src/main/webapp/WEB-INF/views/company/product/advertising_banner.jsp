@@ -30,30 +30,34 @@
 	<!-- 테마 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
 
+    <!-- Bootstrap JS -->
+    <script src="/resources/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- 벤더 -->
+    <script src="/resources/style/common/vendor/apexcharts/js/apexcharts.min.js"></script>
+    <script src="/resources/style/common/vendor/overlay-scrollbar/js/OverlayScrollbars.min.js"></script>
+
+    <!-- 테마 JS -->
+    <script src="/resources/script/common/function/functions.js"></script>
+
+    <!-- 메인 JS -->
+    <!-- <script src="/resources/script/company/main.js"></script> -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body>
-<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
-<p>광고 배너</p>
+<body class="d-flex flex-column min-vh-100">
 
+	<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
-<jsp:include page="/WEB-INF/views/company/footer/company_footer.jsp" flush="true" />
+    <main class="flex-grow-1">
+		<p>광고 배너</p>
+    </main>
 
-<!-- 맨 위로 -->
-<div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
+	<jsp:include page="/WEB-INF/views/company/footer/company_footer.jsp" flush="true" />
 
-<!-- =======================
-JS 라이브러리, 플러그인 및 사용자 정의 스크립트 -->
-
-<!-- Bootstrap JS -->
-<script src="/resources/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- 벤더 -->
-<script src="/resources/style/common/vendor/apexcharts/js/apexcharts.min.js"></script>
-<script src="/resources/style/common/vendor/overlay-scrollbar/js/OverlayScrollbars.min.js"></script>
-
-<!-- 테마 JS -->
-<script src="/resources/script/common/function/functions.js"></script>
+    <!-- 맨 위로 -->
+    <div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
 
 </body>
 </html>

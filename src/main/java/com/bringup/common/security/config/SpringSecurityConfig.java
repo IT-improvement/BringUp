@@ -3,8 +3,6 @@ package com.bringup.common.security.config;
 import com.bringup.common.exception.CustomAccessDeniedHandler;
 import com.bringup.common.security.jwt.JwtFilter;
 import com.bringup.common.security.jwt.JwtProvider;
-import com.bringup.common.security.service.CompanyDetailsService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +10,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -109,6 +106,7 @@ public class SpringSecurityConfig {
                 .securityMatchers(matcher -> matcher
                         .requestMatchers(AuthRequestMatchers()))
                 .authorizeHttpRequests(auth -> auth
+                        //.requestMatchers("/company/**").hasAuthority(ROLE_COMPANY.name()) // ROLE이 Company인것만 /company 에 접근가능
                         .requestMatchers(AuthRequestMatchers())
                         .hasAnyAuthority(ROLE_MEMBER.name(), ROLE_ADMIN.name(), ROLE_COMPANY.name())
                         .anyRequest().authenticated()
@@ -136,12 +134,13 @@ public class SpringSecurityConfig {
      */
     private RequestMatcher[] permitAllRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
-                antMatcher(POST, "/company/login"),            // 로그인
-                antMatcher(POST, "/company/join/first"),       // 회원가입 1단계
-                antMatcher(POST, "/company/join/second"),      // 회원가입 2단계
-                antMatcher(POST, "/company/checkId"),          // ID 중복 체크
+                antMatcher(POST, "/com/login"),            // 로그인
+                antMatcher(POST, "/com/join/first"),       // 회원가입 1단계
+                antMatcher(POST, "/com/join/second"),      // 회원가입 2단계
+                antMatcher(POST, "/com/checkId"),          // ID 중복 체크
                 antMatcher(GET, "/WEB-INF/views/**"),          // 웹 리소스
                 antMatcher(GET, "/resources/**"),
+                antMatcher(GET, "/company/**"),              // 기업 페이지
                 antMatcher("/member/**"),
                 antMatcher("/github/**")// 정적 리소스
         );
@@ -154,22 +153,21 @@ public class SpringSecurityConfig {
      */
     private RequestMatcher[] AuthRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
-                antMatcher(POST, "/company/companyName"),               // 기업명 헤더 삽입
-                antMatcher(PUT, "/company/user"),                       // 회원 정보 수정
-                antMatcher(DELETE, "/company/user"),                    // 회원 탈퇴
-                antMatcher(GET, "/company/companyInfo/post"),           // 회원 정보 조회
+                antMatcher(POST, "/com/companyName"),               // 기업명 헤더 삽입
+                antMatcher(PUT, "/com/user"),                       // 회원 정보 수정
+                antMatcher(DELETE, "/com/user"),                    // 회원 탈퇴
+                antMatcher(GET, "/com/companyInfo/post"),           // 회원 정보 조회
 
-                antMatcher(POST, "/company/recruitment/register"),       // 채용 등록
-                antMatcher(POST, "/company/recruitment/update/{recruitmentId}"), // 채용 수정
-                antMatcher(POST, "/company/recruitment/delete/{recruitmentId}"), // 채용 삭제
-                antMatcher(GET, "/company/recruitment/list"),           // 채용 리스트 조회
+                antMatcher(POST, "/com/recruitment/register"),       // 채용 등록
+                antMatcher(POST, "/com/recruitment/update/{recruitmentId}"), // 채용 수정
+                antMatcher(POST, "/com/recruitment/delete/{recruitmentId}"), // 채용 삭제
+                antMatcher(GET, "/com/recruitment/list"),           // 채용 리스트 조회
 
-                antMatcher(POST, "/company/c_reviews"),                 // 기업 리뷰 열람
-                antMatcher(POST, "/company/c_review/delete"),           // 기업 리뷰 삭제
-                // antMatcher(POST, "/company/c_review/update"),        // 기업 리뷰 수정
+                antMatcher(POST, "/com/c_reviews"),                 // 기업 리뷰 열람
+                antMatcher(POST, "/com/c_review/delete"),           // 기업 리뷰 삭제
 
-                antMatcher(POST, "/company/i_reviews"),                 // 면접 리뷰 열람
-                antMatcher(POST, "/company/i_review/delete")            // 면접 리뷰 삭제
+                antMatcher(POST, "/com/i_reviews"),                 // 면접 리뷰 열람
+                antMatcher(POST, "/com/i_review/delete")            // 면접 리뷰 삭제
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);

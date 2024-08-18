@@ -36,7 +36,7 @@ public class JwtProvider {
 	private int accessExpirationSeconds;
 
 	/**
-	 * Company access 토큰 생성
+	 * access 토큰 생성
 	 */
 	public String createAccessToken(CompanyDetailsImpl companyDetails) {
 		Instant now = Instant.now();

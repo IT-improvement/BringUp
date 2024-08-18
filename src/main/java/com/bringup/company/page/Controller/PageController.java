@@ -31,6 +31,11 @@ public class PageController {
         return "company/jobposting/registration";
     }
 
+    @GetMapping("/jobpost/detail")
+    public String jobpostingDetail(){
+        return "company/jobposting/detail";
+    }
+
     @GetMapping("/product/management")
     public String productManagement(){
         return "company/product/management";
@@ -80,6 +85,10 @@ public class PageController {
     public String signup(){
         return "company/auth/signup/signup";
     }
+    @GetMapping("/auth/signup/second")
+    public String signupSecond(){
+        return "company/auth/signup/signupsecond";
+    }
 
     @GetMapping("/auth/updateProfile")
     public String updateProfile(){
@@ -89,5 +98,10 @@ public class PageController {
     @GetMapping("/auth/updateAuth")
     public String updateAuth(){
         return "company/auth/profile/updateAuth";
+    }
+
+    @GetMapping("/auth/findauth")
+    public String findauth(){
+        return "company/auth/findauth/findauth";
     }
 }

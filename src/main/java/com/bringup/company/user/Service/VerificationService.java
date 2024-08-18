@@ -62,9 +62,11 @@ public class VerificationService {
                 .block();
 
         System.out.println("Response: " + response);
+        System.out.println("data : " + response.data().get(0).valid());
 
         if (response != null && response.data() != null && !response.data().isEmpty()) {
-            return "01".equals(response.data().get(0).valid());
+            System.out.println("02".equals(response.data().get(0).valid()));
+            return "02".equals(response.data().get(0).valid());
         } else {
             throw new CompanyException(BUSINESS_VALIDATE_ERROR);
         }
