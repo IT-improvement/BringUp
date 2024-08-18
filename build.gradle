@@ -36,6 +36,10 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
+    //mail
+    implementation group: 'jakarta.mail', name: 'jakarta.mail-api', version: '2.1.2'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.3.1'
+
     //password
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.security:spring-security-crypto:5.8.12'
@@ -51,6 +55,9 @@ dependencies {
     //json
     implementation group: 'org.json', name: 'json', version: '20231013'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.16.1'
+
+    // Message Queue
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
 
     // JSP

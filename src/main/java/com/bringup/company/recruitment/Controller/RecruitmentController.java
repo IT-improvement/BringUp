@@ -18,7 +18,7 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/company/recruitment")
+@RequestMapping("/com/recruitment")
 public class RecruitmentController {
     private final RecruitmentService recruitmentService;
 
