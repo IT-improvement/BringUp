@@ -9,7 +9,6 @@ import com.bringup.common.enums.RolesType;
 import com.bringup.company.recruitment.Entity.Recruitment;
 import com.bringup.company.recruitment.Repository.RecruitmentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
 @Service

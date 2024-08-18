@@ -3,6 +3,7 @@ package com.bringup.member.user.domain.service;
 import com.bringup.common.security.jwt.JwtProvider;
 
 
+import com.bringup.common.security.service.CustomUserDetails;
 import com.bringup.member.user.domain.repository.UserRepository;
 import com.bringup.member.user.dto.UserLoginDTO;
 import com.bringup.member.user.dto.UserLoginTokenDTO;
@@ -11,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import com.bringup.member.user.dto.CustomUserDetails;
 
 @Service
 public class UserLoginService {
