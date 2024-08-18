@@ -1,7 +1,7 @@
 package com.bringup.common.security.jwt;
 
 import com.bringup.common.security.service.CompanyDetailsImpl;
-import com.bringup.member.user.dto.CustomUserDetails;
+import com.bringup.common.security.service.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
