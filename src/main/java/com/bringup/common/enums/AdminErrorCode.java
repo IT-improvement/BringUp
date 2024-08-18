@@ -5,18 +5,13 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public enum MemberErrorCode implements BaseErrorCode {
+public enum AdminErrorCode implements BaseErrorCode {
     // 400 BAD_REQUEST
     BAD_REQUEST(400, "잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
-    NOT_FOUND_MEMBER_EMAIL(400, "존재하지 않는 회원입니다.", HttpStatus.BAD_REQUEST),
+    NOT_FOUND_RECRUITMENT(400, "존재하지 않는 공고입니다.", HttpStatus.BAD_REQUEST),
     DUPLICATED_MEMBER_EMAIL(400, "이미 존재하는 회원 이메일입니다.", HttpStatus.BAD_REQUEST),
     DUPLICATED_MEMBER_PHONE_NUMBER(400, "이미 등록된 휴대폰 번호입니다.", HttpStatus.BAD_REQUEST),
     DELETE_MEMBER(400, "탈퇴 또는 삭제된 회원입니다.", HttpStatus.BAD_REQUEST),
-    CHECK_ID_OR_PASSWORD(400, "아이디 또는 비밀번호를 확인해주세요.", HttpStatus.BAD_REQUEST),
-    PASSWORD_NOT_MATCHED(400, "비밀번호와 비밀번호 확인이 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
-    INVALID_REQUEST_FORMAT(400,"잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
-    NOT_FOUND_1st(400, "진위여부 파악이 완료되지 않았습니다.", HttpStatus.BAD_REQUEST),
-    NOT_FOUND_RECRUITMENT(400, "공고가 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
     // 403 FORBIDDEN
     FORBIDDEN_DELETE_MEMBER(403, "권한이 없습니다. 본인 계정만 탈퇴할 수 있습니다.", HttpStatus.FORBIDDEN),
     FORBIDDEN_RESET_PASSWORD(403, "권한이 없습니다. 본인 계정만 비밀번호 변경이 가능합니다.", HttpStatus.FORBIDDEN),
@@ -35,7 +30,7 @@ public enum MemberErrorCode implements BaseErrorCode {
     private final String errorMessage;
     private final HttpStatus status;
 
-    MemberErrorCode(int errorCode, String message, HttpStatus status) {
+    AdminErrorCode(int errorCode, String message, HttpStatus status) {
         this.errorCode = errorCode;
         this.errorMessage = message;
         this.status = status;
