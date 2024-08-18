@@ -26,11 +26,13 @@ public class CustomUserDetails implements UserDetails {
     public static UserDetails from(UserEntity user) {
         List<GrantedAuthority> authorities = user.getRole() != null ?
                 List.of(new SimpleGrantedAuthority(user.getRole().name())): null;
-
         return new CustomUserDetails(
                 user,
                 authorities
         );
+    }
+    public int getId() {
+        return User.getUserIndex();
     }
 
     @Override
@@ -50,42 +52,37 @@ public class CustomUserDetails implements UserDetails {
             }
         });
 
+        collection.add(new SimpleGrantedAuthority(userEntity.getRole().name()));
         return collection;
     }*/
 
     @Override
     public String getPassword() {
-
         return User.getUserPassword();
     }
 
     @Override
     public String getUsername() {
-
         return User.getUserEmail();
     }
 
     @Override
     public boolean isAccountNonExpired() {
-
         return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-
         return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-
         return true;
     }
 
     @Override
     public boolean isEnabled() {
-
         return true;
     }
 }

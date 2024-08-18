@@ -1,6 +1,7 @@
 package com.bringup.common.security.jwt;
 
 import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.member.user.dto.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -63,6 +64,28 @@ public class JwtProvider {
 			.compact();
 	}
 
+	/**
+	 * Usesr access 토큰 생성
+	 */
+
+	public String createAccessToken(CustomUserDetails customUserDetails) {
+		Instant now = Instant.now();
+		Date expiration = Date.from(now.plusSeconds(accessExpirationSeconds));
+		SecretKey key = extractSecretKey();
+
+		String roles = customUserDetails.getAuthorities().stream()
+				.map(GrantedAuthority::getAuthority)
+				.collect(Collectors.joining(", "));
+
+		return Jwts.builder()
+				.claim("id", customUserDetails.getId())
+				.setSubject(customUserDetails.getUsername())
+				.setIssuedAt(Date.from(now))
+				.setExpiration(expiration)
+				.claim(AUTHENTICATION_CLAIM_NAME, roles)
+				.signWith(key, SignatureAlgorithm.HS512)
+				.compact();
+	}
 
 
 	/**
