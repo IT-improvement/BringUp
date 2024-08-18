@@ -5,6 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-admin page
+<h3>메인페이지</h3>
+
 </body>
 </html>

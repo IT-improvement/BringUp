@@ -29,6 +29,6 @@ public class UserEntity {
     private boolean freelancer;
 
     private String status;
-
+    @Enumerated(EnumType.STRING) //@Enumerated(EnumType.STRING)
     private RolesType role = RolesType.ROLE_MEMBER;
 }
