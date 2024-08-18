@@ -1,6 +1,6 @@
 package com.bringup.common.security.service;
 
-import com.bringup.company.user.Entity.Company;
+import com.bringup.company.user.entity.Company;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
