@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('userLoginForm').addEventListener('submit', function(e) {
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
         const userid = document.getElementById('userid').value;
