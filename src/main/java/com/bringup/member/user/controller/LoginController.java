@@ -25,6 +25,7 @@ public class LoginController {
 
     @GetMapping("/userLoginForm")
     public String loginP(){
+        
         return "member/user/login";
     }
 
