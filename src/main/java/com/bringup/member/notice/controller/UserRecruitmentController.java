@@ -2,8 +2,8 @@ package com.bringup.member.notice.controller;
 
 import com.bringup.member.notice.domain.entity.UserRecruitmentEntity;
 import com.bringup.member.notice.domain.service.UserRecruitmentService;
-import com.bringup.member.notice.dto.UserRecruitmentDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,5 +25,11 @@ public class UserRecruitmentController {
     @GetMapping("/view")
     public String View() {
         return "/member/recruitment";
+    }
+
+    @GetMapping("/scrap")
+    public ResponseEntity<List<UserRecruitmentEntity>> getBookmarkedRecruitments() {
+        List<UserRecruitmentEntity> recruitments = userRecruitmentService.getBookmarkedRecruitments();
+        return ResponseEntity.ok(recruitments);
     }
 }
