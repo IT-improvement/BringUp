@@ -3,6 +3,8 @@ package com.bringup.common.image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,5 +46,16 @@ public class ImageService {
             return null;
         }
         return fileUrl+saveFileName;
+    }
+    // 이미지 보기
+    public Resource getImage(String fileNmae) {
+        Resource resource = null;
+        try {
+            resource = new UrlResource("file:" + filePath + fileNmae);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return resource;
     }
 }
