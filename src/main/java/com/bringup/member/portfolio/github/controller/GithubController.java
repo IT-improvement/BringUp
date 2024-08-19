@@ -1,7 +1,7 @@
 package com.bringup.member.portfolio.github.controller;
 
 import com.bringup.member.portfolio.github.domain.service.GithubService;
-import com.bringup.member.portfolio.github.dto.GithubReuestDto;
+import com.bringup.member.portfolio.github.dto.GithubRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +17,7 @@ public class GithubController {
     }
 
     @GetMapping("/github/user/repos")
-    public String getUserRepos(@RequestBody GithubReuestDto githubToken) {
+    public String getUserRepos(@RequestBody GithubRequestDto githubToken) {
         String userLogin = gitHubService.getUserLogin(githubToken.getToken());
         return gitHubService.getOrgRepos(userLogin, githubToken.getToken());
     }
