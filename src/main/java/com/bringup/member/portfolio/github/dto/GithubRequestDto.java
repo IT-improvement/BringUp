@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GithubReuestDto {
+public class GithubRequestDto {
     private String token;
 }
