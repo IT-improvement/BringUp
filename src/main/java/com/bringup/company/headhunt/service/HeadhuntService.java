@@ -2,10 +2,10 @@ package com.bringup.company.headhunt.service;
 
 import com.bringup.common.security.service.CompanyDetailsImpl;
 import com.bringup.company.headhunt.dto.response.HeadhuntResponseDto;
-import com.bringup.company.headhunt.repository.CVRepository;
 import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
 import com.bringup.member.resume.domain.entity.CVEntity;
+import com.bringup.member.resume.domain.repository.CVRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
