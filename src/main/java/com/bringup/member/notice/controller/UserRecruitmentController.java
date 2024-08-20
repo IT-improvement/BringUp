@@ -24,8 +24,9 @@ public class UserRecruitmentController {
 
     @GetMapping("/view")
     public String View() {
-        return "/member/recruitment";
+        return "/member/user/recruitmentList";
     }
+
 
     @GetMapping("/scrap")
     public ResponseEntity<List<UserRecruitmentEntity>> getBookmarkedRecruitments() {

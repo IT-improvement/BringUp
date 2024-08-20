@@ -6,6 +6,6 @@
 </head>
 <body>
 <h3>메인페이지</h3>
-
+<a href="/recruitment/view">컴퍼니 로그인</a>
 </body>
 </html>
