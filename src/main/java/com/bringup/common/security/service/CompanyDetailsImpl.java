@@ -17,7 +17,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor @NoArgsConstructor
 public class CompanyDetailsImpl implements UserDetails {
-	private Long id;
+	private int id;
 	private String email;
 	@JsonIgnore
 	private String password;

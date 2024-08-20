@@ -13,10 +13,10 @@ public class Salary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private int id;
 
     @Column(name = "company_id", nullable = false)
-    private Long companyId;
+    private int companyId;
 
     @Column(name = "position", nullable = false, length = 10)
     private String position;
