@@ -134,7 +134,7 @@ public class CompanyService {
         }
     }
 
-    private void saveSalary(Long companyId, SalaryDto salaryDto) {
+    private void saveSalary(int companyId, SalaryDto salaryDto) {
         Salary salary = new Salary();
         salary.setCompanyId(companyId);
         salary.setPosition(salaryDto.getPosition());
