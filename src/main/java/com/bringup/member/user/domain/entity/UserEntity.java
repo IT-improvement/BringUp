@@ -31,4 +31,36 @@ public class UserEntity {
     private String status;
     @Enumerated(EnumType.STRING) //@Enumerated(EnumType.STRING)
     private RolesType role = RolesType.ROLE_MEMBER;
+
+    public void updateUserEmail(String userEmail){
+        this.userEmail = userEmail;
+    }
+
+    public void updatePassword(String userPassword){
+        this.userPassword = userPassword;
+    }
+
+    public void updateUserName(String userName){
+        this.userName = userName;
+    }
+
+    public void updateUserPhoneNumber(String userPhonenumber){
+        this.userPhonenumber = userPhonenumber;
+    }
+
+    public void updateUserAddress(String userAddress){
+        this.userAddress = userAddress;
+    }
+
+    public void updateUserBirthday(String userBirthday){
+        this.userBirthday = userBirthday;
+    }
+
+    public void updateFreeLancer(boolean freelancer){
+        this.freelancer = freelancer;
+    }
+
+    public void updateStatus(String status){
+        this.status = status;
+    }
 }
