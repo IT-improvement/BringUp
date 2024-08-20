@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ScrapRecruitmentRepository extends JpaRepository<ScrapRecuritmentEntity, Integer> {
 
-    @Query("SELECT rb.recruitmentIndex FROM ScrapRecuritmentEntity rb WHERE rb.userIndex.userIndex = :userIndex")
+    @Query("SELECT s.recruitmentIndex FROM ScrapRecuritmentEntity s WHERE s.userIndex.userIndex = :userIndex")
     List<UserRecruitmentEntity> findBookmarkedRecruitmentsByUserIndex(@Param("userIndex") int userIndex);
 
 }
