@@ -6,6 +6,8 @@ import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
 import com.bringup.member.resume.domain.entity.CVEntity;
 import com.bringup.member.resume.domain.repository.CVRepository;
+import com.bringup.member.user.domain.entity.UserEntity;
+import com.bringup.member.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class HeadhuntService {
     private final CVRepository cvRepository;
     private final RecruitmentRepository recruitmentRepository;
+    private final UserRepository userRepository;
 
     // 스킬이 하나라도 일치하는 CV를 필터링하고, 그 중 5개를 랜덤으로 추천하는 메서드
     public List<HeadhuntResponseDto> recommendCVsBasedOnCompanySkills(CompanyDetailsImpl userDetails) {
@@ -28,7 +31,6 @@ public class HeadhuntService {
 
         List<CVEntity> matchingCVs = new ArrayList<>();
 
-        // 스킬이 하나라도 일치하는 CV를 필터링
         for (Recruitment recruitment : recruitments) {
             for (CVEntity cv : allCVs) {
                 if (hasMatchingSkills(recruitment.getSkill(), cv.getSkill())) {
@@ -47,8 +49,8 @@ public class HeadhuntService {
                 .collect(Collectors.toList());
 
         return recommendations.stream()
-                .sorted((a, b) -> random.nextInt(2) - 1) // 랜덤으로 정렬
-                .limit(5) // 최대 5개까지 제한
+                .sorted((a, b) -> random.nextInt(2) - 1)
+                .limit(5)
                 .collect(Collectors.toList());
     }
 
@@ -59,7 +61,6 @@ public class HeadhuntService {
                 .collect(Collectors.toList());
     }
 
-    // 스킬 매칭 여부 확인
     private boolean hasMatchingSkills(String recruitmentSkills, String cvSkills) {
         String[] recruitmentSkillArray = recruitmentSkills.split(",");
         String[] cvSkillArray = cvSkills.split(",");
@@ -75,6 +76,22 @@ public class HeadhuntService {
     }
 
     private HeadhuntResponseDto convertToDto(CVEntity cvEntity) {
-        return new HeadhuntResponseDto(cvEntity.getCvIndex(), cvEntity.getCvImage(), cvEntity.isMainCv(), cvEntity.getEducation(), cvEntity.getSkill(), cvEntity.getUserIndex(), cvEntity.getStatus());
+        UserEntity user = userRepository.findById(Integer.valueOf(cvEntity.getUserIndex()))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // 주소에서 OO시 OO동만 추출
+        String fullAddress = user.getUserAddress();
+        String[] addressParts = fullAddress.split(" ");
+        String userAddress = addressParts[0] + " " + addressParts[1]; // OO시 OO동 추출
+
+        return new HeadhuntResponseDto(
+                cvEntity.getCvIndex(),
+                cvEntity.getCvImage(),
+                cvEntity.isMainCv(),
+                cvEntity.getEducation(),
+                cvEntity.getSkill(),
+                userAddress, // 가공된 주소
+                cvEntity.getUserIndex() // 유저 인덱스 추가
+        );
     }
 }
