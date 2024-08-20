@@ -1,12 +1,17 @@
 package com.bringup.company.advertisement.controller;
 
 import com.bringup.common.response.BfResponse;
+import com.bringup.common.security.service.CompanyDetailsImpl;
 import com.bringup.company.advertisement.dto.request.AdvertisementRequestDto;
+import com.bringup.company.advertisement.dto.response.AdvertisementResponseDto;
 import com.bringup.company.advertisement.service.AdvertisementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
@@ -18,48 +23,75 @@ public class AdvertisementController {
     private final AdvertisementService advertisementService;
 
     @PostMapping("/select")
-    public ResponseEntity<BfResponse<?>> selectAdvertisement(@RequestBody AdvertisementRequestDto requestDto) {
-        advertisementService.createAdvertisement(requestDto);
+    public ResponseEntity<BfResponse<?>> selectAdvertisement(
+            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @RequestBody AdvertisementRequestDto requestDto) {
+        advertisementService.createAdvertisement(userDetails, requestDto);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 선택 완료"));
     }
 
     @PostMapping("/upload")
     public ResponseEntity<BfResponse<?>> uploadAdvertisementImage(
+            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
             @RequestParam("recruitmentIndex") int recruitmentIndex,
             @RequestPart("image") MultipartFile image) {
-        advertisementService.uploadAdvertisementImage(recruitmentIndex, image);
+        advertisementService.uploadAdvertisementImage(userDetails, recruitmentIndex, image);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "이미지 업로드 성공"));
     }
 
     @PostMapping("/type")
-    public ResponseEntity<BfResponse<?>> selectAdvertisementType(@RequestBody AdvertisementRequestDto requestDto) {
-        advertisementService.updateAdvertisementType(requestDto);
+    public ResponseEntity<BfResponse<?>> selectAdvertisementType(
+            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @RequestBody AdvertisementRequestDto requestDto) {
+        advertisementService.updateAdvertisementType(userDetails, requestDto);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 타입 선택 완료"));
     }
 
     @PostMapping("/display-time")
-    public ResponseEntity<BfResponse<?>> selectDisplayTime(@RequestBody AdvertisementRequestDto requestDto) {
-        advertisementService.updateAdvertisementDisplayTime(requestDto);
+    public ResponseEntity<BfResponse<?>> selectDisplayTime(
+            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @RequestBody AdvertisementRequestDto requestDto) {
+        advertisementService.updateAdvertisementDisplayTime(userDetails, requestDto);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 게시 시간 설정완료"));
     }
 
     @PostMapping("/extend")
-    public ResponseEntity<BfResponse<?>> extendAdvertisement(@RequestBody AdvertisementRequestDto requestDto) {
-        advertisementService.extendAdvertisement(requestDto);
+    public ResponseEntity<BfResponse<?>> extendAdvertisement(
+            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @RequestBody AdvertisementRequestDto requestDto) {
+        advertisementService.extendAdvertisement(userDetails, requestDto);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 게시 시간 연장 완료"));
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<BfResponse<?>> deleteAdvertisement(@RequestBody AdvertisementRequestDto requestDto) {
-        advertisementService.deleteAdvertisement(requestDto);
+    public ResponseEntity<BfResponse<?>> deleteAdvertisement(
+            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @RequestBody AdvertisementRequestDto requestDto) {
+        advertisementService.deleteAdvertisement(userDetails, requestDto);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 삭제 완료"));
     }
 
     @PostMapping("/updateImage")
     public ResponseEntity<BfResponse<?>> updateAdvertisementImage(
+            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
             @RequestParam("recruitmentIndex") int recruitmentIndex,
             @RequestPart("image") MultipartFile image) {
-        advertisementService.uploadAdvertisementImage(recruitmentIndex, image);
+        advertisementService.uploadAdvertisementImage(userDetails, recruitmentIndex, image);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 업로드 완료"));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<BfResponse<List<AdvertisementResponseDto>>> listAdvertisements(
+            @AuthenticationPrincipal CompanyDetailsImpl userDetails) {
+        List<AdvertisementResponseDto> advertisements = advertisementService.getAdvertisements(userDetails);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, advertisements));
+    }
+
+    @GetMapping("/detail/{advertisementId}")
+    public ResponseEntity<BfResponse<AdvertisementResponseDto>> getAdvertisementDetail(
+            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @PathVariable Integer advertisementId) {
+        AdvertisementResponseDto advertisementDetail = advertisementService.getAdvertisementDetail(userDetails, advertisementId);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, advertisementDetail));
     }
 }

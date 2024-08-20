@@ -4,12 +4,12 @@ import com.bringup.admin.notify.service.NotificationService;
 import com.bringup.common.enums.NotificationType;
 import com.bringup.common.enums.RolesType;
 import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.company.recruitment.dto.request.RecruitmentRequestDto;
+import com.bringup.company.recruitment.dto.response.RecruitmentResponseDto;
 import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.repository.CompanyRepository;
 import com.bringup.company.user.exception.CompanyException;
-import com.bringup.company.recruitment.dto.request.RecruitmentRequestDto;
-import com.bringup.company.recruitment.dto.response.RecruitmentResponseDto;
 import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
 import jakarta.transaction.Transactional;
@@ -130,6 +130,18 @@ public class RecruitmentService {
                 NotificationType.RECRUITMENT_REJECTION,
                 "Your recruitment request has been deleted."
         );
+    }
+
+    @Transactional
+    public RecruitmentResponseDto getRecruitmentDetail(CompanyDetailsImpl userDetails, Integer recruitmentId) {
+        Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
+                .orElseThrow(() -> new RecruitmentException(NOT_FOUND_RECRUITMENT));
+
+        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+            throw new CompanyException(BAD_REQUEST);
+        }
+
+        return convertToDto(recruitment);
     }
 
     private void sendApprovalRequestToAdmin(Recruitment recruitment, String actionType) {
