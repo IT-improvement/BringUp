@@ -49,4 +49,11 @@ public class RecruitmentController {
         List<RecruitmentResponseDto> recruitments = recruitmentService.getRecruitments(userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, recruitments));
     }
+
+    @GetMapping("/detail/{recruitmentId}")
+    public ResponseEntity<BfResponse<RecruitmentResponseDto>> getRecruitmentDetail(@AuthenticationPrincipal CompanyDetailsImpl userDetails,
+                                                                                   @PathVariable Integer recruitmentId) {
+        RecruitmentResponseDto recruitmentDetail = recruitmentService.getRecruitmentDetail(userDetails, recruitmentId);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, recruitmentDetail));
+    }
 }

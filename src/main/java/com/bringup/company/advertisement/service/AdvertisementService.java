@@ -1,5 +1,6 @@
 package com.bringup.company.advertisement.service;
 
+import com.bringup.common.security.service.CompanyDetailsImpl;
 import com.bringup.company.advertisement.dto.request.AdvertisementRequestDto;
 import com.bringup.company.advertisement.dto.response.AdvertisementResponseDto;
 import com.bringup.company.advertisement.entity.Advertisement;
@@ -26,14 +27,24 @@ public class AdvertisementService {
     private final AdvertisementRepository advertisementRepository;
     private final RecruitmentRepository recruitmentRepository;
 
-    public List<AdvertisementResponseDto> getAdvertisements() {
+    public List<AdvertisementResponseDto> getAdvertisements(CompanyDetailsImpl userDetails) {
         return advertisementRepository.findAll().stream()
+                .filter(ad -> recruitmentRepository.findById(ad.getRecruitmentIndex())
+                        .map(recruitment -> recruitment.getCompany().getCompanyId().equals(userDetails.getId()))
+                        .orElse(false))
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public void createAdvertisement(AdvertisementRequestDto requestDto) {
+    public void createAdvertisement(CompanyDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
+        Recruitment recruitment = recruitmentRepository.findById(requestDto.getRecruitmentIndex())
+                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+
+        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+            throw new RuntimeException("You do not have permission to create an advertisement for this recruitment.");
+        }
+
         Advertisement advertisement = new Advertisement();
         advertisement.setRecruitmentIndex(requestDto.getRecruitmentIndex());
         advertisement.setAdvertisementImage(requestDto.getAdvertisementImage());
@@ -43,14 +54,17 @@ public class AdvertisementService {
 
         advertisementRepository.save(advertisement);
 
-        // 어드민에게 승인 요청을 보냅니다. (예: 이메일, 알림 등)
         notifyAdminForApproval(advertisement);
     }
 
     @Transactional
-    public void uploadAdvertisementImage(int recruitmentIndex, MultipartFile image) {
+    public void uploadAdvertisementImage(CompanyDetailsImpl userDetails, int recruitmentIndex, MultipartFile image) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+
+        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+            throw new RuntimeException("You do not have permission to upload an image for this recruitment.");
+        }
 
         String imageUrl = saveImage(Math.toIntExact(recruitment.getCompany().getCompanyId()), recruitment.getCategory(), image);
 
@@ -61,6 +75,124 @@ public class AdvertisementService {
         advertisement.setStatus("이미지 수정 대기");
 
         advertisementRepository.save(advertisement);
+    }
+
+    @Transactional
+    public void updateAdvertisementType(CompanyDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
+        Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
+                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
+
+        Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
+                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+
+        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+            throw new RuntimeException("You do not have permission to update the type of this advertisement.");
+        }
+
+        advertisement.setType(requestDto.getType());
+        advertisement.setStatus("수정 대기");
+
+        advertisementRepository.save(advertisement);
+
+        notifyAdminForApproval(advertisement);
+    }
+
+    @Transactional
+    public void updateAdvertisementDisplayTime(CompanyDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
+        Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
+                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
+
+        Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
+                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+
+        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+            throw new RuntimeException("You do not have permission to update the display time of this advertisement.");
+        }
+
+        advertisement.setDisplayTime(requestDto.getDisplayTime());
+        advertisement.setStatus("수정 대기");
+
+        advertisementRepository.save(advertisement);
+
+        notifyAdminForApproval(advertisement);
+    }
+
+    @Transactional
+    public void extendAdvertisement(CompanyDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
+        Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
+                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
+
+        Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
+                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+
+        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+            throw new RuntimeException("You do not have permission to extend this advertisement.");
+        }
+
+        advertisement.setStatus("연장 대기");
+
+        advertisementRepository.save(advertisement);
+
+        notifyAdminForApproval(advertisement);
+    }
+
+    @Transactional
+    public void deleteAdvertisement(CompanyDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
+        Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
+                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
+
+        Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
+                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+
+        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+            throw new RuntimeException("You do not have permission to delete this advertisement.");
+        }
+
+        advertisement.setStatus("삭제 대기");
+        advertisementRepository.save(advertisement);
+
+        notifyAdminForDeletionApproval(advertisement);
+    }
+
+    @Scheduled(cron = "0 0 0 * * *") // 매일 자정에 실행
+    @Transactional
+    public void updateAdvertisementStatus() {
+        List<Advertisement> advertisements = advertisementRepository.findAll();
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        for (Advertisement advertisement : advertisements) {
+            LocalDate displayDate = LocalDate.parse(advertisement.getDisplayTime(), formatter);
+            if (!displayDate.isAfter(today) && !"삭제".equals(advertisement.getStatus())) {
+                advertisement.setStatus("삭제");
+                advertisementRepository.save(advertisement);
+            }
+        }
+    }
+
+    public AdvertisementResponseDto getAdvertisementDetail(CompanyDetailsImpl userDetails, Integer advertisementId) {
+        Advertisement advertisement = advertisementRepository.findById(advertisementId)
+                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
+
+        Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
+                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+
+        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+            throw new RuntimeException("You do not have permission to view this advertisement.");
+        }
+
+        return convertToDto(advertisement);
+    }
+
+    private AdvertisementResponseDto convertToDto(Advertisement advertisement) {
+        return AdvertisementResponseDto.builder()
+                .advertisementIndex(advertisement.getAdvertisementIndex())
+                .recruitmentIndex(advertisement.getRecruitmentIndex())
+                .advertisementImage(advertisement.getAdvertisementImage())
+                .type(advertisement.getType())
+                .displayTime(advertisement.getDisplayTime())
+                .status(advertisement.getStatus())
+                .build();
     }
 
     private String saveImage(int companyIndex, String recruitmentTitle, MultipartFile image) {
@@ -95,84 +227,7 @@ public class AdvertisementService {
         // 어드민에게 승인 요청을 보내는 로직을 작성합니다.
     }
 
-    @Transactional
-    public void updateAdvertisementType(AdvertisementRequestDto requestDto) {
-        Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
-                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
-
-        advertisement.setType(requestDto.getType());
-        advertisement.setStatus("수정 대기");
-
-        advertisementRepository.save(advertisement);
-
-        notifyAdminForApproval(advertisement);
-    }
-
-    @Transactional
-    public void updateAdvertisementDisplayTime(AdvertisementRequestDto requestDto) {
-        Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
-                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
-
-        advertisement.setDisplayTime(requestDto.getDisplayTime());
-        advertisement.setStatus("수정 대기");
-
-        advertisementRepository.save(advertisement);
-
-        notifyAdminForApproval(advertisement);
-    }
-
-    @Transactional
-    public void extendAdvertisement(AdvertisementRequestDto requestDto) {
-        Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
-                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
-
-        // 광고 연장 로직 구현 (예: 현재 출력 시간에 추가 시간을 더하는 방식)
-        advertisement.setStatus("연장 대기");
-
-        advertisementRepository.save(advertisement);
-
-        notifyAdminForApproval(advertisement);
-    }
-
-    @Transactional
-    public void deleteAdvertisement(AdvertisementRequestDto requestDto) {
-        Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
-                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
-
-        advertisement.setStatus("삭제 대기");
-        advertisementRepository.save(advertisement);
-
-        notifyAdminForDeletionApproval(advertisement);
-    }
-
     private void notifyAdminForDeletionApproval(Advertisement advertisement) {
         // 어드민에게 삭제 승인 요청을 보내는 로직을 작성합니다.
-    }
-
-    @Scheduled(cron = "0 0 0 * * *") // 매일 자정에 실행
-    @Transactional
-    public void updateAdvertisementStatus() {
-        List<Advertisement> advertisements = advertisementRepository.findAll();
-        LocalDate today = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        for (Advertisement advertisement : advertisements) {
-            LocalDate displayDate = LocalDate.parse(advertisement.getDisplayTime(), formatter);
-            if (!displayDate.isAfter(today) && !"삭제".equals(advertisement.getStatus())) {
-                advertisement.setStatus("삭제");
-                advertisementRepository.save(advertisement);
-            }
-        }
-    }
-
-    private AdvertisementResponseDto convertToDto(Advertisement advertisement) {
-        return AdvertisementResponseDto.builder()
-                .advertisementIndex(advertisement.getAdvertisementIndex())
-                .recruitmentIndex(advertisement.getRecruitmentIndex())
-                .advertisementImage(advertisement.getAdvertisementImage())
-                .type(advertisement.getType())
-                .displayTime(advertisement.getDisplayTime())
-                .status(advertisement.getStatus())
-                .build();
     }
 }
