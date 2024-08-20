@@ -11,6 +11,6 @@ public class HeadhuntResponseDto {
     private boolean mainCv;
     private String education;
     private String skill;
+    private String userAddress;
     private String userIndex;
-    private String status;
 }
