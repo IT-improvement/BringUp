@@ -1,4 +1,4 @@
-package com.bringup.member.notice.dto;
+package com.bringup.member.notice.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;

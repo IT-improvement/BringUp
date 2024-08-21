@@ -1,0 +1,65 @@
+/* 공통 스타일 */
+body {
+    font-family: 'Nunito Sans', sans-serif;
+    background-color: #f9f9f9;
+}
+
+.container {
+    max-width: 1000px;
+}
+
+.section-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* 리스트 항목 스타일 */
+.recruitment-list .recruitment-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.recruitment-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.recruitment-company {
+    font-size: 16px;
+    color: #777;
+    margin-bottom: 12px;
+}
+
+.recruitment-item .btn {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+}
+
+.recruitment-item .btn-outline-primary {
+    border-color: #ff5a5f;
+    color: #ff5a5f;
+}
+
+.recruitment-item .btn-outline-primary:hover {
+    background-color: #ff5a5f;
+    color: #fff;
+    border-color: #ff5a5f;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .recruitment-item .d-flex {
+        flex-direction: column;
+    }
+
+    .recruitment-item .btn {
+        margin-top: 15px;
+        width: 100%;
+    }
+}
