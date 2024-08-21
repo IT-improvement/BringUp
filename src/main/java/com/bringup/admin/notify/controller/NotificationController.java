@@ -19,7 +19,7 @@ public class NotificationController {
 
     @GetMapping("/unread/{userId}/{role}")
     public ResponseEntity<BfResponse<List<NotificationDto>>> getUnreadNotifications(
-            @PathVariable Long userId,
+            @PathVariable int userId,
             @PathVariable String role) {
         List<NotificationDto> notifications = notificationService.getUnreadNotifications(userId, role);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS, notifications));

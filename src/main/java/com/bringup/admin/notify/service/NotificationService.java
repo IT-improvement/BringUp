@@ -18,7 +18,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     // 알림 생성 메서드
-    public void createNotification(Long userId, RolesType role, NotificationType type, String message) {
+    public void createNotification(int userId, RolesType role, NotificationType type, String message) {
         Notification notification = new Notification();
         notification.setUserId(userId);
         notification.setRole(role);
@@ -28,7 +28,7 @@ public class NotificationService {
     }
 
     // 특정 사용자의 읽지 않은 알림 조회
-    public List<NotificationDto> getUnreadNotifications(Long userId, String role) {
+    public List<NotificationDto> getUnreadNotifications(int userId, String role) {
         List<Notification> notifications = notificationRepository.findByUserIdAndRoleAndIsReadFalse(userId, RolesType.valueOf(role));
         return notifications.stream()
                 .map(notification -> NotificationDto.builder()

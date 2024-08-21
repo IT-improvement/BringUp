@@ -81,7 +81,7 @@ public class RecruitmentService {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
             throw new CompanyException(BAD_REQUEST);
         }
 
