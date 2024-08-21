@@ -113,7 +113,7 @@ public class RecruitmentService {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
                 .orElseThrow(() -> new RecruitmentException(NOT_FOUND_RECRUITMENT));
 
-        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+        if ((!(recruitment.getCompany().getCompanyId()==(userDetails.getId())))) {
             throw new CompanyException(BAD_REQUEST);
         }
 
@@ -137,7 +137,7 @@ public class RecruitmentService {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
                 .orElseThrow(() -> new RecruitmentException(NOT_FOUND_RECRUITMENT));
 
-        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
             throw new CompanyException(BAD_REQUEST);
         }
 

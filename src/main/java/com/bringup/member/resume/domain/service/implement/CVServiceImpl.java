@@ -1,5 +1,6 @@
 package com.bringup.member.resume.domain.service.implement;
 
+import com.bringup.common.image.ImageService;
 import com.bringup.common.response.ResponseDto;
 import com.bringup.member.resume.domain.entity.CVEntity;
 import com.bringup.member.resume.domain.repository.CVRepository;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class CVServiceImpl implements CVService {
 
     private final CVRepository cvRepository;
-
+    private final ImageService imageService;
     @Override
     public ResponseEntity<? super CVInsertResponseDto> insertCv(CVInsertRequestDto request) {
         CVEntity cv = new CVEntity(request);

@@ -18,15 +18,13 @@ public class ImageService {
 
     @Value("${file.path}")
     private String filePath;
-    @Value("${file.url}")
-    private String fileUrl;
 
     public String upLoadImage(MultipartFile file){
         String savePath = saveImage(file);
         return savePath;
     }
     // 이미지 저장
-    private String saveImage(MultipartFile file){
+    public String saveImage(MultipartFile file){
         if(file.isEmpty()){
             logger.error("not images");
             return null;
@@ -45,7 +43,8 @@ public class ImageService {
             e.printStackTrace();
             return null;
         }
-        return fileUrl+saveFileName;
+        System.out.println("fileName: "+saveFileName);
+        return saveFileName;
     }
     // 이미지 보기
     public Resource getImage(String fileNmae) {
