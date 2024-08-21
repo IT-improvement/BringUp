@@ -19,7 +19,7 @@ public class CVEntity {
     private boolean mainCv;
     private String education;
     private String skill;
-    private String userIndex;
+    private int userIndex;
     private String status;
 
     public CVEntity(CVInsertRequestDto dto){
