@@ -4,6 +4,7 @@ import com.bringup.member.resume.domain.service.CVService;
 import com.bringup.member.resume.dto.request.CVInsertRequestDto;
 import com.bringup.member.resume.dto.request.CVPortfolioRequestDto;
 import com.bringup.member.resume.dto.response.CVInsertResponseDto;
+import com.bringup.member.resume.dto.response.CVReadResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import oracle.jdbc.proxy.annotation.Post;
@@ -37,7 +38,13 @@ public class CVController {
     }
 
     @GetMapping("/cv/{cvindex}")
-    public String readCv(@AuthenticationPrincipal String userIndex, @PathVariable(name = "cvindex") String cvindex, Model model){
+    public String readCv(@PathVariable(name = "cvindex") String cvindex, Model model){
+        CVReadResponseDto response = cvService.readCv(cvindex);
+        model.addAttribute("cvImage",response.getCvImage());
+        model.addAttribute("mainCv",response.isMainCv());
+        model.addAttribute("education",response.getEducation());
+        model.addAttribute("skill",response.getSkill());
+        model.addAttribute("userIndex",response.getUserIndex());
         return "member/resume/cv";
     }
 }
