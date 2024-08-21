@@ -143,7 +143,7 @@ public class SpringSecurityConfig {
                 antMatcher(GET, "/resources/**"),
                 antMatcher(GET, "/company/**"),              // 기업 페이지
                 antMatcher("/member/**"),
-                antMatcher("/recruitment/"),
+
                 antMatcher("/github/**")// 정적 리소스
         );
 
@@ -171,7 +171,7 @@ public class SpringSecurityConfig {
                 antMatcher(POST, "/com/i_reviews"),                 // 면접 리뷰 열람
                 antMatcher(POST, "/com/i_review/delete"),         // 면접 리뷰 삭제
 
-                antMatcher(GET,"/recruitment/scrap") // 사용자 스크랩기업 리스트
+                antMatcher("/recruitment/**") // 사용자 스크랩기업 리스트
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
