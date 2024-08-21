@@ -85,7 +85,7 @@ public class AdvertisementService {
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
             throw new RuntimeException("You do not have permission to update the type of this advertisement.");
         }
 
@@ -105,7 +105,7 @@ public class AdvertisementService {
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
             throw new RuntimeException("You do not have permission to update the display time of this advertisement.");
         }
 
@@ -125,7 +125,7 @@ public class AdvertisementService {
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
             throw new RuntimeException("You do not have permission to extend this advertisement.");
         }
 
@@ -144,7 +144,7 @@ public class AdvertisementService {
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
             throw new RuntimeException("You do not have permission to delete this advertisement.");
         }
 
@@ -177,7 +177,7 @@ public class AdvertisementService {
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
             throw new RuntimeException("You do not have permission to view this advertisement.");
         }
 

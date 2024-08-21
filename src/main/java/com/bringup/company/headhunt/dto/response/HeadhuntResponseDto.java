@@ -12,5 +12,5 @@ public class HeadhuntResponseDto {
     private String education;
     private String skill;
     private String userAddress;
-    private String userIndex;
+    private int userIndex;
 }
