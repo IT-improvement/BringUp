@@ -10,8 +10,10 @@ import lombok.Setter;
 @Entity
 @Table(name = "user")
 public class UserEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_index") // 데이터베이스의 user_index 컬럼과 매핑
     private int userIndex;
 
     private String userEmail;
@@ -29,6 +31,7 @@ public class UserEntity {
     private boolean freelancer;
 
     private String status;
-    @Enumerated(EnumType.STRING) //@Enumerated(EnumType.STRING)
+
+    @Enumerated(EnumType.STRING)
     private RolesType role = RolesType.ROLE_MEMBER;
 }
