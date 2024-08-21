@@ -9,7 +9,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<!-- 파비콘 -->
-	<link rel="shortcut icon" href="/resources/style/common/images/favicon.ico">
+	<link rel="shortcut icon" href="/resources/static/style/common/images/favicon.ico">
 
 	<!-- 구글 폰트 -->
 	<link rel="preconnect" href="https://fonts.gstatic.com">

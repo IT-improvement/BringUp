@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         modal.remove();
 
                         // 다음 페이지로 이동
-                        window.location.href = '/member/test'; // 로그인 성공 후 리다이렉트할 페이지
+                        window.location.href = '/recruitment/view'; // 로그인 성공 후 리다이렉트할 페이지
                     });
                 } else {
                     console.error('로그인 실패:', data);

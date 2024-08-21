@@ -24,7 +24,7 @@ public class UserRecruitmentController {
 
     @GetMapping("/view")
     public String View() {
-        return "/member/user/recruitmentList";
+        return "member/user/recruitmentList";
     }
 
 
