@@ -10,6 +10,6 @@ public class CVInsertRequestDto {
     private boolean maincv;
     private String education;
     private String skill;
-    private String userIndex;
+    private int userIndex;
     private String status;
 }
