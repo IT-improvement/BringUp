@@ -4,7 +4,7 @@ import com.bringup.member.user.domain.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
+import com.bringup.company.recruitment.entity.Recruitment;
 @Entity
 @Table(name = "recruitment_bookmark")
 @Getter
@@ -18,7 +18,7 @@ public class ScrapRecuritmentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recruitment_index", referencedColumnName = "recruitment_index", nullable = false)
-    private UserRecruitmentEntity recruitmentIndex;
+    private Recruitment recruitmentIndex;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_index", referencedColumnName = "user_index", nullable = false)

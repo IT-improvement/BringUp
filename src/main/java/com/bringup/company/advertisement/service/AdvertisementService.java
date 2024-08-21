@@ -30,7 +30,7 @@ public class AdvertisementService {
     public List<AdvertisementResponseDto> getAdvertisements(CompanyDetailsImpl userDetails) {
         return advertisementRepository.findAll().stream()
                 .filter(ad -> recruitmentRepository.findById(ad.getRecruitmentIndex())
-                        .map(recruitment -> recruitment.getCompany().getCompanyId().equals(userDetails.getId()))
+                        .map(recruitment -> (recruitment.getCompany().getCompanyId()==(userDetails.getId())))
                         .orElse(false))
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -41,7 +41,7 @@ public class AdvertisementService {
         Recruitment recruitment = recruitmentRepository.findById(requestDto.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
             throw new RuntimeException("You do not have permission to create an advertisement for this recruitment.");
         }
 
@@ -62,7 +62,7 @@ public class AdvertisementService {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
+        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
             throw new RuntimeException("You do not have permission to upload an image for this recruitment.");
         }
 

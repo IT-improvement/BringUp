@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface RecruitmentRepository extends JpaRepository<Recruitment, Integer> {
-    List<Recruitment> findAllByCompanyCompanyId(Long companyId);
+    List<Recruitment> findAllByCompanyCompanyId(int companyId);
     List<Recruitment> findAllByPeriod(String period);
 
     List<Recruitment> findAllByStatus(String status);

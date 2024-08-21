@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface CompanyReviewRepository extends JpaRepository<CompanyReview, Integer> {
-    List<CompanyReview> findAllByCompanyCompanyId(Long companyId);
+    List<CompanyReview> findAllByCompanyCompanyId(int companyId);
 }
