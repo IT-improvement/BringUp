@@ -21,7 +21,7 @@ public class MemberService implements UserDetailsService{
     private final UserRepository userRepository;
     private final JoinService joinService;
     private final UserLoginService userLoginService;
-
+/*
     public int updateMember(MemberUpdateDto memberUpdateDto){
         //Optional 오류 (이유 모름)
         UserEntity userEntity = userRepository.findByUserEmail(memberUpdateDto.getUserEmail());
@@ -38,7 +38,7 @@ public class MemberService implements UserDetailsService{
         userEntity.updatePassword(encodePW);
         userRepository.save(userEntity);
         return userEntity.getUserIndex();
-    }
+    }*/
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return null;
