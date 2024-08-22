@@ -5,6 +5,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class AdvertisementUploadRequestDto {
-    private int advertisementIndex;
+    private Integer advertisementIndex;
     private MultipartFile image;
 }
