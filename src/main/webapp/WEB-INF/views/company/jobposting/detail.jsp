@@ -41,7 +41,7 @@
     <script src="/resources/script/common/function/functions.js"></script>
 
     <!-- 메인 JS -->
-    <!-- <script src="/resources/script/company/main.js"></script> -->
+    <script src="/resources/script/company/jobposting/detail.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -54,22 +54,30 @@
         <div class="container mt-5">
             <div class="card">
                 <div class="card-header bg-light">
-                    <h5 class="card-title mb-0">채용 공고 상세 정보</h5>
+                    <h5 class="card-title mb-0" id="recruitmentTitle">로딩 중...</h5>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p><strong>카테고리:</strong> <span id="category"></span></p>
-                            <p><strong>담당자 이메일:</strong> <span id="managerEmail"></span></p>
-                            <p><strong>기간:</strong> <span id="period"></span></p>
-                            <p><strong>채용 분류:</strong> <span id="recruitmentClass"></span></p>
+                    <div id="loadingIndicator" class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">로딩 중...</span>
                         </div>
-                        <div class="col-md-6">
-                            <p><strong>채용 유형:</strong> <span id="recruitmentType"></span></p>
-                            <p><strong>필요 기술:</strong> <span id="skill"></span></p>
-                            <p><strong>시작일:</strong> <span id="startDate"></span></p>
-                            <p><strong>상태:</strong> <span id="status"></span></p>
+                    </div>
+                    <div id="recruitmentContent" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>카테고리:</strong> <span id="category"></span></p>
+                                <p><strong>담당자 이메일:</strong> <span id="managerEmail"></span></p>
+                                <p><strong>기간:</strong> <span id="period"></span></p>
+                                <p><strong>채용 분류:</strong> <span id="recruitmentClass"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>채용 유형:</strong> <span id="recruitmentType"></span></p>
+                                <p><strong>필요 기술:</strong> <span id="skill"></span></p>
+                                <p><strong>시작일:</strong> <span id="startDate"></span></p>
+                                <p><strong>상태:</strong> <span id="status"></span></p>
+                            </div>
                         </div>
+                        <div id="recruitmentImage"></div>
                     </div>
                 </div>
             </div>
@@ -80,50 +88,6 @@
 
     <!-- 맨 위로 -->
     <div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const accessToken = localStorage.getItem('accessToken');
-
-        if (!accessToken) {
-            window.location.href = '/company/auth/login';
-            return;
-        }
-
-        const url = `/com/recruitment/detail/${param.recruitmentIndex}`; // URL 형식 확인
-        console.log('요청 URL:', url);
-
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => {
-            console.log('응답 상태:', response.status);
-            if (!response.ok) {
-                throw new Error(`서버 응답이 실패했습니다. 상태 코드: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('받은 데이터:', data);
-            const recruitment = data.data;
-            document.getElementById('category').textContent = recruitment.category;
-            document.getElementById('managerEmail').textContent = recruitment.managerEmail;
-            document.getElementById('period').textContent = recruitment.period;
-            document.getElementById('recruitmentClass').textContent = recruitment.recruitmentClass;
-            document.getElementById('recruitmentType').textContent = recruitment.recruitmentType;
-            document.getElementById('skill').textContent = recruitment.skill;
-            document.getElementById('startDate').textContent = recruitment.startDate;
-            document.getElementById('status').textContent = recruitment.status;
-        })
-        .catch(error => {
-            console.error('채용 공고 상세 정보를 가져오는 중 오류 발생:', error);
-            alert('채용 공고 상세 정보를 불러올 수 없습니다. 나중에 다시 시도해주세요.');
-        });
-    });
-    </script>
+    
 </body>
 </html>
