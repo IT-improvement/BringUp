@@ -52,7 +52,7 @@ public class RecruitmentController {
 
     @GetMapping("/detail/{recruitmentId}")
     public ResponseEntity<BfResponse<RecruitmentResponseDto>> getRecruitmentDetail(@AuthenticationPrincipal CompanyDetailsImpl userDetails,
-                                                                                   @PathVariable Integer recruitmentId) {
+                                                                                   @PathVariable("recruitmentId") int recruitmentId) {
         RecruitmentResponseDto recruitmentDetail = recruitmentService.getRecruitmentDetail(userDetails, recruitmentId);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, recruitmentDetail));
     }

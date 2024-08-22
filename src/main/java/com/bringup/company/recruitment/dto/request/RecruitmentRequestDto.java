@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class RecruitmentRequestDto {
     private RecruitmentType recruitmentType; // 정규직, 비정규직, 아르바이트 중 하나
     private String recruitmentTitle;
+    private String recruitment_img;
     private String category;
     private String skill;
     private String startDate;

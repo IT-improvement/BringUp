@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.bringup.common.enums.MemberErrorCode.BAD_REQUEST;
@@ -137,7 +138,7 @@ public class RecruitmentService {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
                 .orElseThrow(() -> new RecruitmentException(NOT_FOUND_RECRUITMENT));
 
-        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
+        if (!(Objects.equals(recruitment.getCompany().getCompanyId(), userDetails.getId()))) {
             throw new CompanyException(BAD_REQUEST);
         }
 
