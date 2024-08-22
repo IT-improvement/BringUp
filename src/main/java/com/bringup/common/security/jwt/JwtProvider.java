@@ -104,7 +104,7 @@ public class JwtProvider {
 		}
 
 		UserDetails company = CompanyDetailsImpl.builder()
-			.id(claims.get("id", Integer.class))
+			.id(claims.get("id", int.class))
 			.email(claims.getSubject())
 			.password(null)
 			.authorities(authorities)
