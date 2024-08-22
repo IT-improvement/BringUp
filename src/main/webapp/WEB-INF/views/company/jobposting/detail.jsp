@@ -83,8 +83,6 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const recruitmentIndex = urlParams.get('recruitmentIndex');
         const accessToken = localStorage.getItem('accessToken');
 
         if (!accessToken) {
@@ -92,15 +90,25 @@
             return;
         }
 
-        fetch(`/com/recruitment/${recruitmentIndex}`, {
+        const url = `/com/recruitment/detail/${param.recruitmentIndex}`; // URL 형식 확인
+        console.log('요청 URL:', url);
+
+        fetch(url, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log('응답 상태:', response.status);
+            if (!response.ok) {
+                throw new Error(`서버 응답이 실패했습니다. 상태 코드: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('받은 데이터:', data);
             const recruitment = data.data;
             document.getElementById('category').textContent = recruitment.category;
             document.getElementById('managerEmail').textContent = recruitment.managerEmail;
