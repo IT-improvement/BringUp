@@ -76,7 +76,7 @@
         </div>
     </main>
 
-	<jsp:include page="/WEB-INF/views/company/footer/company_footer.jsp" flush="true" />
+	<jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
 
     <!-- 맨 위로 -->
     <div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
