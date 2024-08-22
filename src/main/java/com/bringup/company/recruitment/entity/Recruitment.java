@@ -15,7 +15,7 @@ public class Recruitment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recruitment_index")
-    private int recruitmentIndex;
+    private Integer recruitmentIndex;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)

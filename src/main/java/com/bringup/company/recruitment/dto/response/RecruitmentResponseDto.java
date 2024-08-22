@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecruitmentResponseDto {
-    private int recruitmentIndex;
+    private Integer recruitmentIndex;
     private String recruitmentTitle;
     private String managerEmail;
     private RecruitmentType recruitmentType; // 정규직, 비정규직, 아르바이트 중 하나
