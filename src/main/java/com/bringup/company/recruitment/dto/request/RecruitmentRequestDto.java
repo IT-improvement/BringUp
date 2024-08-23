@@ -16,5 +16,4 @@ public class RecruitmentRequestDto {
     private String startDate;
     private String period;
     private String status;
-    private String recruitmentClass;
 }

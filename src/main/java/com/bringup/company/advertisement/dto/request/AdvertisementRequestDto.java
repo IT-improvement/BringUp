@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class AdvertisementRequestDto {
-    private int advertisementIndex;
-    private int recruitmentIndex;
+    private Integer advertisementIndex;
+    private Integer recruitmentIndex;
     private String advertisementImage;
     private String type;
     private String displayTime;

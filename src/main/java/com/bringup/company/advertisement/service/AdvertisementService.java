@@ -15,9 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,24 +34,26 @@ public class AdvertisementService {
     public List<AdvertisementResponseDto> getAdvertisements(CompanyDetailsImpl userDetails) {
         return advertisementRepository.findAll().stream()
                 .filter(ad -> recruitmentRepository.findById(ad.getRecruitmentIndex())
-                        .map(recruitment -> (recruitment.getCompany().getCompanyId()==(userDetails.getId())))
+                        .map(recruitment -> (recruitment.getCompany().getCompanyId() == (userDetails.getId())))
                         .orElse(false))
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public void createAdvertisement(CompanyDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
+    public void createAdvertisement(CompanyDetailsImpl userDetails, AdvertisementRequestDto requestDto, MultipartFile image) {
         Recruitment recruitment = recruitmentRepository.findById(requestDto.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
+        if (!(recruitment.getCompany().getCompanyId() == (userDetails.getId()))) {
             throw new RuntimeException("You do not have permission to create an advertisement for this recruitment.");
         }
 
+        String imageUrl = saveAdvertisementImage(image);
+
         Advertisement advertisement = new Advertisement();
         advertisement.setRecruitmentIndex(requestDto.getRecruitmentIndex());
-        advertisement.setAdvertisementImage(requestDto.getAdvertisementImage());
+        advertisement.setAdvertisementImage(imageUrl);
         advertisement.setType(requestDto.getType());
         advertisement.setDisplayTime(requestDto.getDisplayTime());
         advertisement.setStatus("생성 대기");
@@ -62,11 +68,11 @@ public class AdvertisementService {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
+        if (!(recruitment.getCompany().getCompanyId() == (userDetails.getId()))) {
             throw new RuntimeException("You do not have permission to upload an image for this recruitment.");
         }
 
-        String imageUrl = saveImage(Math.toIntExact(recruitment.getCompany().getCompanyId()), recruitment.getCategory(), image);
+        String imageUrl = saveAdvertisementImage(image);
 
         Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(recruitmentIndex)
                 .orElseThrow(() -> new RuntimeException("Advertisement not found"));
@@ -85,7 +91,7 @@ public class AdvertisementService {
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
+        if (!(recruitment.getCompany().getCompanyId() == (userDetails.getId()))) {
             throw new RuntimeException("You do not have permission to update the type of this advertisement.");
         }
 
@@ -105,7 +111,7 @@ public class AdvertisementService {
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
+        if (!(recruitment.getCompany().getCompanyId() == (userDetails.getId()))) {
             throw new RuntimeException("You do not have permission to update the display time of this advertisement.");
         }
 
@@ -125,7 +131,7 @@ public class AdvertisementService {
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
+        if (!(recruitment.getCompany().getCompanyId() == (userDetails.getId()))) {
             throw new RuntimeException("You do not have permission to extend this advertisement.");
         }
 
@@ -144,7 +150,7 @@ public class AdvertisementService {
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
+        if (!(recruitment.getCompany().getCompanyId() == (userDetails.getId()))) {
             throw new RuntimeException("You do not have permission to delete this advertisement.");
         }
 
@@ -177,7 +183,7 @@ public class AdvertisementService {
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
-        if (!(recruitment.getCompany().getCompanyId()==(userDetails.getId()))) {
+        if (!(recruitment.getCompany().getCompanyId() == (userDetails.getId()))) {
             throw new RuntimeException("You do not have permission to view this advertisement.");
         }
 
@@ -195,32 +201,24 @@ public class AdvertisementService {
                 .build();
     }
 
-    private String saveImage(int companyIndex, String recruitmentTitle, MultipartFile image) {
-        // 현재 시간 가져오기
-        String currentTimestamp = String.valueOf(System.currentTimeMillis());
-
-        // 파일 이름 생성
-        String fileName = companyIndex + "_" + recruitmentTitle + "_" + currentTimestamp + "_" + image.getOriginalFilename();
-
-        // 저장 경로 설정
-        String uploadDir = "/path/to/upload/directory"; // 실제 저장 경로로 변경
-        File uploadPath = new File(uploadDir);
-
-        // 경로가 없으면 폴더 생성
-        if (!uploadPath.exists()) {
-            uploadPath.mkdirs();
+    private String saveAdvertisementImage(MultipartFile image) {
+        if (image.isEmpty()) {
+            return null;
         }
 
-        // 파일 저장
-        File saveFile = new File(uploadPath, fileName);
         try {
-            image.transferTo(saveFile);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to save image file", e);
-        }
+            // 이미지 저장 경로 지정
+            String uploadDir = "src/main/resources/static/advertisement/";
+            String fileName = "Advertisement_" + UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+            Path path = Paths.get(uploadDir + fileName);
 
-        // 이미지 URL 생성 (예: http://localhost:8080/images/)
-        return "http://localhost:8080/images/" + fileName;
+            Files.createDirectories(path.getParent());
+            Files.write(path, image.getBytes());
+
+            return fileName;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to store image", e);
+        }
     }
 
     private void notifyAdminForApproval(Advertisement advertisement) {

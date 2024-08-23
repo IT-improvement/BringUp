@@ -13,10 +13,10 @@ public class Advertisement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "advertisement_index")
-    private int advertisementIndex;
+    private Integer advertisementIndex;
 
     @Column(name = "recruitment_index", nullable = false)
-    private int recruitmentIndex;
+    private Integer recruitmentIndex;
 
     @Column(name = "advertisement_image")
     private String advertisementImage;
