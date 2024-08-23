@@ -143,6 +143,7 @@ public class SpringSecurityConfig {
                 antMatcher(GET, "/resources/**"),
                 antMatcher(GET, "/company/**"),              // 기업 페이지
                 antMatcher("/member/**"),
+                antMatcher("/ws/**"),
 
                 antMatcher("/github/**")// 정적 리소스
         );
