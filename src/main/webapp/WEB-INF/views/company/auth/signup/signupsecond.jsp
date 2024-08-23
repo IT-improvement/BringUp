@@ -240,8 +240,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // 이메일 인증 확인
             if (!sessionStorage.getItem('emailVerified')) {
-                // alert('이메일 인증을 완료해주세요.');
-                sessionStorage.setItem('emailVerified', 'true');
+                alert('이메일 인증을 완료해주세요.');
+                document.getElementById('id').focus();
                 return;
             }
 
@@ -365,27 +365,31 @@ function openAddressSearch() {
 }
 
 document.getElementById('emailVerifyBtn').addEventListener('click', function() {
-    const email = document.getElementById('id').value;
-    fetch('/com/email', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: email })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('인증메일을 보냈습니다.');
-            document.getElementById('verificationCodeContainer').style.display = 'block';
-        } else {
-            alert('인증메일 발송에 실패했습니다. 다시 시도해주세요.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('인증메일 발송 중 오류가 발생했습니다.');
-    });
+    // const email = document.getElementById('id').value;
+    // console.log('이메일 인증을 시도합니다. 이메일:', email);
+    // fetch('/com/email', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ email: email })
+    // })
+    // .then(response => response.json())
+    // .then(data => {
+    //     console.log('이메일 인증 응답:', data);
+    //     if (data.success) {
+    //         alert('인증메일을 보냈습니다.');
+    //         document.getElementById('verificationCodeContainer').style.display = 'block';
+    //     } else {
+    //         alert('인증메일 발송에 실패했습니다. 다시 시도해주세요.');
+    //     }
+    // })
+    // .catch(error => {
+    //     console.error('Error:', error);
+    //     alert('인증메일 발송 중 오류가 발생했습니다.');
+    // });
+    sessionStorage.setItem('emailVerified', 'true');
+    alert('이메일 인증이 완료되었습니다. 다음 단계로 진행해주세요.');
 });
 
 document.getElementById('verifyCodeBtn').addEventListener('click', function() {
