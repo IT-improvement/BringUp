@@ -28,6 +28,9 @@ public class Recruitment {
     @Column(name = "recruitment_type", nullable = false, length = 30)
     private RecruitmentType recruitmentType = RecruitmentType.REGULAR_WORKER; // 기본값 정규직
 
+    @Column(name = "recruitment_img", nullable = true)
+    private String recruitmentImg;
+
     @Column(name = "category", nullable = false, length = 30)
     private String category;
 
@@ -42,7 +45,4 @@ public class Recruitment {
 
     @Column(name = "status", nullable = false, length = 10)
     private String status;
-
-    @Column(name = "recruitment_class", nullable = false, length = 30)
-    private String recruitmentClass;
 }
