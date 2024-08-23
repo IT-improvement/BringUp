@@ -3,6 +3,7 @@ package com.bringup.common.security.config;
 import com.bringup.common.exception.CustomAccessDeniedHandler;
 import com.bringup.common.security.jwt.JwtFilter;
 import com.bringup.common.security.jwt.JwtProvider;
+import com.bringup.common.security.service.BringUserDetailsService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,19 +38,14 @@ public class SpringSecurityConfig {
 
     private final JwtProvider jwtProvider;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
-
-    private final UserDetailsService companyDetailsService;
-    
-    private final UserDetailsService customUserDetailsService;
+    private final BringUserDetailsService bringUserDetailsService;
 
     public SpringSecurityConfig(JwtProvider jwtProvider,
                                 CustomAccessDeniedHandler customAccessDeniedHandler,
-                                @Qualifier("companyDetailsService") UserDetailsService companyDetailsService,
-                                @Qualifier("customUserDetailsService") UserDetailsService customUserDetailsService) {
+                                BringUserDetailsService bringUserDetailsService) {
         this.jwtProvider = jwtProvider;
         this.customAccessDeniedHandler = customAccessDeniedHandler;
-        this.companyDetailsService = companyDetailsService;
-        this.customUserDetailsService = customUserDetailsService;
+        this.bringUserDetailsService = bringUserDetailsService;
     }
 
     @Bean
@@ -58,24 +54,16 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider companyAuthenticationProvider() {
+    public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(companyDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
-    }
-
-    @Bean
-    public DaoAuthenticationProvider customAuthenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(customUserDetailsService);
+        provider.setUserDetailsService(bringUserDetailsService);
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
     @Bean
     public AuthenticationManager authenticationManager() {
-        return new ProviderManager(List.of(companyAuthenticationProvider(), customAuthenticationProvider()));
+        return new ProviderManager(List.of(authenticationProvider()));
     }
 
     /**

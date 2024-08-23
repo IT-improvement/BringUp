@@ -1,6 +1,6 @@
 package com.bringup.company.advertisement.service;
 
-import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.dto.request.AdvertisementRequestDto;
 import com.bringup.company.advertisement.dto.response.AdvertisementResponseDto;
 import com.bringup.company.advertisement.entity.Advertisement;
@@ -13,7 +13,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,7 +30,7 @@ public class AdvertisementService {
     private final AdvertisementRepository advertisementRepository;
     private final RecruitmentRepository recruitmentRepository;
 
-    public List<AdvertisementResponseDto> getAdvertisements(CompanyDetailsImpl userDetails) {
+    public List<AdvertisementResponseDto> getAdvertisements(UserDetailsImpl userDetails) {
         return advertisementRepository.findAll().stream()
                 .filter(ad -> recruitmentRepository.findById(ad.getRecruitmentIndex())
                         .map(recruitment -> (recruitment.getCompany().getCompanyId() == (userDetails.getId())))
@@ -41,7 +40,7 @@ public class AdvertisementService {
     }
 
     @Transactional
-    public void createAdvertisement(CompanyDetailsImpl userDetails, AdvertisementRequestDto requestDto, MultipartFile image) {
+    public void createAdvertisement(UserDetailsImpl userDetails, AdvertisementRequestDto requestDto, MultipartFile image) {
         Recruitment recruitment = recruitmentRepository.findById(requestDto.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
@@ -64,7 +63,7 @@ public class AdvertisementService {
     }
 
     @Transactional
-    public void uploadAdvertisementImage(CompanyDetailsImpl userDetails, int recruitmentIndex, MultipartFile image) {
+    public void uploadAdvertisementImage(UserDetailsImpl userDetails, int recruitmentIndex, MultipartFile image) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
@@ -84,7 +83,7 @@ public class AdvertisementService {
     }
 
     @Transactional
-    public void updateAdvertisementType(CompanyDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
+    public void updateAdvertisementType(UserDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
         Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Advertisement not found"));
 
@@ -104,7 +103,7 @@ public class AdvertisementService {
     }
 
     @Transactional
-    public void updateAdvertisementDisplayTime(CompanyDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
+    public void updateAdvertisementDisplayTime(UserDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
         Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Advertisement not found"));
 
@@ -124,7 +123,7 @@ public class AdvertisementService {
     }
 
     @Transactional
-    public void extendAdvertisement(CompanyDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
+    public void extendAdvertisement(UserDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
         Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Advertisement not found"));
 
@@ -143,7 +142,7 @@ public class AdvertisementService {
     }
 
     @Transactional
-    public void deleteAdvertisement(CompanyDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
+    public void deleteAdvertisement(UserDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
         Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
                 .orElseThrow(() -> new RuntimeException("Advertisement not found"));
 
@@ -176,7 +175,7 @@ public class AdvertisementService {
         }
     }
 
-    public AdvertisementResponseDto getAdvertisementDetail(CompanyDetailsImpl userDetails, Integer advertisementId) {
+    public AdvertisementResponseDto getAdvertisementDetail(UserDetailsImpl userDetails, Integer advertisementId) {
         Advertisement advertisement = advertisementRepository.findById(advertisementId)
                 .orElseThrow(() -> new RuntimeException("Advertisement not found"));
 

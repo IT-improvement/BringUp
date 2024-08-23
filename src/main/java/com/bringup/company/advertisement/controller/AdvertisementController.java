@@ -1,7 +1,7 @@
 package com.bringup.company.advertisement.controller;
 
 import com.bringup.common.response.BfResponse;
-import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.dto.response.AdvertisementResponseDto;
 import com.bringup.company.advertisement.dto.request.AdvertisementRequestDto;
 import com.bringup.company.advertisement.service.AdvertisementService;
@@ -24,7 +24,7 @@ public class AdvertisementController {
 
     @PostMapping("/select")
     public ResponseEntity<BfResponse<?>> selectAdvertisement(
-            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody AdvertisementRequestDto requestDto,
             @RequestPart("image") MultipartFile img) {
         advertisementService.createAdvertisement(userDetails, requestDto, img);
@@ -33,7 +33,7 @@ public class AdvertisementController {
 
     @PostMapping("/upload")
     public ResponseEntity<BfResponse<?>> uploadAdvertisementImage(
-            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam("recruitmentIndex") int recruitmentIndex,
             @RequestPart("image") MultipartFile image) {
         advertisementService.uploadAdvertisementImage(userDetails, recruitmentIndex, image);
@@ -42,7 +42,7 @@ public class AdvertisementController {
 
     @PostMapping("/type")
     public ResponseEntity<BfResponse<?>> selectAdvertisementType(
-            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody AdvertisementRequestDto requestDto) {
         advertisementService.updateAdvertisementType(userDetails, requestDto);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 타입 선택 완료"));
@@ -50,7 +50,7 @@ public class AdvertisementController {
 
     @PostMapping("/display-time")
     public ResponseEntity<BfResponse<?>> selectDisplayTime(
-            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody AdvertisementRequestDto requestDto) {
         advertisementService.updateAdvertisementDisplayTime(userDetails, requestDto);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 게시 시간 설정완료"));
@@ -58,7 +58,7 @@ public class AdvertisementController {
 
     @PostMapping("/extend")
     public ResponseEntity<BfResponse<?>> extendAdvertisement(
-            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody AdvertisementRequestDto requestDto) {
         advertisementService.extendAdvertisement(userDetails, requestDto);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 게시 시간 연장 완료"));
@@ -66,7 +66,7 @@ public class AdvertisementController {
 
     @PostMapping("/delete")
     public ResponseEntity<BfResponse<?>> deleteAdvertisement(
-            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody AdvertisementRequestDto requestDto) {
         advertisementService.deleteAdvertisement(userDetails, requestDto);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 삭제 완료"));
@@ -74,7 +74,7 @@ public class AdvertisementController {
 
     @PostMapping("/updateImage")
     public ResponseEntity<BfResponse<?>> updateAdvertisementImage(
-            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam("recruitmentIndex") int recruitmentIndex,
             @RequestPart("image") MultipartFile image) {
         advertisementService.uploadAdvertisementImage(userDetails, recruitmentIndex, image);
@@ -83,14 +83,14 @@ public class AdvertisementController {
 
     @GetMapping("/list")
     public ResponseEntity<BfResponse<List<AdvertisementResponseDto>>> listAdvertisements(
-            @AuthenticationPrincipal CompanyDetailsImpl userDetails) {
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<AdvertisementResponseDto> advertisements = advertisementService.getAdvertisements(userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, advertisements));
     }
 
     @GetMapping("/detail/{advertisementId}")
     public ResponseEntity<BfResponse<AdvertisementResponseDto>> getAdvertisementDetail(
-            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Integer advertisementId) {
         AdvertisementResponseDto advertisementDetail = advertisementService.getAdvertisementDetail(userDetails, advertisementId);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, advertisementDetail));

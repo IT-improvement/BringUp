@@ -1,6 +1,6 @@
 package com.bringup.company.review.service;
 
-import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.review.entity.InterviewReview;
 import com.bringup.company.review.repository.InterviewReviewRepository;
 import jakarta.transaction.Transactional;
@@ -16,13 +16,13 @@ public class InterviewReviewService {
     private final InterviewReviewRepository interviewReviewRepository;
 
     // 면접 리뷰 조회
-    public List<InterviewReview> getInterviewReviews(CompanyDetailsImpl userDetails) {
+    public List<InterviewReview> getInterviewReviews(UserDetailsImpl userDetails) {
         return interviewReviewRepository.findAllByCompanyCompanyId(userDetails.getId());
     }
 
     // 면접 리뷰 삭제
     @Transactional
-    public void deleteInterviewReview(CompanyDetailsImpl userDetails, Integer reviewIndex, String reason) {
+    public void deleteInterviewReview(UserDetailsImpl userDetails, Integer reviewIndex, String reason) {
         InterviewReview review = interviewReviewRepository.findById(reviewIndex)
                 .orElseThrow(() -> new RuntimeException("리뷰를 찾을 수 없습니다."));
         if (review.getUser().getUserEmail().equals(userDetails.getUsername())) {

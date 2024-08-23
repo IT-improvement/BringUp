@@ -3,7 +3,7 @@ package com.bringup.company.recruitment.service;
 import com.bringup.admin.notify.service.NotificationService;
 import com.bringup.common.enums.NotificationType;
 import com.bringup.common.enums.RolesType;
-import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.recruitment.dto.request.RecruitmentRequestDto;
 import com.bringup.company.recruitment.dto.response.RecruitmentResponseDto;
 import com.bringup.company.recruitment.exception.RecruitmentException;
@@ -42,14 +42,14 @@ public class RecruitmentService {
     private final RabbitTemplate rabbitTemplate;
     private final NotificationService notificationService;
 
-    public List<RecruitmentResponseDto> getRecruitments(CompanyDetailsImpl userDetails) {
+    public List<RecruitmentResponseDto> getRecruitments(UserDetailsImpl userDetails) {
         return recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId()).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public void createRecruitment(CompanyDetailsImpl userDetails, RecruitmentRequestDto requestDto, MultipartFile img) {
+    public void createRecruitment(UserDetailsImpl userDetails, RecruitmentRequestDto requestDto, MultipartFile img) {
         Company company = companyRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new RuntimeException("Company not found"));
 
@@ -105,7 +105,7 @@ public class RecruitmentService {
     }
 
     @Transactional
-    public void updateRecruitment(CompanyDetailsImpl userDetails, Integer recruitmentIndex, RecruitmentRequestDto requestDto, MultipartFile img) {
+    public void updateRecruitment(UserDetailsImpl userDetails, Integer recruitmentIndex, RecruitmentRequestDto requestDto, MultipartFile img) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
                 .orElseThrow(() -> new RuntimeException("Recruitment not found"));
 
@@ -137,7 +137,7 @@ public class RecruitmentService {
     }
 
     @Transactional
-    public void deleteRecruitment(CompanyDetailsImpl userDetails, Integer recruitmentIndex, String reason) {
+    public void deleteRecruitment(UserDetailsImpl userDetails, Integer recruitmentIndex, String reason) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
                 .orElseThrow(() -> new RecruitmentException(NOT_FOUND_RECRUITMENT));
 
@@ -161,7 +161,7 @@ public class RecruitmentService {
     }
 
     @Transactional
-    public RecruitmentResponseDto getRecruitmentDetail(CompanyDetailsImpl userDetails, Integer recruitmentId) {
+    public RecruitmentResponseDto getRecruitmentDetail(UserDetailsImpl userDetails, Integer recruitmentId) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
                 .orElseThrow(() -> new RecruitmentException(NOT_FOUND_RECRUITMENT));
 
