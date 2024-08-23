@@ -68,4 +68,19 @@ public class ChatRepository {
 
         return userUUID;
     }
+    // 채팅방 유저 이름 중복 확인
+    public String isDuplicateName(String roomId,String username){
+
+        ChatRoomDto ChatRoomDto = ChatRoomDtoMap.get(roomId);
+        String temp = username;
+
+        // 만약 username이 중복이라면 랜덤한 숫자를 붙여준다.
+        // 이 때 랜덤한 숫자를 붙였을때 getUserList 안에 있는 닉네임이라면 다시 랜덤한 숫자 붙이기
+        while(ChatRoomDto.getUserList().containsValue(temp)){
+            int ranNum = (int) (Math.random() * 100) + 1;
+            temp = username+ranNum;
+        }
+
+        return temp;
+    }
 }
