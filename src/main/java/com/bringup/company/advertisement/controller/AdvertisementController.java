@@ -25,8 +25,9 @@ public class AdvertisementController {
     @PostMapping("/select")
     public ResponseEntity<BfResponse<?>> selectAdvertisement(
             @AuthenticationPrincipal CompanyDetailsImpl userDetails,
-            @RequestBody AdvertisementRequestDto requestDto) {
-        advertisementService.createAdvertisement(userDetails, requestDto);
+            @RequestBody AdvertisementRequestDto requestDto,
+            @RequestPart("image") MultipartFile img) {
+        advertisementService.createAdvertisement(userDetails, requestDto, img);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 선택 완료"));
     }
 
