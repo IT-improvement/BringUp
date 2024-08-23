@@ -22,6 +22,7 @@
 	<link rel="stylesheet" type="text/css" href="/resources/style/member/recruitment.css">
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="/resources/static/script/member/recruitment.js"></script>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -40,7 +41,7 @@
 							<h5 class="mb-1 recruitment-title">${recruitment.title}</h5>
 							<p class="mb-1 recruitment-company">${recruitment.companyName}</p>
 							<p class="mb-1">채용 형태: ${recruitment.type}</p>
-							<p class="mb-1">시작일: ${recruitment.startDate} | 기간: ${recruitment.period}</p>
+							<p class="mb-1">시작일: ${recruitment.startDate} 기간: ${recruitment.period}</p>
 							<p class="mb-1">기술 스택: ${recruitment.skills}</p>
 							<small class="text-muted">상태: ${recruitment.status}</small>
 						</div>
@@ -59,5 +60,6 @@
 
 <!-- 맨 위로 -->
 <div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
+
 </body>
 </html>

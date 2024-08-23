@@ -4,6 +4,7 @@ import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.member.notice.domain.repository.ScrapRecruitmentRepository;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
+import com.bringup.member.notice.dto.response.UserRecruitmentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,8 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
-import com.bringup.company.recruitment.entity.Recruitment;
 
 @Service
 @RequiredArgsConstructor
@@ -23,13 +26,17 @@ public class UserRecruitmentService {
     private final UserRepository userRepository;
     private final ScrapRecruitmentRepository scrapRecruitmentRepository;
 
-
     // 모든 UserRecruitmentEntity를 조회하는 메서드
-    public List<Recruitment> getAllRecruitments() {
-        return userRecruitmentRepository.findAll();  // userRecruitmentRepository를 사용해 모든 공고를 조회합니다.
+    public List<UserRecruitmentDto> getAllRecruitments() {
+        List<Recruitment> recruitments = userRecruitmentRepository.findAll();  // 모든 공고를 조회
+        List<UserRecruitmentDto> dtoList = new ArrayList<>();  // DTO 리스트 생성
+        for (Recruitment recruitment : recruitments) {  // 각 엔티티를 순회
+            UserRecruitmentDto dto = convertToDto(recruitment);  // 엔티티를 DTO로 변환
+            dtoList.add(dto);  // DTO 리스트에 추가
+        }
+        return dtoList;  // DTO 리스트 반환
     }
-
-    public List<Recruitment> getBookmarkedRecruitments() {
+    public List<UserRecruitmentDto> getBookmarkedRecruitments() {
         // 현재 인증된 사용자 정보(Principal)를 가져옵니다.
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String userEmail;
@@ -53,6 +60,27 @@ public class UserRecruitmentService {
         // 조회된 스크랩 공고 목록을 로그로 출력
         log.info("Found {} bookmarked recruitments for User Index: {}", recruitments.size(), user.getUserIndex());
 
-        return recruitments;
+        // 엔티티를 DTO로 변환
+        List<UserRecruitmentDto> dtoList = new ArrayList<>();
+        for (Recruitment recruitment : recruitments) {
+            UserRecruitmentDto dto = convertToDto(recruitment);
+            dtoList.add(dto);
+        }
+
+        return dtoList;
+    }
+    // Recruitment 엔티티를 UserRecruitmentDto로 변환하는 메서드
+    private UserRecruitmentDto convertToDto(Recruitment recruitment) {
+        UserRecruitmentDto dto = new UserRecruitmentDto();
+        dto.setRecruitmentIndex(recruitment.getRecruitmentIndex());
+        dto.setCompanyId(BigInteger.valueOf(recruitment.getCompany().getCompanyId()));
+        dto.setRecruitmentType(recruitment.getRecruitmentType().name());
+        dto.setCategory(recruitment.getCategory());
+        dto.setSkill(recruitment.getSkill());
+        dto.setStartDate(recruitment.getStartDate());
+        dto.setPeriod(recruitment.getPeriod());
+        dto.setStatus(recruitment.getStatus());
+        dto.setRecruitmentClass(recruitment.getRecruitmentClass());
+        return dto;
     }
 }
