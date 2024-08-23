@@ -18,7 +18,7 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public List<BoardResponseDto> getPosts(){
-        return boardRepository.findAllByOOrderByModifiedTimeDesc().stream().map(BoardResponseDto::new).toList();
+        return boardRepository.findAllByOrderByModifiedTimeDesc().stream().map(BoardResponseDto::new).toList();
     }
 
     @Transactional
