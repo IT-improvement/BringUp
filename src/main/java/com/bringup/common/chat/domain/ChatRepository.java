@@ -43,4 +43,19 @@ public class ChatRepository {
 
         return ChatRoomDto;
     }
+
+    // 채팅방 인원 +1
+    public void increaseUser(String roomId){
+
+        ChatRoomDto ChatRoomDto = ChatRoomDtoMap.get(roomId);
+        ChatRoomDto.setUserCount(ChatRoomDto.getUserCount()+1);
+    }
+
+    // 채팅방 인원 -1
+    public void decreaseUser(String roomId){
+
+        ChatRoomDto ChatRoomDto = ChatRoomDtoMap.get(roomId);
+        ChatRoomDto.setUserCount(ChatRoomDto.getUserCount()-1);
+    }
+
 }
