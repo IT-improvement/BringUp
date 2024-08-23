@@ -58,4 +58,14 @@ public class ChatRepository {
         ChatRoomDto.setUserCount(ChatRoomDto.getUserCount()-1);
     }
 
+    //채팅방 유저 리스트에 유저추가
+    public  String addUser(String roomId, String userName){
+
+        ChatRoomDto ChatRoomDto = ChatRoomDtoMap.get(roomId);
+        String userUUID = UUID.randomUUID().toString();
+        //아이디 중복 확인 후 userList에 추가
+        ChatRoomDto.getUserList().put(userUUID,userName);
+
+        return userUUID;
+    }
 }
