@@ -64,7 +64,8 @@
                                 <div class="col-md-4">
                                     <label for="search-category" class="form-label">카테고리</label>
                                     <select class="form-select" id="search-category">
-                                        <option value="jobPostingId">공고 ID</option>
+                                        <option value="all">전체</option>
+                                        <option value="jobPostingTitle">공고 제목</option>
                                         <option value="managerEmail">담당자 Email</option>
                                         <option value="employmentType">채용형태</option>
                                         <option value="jobGroup">직군</option>
@@ -88,17 +89,18 @@
                 </div>
                 
                 <!-- 기존 공고 목록 -->
-                <div class="col-12">
+                <div>
                     <div class="card border">
-                        <div class="card-header border-bottom">
+                        <div class="card-header border-bottom d-flex justify-content-between">
                             <h5 class="card-header-title">공고 목록</h5>
+                            <button type="button" class="btn btn-primary" onclick="location.href='/company/jobpost/registration'">등록</button>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive border-0">
                                 <table class="table table-hover align-middle p-4 mb-0 table-shrink">
                                     <thead class="table-light">
                                         <tr>
-                                            <th scope="col" class="border-0 rounded-start">공고 ID</th>
+                                            <th scope="col" class="border-0 rounded-start">공고 제목</th>
                                             <th scope="col" class="border-0">담당자 Email</th>
                                             <th scope="col" class="border-0">채용형태</th>
                                             <th scope="col" class="border-0">직군</th>
