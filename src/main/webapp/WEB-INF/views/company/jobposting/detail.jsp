@@ -53,8 +53,9 @@
     <main class="flex-grow-1">
         <div class="container mt-5">
             <div class="card">
-                <div class="card-header bg-light">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0" id="recruitmentTitle">로딩 중...</h5>
+                    <button type="button" class="btn btn-sm" style="border: 1px solid black; height: 30px;"><i class="bi bi-pencil"></i></button>
                 </div>
                 <div class="card-body">
                     <div id="loadingIndicator" class="text-center">
