@@ -15,5 +15,11 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer 
         registry.addEndpoint("ws-steomp")//연결될 엔드포인트
                 .withSockJS(); //SocketJS를 연결한다는 설정
     }
-
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        // 메시지를 구독하는 요청 url -> 메시지를 받을 때
+        registry.enableSimpleBroker("/sub");
+        // 메시지를 발행하는 요청 url -> 메시지를 보낼 때
+        registry.setApplicationDestinationPrefixes("/pub");
+    }
 }
