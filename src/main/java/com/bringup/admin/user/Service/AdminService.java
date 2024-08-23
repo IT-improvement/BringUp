@@ -5,7 +5,7 @@ import com.bringup.admin.user.DTO.request.AdminLoginDto;
 import com.bringup.admin.user.DTO.response.AdminLoginTokenDto;
 import com.bringup.common.enums.RolesType;
 import com.bringup.common.security.jwt.JwtProvider;
-import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class AdminService {
                 loginRequestDto.getUserEmail(), loginRequestDto.getUserPassword());
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        CompanyDetailsImpl userDetails = (CompanyDetailsImpl) authentication.getPrincipal();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         String token = jwtProvider.createAccessToken(userDetails);
 

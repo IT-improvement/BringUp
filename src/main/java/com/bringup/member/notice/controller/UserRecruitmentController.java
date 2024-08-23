@@ -1,6 +1,6 @@
 package com.bringup.member.notice.controller;
 
-import com.bringup.common.security.service.CustomUserDetails;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.notice.domain.service.UserRecruitmentService;
 import com.bringup.member.notice.dto.response.UserRecruitmentDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class UserRecruitmentController {
         return userRecruitmentService.getAllRecruitments();
     }
     @GetMapping("/view")
-    public ResponseEntity<?> getRecruitmentPage(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<?> getRecruitmentPage(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         // 현재 로그인된 사용자 정보 확인
         if (userDetails == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증되지 않은 사용자입니다.");

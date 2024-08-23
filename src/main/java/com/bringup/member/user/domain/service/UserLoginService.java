@@ -3,7 +3,7 @@ package com.bringup.member.user.domain.service;
 import com.bringup.common.security.jwt.JwtProvider;
 
 
-import com.bringup.common.security.service.CustomUserDetails;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.user.domain.repository.UserRepository;
 import com.bringup.member.user.dto.UserLoginDTO;
 import com.bringup.member.user.dto.UserLoginTokenDTO;
@@ -56,8 +56,8 @@ public class UserLoginService {
            3. 사용자 정보 추출 및 JWT 토큰 생성
          생성된 JWT 토큰은 UserLoginTokenDTO로 감싸져 반환됩니다.
          */
-        // 수정된 부분: CustomUserDetails 사용
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        // 수정된 부분: UserDetailsImpl 사용
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         //  인증이 완료되면, Authentication 객체로부터 사용자 정보를 추출합니다. 여기서 CustomUserDetails 객체가 반환됩니다.
         System.out.println("userDetails : " + userDetails);
 

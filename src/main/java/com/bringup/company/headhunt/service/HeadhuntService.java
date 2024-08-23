@@ -1,6 +1,6 @@
 package com.bringup.company.headhunt.service;
 
-import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.headhunt.dto.response.HeadhuntResponseDto;
 import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +24,7 @@ public class HeadhuntService {
     private final UserRepository userRepository;
 
     // 스킬이 하나라도 일치하는 CV를 필터링하고, 그 중 5개를 랜덤으로 추천하는 메서드
-    public List<HeadhuntResponseDto> recommendCVsBasedOnCompanySkills(CompanyDetailsImpl userDetails) {
+    public List<HeadhuntResponseDto> recommendCVsBasedOnCompanySkills(UserDetailsImpl userDetails) {
         List<Recruitment> recruitments = recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId());
         List<CVEntity> allCVs = cvRepository.findAll();
 

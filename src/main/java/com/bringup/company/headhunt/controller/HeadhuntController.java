@@ -1,7 +1,7 @@
 package com.bringup.company.headhunt.controller;
 
 import com.bringup.common.response.BfResponse;
-import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.headhunt.dto.response.HeadhuntResponseDto;
 import com.bringup.company.headhunt.service.HeadhuntService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class HeadhuntController {
     private final HeadhuntService headHuntService;
 
     @GetMapping("/recommend")
-    public ResponseEntity<BfResponse<List<HeadhuntResponseDto>>> recommendCVs(@AuthenticationPrincipal CompanyDetailsImpl userDetails) {
+    public ResponseEntity<BfResponse<List<HeadhuntResponseDto>>> recommendCVs(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<HeadhuntResponseDto> recommendations = headHuntService.recommendCVsBasedOnCompanySkills(userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, recommendations));
     }
