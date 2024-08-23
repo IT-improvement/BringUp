@@ -35,7 +35,7 @@ public class ChatRepository {
     }
 
     // roomName 으로 채팅방 만들기
-    public ChatRoomDto createChatRoomDto(String roomName){
+    public ChatRoomDto createChatRoom(String roomName){
         //채팅방 이름으로 채팅 방 생성후
         ChatRoomDto ChatRoomDto = new ChatRoomDto().create(roomName);
         //map에 채팅방 아이디와 만들어진 채팅룸을 저장
