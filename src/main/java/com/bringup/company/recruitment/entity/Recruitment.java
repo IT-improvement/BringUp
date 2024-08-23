@@ -2,6 +2,7 @@ package com.bringup.company.recruitment.entity;
 
 import com.bringup.common.enums.RecruitmentType;
 import com.bringup.company.user.entity.Company;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "recruitment")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Recruitment {
 
     @Id

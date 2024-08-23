@@ -7,6 +7,7 @@ import java.math.BigInteger;
 
 @Getter
 @Setter
+
 public class UserRecruitmentDto {
     private int recruitmentIndex;
     private BigInteger companyId;
@@ -17,5 +18,5 @@ public class UserRecruitmentDto {
     private String period;
     private String status;
     private String recruitmentClass;
-
+    private String recruitmentImg;
 }
