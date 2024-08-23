@@ -10,6 +10,5 @@ import java.util.List;
 public interface RecruitmentRepository extends JpaRepository<Recruitment, Integer> {
     List<Recruitment> findAllByCompanyCompanyId(int companyId);
     List<Recruitment> findAllByPeriod(String period);
-
     List<Recruitment> findAllByStatus(String status);
 }
