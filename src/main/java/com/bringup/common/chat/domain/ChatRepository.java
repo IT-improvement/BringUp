@@ -83,4 +83,16 @@ public class ChatRepository {
 
         return temp;
     }
+    // 채팅방 유저 리스트 삭제
+    public void deleteUser(String roomId,String userUUID){
+        ChatRoomDto ChatRoomDto = ChatRoomDtoMap.get(roomId);
+        ChatRoomDto.getUserList().remove(userUUID);
+    }
+
+    // 채팅방 userName 조회
+    public String getUserName(String roomId,String userUUID){
+        ChatRoomDto ChatRoomDto = ChatRoomDtoMap.get(roomId);
+
+        return ChatRoomDto.getUserList().get(userUUID);
+    }
 }
