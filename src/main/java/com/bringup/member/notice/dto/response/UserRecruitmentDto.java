@@ -18,5 +18,5 @@ public class UserRecruitmentDto {
     private String period;
     private String status;
     private String recruitmentClass;
-
+    private String recruitmentImg;
 }
