@@ -95,4 +95,15 @@ public class ChatRepository {
 
         return ChatRoomDto.getUserList().get(userUUID);
     }
+
+    //채팅방 전체 userList 조회
+    public List<String> getUserList(String roomId){
+        List<String> list = new ArrayList<>();
+
+        ChatRoomDto ChatRoomDto = ChatRoomDtoMap.get(roomId);
+
+        ChatRoomDto.getUserList().forEach((key,value) -> list.add(value));
+
+        return list;
+    }
 }
