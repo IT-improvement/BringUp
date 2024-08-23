@@ -14,7 +14,7 @@ public class InterviewReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "interview_review_index")
-    private int interviewReviewIndex;
+    private Integer interviewReviewIndex;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)

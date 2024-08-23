@@ -165,6 +165,7 @@ public class SpringSecurityConfig {
                 antMatcher(POST, "/com/recruitment/update/{recruitmentId}"), // 채용 수정
                 antMatcher(POST, "/com/recruitment/delete/{recruitmentId}"), // 채용 삭제
                 antMatcher(GET, "/com/recruitment/list"),           // 채용 리스트 조회
+                antMatcher(GET, "/com/recruitment/detail/**"),
 
                 antMatcher(POST, "/com/c_reviews"),                 // 기업 리뷰 열람
                 antMatcher(POST, "/com/c_review/delete"),           // 기업 리뷰 삭제

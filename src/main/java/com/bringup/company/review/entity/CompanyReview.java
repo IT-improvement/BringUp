@@ -14,7 +14,7 @@ public class CompanyReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_review_index")
-    private int companyReviewIndex;
+    private Integer companyReviewIndex;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_index", nullable = false)

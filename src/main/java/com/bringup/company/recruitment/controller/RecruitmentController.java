@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,16 +24,18 @@ public class RecruitmentController {
 
     @PostMapping("/register")
     public ResponseEntity<BfResponse<?>> registerRecruitment(@AuthenticationPrincipal CompanyDetailsImpl userDetails,
-                                                             @RequestBody RecruitmentRequestDto requestDto) {
-        recruitmentService.createRecruitment(userDetails, requestDto);
+                                                             @RequestBody RecruitmentRequestDto requestDto,
+                                                             @RequestPart("recruitmentImg") MultipartFile img) {
+        recruitmentService.createRecruitment(userDetails, requestDto, img);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "Recruitment registration request submitted successfully"));
     }
 
     @PostMapping("/update/{recruitmentId}")
     public ResponseEntity<BfResponse<?>> updateRecruitment(@AuthenticationPrincipal CompanyDetailsImpl userDetails,
                                                            @PathVariable Integer recruitmentId,
-                                                           @RequestBody RecruitmentRequestDto requestDto) {
-        recruitmentService.updateRecruitment(userDetails, recruitmentId, requestDto);
+                                                           @RequestBody RecruitmentRequestDto requestDto,
+                                                           @RequestPart MultipartFile img) {
+        recruitmentService.updateRecruitment(userDetails, recruitmentId, requestDto, img);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "Recruitment update request submitted successfully"));
     }
 
@@ -52,7 +55,7 @@ public class RecruitmentController {
 
     @GetMapping("/detail/{recruitmentId}")
     public ResponseEntity<BfResponse<RecruitmentResponseDto>> getRecruitmentDetail(@AuthenticationPrincipal CompanyDetailsImpl userDetails,
-                                                                                   @PathVariable Integer recruitmentId) {
+                                                                                   @PathVariable("recruitmentId") int recruitmentId) {
         RecruitmentResponseDto recruitmentDetail = recruitmentService.getRecruitmentDetail(userDetails, recruitmentId);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, recruitmentDetail));
     }

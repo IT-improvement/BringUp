@@ -65,7 +65,7 @@ public class JwtProvider {
 	}
 
 	/**
-	 * Usesr access 토큰 생성
+	 * User access 토큰 생성
 	 */
 
 	public String createAccessToken(CustomUserDetails customUserDetails) {

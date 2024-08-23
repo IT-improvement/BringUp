@@ -55,6 +55,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     case 'adGrade':
                         value = recruitment.recruitmentClass;
                         break;
+                    case 'jobPostingTitle':
+                        value = recruitment.jobPostingTitle; // 공고제목 추가
+                        break;
                     default:
                         value = '';
                 }
@@ -84,6 +87,7 @@ function displayRecruitments(recruitments) {
             <td>${recruitment.period}</td>
             <td>${recruitment.status}</td>
             <td>${recruitment.recruitmentClass}</td>
+            <td>${recruitment.jobPostingTitle}</td>
         `;
         row.addEventListener('click', function() {
             window.location.href = `/company/jobpost/detail?recruitmentIndex=${recruitment.recruitmentIndex}`;
