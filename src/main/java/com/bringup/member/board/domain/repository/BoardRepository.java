@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface BoardRepository extends JpaRepository<BoardEntity, Integer> {
-    List<BoardEntity> findAllByOOrderByModifiedTimeDesc();
+    List<BoardEntity> findAllByOrderByModifiedTimeDesc();
 }
