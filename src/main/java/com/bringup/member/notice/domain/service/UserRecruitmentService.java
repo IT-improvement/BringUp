@@ -80,7 +80,6 @@ public class UserRecruitmentService {
         dto.setStartDate(recruitment.getStartDate());
         dto.setPeriod(recruitment.getPeriod());
         dto.setStatus(recruitment.getStatus());
-        dto.setRecruitmentClass(recruitment.getRecruitmentClass());
         return dto;
     }
 }
