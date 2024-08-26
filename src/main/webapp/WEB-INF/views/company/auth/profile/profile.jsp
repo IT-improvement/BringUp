@@ -74,18 +74,38 @@
 					const images = data.data.companyLogo;
 					console.log("회사 로고:", images);
 					if (images) {
-						// URL 인코딩을 하지 않고 그대로 사용
-						const imagePath = '/resources/images/logos/' + images;
+						sessionStorage.setItem('companyLogo', images);
+						document.getElementById('profileImage').src = "/resources/logos/" + images;
 					}
-					console.log("설정된 이미지 경로:", document.getElementById('profileImage').src);
 				})
 				.catch(error => {
 					console.error('Error:', error);
 				});
-				} else {
-                    console.log("토큰을 찾을 수 없습니다.");
-                }
+			} else {
+				console.log("토큰을 찾을 수 없습니다.");
+			}
 		});
+	function uploadProfileImage() {
+		const fileInput = document.getElementById('profileImageInput');
+		const file = fileInput.files[0];
+		if (file) {
+			const formData = new FormData();
+			formData.append('logo', file);
+			fetch('/com/test', {
+				method: 'POST',
+				body: formData,
+			})
+			.then(response => response.json())
+			.then(data => {
+				console.log(data);
+				// 업로드 성공 시 로고 이미지 경로를 업데이트하는 로직을 여기에 구현하세요.
+				// 예시: document.getElementById('profileImage').src = data.logoUrl;
+			})
+			.catch(error => {
+				console.error('Error uploading file:', error);
+			});
+		}
+	}
 	</script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -102,10 +122,16 @@
 					<label for="profileImage" class="form-label">프로필 이미지</label>
 					<div class="d-flex justify-content-start">
 						<div class="rounded-circle overflow-hidden border border-secondary" style="width: 200px; height: 200px; position: relative;">
-							<img src="/resources/logos/Logo_48df5ac5-d099-4684-bf31-46fb75920d96_%EC%9D%B4%EB%AF%B8%EC%A7%80.png" id="profileImage" alt="프로필 이미지" 
-								 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+							<img src="" id="profileImage" alt="프로필 이미지" 
+								 style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"
+								 onload="console.log('이미지의 src값:', this.src);">
 						</div>
 					</div>
+				</div>
+				<div class="mb-3">
+					<label for="profileImageInput" class="form-label">프로필 이미지 업로드</label>
+					<input type="file" class="form-control" id="profileImageInput" name="profile_image_input">
+					<button type="button" class="btn btn-primary" onclick="uploadProfileImage()">업로드</button>
 				</div>
 				<div class="mb-3">
 					<label for="companyName" class="form-label">회사 이름</label>
