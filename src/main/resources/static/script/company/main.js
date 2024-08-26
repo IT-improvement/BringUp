@@ -22,23 +22,27 @@ document.addEventListener('DOMContentLoaded', function() {
         const jobCount = document.getElementById('jobCount');
         if (recruitmentListBody && totalEntries && jobCount) {
             recruitmentListBody.innerHTML = ''; // 기존 내용을 지웁니다
-            recruitmentList.forEach(recruitment => {
-                const row = document.createElement('tr');
-                row.addEventListener('click', function() {
-                    window.location.href = `/company/jobpost/detail?recruitmentIndex=${recruitment.recruitmentIndex}`;
+            if (recruitmentList && recruitmentList.length === 0) {
+                recruitmentListBody.innerHTML = '<tr><td colspan="5">공고가 없습니다.</td></tr>';
+            } else if(recruitmentList) {
+                recruitmentList.forEach(recruitment => {
+                    const row = document.createElement('tr');
+                    row.addEventListener('click', function() {
+                        window.location.href = `/company/jobpost/detail?recruitmentIndex=${recruitment.recruitmentIndex}`;
+                    });
+                    row.innerHTML = `
+                        <td>${recruitment.recruitmentTitle}</td>
+                        <td>${recruitment.recruitmentType}</td>
+                        <td>${recruitment.startDate}</td>
+                        <td>${recruitment.category}</td>
+                        <td>${recruitment.status}</td>
+                    `;
+                    recruitmentListBody.appendChild(row);
                 });
-                row.innerHTML = `
-                    <td>${recruitment.recruitmentTitle}</td>
-                    <td>${recruitment.recruitmentType}</td>
-                    <td>${recruitment.startDate}</td>
-                    <td>${recruitment.category}</td>
-                    <td>${recruitment.status}</td>
-                `;
-                recruitmentListBody.appendChild(row);
-            });
+            }
             // 채용 목록의 총 개수를 업데이트합니다.
-            totalEntries.textContent = `총${recruitmentList.length}`;
-            jobCount.textContent = `${recruitmentList.length}개`;
+            totalEntries.textContent = `총${recruitmentList ? recruitmentList.length : 0}`;
+            jobCount.textContent = `${recruitmentList ? recruitmentList.length : 0}개`;
         } else {
             console.error('recruitment-list-body, totalEntries, 또는 jobCount 요소를 찾을 수 없습니다.');
             alert('채용 목록을 표시할 수 없습니다. 페이지를 새로고침하거나 나중에 다시 시도해주세요.');
