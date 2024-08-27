@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class UserMembershipDto {
 
-    private Long userIndex;
+    private int userIndex;
     private String startDate;
     private String period;
 }
