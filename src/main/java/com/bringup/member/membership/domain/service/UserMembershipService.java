@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class UserMembershipService {
     private final UserMembershipRepository userMembershipRepository;
 
-    public UserMembershipDto subscribeMembership(Long userIndex, String period){
+    public UserMembershipDto subscribeMembership(int userIndex, String period){
         UserMembership membership = new UserMembership();
         membership.setUserIndex(userIndex);
         membership.setStartDate(LocalDate.now().toString()); // LocalDate를 String으로 변환하여 저장

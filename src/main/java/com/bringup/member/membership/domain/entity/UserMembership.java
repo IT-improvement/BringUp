@@ -12,7 +12,7 @@ public class UserMembership {
 
     @Id
     @Column(name = "user_index", nullable = false)
-    private Long userIndex;
+    private int userIndex;
 
     @Column(name = "start_date", nullable = false, length = 30)
     private String startDate;
