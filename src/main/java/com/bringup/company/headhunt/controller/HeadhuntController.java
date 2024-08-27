@@ -25,7 +25,7 @@ public class HeadhuntController {
 
     @GetMapping("/recommend")
     public ResponseEntity<BfResponse<List<HeadhuntResponseDto>>> recommendCVs(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<HeadhuntResponseDto> recommendations = headHuntService.recommendCVsBasedOnCompanySkills(userDetails);
+        List<HeadhuntResponseDto> recommendations = headHuntService.recommendMembershipCVsBasedOnCompanySkills(userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, recommendations));
     }
 
