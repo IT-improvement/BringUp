@@ -29,29 +29,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     const modal = document.createElement('div');
                     modal.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background-color: rgba(0,0,0,0.5);
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    z-index: 1000;
-                `;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            `;
                     const modalContent = document.createElement('div');
                     modalContent.style.cssText = `
-                    background-color: white;
-                    padding: 20px;
-                    border-radius: 5px;
-                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                `;
+                background-color: white;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            `;
                     modalContent.innerHTML = `
-                    <h3>알림</h3>
-                    <p>로그인에 성공하셨습니다!</p>
-                    <button id="modalConfirmButton">확인</button>
-                `;
+                <h3>알림</h3>
+                <p>로그인에 성공하셨습니다!</p>
+                <button id="modalConfirmButton">확인</button>
+            `;
                     modal.appendChild(modalContent);
                     document.body.appendChild(modal);
 
@@ -74,8 +74,29 @@ document.addEventListener('DOMContentLoaded', function() {
                         // 모달 닫기
                         modal.remove();
 
-                        // 다음 페이지로 이동
-                        window.location.href = '/recruitment/view'; // 로그인 성공 후 리다이렉트할 페이지
+                        // 다음 페이지로 이동 (토큰을 포함하여 이동)
+                        const accessToken = localStorage.getItem('accessToken');
+                        fetch('/recruitment/list', {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': `Bearer ${accessToken}`
+                            }
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('페이지 로드 실패');
+                                }
+                                return response.text(); // 페이지의 HTML을 가져옴
+                            })
+                            .then(html => {
+                                document.open();
+                                document.write(html);
+                                document.close();
+                            })
+                            .catch(error => {
+                                console.error('에러:', error);
+                                alert('페이지 로드 중 오류가 발생했습니다. 나중에 다시 시도해주세요.');
+                            });
                     });
                 } else {
                     console.error('로그인 실패:', data);
