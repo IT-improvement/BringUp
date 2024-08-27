@@ -9,7 +9,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<!-- 파비콘 -->
-	<link rel="shortcut icon" href="/resources/static/style/common/images/favicon.ico">
+	<link rel="shortcut icon" href="/resources/style/common/images/favicon.ico">
 
 	<!-- 구글 폰트 -->
 	<link rel="preconnect" href="https://fonts.gstatic.com">
@@ -21,8 +21,8 @@
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/resources/style/member/recruitment.css">
 
+	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="/resources/static/script/member/recruitment.js"></script>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -32,25 +32,23 @@
 <main class="flex-grow-1">
 	<div class="container mt-5">
 		<h2 class="section-title">추천 채용 공고</h2>
-		<div class="list-group recruitment-list">
-			<!-- 공고 항목 -->
-			<c:forEach var="recruitment" items="${recruitments}">
-				<div class="list-group-item recruitment-item">
-					<div class="d-flex justify-content-between">
-						<div>
-							<h5 class="mb-1 recruitment-title">${recruitment.title}</h5>
-							<p class="mb-1 recruitment-company">${recruitment.companyName}</p>
-							<p class="mb-1">채용 형태: ${recruitment.type}</p>
-							<p class="mb-1">시작일: ${recruitment.startDate} 기간: ${recruitment.period}</p>
-							<p class="mb-1">기술 스택: ${recruitment.skills}</p>
-							<small class="text-muted">상태: ${recruitment.status}</small>
-						</div>
-						<div class="align-self-center">
-							<a href="#" class="btn btn-outline-primary">공고 보기</a>
-						</div>
+		<div id="recruitmentList" class="list-group recruitment-list">
+			<!-- 미리 정의된 HTML 구조 -->
+			<div class="list-group-item recruitment-item d-none" id="recruitmentTemplate">
+				<div class="d-flex justify-content-between">
+					<div>
+						<h5 class="mb-1 recruitment-title"></h5>
+						<p class="mb-1 recruitment-company"></p>
+						<p class="mb-1 recruitment-type"></p>
+						<p class="mb-1 recruitment-period"></p>
+						<p class="mb-1 recruitment-skills"></p>
+						<small class="text-muted recruitment-status"></small>
+					</div>
+					<div class="align-self-center">
+						<a href="#" class="btn btn-outline-primary recruitment-link">공고 보기</a>
 					</div>
 				</div>
-			</c:forEach>
+			</div>
 		</div>
 	</div>
 </main>
@@ -61,5 +59,7 @@
 <!-- 맨 위로 -->
 <div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
 
+<!-- 별도의 JavaScript 파일을 로드 -->
+<script src="/resources/static/script/member/recruitment.js"></script>
 </body>
 </html>

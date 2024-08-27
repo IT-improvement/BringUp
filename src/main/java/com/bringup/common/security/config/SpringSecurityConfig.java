@@ -161,7 +161,10 @@ public class SpringSecurityConfig {
                 antMatcher(POST, "/com/i_reviews"),                 // 면접 리뷰 열람
                 antMatcher(POST, "/com/i_review/delete"),         // 면접 리뷰 삭제
 
-                antMatcher("/recruitment/**") // 사용자 스크랩기업 리스트
+                antMatcher("/recruitment/**"), // 사용자 스크랩기업 리스트
+                antMatcher("/membership/**") // 사용자 멤버십
+
+
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
