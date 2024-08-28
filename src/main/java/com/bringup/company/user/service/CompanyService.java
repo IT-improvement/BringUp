@@ -6,7 +6,7 @@ import com.bringup.common.enums.RolesType;
 import com.bringup.common.event.Service.CertificateService;
 import com.bringup.common.event.exception.CertificateException;
 import com.bringup.common.security.jwt.JwtProvider;
-import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.user.dto.request.JoinDto;
 import com.bringup.company.user.dto.request.LoginDto;
 import com.bringup.company.user.dto.request.SalaryDto;
@@ -162,7 +162,7 @@ public class CompanyService {
 
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        CompanyDetailsImpl userDetails = (CompanyDetailsImpl) authentication.getPrincipal();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         System.out.println("userDetails : " + userDetails);
 
         String accessToken = jwtProvider.createAccessToken(userDetails);
@@ -183,7 +183,7 @@ public class CompanyService {
 
     // 회원 정보 수정
     @Transactional
-    public void updateUser(CompanyDetailsImpl userDetails, Map<String, String> requestBody) {
+    public void updateUser(UserDetailsImpl userDetails, Map<String, String> requestBody) {
         Company company = companyRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
 
@@ -227,19 +227,19 @@ public class CompanyService {
 
     // 회원 탈퇴
     @Transactional
-    public void deleteUser(CompanyDetailsImpl userDetails) {
+    public void deleteUser(UserDetailsImpl userDetails) {
         Company company = companyRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
 
         companyRepository.delete(company);
     }
 
-    public Company getUserInfo(CompanyDetailsImpl userDetails) {
+    public Company getUserInfo(UserDetailsImpl userDetails) {
         return companyRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
     }
 
-    public String companyName(CompanyDetailsImpl userDetails) {
+    public String companyName(UserDetailsImpl userDetails) {
         Optional<Company> companyOptional = companyRepository.findByManagerEmail(userDetails.getUsername());
         if (companyOptional.isPresent()) {
             return companyOptional.get().getCompanyName();

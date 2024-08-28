@@ -2,7 +2,7 @@ package com.bringup.company.user.controller;
 
 
 import com.bringup.common.response.BfResponse;
-import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.user.dto.request.JoinDto;
 import com.bringup.company.user.dto.request.LoginDto;
 import com.bringup.company.user.dto.request.ValidationRequestDto;
@@ -88,14 +88,14 @@ public class CompanyController {
 
     // 기업명 헤더 삽입
     @PostMapping("/companyName")
-    public ResponseEntity<BfResponse<?>> companyName(@AuthenticationPrincipal CompanyDetailsImpl userDetails) {
+    public ResponseEntity<BfResponse<?>> companyName(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, companyService.companyName(userDetails)));
     }
 
     // 회원 정보 수정
     @PutMapping("/user")
     public ResponseEntity<BfResponse<?>> updateUser(
-            @AuthenticationPrincipal CompanyDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam Map<String, String> requestBody) {
         companyService.updateUser(userDetails, requestBody);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "Company update successful")));
@@ -103,14 +103,14 @@ public class CompanyController {
 
     // 회원 탈퇴
     @DeleteMapping("/user")
-    public ResponseEntity<BfResponse<?>> deleteUser(@AuthenticationPrincipal CompanyDetailsImpl userDetails) {
+    public ResponseEntity<BfResponse<?>> deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         companyService.deleteUser(userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "DELETE successful")));
     }
 
     // 회원 정보 조회
     @GetMapping("/companyInfo/post")
-    public ResponseEntity<BfResponse<Company>> getUserInfo(@AuthenticationPrincipal CompanyDetailsImpl userDetails) {
+    public ResponseEntity<BfResponse<Company>> getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         Company company = companyService.getUserInfo(userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, company));
     }

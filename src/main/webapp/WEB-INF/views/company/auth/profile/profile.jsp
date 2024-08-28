@@ -41,7 +41,7 @@
     <script src="/resources/script/common/function/functions.js"></script>
 
     <!-- 메인 JS -->
-    <!-- <script src="/resources/script/company/main.js"></script> -->
+    <script src="/resources/script/company/profile.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -50,8 +50,74 @@
 
 	<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
-    <main class="flex-grow-1">
-		<p>기업 프로필</p>
+    <main class="flex-grow-1 m-4">
+		<div class="company-profile container" style="max-width: 1260px;">
+					<h2>회사 정보</h2>
+					<div class="row mb-4">
+						<div class="col-md-3">
+							<div class="rounded-circle overflow-hidden border border-secondary" style="width: 200px; height: 200px; position: relative;">
+								<img src="" id="profileImage" alt="프로필 이미지" 
+									style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+							</div>
+						</div>
+						<div class="col-md-9">
+							<div class="mb-3">
+								<label for="companyName" class="form-label">회사 이름</label>
+								<input type="text" class="form-control" id="companyName" name="company_name" readonly>
+							</div>
+							<div class="mb-3">
+								<label for="representativeName" class="form-label">회사 대표</label>
+								<input type="text" class="form-control" id="representativeName" name="representative_name" readonly>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="mb-3">
+								<label for="address" class="form-label">주소</label>
+								<input type="text" class="form-control" id="address" name="address" readonly>
+							</div>
+							<div class="mb-3">
+								<label for="phoneNumber" class="form-label">전화번호</label>
+								<input type="text" class="form-control" id="phoneNumber" name="phone_number" readonly>
+							</div>
+							<div class="mb-3">
+								<label for="homepage" class="form-label">홈페이지 주소</label>
+								<input type="url" class="form-control" id="homepage" name="homepage" readonly>
+							</div>
+							<div class="mb-3">
+								<label for="industry" class="form-label">업종</label>
+								<input type="text" class="form-control" id="industry" name="industry" readonly>
+							</div>
+							<div class="mb-3">
+								<label for="establishDate" class="form-label">설립일</label>
+								<input type="date" class="form-control" id="establishDate" name="establish_date" readonly>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="mb-3">
+								<label for="scale" class="form-label">규모</label>
+								<input type="text" class="form-control" id="scale" name="scale" readonly>
+							</div>
+							<div class="mb-3">
+								<label for="employeeCount" class="form-label">직원 수</label>
+								<input type="number" class="form-control" id="employeeCount" name="employee_count" readonly>
+							</div>
+							<div class="mb-3">
+								<label for="businessLicense" class="form-label">사업자등록번호</label>
+								<input type="text" class="form-control" id="businessLicense" name="business_license" readonly>
+							</div>
+							<div class="mb-3">
+								<label for="representativeEmail" class="form-label">대표 이메일</label>
+								<input type="email" class="form-control" id="representativeEmail" name="representative_email" readonly>
+							</div>
+							<div class="mb-3">
+								<label for="representativePhoneNumber" class="form-label">대표 전화번호</label>
+								<input type="text" class="form-control" id="representativePhoneNumber" name="representative_phone_number" readonly>
+							</div>
+						</div>
+					</div>
+				</div>
     </main>
 
 	<jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
