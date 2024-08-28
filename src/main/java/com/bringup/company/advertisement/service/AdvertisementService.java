@@ -1,5 +1,6 @@
 package com.bringup.company.advertisement.service;
 
+import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.dto.request.AdvertisementRequestDto;
 import com.bringup.company.advertisement.dto.response.AdvertisementResponseDto;
@@ -29,6 +30,7 @@ public class AdvertisementService {
 
     private final AdvertisementRepository advertisementRepository;
     private final RecruitmentRepository recruitmentRepository;
+    private final ImageService imageService;
 
     public List<AdvertisementResponseDto> getAdvertisements(UserDetailsImpl userDetails) {
         return advertisementRepository.findAll().stream()
@@ -48,7 +50,7 @@ public class AdvertisementService {
             throw new RuntimeException("You do not have permission to create an advertisement for this recruitment.");
         }
 
-        String imageUrl = saveAdvertisementImage(image);
+        String imageUrl = imageService.upLoadImage(image);
 
         Advertisement advertisement = new Advertisement();
         advertisement.setRecruitmentIndex(requestDto.getRecruitmentIndex());
@@ -71,7 +73,7 @@ public class AdvertisementService {
             throw new RuntimeException("You do not have permission to upload an image for this recruitment.");
         }
 
-        String imageUrl = saveAdvertisementImage(image);
+        String imageUrl = imageService.upLoadImage(image);
 
         Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(recruitmentIndex)
                 .orElseThrow(() -> new RuntimeException("Advertisement not found"));
@@ -200,7 +202,7 @@ public class AdvertisementService {
                 .build();
     }
 
-    private String saveAdvertisementImage(MultipartFile image) {
+    /*private String saveAdvertisementImage(MultipartFile image) {
         if (image.isEmpty()) {
             return null;
         }
@@ -218,7 +220,7 @@ public class AdvertisementService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to store image", e);
         }
-    }
+    }*/
 
     private void notifyAdminForApproval(Advertisement advertisement) {
         // 어드민에게 승인 요청을 보내는 로직을 작성합니다.
