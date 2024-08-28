@@ -1,7 +1,7 @@
 package com.bringup.company.review.controller;
 
 import com.bringup.common.response.BfResponse;
-import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.review.dto.request.CompanyReviewRequestDto;
 import com.bringup.company.review.dto.request.InterviewReviewRequestDto;
 import com.bringup.company.review.dto.response.CompanyReviewResponseDto;
@@ -33,7 +33,7 @@ public class ReviewController {
 
     // 기업 리뷰 열람
     @PostMapping("/c_reviews")
-    public ResponseEntity<BfResponse<List<CompanyReviewResponseDto>>> getCompanyReviews(@AuthenticationPrincipal CompanyDetailsImpl userDetails) {
+    public ResponseEntity<BfResponse<List<CompanyReviewResponseDto>>> getCompanyReviews(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<CompanyReview> reviews = companyReviewService.getCompanyReviews(userDetails);
         List<CompanyReviewResponseDto> reviewDtos = reviews.stream().map(this::convertToDto).collect(Collectors.toList());
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, reviewDtos));
@@ -56,7 +56,7 @@ public class ReviewController {
 
     // 기업 리뷰 삭제 요청
     @PostMapping("/c_review/delete")
-    public ResponseEntity<BfResponse<?>> deleteCompanyReview(@AuthenticationPrincipal CompanyDetailsImpl userDetails, @RequestBody CompanyReviewRequestDto requestDto) {
+    public ResponseEntity<BfResponse<?>> deleteCompanyReview(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CompanyReviewRequestDto requestDto) {
         companyReviewService.deleteCompanyReview(userDetails, requestDto.getReviewIndex(), requestDto.getReason());
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "Review deletion request submitted successfully"));
     }
@@ -70,7 +70,7 @@ public class ReviewController {
 
     // 면접 리뷰 열람
     @PostMapping("/i_reviews")
-    public ResponseEntity<BfResponse<List<InterviewReviewResponseDto>>> getInterviewReviews(@AuthenticationPrincipal CompanyDetailsImpl userDetails) {
+    public ResponseEntity<BfResponse<List<InterviewReviewResponseDto>>> getInterviewReviews(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<InterviewReview> reviews = interviewReviewService.getInterviewReviews(userDetails);
         List<InterviewReviewResponseDto> reviewDtos = reviews.stream().map(this::convertToDto).collect(Collectors.toList());
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, reviewDtos));
@@ -90,7 +90,7 @@ public class ReviewController {
 
     // 면접 리뷰 삭제
     @PostMapping("/i_review/delete")
-    public ResponseEntity<BfResponse<?>> deleteInterviewReview(@AuthenticationPrincipal CompanyDetailsImpl userDetails, @RequestBody InterviewReviewRequestDto requestDto) {
+    public ResponseEntity<BfResponse<?>> deleteInterviewReview(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody InterviewReviewRequestDto requestDto) {
         interviewReviewService.deleteInterviewReview(userDetails, requestDto.getReviewIndex(), requestDto.getReason());
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "Review deletion request submitted successfully"));
     }

@@ -41,7 +41,7 @@
                     <input type="text" class="form-control" id="businessNumber" name="businessNumber" placeholder="사업자 번호를 입력하세요" required>
                 </div>
                 <div class="mb-3">
-                    <label for="name" class="form-label"><i class="fas fa-user"></i> 회사명</label>
+                    <label for="name" class="form-label"><i class="fas fa-user"></i> 회사 대표 이름</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="회사명을 입력하세요" required>
                 </div>
                 <div class="mb-3">

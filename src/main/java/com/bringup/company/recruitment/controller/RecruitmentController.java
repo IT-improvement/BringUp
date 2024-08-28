@@ -1,7 +1,7 @@
 package com.bringup.company.recruitment.controller;
 
 import com.bringup.common.response.BfResponse;
-import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.recruitment.dto.request.RecruitmentRequestDto;
 import com.bringup.company.recruitment.dto.response.RecruitmentResponseDto;
 import com.bringup.company.recruitment.service.RecruitmentService;
@@ -23,7 +23,7 @@ public class RecruitmentController {
     private final RecruitmentService recruitmentService;
 
     @PostMapping("/register")
-    public ResponseEntity<BfResponse<?>> registerRecruitment(@AuthenticationPrincipal CompanyDetailsImpl userDetails,
+    public ResponseEntity<BfResponse<?>> registerRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                              @RequestBody RecruitmentRequestDto requestDto,
                                                              @RequestPart("recruitmentImg") MultipartFile img) {
         recruitmentService.createRecruitment(userDetails, requestDto, img);
@@ -31,7 +31,7 @@ public class RecruitmentController {
     }
 
     @PostMapping("/update/{recruitmentId}")
-    public ResponseEntity<BfResponse<?>> updateRecruitment(@AuthenticationPrincipal CompanyDetailsImpl userDetails,
+    public ResponseEntity<BfResponse<?>> updateRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                            @PathVariable Integer recruitmentId,
                                                            @RequestBody RecruitmentRequestDto requestDto,
                                                            @RequestPart MultipartFile img) {
@@ -40,7 +40,7 @@ public class RecruitmentController {
     }
 
     @PostMapping("/delete/{recruitmentId}")
-    public ResponseEntity<BfResponse<?>> deleteRecruitment(@AuthenticationPrincipal CompanyDetailsImpl userDetails,
+    public ResponseEntity<BfResponse<?>> deleteRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                            @PathVariable Integer recruitmentId,
                                                            @RequestBody String reason) {
         recruitmentService.deleteRecruitment(userDetails, recruitmentId, reason);
@@ -48,13 +48,13 @@ public class RecruitmentController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<BfResponse<List<RecruitmentResponseDto>>> listRecruitments(@AuthenticationPrincipal CompanyDetailsImpl userDetails) {
+    public ResponseEntity<BfResponse<List<RecruitmentResponseDto>>> listRecruitments(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<RecruitmentResponseDto> recruitments = recruitmentService.getRecruitments(userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, recruitments));
     }
 
     @GetMapping("/detail/{recruitmentId}")
-    public ResponseEntity<BfResponse<RecruitmentResponseDto>> getRecruitmentDetail(@AuthenticationPrincipal CompanyDetailsImpl userDetails,
+    public ResponseEntity<BfResponse<RecruitmentResponseDto>> getRecruitmentDetail(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                                    @PathVariable("recruitmentId") int recruitmentId) {
         RecruitmentResponseDto recruitmentDetail = recruitmentService.getRecruitmentDetail(userDetails, recruitmentId);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, recruitmentDetail));

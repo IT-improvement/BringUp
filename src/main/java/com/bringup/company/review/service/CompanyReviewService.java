@@ -1,6 +1,6 @@
 package com.bringup.company.review.service;
 
-import com.bringup.common.security.service.CompanyDetailsImpl;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.review.entity.CompanyReview;
 import com.bringup.company.review.repository.CompanyReviewRepository;
 import com.bringup.member.user.domain.repository.UserRepository;
@@ -16,12 +16,12 @@ public class CompanyReviewService {
     private final CompanyReviewRepository companyReviewRepository;
     private final UserRepository userRepository;
 
-    public List<CompanyReview> getCompanyReviews(CompanyDetailsImpl userDetails) {
+    public List<CompanyReview> getCompanyReviews(UserDetailsImpl userDetails) {
         return companyReviewRepository.findAllByCompanyCompanyId(userDetails.getId());
     }
 
     @Transactional
-    public void deleteCompanyReview(CompanyDetailsImpl userDetails, Integer reviewIndex, String reason) {
+    public void deleteCompanyReview(UserDetailsImpl userDetails, Integer reviewIndex, String reason) {
         CompanyReview review = companyReviewRepository.findById(reviewIndex)
                 .orElseThrow(() -> new RuntimeException("Review not found"));
         if (review.getUser().getUserEmail().equals(userDetails.getUsername())) {
