@@ -13,7 +13,7 @@ public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "company_id")
+    @Column(name = "company_index")
     private Integer companyId;
 
     @Column(name = "manager_email", nullable = false)
