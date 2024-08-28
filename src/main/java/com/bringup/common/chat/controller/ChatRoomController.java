@@ -21,7 +21,7 @@ public class ChatRoomController {
 
     // 채팅 리스트 확인
     // "/" 로 요청이 들어오면 전체 채팅방 리스트를 담아서 return
-    @GetMapping("/")
+    @GetMapping("/chat")
     public String ChatRoomList(Model model){
 
         model.addAttribute("list",repository.findAllRoom());
