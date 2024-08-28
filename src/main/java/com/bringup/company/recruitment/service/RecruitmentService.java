@@ -3,6 +3,7 @@ package com.bringup.company.recruitment.service;
 import com.bringup.admin.notify.service.NotificationService;
 import com.bringup.common.enums.NotificationType;
 import com.bringup.common.enums.RolesType;
+import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.recruitment.dto.request.RecruitmentRequestDto;
 import com.bringup.company.recruitment.dto.response.RecruitmentResponseDto;
@@ -41,6 +42,7 @@ public class RecruitmentService {
     private final CompanyRepository companyRepository;
     private final RabbitTemplate rabbitTemplate;
     private final NotificationService notificationService;
+    private final ImageService imageService;
 
     public List<RecruitmentResponseDto> getRecruitments(UserDetailsImpl userDetails) {
         return recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId()).stream()
@@ -57,7 +59,7 @@ public class RecruitmentService {
         recruitment.setCompany(company);
         recruitment.setRecruitmentTitle(requestDto.getRecruitmentTitle());
         recruitment.setRecruitmentType(requestDto.getRecruitmentType());
-        recruitment.setRecruitmentImg(saveRecruitmentImage(img));
+        recruitment.setRecruitmentImg(imageService.upLoadImage(img));
         recruitment.setCategory(requestDto.getCategory());
         recruitment.setSkill(requestDto.getSkill());
 
@@ -84,7 +86,7 @@ public class RecruitmentService {
         );*/
     }
 
-    private String saveRecruitmentImage(MultipartFile img) {
+    /*private String saveRecruitmentImage(MultipartFile img) {
         if (img.isEmpty()) {
             return null;
         }
@@ -102,7 +104,7 @@ public class RecruitmentService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to store image", e);
         }
-    }
+    }*/
 
     @Transactional
     public void updateRecruitment(UserDetailsImpl userDetails, Integer recruitmentIndex, RecruitmentRequestDto requestDto, MultipartFile img) {
@@ -115,7 +117,7 @@ public class RecruitmentService {
 
         recruitment.setRecruitmentType(requestDto.getRecruitmentType());
         recruitment.setRecruitmentTitle(requestDto.getRecruitmentTitle());
-        recruitment.setRecruitmentImg(saveRecruitmentImage(img));
+        recruitment.setRecruitmentImg(imageService.upLoadImage(img));
         recruitment.setCategory(requestDto.getCategory());
         recruitment.setSkill(requestDto.getSkill());
         recruitment.setStartDate(requestDto.getStartDate());
