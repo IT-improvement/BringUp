@@ -30,7 +30,7 @@ public class UserRecruitmentController {
         }
 
         // 인증된 사용자라면 recruitmentList.jsp 페이지를 렌더링
-        return "member/user/potofolio";
+        return "member/user/recruitmentList";
     }
 
     @GetMapping
