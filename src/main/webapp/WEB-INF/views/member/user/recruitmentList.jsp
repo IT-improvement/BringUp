@@ -27,7 +27,7 @@
 
 <body class="d-flex flex-column min-vh-100">
 <!-- header-->
-<jsp:include page="/WEB-INF/views/member/header/member_header.jsp" flush="true" />
+<%--<jsp:include page="/WEB-INF/views/member/header/member_header.jsp" flush="true" />--%>
 
 <main class="flex-grow-1">
 	<div class="container mt-5">
