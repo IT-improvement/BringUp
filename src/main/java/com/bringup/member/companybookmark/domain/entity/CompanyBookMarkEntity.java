@@ -9,14 +9,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name = "companybookmark")
+@Entity(name = "company_bookmark")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
 public class CompanyBookMarkEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int companybookmarkIndex;
-    private String managerEmail;
-    private String userEmail;
+    private int companyIndex;
+    private int userIndex;
+    private String status;
 }
