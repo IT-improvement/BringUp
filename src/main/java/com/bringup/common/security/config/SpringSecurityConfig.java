@@ -133,7 +133,9 @@ public class SpringSecurityConfig {
                 antMatcher("/member/**"),
                 antMatcher("/ws/**"),
 
-                antMatcher("/github/**")// 정적 리소스
+                antMatcher("/github/**"),// 정적 리소스
+
+                antMatcher(GET, "image/**")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
