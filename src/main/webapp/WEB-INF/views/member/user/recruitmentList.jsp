@@ -27,7 +27,7 @@
 
 <body class="d-flex flex-column min-vh-100">
 <!-- header-->
-<%--<jsp:include page="/WEB-INF/views/member/header/member_header.jsp" flush="true" />--%>
+	<jsp:include page="/WEB-INF/views/member/header/member_header.jsp" flush="true" />
 
 <main class="flex-grow-1">
 	<div class="container mt-5">
@@ -60,6 +60,5 @@
 <div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
 
 <!-- 별도의 JavaScript 파일을 로드 -->
-<script src="/resources/static/script/member/recruitment.js"></script>
 </body>
 </html>
