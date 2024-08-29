@@ -5,6 +5,7 @@ import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.enums.RolesType;
 import com.bringup.common.event.Service.CertificateService;
 import com.bringup.common.event.exception.CertificateException;
+import com.bringup.common.image.ImageService;
 import com.bringup.common.security.jwt.JwtProvider;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.user.dto.request.JoinDto;
@@ -51,6 +52,7 @@ public class CompanyService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final CertificateService certificateService;
+    private final ImageService imageService;
 
     /**
      * 회원 등록
@@ -88,7 +90,7 @@ public class CompanyService {
         company.setCompanyHistory(joinDto.getC_history());
         company.setCompanyScale(joinDto.getC_scale());
         company.setCompanyVision(joinDto.getC_vision());
-        company.setCompanyLogo(saveLogoImage(logo));
+        company.setCompanyLogo(imageService.upLoadImage(logo));
         company.setCompanySize(joinDto.getC_size());
         company.setCompanyOpendate(joinDto.getCompany_opendate());
         company.setCompanyLicense(joinDto.getCompany_licence());
@@ -114,7 +116,7 @@ public class CompanyService {
         return savedCompany;
     }
 
-    private String saveLogoImage(MultipartFile logo) {
+/*    private String saveLogoImage(MultipartFile logo) {
         if (logo.isEmpty()) {
             return null;
         }
@@ -132,7 +134,7 @@ public class CompanyService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to store logo image", e);
         }
-    }
+    }*/
 
     private void saveSalary(int companyId, SalaryDto salaryDto) {
         Salary salary = new Salary();
