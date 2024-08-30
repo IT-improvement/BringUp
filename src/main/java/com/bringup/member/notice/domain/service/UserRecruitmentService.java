@@ -74,6 +74,7 @@ public class UserRecruitmentService {
         UserRecruitmentDto dto = new UserRecruitmentDto();
         dto.setRecruitmentIndex(recruitment.getRecruitmentIndex());
         dto.setCompanyId(BigInteger.valueOf(recruitment.getCompany().getCompanyId()));
+        dto.setRecruitmentTitle(recruitment.getRecruitmentTitle());
         dto.setRecruitmentType(recruitment.getRecruitmentType().name());
         dto.setCategory(recruitment.getCategory());
         dto.setSkill(recruitment.getSkill());
