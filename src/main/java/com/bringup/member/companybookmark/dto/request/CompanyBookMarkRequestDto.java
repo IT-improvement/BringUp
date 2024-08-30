@@ -5,7 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CompanyBookMarkDto {
+public class CompanyBookMarkRequestDto {
     private int userIndex;
     private int companyIndex;
+    private String status;
 }
