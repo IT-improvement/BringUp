@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <!-- Include the socket.js script here -->
+    <script src="./socket.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<!-- HTML elements that correspond to the IDs and classes used in the script -->
+<div id="username-page">
+    <form id="usernameForm">
+        <input type="text" id="name" placeholder="Enter your name" required>
+        <button type="submit">Join Chat</button>
+    </form>
+</div>
+
+<div id="chat-page" class="hidden">
+    <ul id="messageArea"></ul>
+    <form id="messageForm">
+        <input type="text" id="message" placeholder="Type a message..." required>
+        <button type="submit">Send</button>
+    </form>
+    <div class="connecting">Connecting...</div>
+</div>
+</body>
+</html>
