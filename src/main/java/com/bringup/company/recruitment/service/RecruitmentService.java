@@ -40,9 +40,6 @@ public class RecruitmentService {
 
     private final RecruitmentRepository recruitmentRepository;
     private final CompanyRepository companyRepository;
-    private final RabbitTemplate rabbitTemplate;
-    private final NotificationService notificationService;
-    private final ImageService imageService;
 
     public List<RecruitmentResponseDto> getRecruitments(UserDetailsImpl userDetails) {
         return recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId()).stream()
@@ -59,7 +56,6 @@ public class RecruitmentService {
         recruitment.setCompany(company);
         recruitment.setRecruitmentTitle(requestDto.getRecruitmentTitle());
         recruitment.setRecruitmentType(requestDto.getRecruitmentType());
-        recruitment.setRecruitmentImg(imageService.upLoadImage(img));
         recruitment.setCategory(requestDto.getCategory());
         recruitment.setSkill(requestDto.getSkill());
 
@@ -117,7 +113,6 @@ public class RecruitmentService {
 
         recruitment.setRecruitmentType(requestDto.getRecruitmentType());
         recruitment.setRecruitmentTitle(requestDto.getRecruitmentTitle());
-        recruitment.setRecruitmentImg(imageService.upLoadImage(img));
         recruitment.setCategory(requestDto.getCategory());
         recruitment.setSkill(requestDto.getSkill());
         recruitment.setStartDate(requestDto.getStartDate());
@@ -173,12 +168,12 @@ public class RecruitmentService {
 
         return convertToDto(recruitment);
     }
-
+/*
     private void sendApprovalRequestToAdmin(Recruitment recruitment, String actionType) {
         String exchange = "approvalExchange";
         String routingKey = "approval." + actionType;
         rabbitTemplate.convertAndSend(exchange, routingKey, recruitment);
-    }
+    }*/
 
     private LocalDate calculatePeriod(LocalDate startDate, String periodDuration) {
         int durationInMonths = Integer.parseInt(periodDuration.replace("months", "").trim());
