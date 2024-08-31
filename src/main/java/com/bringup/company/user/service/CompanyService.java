@@ -100,6 +100,16 @@ public class CompanyService {
         company.setCompanyFinancialStatements(joinDto.getFinancial_stat());
         company.setOpencvKey(joinDto.getCv_key());
 
+        // 여러 이미지 파일 업로드 처리
+        if (joinDto.getCompanyImg() != null && joinDto.getCompanyImg().length > 0) {
+            StringBuilder imgPaths = new StringBuilder();
+            for (MultipartFile img : joinDto.getCompanyImg()) {
+                String imgPath = imageService.upLoadImage(img);
+                imgPaths.append(imgPath).append(",");  // 이미지 경로를 쉼표로 구분하여 저장
+            }
+            company.setCompanyImg(imgPaths.toString());
+        }
+
         company.setRole(RolesType.ROLE_COMPANY);
         company.setStatus("활성");
 

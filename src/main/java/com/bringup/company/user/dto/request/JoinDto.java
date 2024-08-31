@@ -38,6 +38,7 @@ public class JoinDto {
     private String c_scale; // 회사 규모(중소/중견/대/공)
     private String c_vision; // 회사 비전
     private MultipartFile c_logo; // 회사 로고
+    private MultipartFile[] companyImg;
     private int c_size; // 직원 수
     private String c_homePage; // 회사 홈페이지
     private String subsidiary; // 계열사

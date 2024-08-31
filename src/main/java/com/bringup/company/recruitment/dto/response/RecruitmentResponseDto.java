@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 public class RecruitmentResponseDto {
     private Integer recruitmentIndex;
     private String recruitmentTitle;
-    private String recruitmentImg;
     private String managerEmail;
     private RecruitmentType recruitmentType; // 정규직, 비정규직, 아르바이트 중 하나
     private String category;

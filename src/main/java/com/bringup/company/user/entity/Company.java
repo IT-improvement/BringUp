@@ -70,6 +70,9 @@ public class Company {
     @Column(name = "company_logo")
     private String companyLogo;
 
+    @Column(name = "company_img")
+    private String companyImg;
+
     @Column(name = "company_homepage")
     private String companyHomepage;
 
