@@ -43,103 +43,107 @@
     <!-- 메인 JS -->
     <!-- <script src="/resources/script/company/main.js"></script> -->
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <%--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>--%>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 
-	<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
+<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
-	<main class="flex-grow-1">
-		<div class="container my-5">
-			<h2 class="mb-4">인재 추천</h2>
+<main class="flex-grow-1 m-4">
+	<div class="headhunt-list container" style="max-width: 1260px;">
+		<h2>인재 추천</h2>
 
-			<h3 class="mb-3">프리미엄</h3>
-			<div id="premiumSection" class="d-flex justify-content-between mb-5">
-			</div>
-
-			<h3 class="mb-3">일반</h3>
-			<div id="generalSection">
-			</div>
+		<h3 class="mb-3">프리미엄</h3>
+		<div id="premiumSection" class="d-flex justify-content-between mb-5">
+			<!-- 프리미엄 인재 리스트가 여기 표시됩니다 -->
 		</div>
-	</main>
 
-	<jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
+		<h3 class="mb-3">일반</h3>
+		<div id="generalSection">
+			<!-- 일반 인재 리스트가 여기 표시됩니다 -->
+		</div>
+	</div>
+</main>
 
-    <!-- 맨 위로 -->
-    <div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
+<jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
 
-	<script>
-		$(document).ready(function () {
-			const accessToken = localStorage.getItem("accessToken");
+<!-- 맨 위로 -->
+<div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
 
-			if (!accessToken) {
-				console.log("토큰이 없습니다. 로그인이 필요합니다.");
-				window.location.href = "company/login"; // 로그인 페이지로 리다이렉트
-				return;
+<script>
+	$(document).ready(function () {
+		const accessToken = localStorage.getItem("accessToken");
+
+		if (!accessToken) {
+			console.log("토큰이 없습니다. 로그인이 필요합니다.");
+			window.location.href = "company/login"; // 로그인 페이지로 리다이렉트
+			return;
+		}
+
+		// 멤버십 가입유저 랜덤 5개 추출 리스트
+		$.ajax({
+			url: '/com/headhunt/recommend',
+			method: 'GET',
+			headers: {
+				'Authorization': `Bearer `+ accessToken
+			},
+			success: function (response) {
+				let recommendations = response.data;
+				recommendations.forEach(function (cv) {
+					let imgSrc = cv.cvImage ? `/static/logos/${cv.cvImage}` : '/image/default.png';
+					let card = `
+                        <div class="card mx-2" style="width: 18rem;">
+                            <img src="${imgSrc}" class="card-img-top" alt="CV Image">
+                            <div class="card-body">
+                                <h5 class="card-title">${cv.education}</h5>
+                                <p class="card-text">${cv.userAddress}</p>
+                                <p class="card-text">${cv.skill}</p>
+                            </div>
+                        </div>`;
+					$('#premiumSection').append(card);
+				});
+			},
+			error: function (error) {
+				console.log("Error fetching premium CVs: ", error);
 			}
-
-			// 멤버십 가입유저 랜덤 5개 추출 리스트
-			$.ajax({
-				url: '/com/headhunt/recommend',
-				method: 'GET',
-				headers: {
-					'Authorization': `Bearer `+ accessToken
-				},
-				success: function (response) {
-					let recommendations = response.data;
-					recommendations.forEach(function (cv) {
-						let card = `
-                            <div class="card mx-2" style="width: 18rem;">
-                                <img src="/static/logos/${cv.cvImage}" class="card-img-top" alt="CV Image">
-                                <div class="card-body">
-                                    <h5 class="card-title">${cv.education}</h5>
-                                    <p class="card-text">${cv.userAddress}</p>
-                                    <p class="card-text">${cv.skill}</p>
-                                </div>
-                            </div>`;
-						$('#premiumSection').append(card);
-					});
-				},
-				error: function (error) {
-					console.log("Error fetching premium CVs: ", error);
-				}
-			});
-
-			// CV 리스트업
-			$.ajax({
-				url: '/com/headhunt/list',
-				method: 'GET',
-				headers: {
-					'Authorization': `Bearer `+ accessToken
-				},
-				success: function (response) {
-					let allCVs = response.data;
-					allCVs.forEach(function (cv) {
-						let card = `
-                            <div class="card mb-3">
-                                <div class="row g-0">
-                                    <div class="col-md-4">
-                                        <img src="/static/logos/${cv.cvImage}" class="img-fluid rounded-start" alt="CV Image">
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="card-body">
-                                            <h5 class="card-title">${cv.education}</h5>
-                                            <p class="card-text">${cv.userAddress}</p>
-                                            <p class="card-text">${cv.skill}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>`;
-						$('#generalSection').append(card);
-					});
-				},
-				error: function (error) {
-					console.log("Error fetching general CVs: ", error);
-				}
-			});
 		});
-	</script>
+
+		// CV 리스트업
+		$.ajax({
+			url: '/com/headhunt/list',
+			method: 'GET',
+			headers: {
+				'Authorization': `Bearer `+ accessToken
+			},
+			success: function (response) {
+				let allCVs = response.data;
+				allCVs.forEach(function (cv) {
+					let imgSrc = cv.cvImage ? `/static/image/${cv.cvImage}` : '/static/image/default.png';
+					let card = `
+                        <div class="card mb-3">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img src="${imgSrc}" class="img-fluid rounded-start" alt="CV Image">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${cv.education}</h5>
+                                        <p class="card-text">Address : ${cv.userAddress}</p>
+                                        <p class="card-text">skill : ${cv.skill}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+					$('#generalSection').append(card);
+				});
+			},
+			error: function (error) {
+				console.log("Error fetching general CVs: ", error);
+			}
+		});
+	});
+</script>
 
 </body>
 </html>
