@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    // 멤버십 가입유저 랜덤 5개 추출 리스트
+    // 프리미엄 유저 목록 가져오기
     fetch('/com/headhunt/recommend', {
         method: 'GET',
         headers: {
@@ -22,12 +22,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 recommendations.forEach(function (cv) {
                     let imgSrc = cv.cvImage ? `/static/logos/${cv.cvImage}` : '/image/default.png';
                     let card = `
-                    <div class="card mx-2" style="width: 18rem;">
+                    <div class="card">
                         <img src="${imgSrc}" class="card-img-top" alt="CV Image">
                         <div class="card-body">
                             <h5 class="card-title">${cv.education}</h5>
-                            <p class="card-text">${cv.userAddress}</p>
-                            <p class="card-text">${cv.skill}</p>
+                            <p class="card-text">Address: ${cv.userAddress}</p>
+                            <p class="card-text">Skill: ${cv.skill}</p>
                         </div>
                     </div>`;
                     document.getElementById('premiumSection').insertAdjacentHTML('beforeend', card);
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('premiumSection').innerHTML = "<p>추천할 유저가 없습니다.</p>";
         });
 
-    // CV 리스트업
+    // 일반 유저 목록 가져오기
     fetch('/com/headhunt/list', {
         method: 'GET',
         headers: {
@@ -56,18 +56,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 allCVs.forEach(function (cv) {
                     let imgSrc = cv.cvImage ? '/resources/image/' + cv.cvImage : '/resources/image/default.png';
                     let card = `
-                    <div class="card mb-3">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img src="${imgSrc}" class="img-fluid rounded-start" alt="CV Image" style="width: 200px; height: 200px; object-fit: cover;">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title">${cv.education}</h5>
-                                    <p class="card-text">Address : ${cv.userAddress}</p>
-                                    <p class="card-text">skill : ${cv.skill}</p>
-                                </div>
-                            </div>
+                    <div class="card">
+                        <img src="${imgSrc}" class="img-fluid rounded-start" alt="CV Image">
+                        <div class="card-body">
+                            <h5 class="card-title">${cv.education}</h5>
+                            <p class="card-text">Address: ${cv.userAddress}</p>
+                            <p class="card-text">Skill: ${cv.skill}</p>
                         </div>
                     </div>`;
                     document.getElementById('generalSection').insertAdjacentHTML('beforeend', card);
