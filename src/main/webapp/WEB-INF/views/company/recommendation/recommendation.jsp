@@ -43,10 +43,13 @@
 	<!-- 헤드헌트 JS -->
 	<script src="/resources/script/company/headhunt.js"></script>
 
+	<!-- 헤드헌트 CSS -->
+	<link rel="stylesheet" type="text/css" href="/resources/style/company/headhunt/headhunt.css">
+
     <!-- 메인 JS -->
     <!-- <script src="/resources/script/company/main.js"></script> -->
 
-    <%--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>--%>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -58,13 +61,13 @@
 		<h2>인재 추천</h2>
 
 		<h3 class="mb-3">프리미엄</h3>
-		<div id="premiumSection" class="d-flex justify-content-between mb-5">
-			<!-- 프리미엄 인재 리스트가 여기 표시됩니다 -->
+		<div id="premiumSection" class="row mb-5">
+			<!-- 프리미엄 카드가 여기에 삽입됩니다 -->
 		</div>
 
 		<h3 class="mb-3">일반</h3>
-		<div id="generalSection">
-			<!-- 일반 인재 리스트가 여기 표시됩니다 -->
+		<div id="generalSection" class="row">
+			<!-- 일반 카드가 여기에 삽입됩니다 -->
 		</div>
 	</div>
 </main>
