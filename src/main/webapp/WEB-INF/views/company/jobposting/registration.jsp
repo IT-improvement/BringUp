@@ -58,6 +58,10 @@
 			<div class="card-body">
 				<form action="/com/recruitment/register" method="post">
 					<div class="mb-3">
+						<label for="recruitmentTitle" class="form-label">공고 제목</label>
+						<input type="text" class="form-control" id="recruitmentTitle" name="recruitmentTitle" required>
+					</div>
+					<div class="mb-3">
 						<label for="recruitmentType" class="form-label">채용 형태</label>
 						<select class="form-select" id="recruitmentType" name="recruitmentType">
 							<option value="정규직">정규직</option>
@@ -65,16 +69,28 @@
 						</select>
 					</div>
 					<div class="mb-3">
-						<label for="recruitmentTitle" class="form-label">공고 제목</label>
-						<input type="text" class="form-control" id="recruitmentTitle" name="recruitmentTitle" required>
-					</div>
-					<div class="mb-3">
 						<label for="category" class="form-label">카테고리</label>
 						<input type="text" class="form-control" id="category" name="category" required>
 					</div>
 					<div class="mb-3">
+						<label for="recruitmentContent" class="form-label">업무 내용</label>
+						<textarea class="form-control" id="recruitmentContent" name="recruitmentContent" rows="10" required></textarea>
+					</div>
+					<div class="mb-3">
 						<label for="skill" class="form-label">필요 기술</label>
 						<input type="text" class="form-control" id="skill" name="skill" required>
+					</div>
+					<div class="mb-3">
+						<label for="preferential" class="form-label">우대 사항</label>
+						<textarea class="form-control" id="preferential" name="preferential" rows="10" required></textarea>
+					</div>
+					<div class="mb-3">
+						<label for="career" class="form-label">경력</label>
+						<input type="text" class="form-control" id="career" name="career" required>
+					</div>
+					<div class="mb-3">
+						<label for="salary" class="form-label">최소 연봉</label>
+						<input type="number" class="form-control" id="salary" name="salary" required>
 					</div>
 					<div class="mb-3">
 						<label for="startDate" class="form-label">시작 날짜</label>
@@ -83,13 +99,6 @@
 					<div class="mb-3">
 						<label for="period" class="form-label">기간</label>
 						<input type="text" class="form-control" id="period" name="period" required>
-					</div>
-					<div class="mb-3">
-						<label for="recruitment_img" class="form-label">공고 이미지</label>
-						<div class="input-group">
-							<input type="file" class="form-control" id="recruitment_img" name="recruitment_img" required>
-							<button type="button" class="btn btn-outline-secondary" onclick="previewImage()">미리보기</button>
-						</div>
 					</div>
 					<button type="button" class="btn btn-secondary" onclick="location.href='/company/jobpost/management'">돌아가기</button>
 					<button type="submit" class="btn btn-primary" style="float: right;">등록</button>
