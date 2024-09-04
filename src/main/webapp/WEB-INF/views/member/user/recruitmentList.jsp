@@ -204,7 +204,8 @@
 					<div class="ur_tech-stack">
 						<i class="bi bi-code-slash"></i>
 						기술 스택
-						<input type="text" placeholder="직무 스킬을 검색해보세요" />
+						<input type="text" id="tech-search" placeholder="직무 스킬을 검색해보세요" />
+						<div id="tech-results" class="tech-results-container"></div>
 					</div>
 					<div class="ur_tech-tags">
 						<span>Python</span>
@@ -393,91 +394,260 @@
 				});
 			});
 
-			// 직군 및 직무 처리
-			const duties = {
-				'전체': ['전체'],
-				'개발': ['백엔드/서버 개발자', '프론트엔드/웹퍼블리셔', 'SW 엔지니어', '안드로이드 개발자', 'iOS 개발자', '크로스플랫폼 앱 개발자', '데이터 엔지니어'],
-				'게임개발': ['게임 서버 개발자', '게임 클라이언트 개발자', '게임 기획자', '게임 그래픽 디자이너', '게임 아티스트', '모바일 게임 개발자', '게임 운영자'],
-				'디자인': ['프로덕트 디자이너', '웹/앱 디자이너', '그래픽 디자이너', 'BI/BX 디자이너', '광고 디자이너', '영상/모션 디자이너', '운영 디자이너'],
-				'기획': ['서비스 기획자', 'PO/PM', '비즈니스 분석가', '사업개발/기획자', '전략 기획자', '해외 사업개발/기획자', '상품 기획자/MD'],
-				'마케팅': ['퍼포먼스 마케터', '콘텐츠 마케터', '디지털 마케터', '마케팅 기획자', '브랜드 마케터', '광고 기획자', 'CRM 전문가'],
-				'경영/인사': ['경영지원', '회계/경리', '조직관리', '정보보호 담당자', '인사/평가', '교육', '채용담당자'],
-				'영업': ['기업영업', '영업 관리자', '기술영업', '솔루션 컨설턴트', '세일즈']
-			};
+			document.addEventListener('DOMContentLoaded', function () {
+				const accessToken = localStorage.getItem("accessToken");
+				console.log("Access token: " + accessToken);
+				const url = "/recruitment/list"; // 공고 리스트를 가져오는 API 엔드포인트
 
-			const jobList = document.querySelectorAll('.ur_filter-dropdown .job-section ul li');
-			const dutyListContainer = document.querySelector('.ur_filter-dropdown .duty-section ul');
-			const filterLabel = document.querySelector('#job-category-filter > span');
-			const selectedTagContainer = document.createElement('div');
-			selectedTagContainer.className = 'selected-tags';
-			filterLabel.parentElement.appendChild(selectedTagContainer);
+				if (accessToken) {
+					fetch(url, {
+						method: 'GET',
+						headers: {
+							'Authorization': `Bearer ` + accessToken,
+							'Content-Type': 'application/json' // JSON 형식으로 요청
+						}
+					})
+							.then(response => {
+								if (!response.ok) {
+									throw new Error('Network response was not ok');
+								}
+								return response.json();
+							})
+							.then(data => {
+								console.log("Received recruitment data:", data);
+								if (Array.isArray(data)) {
+									renderRecruitmentList(data);
+								} else if (Array.isArray(data.data)) {
+									renderRecruitmentList(data.data);
+								} else {
+									console.error("Unexpected data format:", data);
+								}
+							})
+							.catch(error => {
+								console.error('Error fetching recruitment data:', error);
+							});
+				} else {
+					console.log("Access token not found.");
+				}
 
-			jobList.forEach(function (jobItem) {
-				jobItem.addEventListener('click', function () {
-					const selectedJob = this.dataset.job;
-					const relatedDuties = duties[selectedJob] || [];
+				// 직군 및 직무 처리
+				const duties = {
+					'전체': ['전체'],
+					'개발': ['백엔드/서버 개발자', '프론트엔드/웹퍼블리셔', 'SW 엔지니어', '안드로이드 개발자', 'iOS 개발자', '크로스플랫폼 앱 개발자', '데이터 엔지니어'],
+					'게임개발': ['게임 서버 개발자', '게임 클라이언트 개발자', '게임 기획자', '게임 그래픽 디자이너', '게임 아티스트', '모바일 게임 개발자', '게임 운영자'],
+					'디자인': ['프로덕트 디자이너', '웹/앱 디자이너', '그래픽 디자이너', 'BI/BX 디자이너', '광고 디자이너', '영상/모션 디자이너', '운영 디자이너'],
+					'기획': ['서비스 기획자', 'PO/PM', '비즈니스 분석가', '사업개발/기획자', '전략 기획자', '해외 사업개발/기획자', '상품 기획자/MD'],
+					'마케팅': ['퍼포먼스 마케터', '콘텐츠 마케터', '디지털 마케터', '마케팅 기획자', '브랜드 마케터', '광고 기획자', 'CRM 전문가'],
+					'경영/인사': ['경영지원', '회계/경리', '조직관리', '정보보호 담당자', '인사/평가', '교육', '채용담당자'],
+					'영업': ['기업영업', '영업 관리자', '기술영업', '솔루션 컨설턴트', '세일즈']
+				};
 
-					// 직무 리스트를 업데이트
-					dutyListContainer.innerHTML = '';
-					relatedDuties.forEach(function (duty, index) {
-						const dutyId = `duty-checkbox${index + 1}`;
-						const dutyItem = document.createElement('li');
+				const jobList = document.querySelectorAll('.ur_filter-dropdown .job-section ul li');
+				const dutyListContainer = document.querySelector('.ur_filter-dropdown .duty-section ul');
+				const filterLabel = document.querySelector('#job-category-filter > span');
+				const selectedTagContainer = document.createElement('div');
+				selectedTagContainer.className = 'selected-tags';
+				filterLabel.parentElement.appendChild(selectedTagContainer);
 
-						const dutyLabel = document.createElement('label');
-						dutyLabel.textContent = duty;
-						dutyLabel.setAttribute('for', dutyId);
+				jobList.forEach(function (jobItem) {
+					jobItem.addEventListener('click', function () {
+						const selectedJob = this.dataset.job;
+						const relatedDuties = duties[selectedJob] || [];
 
-						const dutyCheckbox = document.createElement('input');
-						dutyCheckbox.type = 'checkbox';
-						dutyCheckbox.id = dutyId;
+						// 직무 리스트를 업데이트
+						dutyListContainer.innerHTML = '';
+						relatedDuties.forEach(function (duty, index) {
+							const dutyId = `duty-checkbox${index + 1}`;
+							const dutyItem = document.createElement('li');
 
-						dutyItem.appendChild(dutyCheckbox);
-						dutyItem.appendChild(dutyLabel);
+							const dutyLabel = document.createElement('label');
+							dutyLabel.textContent = duty;
+							dutyLabel.setAttribute('for', dutyId);
 
-						dutyListContainer.appendChild(dutyItem);
+							const dutyCheckbox = document.createElement('input');
+							dutyCheckbox.type = 'checkbox';
+							dutyCheckbox.id = dutyId;
+
+							dutyItem.appendChild(dutyCheckbox);
+							dutyItem.appendChild(dutyLabel);
+
+							dutyListContainer.appendChild(dutyItem);
+						});
+
+						// 태그 업데이트
+						updateSelectedTags(selectedJob, []);
+
+						// 체크박스 이벤트 추가
+						updateCheckboxEvents(selectedJob);
+					});
+				});
+
+				function updateCheckboxEvents(selectedJob) {
+					const dutyCheckboxes = document.querySelectorAll('.ur_filter-dropdown .duty-section ul input[type="checkbox"]');
+					dutyCheckboxes.forEach(function (checkbox) {
+						checkbox.addEventListener('change', function () {
+							const selectedDuties = Array.from(dutyCheckboxes)
+									.filter(cb => cb.checked)
+									.map(cb => cb.nextElementSibling.textContent.trim());
+							updateSelectedTags(selectedJob, selectedDuties);
+						});
+					});
+				}
+
+				function updateSelectedTags(selectedJob, selectedDuties) {
+					selectedTagContainer.innerHTML = '';
+
+					const jobTag = document.createElement('span');
+					jobTag.className = 'tag';
+					jobTag.textContent = selectedJob;
+					selectedTagContainer.appendChild(jobTag);
+
+					selectedDuties.forEach(function (duty) {
+						const dutyTag = document.createElement('span');
+						dutyTag.className = 'tag';
+						dutyTag.textContent = duty;
+						selectedTagContainer.appendChild(dutyTag);
+					});
+				}
+
+				// 기본 이벤트 설정
+				updateCheckboxEvents('전체');
+
+				// 경력 및 지역 처리
+				const experiences = [
+					'전체', '경력무관', '인턴', '신입 (1년 이하)', '주니어 (1~3년)', '미들 (4~8년)', '시니어 (9년 이상)', 'Lead 레벨'
+				];
+
+				const locations = [
+					'전체', '서울', '강남', '마포', '구로/가산', '경기', '판교/분당', '그 외'
+				];
+
+				const experienceListContainer = document.querySelector('.ur_filter-dropdown .experience-section ul');
+				const locationListContainer = document.querySelector('.ur_filter-dropdown .location-section ul');
+				const experienceLocationTagContainer = document.createElement('div');
+				experienceLocationTagContainer.className = 'selected-tags';
+				const experienceLocationFilter = document.querySelector('#experience-location-filter > span');
+				experienceLocationFilter.parentElement.appendChild(experienceLocationTagContainer);
+
+				function updateExperienceLocationTags() {
+					experienceLocationTagContainer.innerHTML = ''; // 기존 태그 초기화
+
+					const selectedExperiences = Array.from(experienceListContainer.querySelectorAll('input[type="checkbox"]:checked'))
+							.map(cb => cb.nextElementSibling.textContent.trim());
+
+					const selectedLocations = Array.from(locationListContainer.querySelectorAll('input[type="checkbox"]:checked'))
+							.map(cb => cb.nextElementSibling.textContent.trim());
+
+					// 경력 태그 추가
+					selectedExperiences.forEach(function (experience) {
+						const experienceTag = document.createElement('span');
+						experienceTag.className = 'tag';
+						experienceTag.textContent = experience;
+						experienceLocationTagContainer.appendChild(experienceTag);
 					});
 
-		
+					// 지역 태그 추가
+					selectedLocations.forEach(function (location) {
+						const locationTag = document.createElement('span');
+						locationTag.className = 'tag';
+						locationTag.textContent = location;
+						experienceLocationTagContainer.appendChild(locationTag);
+					});
+				}
 
-					// 태그 업데이트
-					updateSelectedTags(selectedJob, []);
+				// 경력 체크박스 생성 및 이벤트 바인딩
+				experiences.forEach(function (experience, index) {
+					const expId = `exp-checkbox${index + 1}`;
+					const expItem = document.createElement('li');
 
-					// 체크박스 이벤트 추가
-					updateCheckboxEvents(selectedJob);
+					const expLabel = document.createElement('label');
+					expLabel.textContent = experience;
+					expLabel.setAttribute('for', expId);
+
+					const expCheckbox = document.createElement('input');
+					expCheckbox.type = 'checkbox';
+					expCheckbox.id = expId;
+
+					expItem.appendChild(expCheckbox);
+					expItem.appendChild(expLabel);
+
+					experienceListContainer.appendChild(expItem);
 				});
+
+				// 지역 체크박스 생성 및 이벤트 바인딩
+				locations.forEach(function (location, index) {
+					const locId = `loc-checkbox${index + 1}`;
+					const locItem = document.createElement('li');
+
+					const locLabel = document.createElement('label');
+					locLabel.textContent = location;
+					locLabel.setAttribute('for', locId);
+
+					const locCheckbox = document.createElement('input');
+					locCheckbox.type = 'checkbox';
+					locCheckbox.id = locId;
+
+					locItem.appendChild(locCheckbox);
+					locItem.appendChild(locLabel);
+
+					locationListContainer.appendChild(locItem);
+				});
+
+				// 체크박스 변경 시 태그 업데이트
+				experienceListContainer.querySelectorAll('input[type="checkbox"]').forEach(function (checkbox) {
+					checkbox.addEventListener('change', updateExperienceLocationTags);
+				});
+
+				locationListContainer.querySelectorAll('input[type="checkbox"]').forEach(function (checkbox) {
+					checkbox.addEventListener('change', updateExperienceLocationTags);
+				});
+
 			});
 
-			function updateCheckboxEvents(selectedJob) {
-				const dutyCheckboxes = document.querySelectorAll('.ur_filter-dropdown .duty-section ul input[type="checkbox"]');
-				dutyCheckboxes.forEach(function (checkbox) {
-					checkbox.addEventListener('change', function () {
-						const selectedDuties = Array.from(dutyCheckboxes)
-								.filter(cb => cb.checked)
-								.map(cb => cb.nextElementSibling.textContent.trim());
-						updateSelectedTags(selectedJob, selectedDuties);
-					});
+			document.addEventListener('DOMContentLoaded', function () {
+				const techInput = document.getElementById('tech-search');
+				const selectedTechContainer = document.querySelector('.ur_tech-tags');
+
+				const techStack = [
+					'Python', 'JavaScript', 'React', 'Next.js', 'SQL', 'Slack', 'JIRA', 'Confluence',
+					'Java', 'C++', 'C#', 'Ruby', 'Go', 'Rust', 'TypeScript', 'Kotlin', 'Swift',
+					'PHP', 'Perl', 'Scala', 'Objective-C', 'R', 'Haskell', 'Elixir'
+				];
+
+				techInput.addEventListener('input', function () {
+					const query = techInput.value.toLowerCase();
+					selectedTechContainer.innerHTML = ''; // Clear existing tags before updating
+
+					if (query) {
+						const filteredTech = techStack.filter(tech => tech.toLowerCase().includes(query));
+
+						filteredTech.forEach(tech => {
+							const techElement = document.createElement('span');
+							techElement.textContent = tech;
+							techElement.classList.add('tech-tag'); // Optional: add a class for styling
+							selectedTechContainer.appendChild(techElement);
+
+							techElement.addEventListener('click', function () {
+								addTechTag(tech);
+								techInput.value = ''; // Clear input field after selection
+							});
+						});
+					}
 				});
-			}
 
-			function updateSelectedTags(selectedJob, selectedDuties) {
-				selectedTagContainer.innerHTML = '';
+				function addTechTag(tech) {
+					const existingTags = Array.from(selectedTechContainer.children).map(tag => tag.textContent);
 
-				const jobTag = document.createElement('span');
-				jobTag.className = 'tag';
-				jobTag.textContent = selectedJob;
-				selectedTagContainer.appendChild(jobTag);
+					if (!existingTags.includes(tech)) {
+						const techTag = document.createElement('span');
+						techTag.textContent = tech;
+						techTag.classList.add('tech-tag'); // Optional: add a class for styling
+						selectedTechContainer.appendChild(techTag);
+					}
+				}
+			});
 
-				selectedDuties.forEach(function (duty) {
-					const dutyTag = document.createElement('span');
-					dutyTag.className = 'tag';
-					dutyTag.textContent = duty;
-					selectedTagContainer.appendChild(dutyTag);
-				});
-			}
 
-			// 기본 이벤트 설정
-			updateCheckboxEvents('전체');
-		</script>
 		</script>
 		</body>
 		</html>
