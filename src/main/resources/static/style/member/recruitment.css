@@ -1,65 +1,325 @@
-/* 공통 스타일 */
-body {
-    font-family: 'Nunito Sans', sans-serif;
-    background-color: #f9f9f9;
+/* 검색 바 및 필터 그룹 스타일 */
+.ur_search-bar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f0f7ff;
 }
 
-.container {
-    max-width: 1000px;
+.ur_search-bar {
+    width: 100%;
+    max-width: 1200px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border: solid 1px;
 }
 
-.section-title {
-    font-size: 24px;
+.ur_search-input {
+    display: flex;
+    align-items: center;
+}
+
+.ur_search-input input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.ur_search-input input:focus {
+    border-color: #007bff;
+}
+
+.ur_search-button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    background-color: #333;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.ur_search-button:hover {
+    background-color: #007bff;
+}
+
+.ur_filter-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+}
+
+/* 필터 항목 스타일 */
+.ur_filter-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    cursor: pointer;
+    gap: 5px;
+    font-size: 16px;
+    position: relative;
+    width: 50%;
+    transition: border-color 0.3s ease;
+}
+
+.ur_filter-item:hover {
+    border-color: #007bff;
+}
+
+/* 필터 드롭다운 스타일 */
+.ur_filter-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 100%;
+    flex-direction: row;
+}
+
+.ur_filter-item.open .ur_filter-dropdown {
+    display: flex;
+}
+
+.ur_dropdown-section {
+    margin-bottom: 15px;
+    flex: 1;
+}
+
+.ur_dropdown-section h4 {
+    margin-bottom: 10px;
+    font-size: 14px;
     font-weight: bold;
+}
+
+.ur_dropdown-section ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ur_dropdown-section ul li {
+    margin-bottom: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    transition: background-color 0.3s ease;
+}
+
+.ur_dropdown-section ul li:hover {
+    background-color: #f0f7ff;
+    border-radius: 5px;
+    color: #007bff;
+}
+
+/* 직무 리스트의 스타일 */
+#duty-list li {
+    background-color: #f9f9f9;
+    padding: 5px 10px;
+    transition: background-color 0.3s ease;
+}
+
+#duty-list li:hover {
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+}
+
+/* 선택된 태그 스타일 */
+.ur_filter-item .selected-tags {
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.ur_filter-item .selected-tags .tag {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+/* 기술 스택 입력 필드 및 태그 스타일 */
+.ur_tech-stack {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.ur_tech-stack:hover {
+    border-color: #007bff;
+}
+
+.ur_tech-stack input {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    flex-grow: 1;
+}
+
+.ur_tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.ur_tech-tags span {
+    background-color: #f1f3f5;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.ur_tech-tags span:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* 모집공고 아이템 스타일 */
+.recruitment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     margin-bottom: 20px;
 }
 
-/* 리스트 항목 스타일 */
-.recruitment-list .recruitment-item {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    background-color: #fff;
-    padding: 20px;
-    margin-bottom: 15px;
+.recruitment-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.company-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    align-self: flex-start;
+}
+
+.recruitment-details {
+    text-align: center;
+    margin-top: 5px;
 }
 
 .recruitment-title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
-    margin-bottom: 8px;
+    color: #000;
+    margin: 0;
 }
 
-.recruitment-company {
-    font-size: 16px;
-    color: #777;
-    margin-bottom: 12px;
-}
-
-.recruitment-item .btn {
+.recruitment-subdetails {
     font-size: 14px;
-    font-weight: 600;
-    padding: 8px 16px;
+    color: #777;
+    margin-top: 5px;
 }
 
-.recruitment-item .btn-outline-primary {
-    border-color: #ff5a5f;
-    color: #ff5a5f;
+.recruitment-action {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
 }
 
-.recruitment-item .btn-outline-primary:hover {
-    background-color: #ff5a5f;
-    color: #fff;
-    border-color: #ff5a5f;
+.apply-button {
+    padding: 10px 20px;
+    border: 1px solid #f00;
+    background-color: white;
+    color: #f00;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-/* 반응형 스타일 */
+.apply-button:hover {
+    background-color: #f00;
+    color: white;
+}
+
+.deadline {
+    font-size: 12px;
+    color: #f00;
+    margin-top: 10px;
+}
+
+/* 반응형 레이아웃 */
 @media (max-width: 768px) {
-    .recruitment-item .d-flex {
-        flex-direction: column;
+    .ur_search-bar {
+        padding: 15px;
     }
 
-    .recruitment-item .btn {
-        margin-top: 15px;
+    .ur_filter-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .ur_filter-item {
         width: 100%;
     }
+
+    .recruitment-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .recruitment-action {
+        align-items: flex-start;
+        text-align: left;
+        margin-top: 10px;
+    }
+}
+
+.tech-results {
+    display: none;
+    border: 1px solid #ccc;
+    background-color: white;
+    position: absolute;
+    z-index: 1000;
+    max-height: 150px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.tech-results span {
+    display: block;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.tech-results span:hover {
+    background-color: #f0f0f0;
 }

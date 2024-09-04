@@ -30,12 +30,14 @@ public class UserRecruitmentService {
     public List<UserRecruitmentDto> getAllRecruitments() {
         List<Recruitment> recruitments = userRecruitmentRepository.findAll();  // 모든 공고를 조회
         List<UserRecruitmentDto> dtoList = new ArrayList<>();  // DTO 리스트 생성
+
         for (Recruitment recruitment : recruitments) {  // 각 엔티티를 순회
             UserRecruitmentDto dto = convertToDto(recruitment);  // 엔티티를 DTO로 변환
             dtoList.add(dto);  // DTO 리스트에 추가
         }
         return dtoList;  // DTO 리스트 반환
     }
+
     public List<UserRecruitmentDto> getBookmarkedRecruitments() {
         // 현재 인증된 사용자 정보(Principal)를 가져옵니다.
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -69,15 +71,15 @@ public class UserRecruitmentService {
 
         return dtoList;
     }
-    // Recruitment 엔티티를 UserRecruitmentDto로 변환하는 메서드
     private UserRecruitmentDto convertToDto(Recruitment recruitment) {
         UserRecruitmentDto dto = new UserRecruitmentDto();
         dto.setRecruitmentIndex(recruitment.getRecruitmentIndex());
         dto.setCompanyId(BigInteger.valueOf(recruitment.getCompany().getCompanyId()));
+        dto.setRecruitmentTitle(recruitment.getRecruitmentTitle());
         dto.setRecruitmentType(recruitment.getRecruitmentType().name());
         dto.setCategory(recruitment.getCategory());
         dto.setSkill(recruitment.getSkill());
-        dto.setStartDate(recruitment.getStartDate());
+        dto.setStartDate(recruitment.getStartDate().toString());
         dto.setPeriod(recruitment.getPeriod());
         dto.setStatus(recruitment.getStatus());
         return dto;
