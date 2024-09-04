@@ -24,7 +24,7 @@ public class HeadhuntService {
     private final UserRepository userRepository;
     private final UserMembershipRepository userMembershipRepository;
 
-    // 멤버십 유저 중 스킬이 일치하는 5명의 유저를 랜덤으로 추천하는 메서드
+    // 멤버십 유저 중 스킬이 일치하는 5명의 유저를 랜덤으로 추천하는 메서드 (mainCv가 true인 경우만 포함)
     public List<HeadhuntResponseDto> recommendMembershipCVsBasedOnCompanySkills(UserDetailsImpl userDetails) {
         List<Recruitment> recruitments = recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId());
         List<CVEntity> allCVs = cvRepository.findAll();
@@ -38,10 +38,10 @@ public class HeadhuntService {
 
         List<CVEntity> matchingCVs = new ArrayList<>();
 
-        // 스킬이 하나라도 일치하는 멤버십 유저의 CV를 필터링
+        // 스킬이 하나라도 일치하는 멤버십 유저의 CV를 필터링 (mainCv가 true인 경우만 포함)
         for (Recruitment recruitment : recruitments) {
             for (CVEntity cv : allCVs) {
-                if (membershipUserIds.contains(cv.getUserIndex()) && hasMatchingSkills(recruitment.getSkill(), cv.getSkill())) {
+                if (membershipUserIds.contains(cv.getUserIndex()) && hasMatchingSkills(recruitment.getSkill(), cv.getSkill()) && cv.isMainCv()) {
                     matchingCVs.add(cv);
                 }
             }
@@ -86,7 +86,9 @@ public class HeadhuntService {
             if (!membershipUserIds.contains(user.getUserIndex())) { // 멤버십 유저가 아닌 일반 유저들만 필터링
                 List<CVEntity> userCVs = cvRepository.findAllByUserIndex(user.getUserIndex());
                 for (CVEntity cvEntity : userCVs) {
-                    allCVs.add(convertToDto(cvEntity));
+                    if (cvEntity.isMainCv()) {  // mainCv가 true인 경우만 추가
+                        allCVs.add(convertToDto(cvEntity));
+                    }
                 }
             }
         }
@@ -118,6 +120,10 @@ public class HeadhuntService {
         String[] addressParts = fullAddress.split(" ");
         String userAddress = addressParts[0] + " " + addressParts[1]; // OO시 OO동 추출
 
+        String userName = user.getUserName();
+        String[] userNameParts = userName.split(" ");
+        String userNames = userNameParts[0];
+
         return new HeadhuntResponseDto(
                 cvEntity.getCvIndex(),
                 cvEntity.getCvImage(),
@@ -125,7 +131,8 @@ public class HeadhuntService {
                 cvEntity.getEducation(),
                 cvEntity.getSkill(),
                 userAddress, // 가공된 주소
-                cvEntity.getUserIndex() // 유저 인덱스 추가
+                cvEntity.getUserIndex(), // 유저 인덱스 추가
+                userNames
         );
     }
 }
