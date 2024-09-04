@@ -121,6 +121,8 @@ public class HeadhuntService {
         String userAddress = addressParts[0] + " " + addressParts[1]; // OO시 OO동 추출
 
         String userName = user.getUserName();
+        String[] userNameParts = userName.split(" ");
+        String userNames = userNameParts[0];
 
         return new HeadhuntResponseDto(
                 cvEntity.getCvIndex(),
@@ -130,7 +132,7 @@ public class HeadhuntService {
                 cvEntity.getSkill(),
                 userAddress, // 가공된 주소
                 cvEntity.getUserIndex(), // 유저 인덱스 추가
-                userName
+                userNames
         );
     }
 }

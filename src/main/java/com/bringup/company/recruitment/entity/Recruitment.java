@@ -44,4 +44,7 @@ public class Recruitment {
 
     @Column(name = "status", nullable = false, length = 10)
     private String status;
+
+    @Column(name = "view_count")
+    private int view_count;
 }
