@@ -17,6 +17,7 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    border: solid 1px;
 }
 
 .ur_search-input {
@@ -93,7 +94,7 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     width: 100%;
-    flex-direction: column;
+    flex-direction: row;
 }
 
 .ur_filter-item.open .ur_filter-dropdown {
@@ -204,6 +205,77 @@
     color: white;
 }
 
+/* 모집공고 아이템 스타일 */
+.recruitment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.recruitment-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.company-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+    align-self: flex-start;
+}
+
+.recruitment-details {
+    text-align: center;
+    margin-top: 5px;
+}
+
+.recruitment-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    margin: 0;
+}
+
+.recruitment-subdetails {
+    font-size: 14px;
+    color: #777;
+    margin-top: 5px;
+}
+
+.recruitment-action {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.apply-button {
+    padding: 10px 20px;
+    border: 1px solid #f00;
+    background-color: white;
+    color: #f00;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.apply-button:hover {
+    background-color: #f00;
+    color: white;
+}
+
+.deadline {
+    font-size: 12px;
+    color: #f00;
+    margin-top: 10px;
+}
+
 /* 반응형 레이아웃 */
 @media (max-width: 768px) {
     .ur_search-bar {
@@ -217,5 +289,16 @@
 
     .ur_filter-item {
         width: 100%;
+    }
+
+    .recruitment-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .recruitment-action {
+        align-items: flex-start;
+        text-align: left;
+        margin-top: 10px;
     }
 }
