@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
     Optional<Company> findByCompanyPassword(String companyPassword);
     Optional<Company> findByManagerEmail(String managerEmail);
-    Optional<Company> findByCompanyIndex(int companyIndex);
+    Optional<Company> findBycompanyId(int companyIndex);
 
     boolean existsByManagerEmail(String managerEmail);
 
