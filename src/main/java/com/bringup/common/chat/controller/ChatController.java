@@ -30,12 +30,6 @@ public class ChatController {
     private final SimpMessageSendingOperations template;
     private final ChatRepository repository;
 
-    @GetMapping("/chat/user")
-    public String user(@AuthenticationPrincipal String userCode){
-        System.out.println("userCode: "+userCode);
-        return userCode;
-    }
-
     // MessageMapping 을 통해 websocket 으로 들어오는 메시지를 발신 처리합니다.
     // 이 때 클라이언트에서는 /pub/chat/message 로 요청을 하게 되고 이것을 controller 가 받아서 처리합니다.
     // 처리가 완료되면 /sub/chat/room/roomId 로 메시지가 전송됩니다.
