@@ -22,7 +22,7 @@ public class UserRecruitmentController {
     private UserRecruitmentService userRecruitmentService;
 
 
-    @GetMapping("/list")
+    @GetMapping("/auth")
     public String showRecruitmentListPage(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         // 인증된 사용자만 이 페이지에 접근할 수 있음
         if (userDetails == null) {
@@ -33,13 +33,10 @@ public class UserRecruitmentController {
         return "member/user/recruitmentList";
     }
 
-    @GetMapping
-    public List<UserRecruitmentDto> getAllRecruitments() {
-        return userRecruitmentService.getAllRecruitments();
-    }
 
 
-    @GetMapping("/auth")
+
+    @GetMapping("/list")
     public ResponseEntity<List<UserRecruitmentDto>> getAllRecruitments(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         if (userDetails == null) {
             return ResponseEntity.status(401).build(); // 인증되지 않은 경우

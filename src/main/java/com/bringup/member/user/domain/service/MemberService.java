@@ -1,5 +1,6 @@
 package com.bringup.member.user.domain.service;
 
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import com.bringup.member.user.dto.JoinDTO;
@@ -12,6 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,5 +46,14 @@ public class MemberService implements UserDetailsService{
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return null;
+    }
+
+    public String getUserName(UserDetailsImpl userDetails) {
+        Optional<UserEntity> userOptional = userRepository.findByUserEmail(userDetails.getUsername());
+        if (userOptional.isPresent()) {
+            return userOptional.get().getUserName();
+        } else {
+            throw new IllegalArgumentException("User not found for email: " + userDetails.getUsername());
+        }
     }
 }

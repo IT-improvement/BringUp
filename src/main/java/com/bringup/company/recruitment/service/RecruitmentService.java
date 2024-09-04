@@ -57,7 +57,7 @@ public class RecruitmentService {
         recruitment.setCompany(company);
         recruitment.setRecruitmentTitle(requestDto.getRecruitmentTitle());
         recruitment.setRecruitmentType(requestDto.getRecruitmentType());
-        recruitment.setRecruitmentImg(saveRecruitmentImage(img));
+     /*   recruitment.setRecruitmentImg(saveRecruitmentImage(img));*/
         recruitment.setCategory(requestDto.getCategory());
         recruitment.setSkill(requestDto.getSkill());
 
@@ -115,7 +115,9 @@ public class RecruitmentService {
 
         recruitment.setRecruitmentType(requestDto.getRecruitmentType());
         recruitment.setRecruitmentTitle(requestDto.getRecruitmentTitle());
+/*
         recruitment.setRecruitmentImg(saveRecruitmentImage(img));
+*/
         recruitment.setCategory(requestDto.getCategory());
         recruitment.setSkill(requestDto.getSkill());
         recruitment.setStartDate(requestDto.getStartDate());
