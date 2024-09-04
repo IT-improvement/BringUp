@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface CompanyBookMarkRepository extends JpaRepository<CompanyBookMarkEntity, Integer> {
-    List<CompanyBookMarkEntity> findByUserIndex(int userIndex, String status);
+    List<CompanyBookMarkEntity> findByUserIndexAndStatus(int userIndex, String status);
 
     Optional<CompanyBookMarkEntity> findByUserIndexAndCompanyIndex(int userIndex, int companyIndex);
 }

@@ -30,7 +30,7 @@ public class CompanyBookMarkService {
         UserEntity userEntity = userRepository.findByUserIndex(companyBookMarkRequestDto.getUserIndex())
                 .orElseThrow(()->new RuntimeException("사용자를 찾을 수 없습니다."));
 
-        Company company = companyRepository.findByCompanyIndex(companyBookMarkRequestDto.getCompanyIndex())
+        Company company = companyRepository.findBycompanyId(companyBookMarkRequestDto.getCompanyIndex())
                 .orElseThrow(()->new RuntimeException("기업을 찾을 수 없습니다."));
 
         Optional<CompanyBookMarkEntity> exitingBookMark = companyBookMarkRepository.findByUserIndexAndCompanyIndex(companyBookMarkRequestDto.getUserIndex(), companyBookMarkRequestDto.getCompanyIndex());
@@ -50,7 +50,7 @@ public class CompanyBookMarkService {
     }
 
     public List<CompanyBookMarkResponseDto> getCompanyBookMarks(int userIndex){
-        List<CompanyBookMarkEntity> companyBookMarkEntityList = companyBookMarkRepository.findByUserIndex(userIndex, "등록");
+        List<CompanyBookMarkEntity> companyBookMarkEntityList = companyBookMarkRepository.findByUserIndexAndStatus(userIndex, "등록");
         return companyBookMarkEntityList.stream()
                 .map(CompanyBookMarkResponseDto::new)
                 .collect(Collectors.toList());

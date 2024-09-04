@@ -1,6 +1,5 @@
 package com.bringup.company.recruitment.service;
 
-import com.bringup.admin.notify.service.NotificationService;
 import com.bringup.common.enums.NotificationType;
 import com.bringup.common.enums.RolesType;
 import com.bringup.common.image.ImageService;
