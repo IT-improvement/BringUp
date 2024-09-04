@@ -6,7 +6,7 @@
     <nav class="navbar navbar-expand-xl">
         <div class="container-fluid px-3" style="max-width: 1260px;">
             <!-- 로고 시작 -->
-            <a class="navbar-brand justify-content-center" href="/company">
+            <a class="navbar-brand justify-content-center" href=#">
                 <img class="navbar-brand-item light-mode-item" src="/resources/style/common/images/Logo.png" alt="로고">
                 <img class="navbar-brand-item dark-mode-item" src="/resources/style/common/images/Logo_darkmode.png" alt="로고">
             </a>
@@ -108,7 +108,7 @@
                 <div class="nav-item ms-2 ms-md-3 dropdown">
                     <!-- 아바타 -->
                     <a href="#" id="profileDropdown" role="button" data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span id="companyNameSpan" style="display: none;">로딩 중...</span>
+                        <span id="memberNameSpan" style="display: none;">로딩 중...</span>
                     </a>
 
                     <!-- 프로필 드롭다운 시작 -->
@@ -117,14 +117,14 @@
                         <li class="px-3">
                             <div class="d-flex align-items-center">
                                 <div>
-                                    <a class="h6 mt-2 mt-sm-0" href="/company/auth/profile"><span id="companyNameLink">로딩 중...</span></a>
+                                    <a class="h6 mt-2 mt-sm-0" href="#"><span id="memberNameLink">로딩 중...</span></a>
                                 </div>
                             </div>
                             <hr>
                         </li>
                         <!-- 링크 -->
-                        <li><a class="dropdown-item" href="/company/auth/updateProfile"><i class="bi bi-person fa-fw me-2"></i>프로필 수정</a></li>
-                        <li><a class="dropdown-item" href="/company/auth/updateAuth"><i class="bi bi-gear fa-fw me-2"></i>계정 설정</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-person fa-fw me-2"></i>프로필 수정</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-gear fa-fw me-2"></i>계정 설정</a></li>
                         <li><a class="dropdown-item" href="#" id="logoutButton"><i class="bi bi-power fa-fw me-2"></i>로그아웃</a></li>
                         <li class="dropdown-divider mb-2"></li>
                         <li>
@@ -165,8 +165,8 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="jobPostingMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">공고</a>
                         <ul class="dropdown-menu" aria-labelledby="jobPostingMenu">
-                            <li><a class="dropdown-item" href="/company/jobpost/management">공고 관리</a></li>
-                            <li><a class="dropdown-item" href="/company/jobpost/registration">공고 등록</a></li>
+                            <li><a class="dropdown-item" href="#">공고 관리</a></li>
+                            <li><a class="dropdown-item" href="#">공고 등록</a></li>
                         </ul>
                     </li>
 
@@ -174,22 +174,22 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="pagesMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">상품</a>
                         <ul class="dropdown-menu" aria-labelledby="pagesMenu">
-                            <li><a class="dropdown-item" href="/company/product/management">상품 관리</a></li>
-                            <li><a class="dropdown-item" href="/company/product/premium_job_posting">프리미엄 공고</a></li>
-                            <li><a class="dropdown-item" href="/company/product/advertising_banner">광고 배너</a></li>
-                            <li><a class="dropdown-item" href="/company/product/resume_key">이력서 열람</a></li>
+                            <li><a class="dropdown-item" href="#">상품 관리</a></li>
+                            <li><a class="dropdown-item" href="#">프리미엄 공고</a></li>
+                            <li><a class="dropdown-item" href="#">광고 배너</a></li>
+                            <li><a class="dropdown-item" href="#">이력서 열람</a></li>
                         </ul>
                     </li>
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="reviewMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">리뷰</a>
                         <ul class="dropdown-menu" aria-labelledby="postMenu">
-                            <li><a class="dropdown-item" href="/company/review/corporation">기업 리뷰</a></li>
-                            <li><a class="dropdown-item" href="/company/review/interview">면접 리뷰</a></li>
+                            <li><a class="dropdown-item" href="#">기업 리뷰</a></li>
+                            <li><a class="dropdown-item" href="#">면접 리뷰</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/company/recommendation" id="recommendMenu">인재 추천</a>
+                        <a class="nav-link" href="#" id="recommendMenu">인재 추천</a>
                     </li>
                 </ul>
             </div>
@@ -200,4 +200,4 @@
 <!-- 메인 네비게이션 부분 끝 -->
 <link rel="stylesheet" href="/resources/style/company/header/header.css">
 
-<script src="/resources/script/company/header.js"></script>
+<script src="/resources/script/member/memberHeader.js"></script>

@@ -11,11 +11,11 @@ import java.math.BigInteger;
 public class UserRecruitmentDto {
     private int recruitmentIndex;
     private BigInteger companyId;
+    private String recruitmentTitle;
     private String recruitmentType;
     private String category;
     private String skill;
     private String startDate;
     private String period;
     private String status;
-    private String recruitmentImg;
 }
