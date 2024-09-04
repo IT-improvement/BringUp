@@ -148,7 +148,7 @@
 
 /* 선택된 태그 스타일 */
 .ur_filter-item .selected-tags {
-    margin-top: 10px;
+
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -301,4 +301,25 @@
         text-align: left;
         margin-top: 10px;
     }
+}
+
+.tech-results {
+    display: none;
+    border: 1px solid #ccc;
+    background-color: white;
+    position: absolute;
+    z-index: 1000;
+    max-height: 150px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.tech-results span {
+    display: block;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.tech-results span:hover {
+    background-color: #f0f0f0;
 }
