@@ -154,7 +154,7 @@
 <!-- 알림 프로필 부분 끝 -->
 
 <!-- 메인 네비게이션 부분 시작 -->
-<header class="border-bottom" style="position: fixed; width: 100%; top: 50px; z-index: 9999;">
+<header class="border-bottom" style="position: fixed; width: 100%; top: 50px; z-index: 9998;">
     <!-- 하단 헤더 (메인 네비게이션) -->
     <nav class="navbar navbar-expand-lg navbar-dashboard">
         <div class="container px-3" style="max-width: 1260px;">
