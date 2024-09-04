@@ -60,15 +60,10 @@
 	<div class="headhunt-list container" style="max-width: 1260px;">
 		<h2>인재 추천</h2>
 
-		<h3 class="mb-3">프리미엄</h3>
-		<div id="premiumSection" class="row mb-5">
-			<!-- 프리미엄 카드가 여기에 삽입됩니다 -->
+		<div id="userSection" class="user-card-list">
+			<!-- 사용자 카드 -->
 		</div>
 
-		<h3 class="mb-3">일반</h3>
-		<div id="generalSection" class="row">
-			<!-- 일반 카드가 여기에 삽입됩니다 -->
-		</div>
 	</div>
 </main>
 
