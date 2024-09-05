@@ -1,6 +1,9 @@
 package com.bringup.company.user.controller;
 
 
+import com.bringup.common.enums.GlobalErrorCode;
+import com.bringup.common.event.exception.CertificateException;
+import com.bringup.common.event.exception.ErrorResponseHandler;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.user.dto.request.JoinDto;
@@ -8,10 +11,10 @@ import com.bringup.company.user.dto.request.LoginDto;
 import com.bringup.company.user.dto.request.ValidationRequestDto;
 import com.bringup.company.user.dto.response.LoginTokenDto;
 import com.bringup.company.user.entity.Company;
+import com.bringup.company.user.exception.CompanyException;
 import com.bringup.company.user.service.CompanyService;
 import com.bringup.company.user.service.VerificationService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +34,7 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 public class CompanyController {
     private final CompanyService companyService;
     private final VerificationService verificationService;
+    private final ErrorResponseHandler errorResponseHandler;
 
     //회원가입 1단계 ( 진위여부 파악 )
     @PostMapping("/join/first")
@@ -58,38 +62,67 @@ public class CompanyController {
                                                       @RequestPart("c_logo") MultipartFile logo,
                                                       HttpSession session) {
         ValidationRequestDto businessInfo = (ValidationRequestDto) session.getAttribute("businessInfo");
-        if (businessInfo != null) {
-            joinDTO.setMaster_name(businessInfo.getP_nm());
-            joinDTO.setCompany_opendate(businessInfo.getStart_dt());
-            joinDTO.setCompany_licence(businessInfo.getB_no());
+        try{
+            if (businessInfo != null) {
+                joinDTO.setMaster_name(businessInfo.getP_nm());
+                joinDTO.setCompany_opendate(businessInfo.getStart_dt());
+                joinDTO.setCompany_licence(businessInfo.getB_no());
+            }
+            //프로젝트 발표 전까지는 주석처리 ( 진위여부 파악 실패시 회원가입 안됨 )
+            //else throw new CompanyException(MemberErrorCode.NOT_FOUND_1st);
+            companyService.joinCompany(joinDTO, logo);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new BfResponse<>(CREATE, Map.of("Company_name", joinDTO.getC_name())));
+        } catch (CompanyException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (CertificateException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         }
-        //프로젝트 발표 전까지는 주석처리 ( 진위여부 파악 실패시 회원가입 안됨 )
-        //else throw new CompanyException(MemberErrorCode.NOT_FOUND_1st);
-        companyService.joinCompany(joinDTO, logo);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new BfResponse<>(CREATE, Map.of("Company_name", joinDTO.getC_name())));
+
     }
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<BfResponse<LoginTokenDto>> login(@Valid @RequestBody LoginDto loginDto) {
-        // 디버그 로그 추가
-        System.out.println("Controller: login method called with " + loginDto.getUserid());
-        return ResponseEntity.ok(new BfResponse<>(companyService.login(loginDto)));
+    public ResponseEntity<BfResponse<?>> login(@RequestBody LoginDto loginDto) {
+        try {
+            // 로그인 로직 수행
+            LoginTokenDto loginToken = companyService.login(loginDto);
+            return ResponseEntity.ok(new BfResponse<>(loginToken));
+        } catch (CompanyException e) {
+            // CompanyException이 발생했을 때 처리
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (Exception e) {
+            // 기타 예외 처리 (500 내부 서버 오류)
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
 
     // Id 중복 체크
     @PostMapping("/checkId")
     public ResponseEntity<BfResponse<?>> checkId(@RequestBody Map<String, String> requestBody) {
-        String companyEmail = requestBody.get("company_email");
-        boolean isAvailable = companyService.checkId(companyEmail);
-        return ResponseEntity.ok(new BfResponse<>(isAvailable));
+
+            String companyEmail = requestBody.get("company_email");
+            if (companyEmail == null){
+                return errorResponseHandler.handleErrorResponse(GlobalErrorCode.VALIDATION_FAILED);
+            }
+        try{
+            boolean isAvailable = companyService.checkId(companyEmail);
+            return ResponseEntity.ok(new BfResponse<>(isAvailable));
+        } catch (CompanyException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+
     }
 
     // 기업명 헤더 삽입
     @PostMapping("/companyName")
     public ResponseEntity<BfResponse<?>> companyName(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, companyService.companyName(userDetails)));
+        try{
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, companyService.companyName(userDetails)));
+        } catch (CompanyException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+
     }
 
     // 회원 정보 수정
@@ -97,22 +130,36 @@ public class CompanyController {
     public ResponseEntity<BfResponse<?>> updateUser(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam Map<String, String> requestBody) {
-        companyService.updateUser(userDetails, requestBody);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "Company update successful")));
+        try{
+            companyService.updateUser(userDetails, requestBody);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "업데이트 완료")));
+        } catch (CompanyException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+
     }
 
     // 회원 탈퇴
     @DeleteMapping("/user")
     public ResponseEntity<BfResponse<?>> deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        companyService.deleteUser(userDetails);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "DELETE successful")));
+        try{
+            companyService.deleteUser(userDetails);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "탈퇴 완료")));
+        } catch (CompanyException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+
     }
 
     // 회원 정보 조회
     @GetMapping("/companyInfo/post")
-    public ResponseEntity<BfResponse<Company>> getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        Company company = companyService.getUserInfo(userDetails);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, company));
+    public ResponseEntity<BfResponse<?>> getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try{
+            Company company = companyService.getUserInfo(userDetails);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, company));
+        } catch (CompanyException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
     }
 
     // 로그아웃

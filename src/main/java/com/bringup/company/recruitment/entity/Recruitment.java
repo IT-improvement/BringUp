@@ -1,6 +1,7 @@
 package com.bringup.company.recruitment.entity;
 
 import com.bringup.common.enums.RecruitmentType;
+import com.bringup.common.enums.StatusType;
 import com.bringup.company.user.entity.Company;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -42,8 +43,10 @@ public class Recruitment {
     @Column(name = "period", nullable = false, length = 30)
     private String period;
 
-    @Column(name = "status", nullable = false, length = 10)
-    private String status;
+    @Setter
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private StatusType status;
 
     @Column(name = "view_count")
     private int view_count;

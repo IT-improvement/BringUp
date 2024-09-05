@@ -2,11 +2,15 @@ package com.bringup.company.review.service;
 
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.review.entity.CompanyReview;
+import com.bringup.company.review.exception.ReviewException;
 import com.bringup.company.review.repository.CompanyReviewRepository;
 import com.bringup.member.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import static com.bringup.common.enums.ReviewErrorCode.NOT_FOUND_REVIEW;
+
 
 import java.util.List;
 
@@ -23,12 +27,12 @@ public class CompanyReviewService {
     @Transactional
     public void deleteCompanyReview(UserDetailsImpl userDetails, Integer reviewIndex, String reason) {
         CompanyReview review = companyReviewRepository.findById(reviewIndex)
-                .orElseThrow(() -> new RuntimeException("Review not found"));
+                .orElseThrow(() -> new ReviewException(NOT_FOUND_REVIEW));
         if (review.getUser().getUserEmail().equals(userDetails.getUsername())) {
             companyReviewRepository.delete(review);
             System.out.println("Deletion reason: " + reason);
         } else {
-            throw new RuntimeException("Unauthorized to delete this review");
+            throw new ReviewException(NOT_FOUND_REVIEW);
         }
     }
     //수정요청 ( 필요시 주석해제 )
