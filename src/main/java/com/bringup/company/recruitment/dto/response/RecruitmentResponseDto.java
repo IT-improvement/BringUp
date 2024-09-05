@@ -1,6 +1,7 @@
 package com.bringup.company.recruitment.dto.response;
 
 import com.bringup.common.enums.RecruitmentType;
+import com.bringup.common.enums.StatusType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +20,5 @@ public class RecruitmentResponseDto {
     private String skill;
     private String startDate;
     private String period;
-    private String status;
+    private StatusType status;
 }
