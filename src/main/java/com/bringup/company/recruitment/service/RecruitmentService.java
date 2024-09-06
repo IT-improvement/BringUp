@@ -63,6 +63,8 @@ public class RecruitmentService {
         recruitment.setCompany(company);
         recruitment.setRecruitmentTitle(requestDto.getRecruitmentTitle());
         recruitment.setRecruitmentType(requestDto.getRecruitmentType());
+        recruitment.setWorkDetail(requestDto.getWorkDetail());
+        recruitment.setHospitality(requestDto.getHospitality());
         recruitment.setCategory(requestDto.getCategory());
         recruitment.setSkill(requestDto.getSkill());
 
@@ -91,6 +93,8 @@ public class RecruitmentService {
         recruitment.setRecruitmentTitle(requestDto.getRecruitmentTitle());
         recruitment.setCategory(requestDto.getCategory());
         recruitment.setSkill(requestDto.getSkill());
+        recruitment.setWorkDetail(requestDto.getWorkDetail());
+        recruitment.setHospitality(requestDto.getHospitality());
         recruitment.setStartDate(requestDto.getStartDate());
         recruitment.setPeriod(requestDto.getPeriod());
         recruitment.setStatus(StatusType.ACTIVE);
@@ -152,6 +156,8 @@ public class RecruitmentService {
                 .recruitmentType(recruitment.getRecruitmentType())
                 .category(recruitment.getCategory())
                 .skill(recruitment.getSkill())
+                .workDetail(recruitment.getWorkDetail())
+                .hospitality(recruitment.getHospitality())
                 .startDate(recruitment.getStartDate())
                 .period(recruitment.getPeriod())
                 .status(recruitment.getStatus())

@@ -37,6 +37,12 @@ public class Recruitment {
     @Column(name = "skill", length = 30)
     private String skill;
 
+    @Column(name = "work_detail")
+    private String workDetail;
+
+    @Column(name = "hospitality")
+    private String hospitality;
+
     @Column(name = "start_date", nullable = false, length = 50)
     private String startDate;
 
