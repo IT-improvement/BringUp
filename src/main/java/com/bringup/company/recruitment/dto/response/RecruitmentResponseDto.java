@@ -19,6 +19,7 @@ public class RecruitmentResponseDto {
     private String category;
     private String skill;
     private String workDetail;
+    private String companyImg;
     private String hospitality;
     private String startDate;
     private String period;
