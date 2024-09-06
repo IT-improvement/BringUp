@@ -36,29 +36,18 @@ public class RecruitmentService {
 
     // 공고 리스트업
     public List<RecruitmentResponseDto> getRecruitments(UserDetailsImpl userDetails) {
-        System.out.println("userDetail in service : " + userDetails.getId());
-        List<Recruitment> recruitments = null;
+        // 공고를 가져옴
+        List<Recruitment> recruitments = recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId());
 
-        try {
-            recruitments = recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId());
-        } catch (Exception e) {
-            e.printStackTrace();  // 예외를 출력하여 무슨 오류가 발생하는지 확인
-            System.out.println("Exception occurred during recruitment fetch");
-        }
-
-        if (recruitments == null) {
-            System.out.println("Recruitments is null");
-        } else if (recruitments.isEmpty()) {
-            System.out.println("Recruitments is empty");
-        } else {
-            System.out.println("Number of recruitments: " + recruitments.size());
+        // 공고가 없을 경우 예외를 던짐
+        if (recruitments == null || recruitments.isEmpty()) {
+            throw new RecruitmentException(NOT_FOUND_RECRUITMENT); // 적절한 에러 코드 사용
         }
 
         List<RecruitmentResponseDto> recruitmentResponseDtos = new ArrayList<>();
         for (Recruitment recruitment : recruitments) {
             RecruitmentResponseDto dto = convertToDto(recruitment);
             recruitmentResponseDtos.add(dto);
-            System.out.println("추가완료");
         }
 
         return recruitmentResponseDtos;
@@ -66,7 +55,7 @@ public class RecruitmentService {
 
     // 공고 작성
     @Transactional
-    public void createRecruitment(UserDetailsImpl userDetails, RecruitmentRequestDto requestDto, MultipartFile img) {
+    public void createRecruitment(UserDetailsImpl userDetails, RecruitmentRequestDto requestDto) {
         Company company = companyRepository.findById(userDetails.getId())
                 .orElseThrow(() -> new RecruitmentException(NOT_FOUND_RECRUITMENT));
 
@@ -89,7 +78,7 @@ public class RecruitmentService {
     }
 
     @Transactional
-    public void updateRecruitment(UserDetailsImpl userDetails, Integer recruitmentIndex, RecruitmentRequestDto requestDto, MultipartFile img) {
+    public void updateRecruitment(UserDetailsImpl userDetails, Integer recruitmentIndex, RecruitmentRequestDto requestDto) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
                 .orElseThrow(() -> new RecruitmentException(NOT_FOUND_RECRUITMENT));
 

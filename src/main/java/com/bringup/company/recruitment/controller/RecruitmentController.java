@@ -28,10 +28,9 @@ public class RecruitmentController {
 
     @PostMapping("/register")
     public ResponseEntity<BfResponse<?>> registerRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                             @RequestBody RecruitmentRequestDto requestDto,
-                                                             @RequestPart("recruitmentImg") MultipartFile img) {
+                                                             @RequestBody RecruitmentRequestDto requestDto) {
         try {
-            recruitmentService.createRecruitment(userDetails, requestDto, img);
+            recruitmentService.createRecruitment(userDetails, requestDto);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, "Recruitment registration request submitted successfully"));
         } catch (RecruitmentException e) {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
@@ -43,10 +42,9 @@ public class RecruitmentController {
     @PostMapping("/update/{recruitmentId}")
     public ResponseEntity<BfResponse<?>> updateRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                            @PathVariable Integer recruitmentId,
-                                                           @RequestBody RecruitmentRequestDto requestDto,
-                                                           @RequestPart MultipartFile img) {
+                                                           @RequestBody RecruitmentRequestDto requestDto) {
         try {
-            recruitmentService.updateRecruitment(userDetails, recruitmentId, requestDto, img);
+            recruitmentService.updateRecruitment(userDetails, recruitmentId, requestDto);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, "Recruitment update request submitted successfully"));
         } catch (RecruitmentException e) {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
@@ -78,11 +76,6 @@ public class RecruitmentController {
 
         try {
             List<RecruitmentResponseDto> recruitments = recruitmentService.getRecruitments(userDetails);
-            if (recruitments == null) {
-                System.out.println("Recruitments is null");
-            } else {
-                System.out.println("Number of recruitments: " + recruitments.size());
-            }
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, recruitments));
         } catch (RecruitmentException e) {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
