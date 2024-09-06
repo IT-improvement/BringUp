@@ -21,11 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.bringup.common.enums.RecruitmentErrorCode.BAD_REQUEST;
-import static com.bringup.common.enums.RecruitmentErrorCode.NOT_FOUND_RECRUITMENT;
+import static com.bringup.common.enums.RecruitmentErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +46,7 @@ public class RecruitmentService {
 
         List<RecruitmentResponseDto> recruitmentResponseDtos = new ArrayList<>();
         for (Recruitment recruitment : recruitments) {
-            RecruitmentResponseDto dto = convertToDto(recruitment);
+            RecruitmentResponseDto dto = convertToDto(recruitment, null);
             recruitmentResponseDtos.add(dto);
         }
 
@@ -121,11 +121,16 @@ public class RecruitmentService {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
                 .orElseThrow(() -> new RecruitmentException(NOT_FOUND_RECRUITMENT));
 
+        Company company = companyRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new RecruitmentException(NOT_FOUND_MEMBER_ID));
+
+        String[] images = company.getCompanyImg().replaceAll(" ", "").replaceAll("\n", "").split(",");
+
         if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
             throw new RecruitmentException(BAD_REQUEST);
         }
 
-        return convertToDto(recruitment);
+        return convertToDto(recruitment, images);
     }
 
     private LocalDate calculatePeriod(LocalDate startDate, String periodDuration) {
@@ -148,7 +153,7 @@ public class RecruitmentService {
         }
     }
 
-    private RecruitmentResponseDto convertToDto(Recruitment recruitment) {
+    private RecruitmentResponseDto convertToDto(Recruitment recruitment, String[] image) {
         return RecruitmentResponseDto.builder()
                 .recruitmentIndex(recruitment.getRecruitmentIndex())
                 .managerEmail(recruitment.getCompany().getManagerEmail())
@@ -158,6 +163,7 @@ public class RecruitmentService {
                 .skill(recruitment.getSkill())
                 .workDetail(recruitment.getWorkDetail())
                 .hospitality(recruitment.getHospitality())
+                .companyImg(Arrays.toString(image))
                 .startDate(recruitment.getStartDate())
                 .period(recruitment.getPeriod())
                 .status(recruitment.getStatus())
