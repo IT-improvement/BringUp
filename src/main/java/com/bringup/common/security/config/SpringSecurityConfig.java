@@ -169,7 +169,9 @@ public class SpringSecurityConfig {
 
                 antMatcher("/recruitment/**"), // 사용자 스크랩기업 리스트
                 antMatcher("/membership/**"), // 사용자 멤버십
-                antMatcher("/member/name")
+
+                antMatcher("/kakao/**")
+
 
         );
 
