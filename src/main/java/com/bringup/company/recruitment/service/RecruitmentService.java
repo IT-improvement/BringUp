@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,9 +36,32 @@ public class RecruitmentService {
 
     // 공고 리스트업
     public List<RecruitmentResponseDto> getRecruitments(UserDetailsImpl userDetails) {
-        return recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId()).stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        System.out.println("userDetail in service : " + userDetails.getId());
+        List<Recruitment> recruitments = null;
+
+        try {
+            recruitments = recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId());
+        } catch (Exception e) {
+            e.printStackTrace();  // 예외를 출력하여 무슨 오류가 발생하는지 확인
+            System.out.println("Exception occurred during recruitment fetch");
+        }
+
+        if (recruitments == null) {
+            System.out.println("Recruitments is null");
+        } else if (recruitments.isEmpty()) {
+            System.out.println("Recruitments is empty");
+        } else {
+            System.out.println("Number of recruitments: " + recruitments.size());
+        }
+
+        List<RecruitmentResponseDto> recruitmentResponseDtos = new ArrayList<>();
+        for (Recruitment recruitment : recruitments) {
+            RecruitmentResponseDto dto = convertToDto(recruitment);
+            recruitmentResponseDtos.add(dto);
+            System.out.println("추가완료");
+        }
+
+        return recruitmentResponseDtos;
     }
 
     // 공고 작성

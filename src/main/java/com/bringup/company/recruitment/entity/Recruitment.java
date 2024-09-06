@@ -21,7 +21,7 @@ public class Recruitment {
     private Integer recruitmentIndex;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id", nullable = false)
+    @JoinColumn(name = "company_index", nullable = false)
     private Company company;
 
     @Column(name = "recruitment_title", nullable = false, length = 30)
