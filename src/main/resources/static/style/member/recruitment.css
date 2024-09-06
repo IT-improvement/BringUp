@@ -323,3 +323,16 @@
 .tech-results span:hover {
     background-color: #f0f0f0;
 }
+/* li 안에서 label이 li 크기를 모두 차지하도록 */
+li {
+    position: relative;
+}
+
+li label {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer; /* 커서를 포인터로 변경 */
+    padding: 10px; /* li 크기만큼 label이 확장되도록 */
+}
+
