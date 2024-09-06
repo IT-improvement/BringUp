@@ -84,6 +84,46 @@
                     <label for="c_logo" class="form-label"><i class="fas fa-image"></i> 회사 로고</label>
                     <input type="file" class="form-control" id="c_logo" name="c_logo" accept="image/*">
                 </div>
+                <div class="mb-3" id="ceoImageContainer">
+                    <label for="ceo_image" class="form-label"><i class="fas fa-image"></i> 회사 대표 이미지 *</label>
+                    <div class="d-flex flex-wrap">
+                        <div class="input-group mb-2 mr-2">
+                            <input type="file" class="form-control" id="ceo_image" name="ceo_image" accept="image/*" required>
+                        </div>
+                        <button type="button" class="btn btn-primary mb-2 w-100" id="addCeoImage">이미지 추가</button>
+                    </div>
+                </div>
+                <script>
+                    document.getElementById('addCeoImage').addEventListener('click', function() {
+                        const ceoImageContainer = document.getElementById('ceoImageContainer').querySelector('.d-flex');
+                        const existingInputs = ceoImageContainer.querySelectorAll('.input-group');
+                        if (existingInputs.length < 5) { 
+                            const inputGroup = document.createElement('div');
+                            inputGroup.classList.add('input-group', 'mb-2', 'mr-2');
+                            
+                            const newInput = document.createElement('input');
+                            newInput.type = 'file';
+                            newInput.name = 'ceo_image';
+                            newInput.accept = 'image/*';
+                            newInput.required = true;
+                            newInput.classList.add('form-control');
+                            
+                            const removeButton = document.createElement('button');
+                            removeButton.type = 'button';
+                            removeButton.textContent = 'X';
+                            removeButton.classList.add('btn', 'btn-danger');
+                            removeButton.addEventListener('click', function() {
+                                ceoImageContainer.removeChild(inputGroup);
+                            });
+                            
+                            inputGroup.appendChild(newInput);
+                            inputGroup.appendChild(removeButton);
+                            ceoImageContainer.insertBefore(inputGroup, this);
+                        } else {
+                            alert('이미지 입력칸은 최대 5개까지 생성할 수 있습니다.');
+                        }
+                    });
+                </script>
                 <div class="mb-3">
                     <label for="m_name" class="form-label"><i class="fas fa-user"></i> 담당자명 *</label>
                     <input type="text" class="form-control" id="m_name" name="m_name" placeholder="담당자명을 입력하세요" required>
