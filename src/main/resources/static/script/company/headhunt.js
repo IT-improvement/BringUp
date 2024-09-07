@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let allCVs = data.data;
             if (allCVs && allCVs.length > 0) {
                 allCVs.forEach(function (cv) {
-                    let imgSrc = cv.cvImage ? '/resources/image/' + cv.cvImage : '/resources/image/default.png';
+                    let imgSrc = cv.cvImage ? '/resources' + cv.cvImage : '/resources/image/default.png';
                     let card = `
                     <div class="user-card">
                         <div class="user-card-content">

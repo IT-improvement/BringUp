@@ -57,7 +57,7 @@ public class CompanyService {
      * 회원 등록
      */
     @Transactional
-    public Company joinCompany(JoinDto joinDto) {
+    public Company joinCompany(JoinDto joinDto, MultipartFile logo, MultipartFile[] imgs) {
 
         String email = joinDto.getId();
 
@@ -93,8 +93,9 @@ public class CompanyService {
         company.setCompanyHistory(joinDto.getC_history());
         company.setCompanyScale(joinDto.getC_scale());
         company.setCompanyVision(joinDto.getC_vision());
-        company.setCompanyLogo(imageService.upLoadImage(joinDto.getC_logo()));
         company.setCompanySize(joinDto.getC_size());
+        company.setCompanyLogo(imageService.saveImage(logo));
+        company.setCompanyImg(imageService.uploadImages(imgs));
         company.setCompanyOpendate(joinDto.getCompany_opendate());
         company.setCompanyLicense(joinDto.getCompany_licence());
         company.setMasterName(joinDto.getMaster_name());
@@ -102,16 +103,6 @@ public class CompanyService {
         company.setCompanySubsidiary(joinDto.getSubsidiary());
         company.setCompanyFinancialStatements(joinDto.getFinancial_stat());
         company.setOpencvKey(joinDto.getCv_key());
-
-        // 여러 이미지 파일 업로드 처리
-        if (joinDto.getCompanyImg() != null && joinDto.getCompanyImg().length > 0) {
-            StringBuilder imgPaths = new StringBuilder();
-            for (MultipartFile img : joinDto.getCompanyImg()) {
-                String imgPath = imageService.upLoadImage(img);
-                imgPaths.append(imgPath).append(",");  // 이미지 경로를 쉼표로 구분하여 저장
-            }
-            company.setCompanyImg(imgPaths.toString());
-        }
 
         company.setRole(RolesType.ROLE_COMPANY);
         company.setStatus(StatusType.ACTIVE);
