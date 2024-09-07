@@ -29,8 +29,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const images = data.data.companyLogo;
             console.log("회사 로고:", images);
             if (images) {
-                sessionStorage.setItem('companyLogo', images);
-                document.getElementById('profileImage').src = "/resources/logos/" + images;
+                // 이미지 경로가 '/'로 시작하지 않으면 '/'를 추가합니다.
+                const imagePath = images.startsWith('/') ? images : '/' + images;
+                sessionStorage.setItem('companyLogo', imagePath);
+                document.getElementById('profileImage').src = imagePath;
             }
         })
         .catch(error => {
