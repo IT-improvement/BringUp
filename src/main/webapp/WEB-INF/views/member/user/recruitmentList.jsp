@@ -208,16 +208,12 @@
 									<input type="text" id="tech-search" placeholder="직무 스킬을 검색해보세요" />
 									<div id="tech-results" class="tech-results-container"></div>
 								</div>
-								<div class="ur_tech-tags">
-									<span>Python</span>
-									<span>JavaScript</span>
-									<span>React</span>
-									<span>Next.js</span>
-									<span>SQL</span>
-									<span>Slack</span>
-									<span>JIRA</span>
-									<span>Confluence</span>
+
+								<!-- 선택된 기술 스택 태그 표시 -->
+								<div class="selected-tech-tags">
+									<!-- 여기에 선택된 기술 스택 태그가 추가됩니다 -->
 								</div>
+								
 							</div>
 						</section>
 
@@ -610,7 +606,8 @@
 						//언어필터
 						document.addEventListener('DOMContentLoaded', function () {
 							const techInput = document.getElementById('tech-search');
-							const selectedTechContainer = document.querySelector('.ur_tech-tags');
+							const selectedTechContainer = document.querySelector('.selected-tech-tags'); // 선택된 태그를 표시할 컨테이너
+							const techResultsContainer = document.getElementById('tech-results');
 
 							const techStack = [
 								'Python', 'JavaScript', 'React', 'Next.js', 'SQL', 'Slack', 'JIRA', 'Confluence',
@@ -618,9 +615,11 @@
 								'PHP', 'Perl', 'Scala', 'Objective-C', 'R', 'Haskell', 'Elixir'
 							];
 
+							const selectedTechTags = [];
+
 							techInput.addEventListener('input', function () {
 								const query = techInput.value.toLowerCase();
-								selectedTechContainer.innerHTML = ''; // Clear existing tags before updating
+								techResultsContainer.innerHTML = ''; // 이전 검색 결과 초기화
 
 								if (query) {
 									const filteredTech = techStack.filter(tech => tech.toLowerCase().includes(query));
@@ -628,29 +627,37 @@
 									filteredTech.forEach(tech => {
 										const techElement = document.createElement('span');
 										techElement.textContent = tech;
-										techElement.classList.add('tech-tag'); // Optional: add a class for styling
-										selectedTechContainer.appendChild(techElement);
+										techElement.classList.add('tech-result-item');
+										techResultsContainer.appendChild(techElement);
 
+										// 클릭 시 선택된 태그로 추가
 										techElement.addEventListener('click', function () {
 											addTechTag(tech);
-											techInput.value = ''; // Clear input field after selection
+											techInput.value = ''; // 입력 필드를 비웁니다
+											techResultsContainer.innerHTML = ''; // 검색 결과도 초기화
 										});
 									});
 								}
 							});
 
 							function addTechTag(tech) {
-								const existingTags = Array.from(selectedTechContainer.children).map(tag => tag.textContent);
+								// 이미 선택된 기술 스택인지 확인
+								if (!selectedTechTags.includes(tech)) {
+									selectedTechTags.push(tech);
 
-								if (!existingTags.includes(tech)) {
 									const techTag = document.createElement('span');
 									techTag.textContent = tech;
-									techTag.classList.add('tech-tag'); // Optional: add a class for styling
+									techTag.classList.add('tech-tag'); // 스타일 클래스 추가
 									selectedTechContainer.appendChild(techTag);
+
+									// 선택된 태그 삭제 기능 추가
+									techTag.addEventListener('click', function () {
+										selectedTechTags.splice(selectedTechTags.indexOf(tech), 1); // 배열에서 제거
+										selectedTechContainer.removeChild(techTag); // 화면에서 제거
+									});
 								}
 							}
 						});
-
 
 					</script>
 					</body>
