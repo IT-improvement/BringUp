@@ -106,6 +106,11 @@
                     salaries: []
                 };
     
+                // 회사 홈페이지 URL에 "http://"를 추가
+                if (joinDto.c_homePage && !joinDto.c_homePage.startsWith('http://')) {
+                    joinDto.c_homePage = 'http://' + joinDto.c_homePage;
+                }
+    
                 // 급여 정보 수집
                 const salaryFields = document.querySelectorAll('.salary-field');
                 salaryFields.forEach(field => {
@@ -132,6 +137,19 @@
                 const logoFile = document.getElementById('c_logo').files[0];
                 if (logoFile) {
                     formData.append('c_logo', logoFile);
+                }
+    
+                // CEO 이미지 파일 추가
+                const ceoImageInputs = document.querySelectorAll('#ceoImageContainer input[type="file"]');
+                ceoImageInputs.forEach((input, index) => {
+                    if (input.files[0]) {
+                        formData.append(`c_img`, input.files[0]);
+                    }
+                });
+    
+                // formData에 모든 데이터를 추가한 후
+                for (let [key, value] of formData.entries()) {
+                    console.log(key, value);
                 }
     
                 fetch('/com/join/second', {

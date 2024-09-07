@@ -88,7 +88,7 @@
                     <label for="ceo_image" class="form-label"><i class="fas fa-image"></i> 회사 대표 이미지 *</label>
                     <div class="d-flex flex-wrap">
                         <div class="input-group mb-2 mr-2">
-                            <input type="file" class="form-control" id="ceo_image" name="ceo_image" accept="image/*" required>
+                            <input type="file" class="form-control" id="ceo_image" name="c_img" accept="image/*" required>
                         </div>
                         <button type="button" class="btn btn-primary mb-2 w-100" id="addCeoImage">이미지 추가</button>
                     </div>
@@ -103,7 +103,7 @@
                             
                             const newInput = document.createElement('input');
                             newInput.type = 'file';
-                            newInput.name = 'ceo_image';
+                            newInput.name = 'c_img';
                             newInput.accept = 'image/*';
                             newInput.required = true;
                             newInput.classList.add('form-control');
@@ -176,7 +176,12 @@
                 </div>
                 <div class="mb-3">
                     <label for="c_homePage" class="form-label"><i class="fas fa-globe"></i> 회사 홈페이지</label>
-                    <input type="url" class="form-control" id="c_homePage" name="c_homePage" placeholder="회사 홈페이지 URL을 입력하세요">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">http://</span>
+                        </div>
+                        <input type="text" class="form-control" id="c_homePage" name="c_homePage" placeholder="회사 홈페이지 URL을 입력하세요">
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="subsidiary" class="form-label"><i class="fas fa-sitemap"></i> 계열사</label>
