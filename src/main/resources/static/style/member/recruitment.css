@@ -336,3 +336,41 @@ li label {
     padding: 10px; /* li 크기만큼 label이 확장되도록 */
 }
 
+/* 기술 스택 검색 결과 스타일 */
+.tech-result-item {
+    display: inline-block;
+    background-color: #f1f3f5;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 5px;
+}
+
+.tech-result-item:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* 선택된 기술 스택 태그 스타일 */
+.selected-tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.tech-tag {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.tech-tag:hover {
+    background-color: #0056b3;
+}

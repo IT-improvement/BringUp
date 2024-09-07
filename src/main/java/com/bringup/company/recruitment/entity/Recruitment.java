@@ -46,5 +46,8 @@ public class Recruitment {
     private String status;
 
     @Column(name = "view_count")
-    private int view_count;
-}
+    private int viewCount;
+
+
+    }
+
