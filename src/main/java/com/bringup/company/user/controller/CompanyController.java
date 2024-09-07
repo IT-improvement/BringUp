@@ -59,7 +59,6 @@ public class CompanyController {
     // 회원가입 2단계 ( 정보 작성 )
     @PostMapping("/join/second")
     public ResponseEntity<BfResponse<?>> registerUser(@RequestPart("joinDto") JoinDto joinDTO,
-                                                      @RequestPart("c_logo") MultipartFile logo,
                                                       HttpSession session) {
         ValidationRequestDto businessInfo = (ValidationRequestDto) session.getAttribute("businessInfo");
         try{
@@ -70,7 +69,7 @@ public class CompanyController {
             }
             //프로젝트 발표 전까지는 주석처리 ( 진위여부 파악 실패시 회원가입 안됨 )
             //else throw new CompanyException(MemberErrorCode.NOT_FOUND_1st);
-            companyService.joinCompany(joinDTO, logo);
+            companyService.joinCompany(joinDTO);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new BfResponse<>(CREATE, Map.of("Company_name", joinDTO.getC_name())));
         } catch (CompanyException e){
