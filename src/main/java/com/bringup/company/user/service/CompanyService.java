@@ -35,10 +35,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static com.bringup.common.enums.CertificateErrorCode.INVALID_CERTIFCATE_NUMBER;
 import static com.bringup.common.enums.MemberErrorCode.*;
@@ -60,7 +57,7 @@ public class CompanyService {
      * 회원 등록
      */
     @Transactional
-    public Company joinCompany(JoinDto joinDto, MultipartFile logo) {
+    public Company joinCompany(JoinDto joinDto) {
 
         String email = joinDto.getId();
 
@@ -96,7 +93,7 @@ public class CompanyService {
         company.setCompanyHistory(joinDto.getC_history());
         company.setCompanyScale(joinDto.getC_scale());
         company.setCompanyVision(joinDto.getC_vision());
-        company.setCompanyLogo(imageService.upLoadImage(logo));
+        company.setCompanyLogo(imageService.upLoadImage(joinDto.getC_logo()));
         company.setCompanySize(joinDto.getC_size());
         company.setCompanyOpendate(joinDto.getCompany_opendate());
         company.setCompanyLicense(joinDto.getCompany_licence());
