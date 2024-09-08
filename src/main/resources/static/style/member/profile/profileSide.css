@@ -15,3 +15,42 @@
     color: #333;
     font-weight: bold;
 }
+.profile-banner{
+    background-color: #e0f7fa;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+.profile-banner p{
+    margin: 0;
+    font-size: 18px;
+}
+.profile-banner a{
+    text-decoration: none;
+    color: #00796b;
+    font-weight: bold;
+}
+.profile-applications, .profile-submitted-applications{
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+}
+.profile-applications h2, .profile-submitted-applications h2{
+    margin-top: 0
+}
+.profile-status{
+    display: flex;
+    justify-content: space-between;
+}
+.profile-status div{
+    text-align: center;
+}
+.profile-status p{
+    margin: 5px 0;
+}
+.profile-status span{
+    font-size: 24px;
+    font-weight: bold;
+}

@@ -78,7 +78,34 @@
         </ul>
     </aside>
     <section class>
-        <!-- 섹션 별 jsp 페이지 include -->
+        <section class="profile-dashboard">
+            <div class="profile-banner">
+                <p>자동 경력 블로그기로 커리어를 관리해 보세요!</p>
+                <a href="#">내 커리어 기록하러 가기</a>
+            </div>
+            <div class="profile-applications">
+                <h2>작성 중인 지원서</h2>
+                <p>작성 중인 지원서가 없어요. 관심있는 공고에 지원해 보세요.</p>
+                <button>채용 공고 탐색하기</button>
+            </div>
+            <div class="profile-submitted-applications">
+                <h2>제출한 지원서</h2>
+                <div class="profile-status">
+                    <div>
+                        <p>서류지원</p>
+                        <span>0</span>
+                    </div>
+                    <div>
+                        <p>진행중</p>
+                        <span>0</span>
+                    </div>
+                    <div>
+                        <p>최종합격</p>
+                        <span>0</span>
+                    </div>
+                </div>
+            </div>
+        </section>
     </section>
 </main>
 
