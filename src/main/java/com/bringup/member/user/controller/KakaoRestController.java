@@ -1,9 +1,20 @@
 package com.bringup.member.user.controller;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/kakao")
 public class KakaoRestController {
+
+    @Value("${kakaoapi.key}")
+    private String key;
+
+    @GetMapping("/login")
+    public void kakaoLogoin(){
+
+    }
 }
