@@ -15,7 +15,7 @@ public class Salary {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "company_id", nullable = false)
+    @Column(name = "company_index", nullable = false)
     private Integer companyId;
 
     @Column(name = "position", nullable = false, length = 10)
@@ -31,7 +31,7 @@ public class Salary {
     private int maxSalary;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id", insertable = false, updatable = false)
+    @JoinColumn(name = "company_index", insertable = false, updatable = false)
     private Company company;
 }
 

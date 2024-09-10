@@ -1,5 +1,6 @@
 package com.bringup.company.advertisement.dto.response;
 
+import com.bringup.common.enums.StatusType;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,5 +12,5 @@ public class AdvertisementResponseDto {
     private String advertisementImage;
     private String type;
     private String displayTime;
-    private String status;
+    private StatusType status;
 }

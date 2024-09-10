@@ -1,10 +1,12 @@
 package com.bringup.company.advertisement.service;
 
+import com.bringup.common.enums.StatusType;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.dto.request.AdvertisementRequestDto;
 import com.bringup.company.advertisement.dto.response.AdvertisementResponseDto;
 import com.bringup.company.advertisement.entity.Advertisement;
+import com.bringup.company.advertisement.exception.AdvertisementException;
 import com.bringup.company.advertisement.repository.AdvertisementRepository;
 import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
@@ -14,15 +16,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.Objects;
+
+import static com.bringup.common.enums.AdvertisementErrorCode.*;
+
 
 @Service
 @RequiredArgsConstructor
@@ -33,31 +34,37 @@ public class AdvertisementService {
     private final ImageService imageService;
 
     public List<AdvertisementResponseDto> getAdvertisements(UserDetailsImpl userDetails) {
-        return advertisementRepository.findAll().stream()
-                .filter(ad -> recruitmentRepository.findById(ad.getRecruitmentIndex())
-                        .map(recruitment -> (recruitment.getCompany().getCompanyId() == (userDetails.getId())))
-                        .orElse(false))
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        List<Advertisement> advertisements = advertisementRepository.findAll();
+        List<AdvertisementResponseDto> responseDtos = new ArrayList<>();
+
+        for (Advertisement ad : advertisements) {
+            Recruitment recruitment = recruitmentRepository.findById(ad.getRecruitmentIndex())
+                    .orElse(null);
+            if (recruitment != null && Objects.equals(recruitment.getCompany().getCompanyId(), userDetails.getId())) {
+                responseDtos.add(convertToDto(ad));
+            }
+        }
+        return responseDtos;
     }
 
     @Transactional
     public void createAdvertisement(UserDetailsImpl userDetails, AdvertisementRequestDto requestDto, MultipartFile image) {
         Recruitment recruitment = recruitmentRepository.findById(requestDto.getRecruitmentIndex())
-                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_RECRUITMENT));
 
-        if (!(recruitment.getCompany().getCompanyId() == (userDetails.getId()))) {
-            throw new RuntimeException("You do not have permission to create an advertisement for this recruitment.");
+        if (!Objects.equals(recruitment.getCompany().getCompanyId(), userDetails.getId())) {
+            throw new AdvertisementException(UNAUTHORIZED_ADVERTISEMENT_ACCESS);
         }
 
         String imageUrl = imageService.upLoadImage(image);
 
-        Advertisement advertisement = new Advertisement();
-        advertisement.setRecruitmentIndex(requestDto.getRecruitmentIndex());
+        Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
         advertisement.setAdvertisementImage(imageUrl);
         advertisement.setType(requestDto.getType());
         advertisement.setDisplayTime(requestDto.getDisplayTime());
-        advertisement.setStatus("생성 대기");
+        advertisement.setStatus(StatusType.CRT_WAIT);
 
         advertisementRepository.save(advertisement);
 
@@ -67,19 +74,19 @@ public class AdvertisementService {
     @Transactional
     public void uploadAdvertisementImage(UserDetailsImpl userDetails, int recruitmentIndex, MultipartFile image) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentIndex)
-                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_RECRUITMENT));
 
-        if (!(recruitment.getCompany().getCompanyId() == (userDetails.getId()))) {
-            throw new RuntimeException("You do not have permission to upload an image for this recruitment.");
+        if (!Objects.equals(recruitment.getCompany().getCompanyId(), userDetails.getId())) {
+            throw new AdvertisementException(UNAUTHORIZED_ADVERTISEMENT_ACCESS);
         }
 
         String imageUrl = imageService.upLoadImage(image);
 
         Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(recruitmentIndex)
-                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         advertisement.setAdvertisementImage(imageUrl);
-        advertisement.setStatus("이미지 수정 대기");
+        advertisement.setStatus(StatusType.CRT_WAIT);
 
         advertisementRepository.save(advertisement);
     }
@@ -87,57 +94,54 @@ public class AdvertisementService {
     @Transactional
     public void updateAdvertisementType(UserDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
         Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
-                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
-                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_RECRUITMENT));
 
-        if (!(recruitment.getCompany().getCompanyId() == (userDetails.getId()))) {
-            throw new RuntimeException("You do not have permission to update the type of this advertisement.");
+        if (!Objects.equals(recruitment.getCompany().getCompanyId(), userDetails.getId())) {
+            throw new AdvertisementException(UNAUTHORIZED_ADVERTISEMENT_ACCESS);
         }
 
         advertisement.setType(requestDto.getType());
-        advertisement.setStatus("수정 대기");
+        advertisement.setStatus(StatusType.CRT_WAIT);
 
         advertisementRepository.save(advertisement);
-
         notifyAdminForApproval(advertisement);
     }
 
     @Transactional
     public void updateAdvertisementDisplayTime(UserDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
         Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
-                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
-                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_RECRUITMENT));
 
-        if (!(recruitment.getCompany().getCompanyId() == (userDetails.getId()))) {
-            throw new RuntimeException("You do not have permission to update the display time of this advertisement.");
+        if (!Objects.equals(recruitment.getCompany().getCompanyId(), userDetails.getId())) {
+            throw new AdvertisementException(UNAUTHORIZED_ADVERTISEMENT_ACCESS);
         }
 
         advertisement.setDisplayTime(requestDto.getDisplayTime());
-        advertisement.setStatus("수정 대기");
+        advertisement.setStatus(StatusType.CRT_WAIT);
 
         advertisementRepository.save(advertisement);
-
         notifyAdminForApproval(advertisement);
     }
 
     @Transactional
     public void extendAdvertisement(UserDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
         Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
-                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
-                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_RECRUITMENT));
 
-        if (!(recruitment.getCompany().getCompanyId() == (userDetails.getId()))) {
-            throw new RuntimeException("You do not have permission to extend this advertisement.");
+        if (!Objects.equals(recruitment.getCompany().getCompanyId(), userDetails.getId())) {
+            throw new AdvertisementException(UNAUTHORIZED_ADVERTISEMENT_ACCESS);
         }
 
-        advertisement.setStatus("연장 대기");
-
+        advertisement.setStatus(StatusType.CRT_WAIT);
         advertisementRepository.save(advertisement);
 
         notifyAdminForApproval(advertisement);
@@ -146,16 +150,16 @@ public class AdvertisementService {
     @Transactional
     public void deleteAdvertisement(UserDetailsImpl userDetails, AdvertisementRequestDto requestDto) {
         Advertisement advertisement = advertisementRepository.findByRecruitmentIndex(requestDto.getRecruitmentIndex())
-                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
-                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_RECRUITMENT));
 
-        if (!(recruitment.getCompany().getCompanyId() == (userDetails.getId()))) {
-            throw new RuntimeException("You do not have permission to delete this advertisement.");
+        if (!Objects.equals(recruitment.getCompany().getCompanyId(), userDetails.getId())) {
+            throw new AdvertisementException(UNAUTHORIZED_ADVERTISEMENT_ACCESS);
         }
 
-        advertisement.setStatus("삭제 대기");
+        advertisement.setStatus(StatusType.DEL_WAIT);
         advertisementRepository.save(advertisement);
 
         notifyAdminForDeletionApproval(advertisement);
@@ -170,8 +174,8 @@ public class AdvertisementService {
 
         for (Advertisement advertisement : advertisements) {
             LocalDate displayDate = LocalDate.parse(advertisement.getDisplayTime(), formatter);
-            if (!displayDate.isAfter(today) && !"삭제".equals(advertisement.getStatus())) {
-                advertisement.setStatus("삭제");
+            if (!displayDate.isAfter(today) && !StatusType.INACTIVE.equals(advertisement.getStatus())) {
+                advertisement.setStatus(StatusType.DEL_WAIT);
                 advertisementRepository.save(advertisement);
             }
         }
@@ -179,13 +183,13 @@ public class AdvertisementService {
 
     public AdvertisementResponseDto getAdvertisementDetail(UserDetailsImpl userDetails, Integer advertisementId) {
         Advertisement advertisement = advertisementRepository.findById(advertisementId)
-                .orElseThrow(() -> new RuntimeException("Advertisement not found"));
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         Recruitment recruitment = recruitmentRepository.findById(advertisement.getRecruitmentIndex())
-                .orElseThrow(() -> new RuntimeException("Recruitment not found"));
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_RECRUITMENT));
 
-        if (!(recruitment.getCompany().getCompanyId() == (userDetails.getId()))) {
-            throw new RuntimeException("You do not have permission to view this advertisement.");
+        if (!Objects.equals(recruitment.getCompany().getCompanyId(), userDetails.getId())) {
+            throw new AdvertisementException(UNAUTHORIZED_ADVERTISEMENT_ACCESS);
         }
 
         return convertToDto(advertisement);

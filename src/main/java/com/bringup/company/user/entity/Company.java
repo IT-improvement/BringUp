@@ -1,6 +1,7 @@
 package com.bringup.company.user.entity;
 
 import com.bringup.common.enums.RolesType;
+import com.bringup.common.enums.StatusType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -85,8 +86,10 @@ public class Company {
     @Column(name = "opencv_key", nullable = false, columnDefinition = "int default 0")
     private int opencvKey;
 
+    @Setter
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private String status;
+    private StatusType status = StatusType.ACTIVE;
 
     @Setter
     @Enumerated(EnumType.STRING)
@@ -106,7 +109,7 @@ public class Company {
     }
 
     public void inactiveMember() {
-        this.status = "삭제";
+        this.status = StatusType.INACTIVE;
     }
 
     public void resetPassword(String password) {

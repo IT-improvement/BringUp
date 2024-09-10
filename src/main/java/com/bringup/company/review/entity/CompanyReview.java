@@ -21,7 +21,7 @@ public class CompanyReview {
     private UserEntity user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id", nullable = false)
+    @JoinColumn(name = "company_index", nullable = false)
     private Company company;
 
     @Column(name = "advancement", nullable = false, columnDefinition = "int default 3")
