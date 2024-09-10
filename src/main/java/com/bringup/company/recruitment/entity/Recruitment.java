@@ -1,6 +1,7 @@
 package com.bringup.company.recruitment.entity;
 
 import com.bringup.common.enums.RecruitmentType;
+import com.bringup.common.enums.StatusType;
 import com.bringup.company.user.entity.Company;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -20,7 +21,7 @@ public class Recruitment {
     private Integer recruitmentIndex;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id", nullable = false)
+    @JoinColumn(name = "company_index", nullable = false)
     private Company company;
 
     @Column(name = "recruitment_title", nullable = false, length = 30)
@@ -36,14 +37,22 @@ public class Recruitment {
     @Column(name = "skill", length = 30)
     private String skill;
 
+    @Column(name = "work_detail")
+    private String workDetail;
+
+    @Column(name = "hospitality")
+    private String hospitality;
+
     @Column(name = "start_date", nullable = false, length = 50)
     private String startDate;
 
     @Column(name = "period", nullable = false, length = 30)
     private String period;
 
-    @Column(name = "status", nullable = false, length = 10)
-    private String status;
+    @Setter
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private StatusType status;
 
     @Column(name = "view_count")
     private int viewCount;

@@ -3,6 +3,7 @@ package com.bringup.company.user.service;
 import com.bringup.common.enums.CertificateErrorCode;
 import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.enums.RolesType;
+import com.bringup.common.enums.StatusType;
 import com.bringup.common.event.Service.CertificateService;
 import com.bringup.common.event.exception.CertificateException;
 import com.bringup.common.image.ImageService;
@@ -34,11 +35,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
+import static com.bringup.common.enums.CertificateErrorCode.INVALID_CERTIFCATE_NUMBER;
 import static com.bringup.common.enums.MemberErrorCode.*;
 
 @Service
@@ -58,27 +57,31 @@ public class CompanyService {
      * 회원 등록
      */
     @Transactional
-    public Company joinCompany(JoinDto joinDto, MultipartFile logo) {
+    public Company joinCompany(JoinDto joinDto, MultipartFile logo, MultipartFile[] imgs) {
 
         String email = joinDto.getId();
 
-        // 이메일 인증 여부 확인
-        if (!certificateService.isEmailVerified(email)) {
-            throw new CertificateException(CertificateErrorCode.INVALID_CERTIFCATE_NUMBER);
-        }
+        try {
+            // 이메일 인증 여부 확인
+            if (!certificateService.isEmailVerified(email)) {
+                throw new CertificateException(INVALID_CERTIFCATE_NUMBER);
+            }
 
-        // 이메일 중복 체크
-        if (companyRepository.existsByManagerEmail(email)) {
-            throw new CompanyException(MemberErrorCode.DUPLICATED_MEMBER_EMAIL);
+            // 이메일 중복 체크
+            if (companyRepository.existsByManagerEmail(email)) {
+                throw new CompanyException(DUPLICATED_MEMBER_EMAIL);
+            }
+        } catch (Exception e) {
+            log.error("Validation failed: {}", e.getMessage());
+            throw new CompanyException(CHECK_ID_OR_PASSWORD);
         }
 
         Company company = new Company();
 
         String encodedPassword = passwordEncoder.encode(joinDto.getPassword());
-        System.out.println("Encoded Password: " + encodedPassword);
 
         company.setManagerEmail(email);
-        company.setCompanyPassword(passwordEncoder.encode(joinDto.getPassword()));
+        company.setCompanyPassword(encodedPassword);
         company.setCompanyPhonenumber(joinDto.getC_phone());
         company.setCompanyName(joinDto.getC_name());
         company.setManagerName(joinDto.getM_name());
@@ -90,8 +93,9 @@ public class CompanyService {
         company.setCompanyHistory(joinDto.getC_history());
         company.setCompanyScale(joinDto.getC_scale());
         company.setCompanyVision(joinDto.getC_vision());
-        company.setCompanyLogo(imageService.upLoadImage(logo));
         company.setCompanySize(joinDto.getC_size());
+        company.setCompanyLogo(imageService.saveImage(logo));
+        company.setCompanyImg(imageService.uploadImages(imgs));
         company.setCompanyOpendate(joinDto.getCompany_opendate());
         company.setCompanyLicense(joinDto.getCompany_licence());
         company.setMasterName(joinDto.getMaster_name());
@@ -100,18 +104,8 @@ public class CompanyService {
         company.setCompanyFinancialStatements(joinDto.getFinancial_stat());
         company.setOpencvKey(joinDto.getCv_key());
 
-        // 여러 이미지 파일 업로드 처리
-        if (joinDto.getCompanyImg() != null && joinDto.getCompanyImg().length > 0) {
-            StringBuilder imgPaths = new StringBuilder();
-            for (MultipartFile img : joinDto.getCompanyImg()) {
-                String imgPath = imageService.upLoadImage(img);
-                imgPaths.append(imgPath).append(",");  // 이미지 경로를 쉼표로 구분하여 저장
-            }
-            company.setCompanyImg(imgPaths.toString());
-        }
-
         company.setRole(RolesType.ROLE_COMPANY);
-        company.setStatus("활성");
+        company.setStatus(StatusType.ACTIVE);
 
         Company savedCompany = companyRepository.save(company);
 
@@ -165,32 +159,34 @@ public class CompanyService {
                 loginDto.getPassword()
         );
 
-        System.out.println("Service: login method called with " + loginDto.getUserid());
-        System.out.println("authenticationToken : " + authenticationToken);
+        try{
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            System.out.println("userDetails : " + userDetails);
 
-        if (loginDto == null) {
-            throw new IllegalArgumentException("loginDto cannot be null");
+            String accessToken = jwtProvider.createAccessToken(userDetails);
+            System.out.println("Service: JWT token created for " + userDetails.getUsername());
+
+            return LoginTokenDto.builder()
+                    .accessToken(accessToken)
+                    .build();
+        } catch (Exception e){
+            throw new CompanyException(CHECK_ID_OR_PASSWORD);
         }
 
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        System.out.println("userDetails : " + userDetails);
-
-        String accessToken = jwtProvider.createAccessToken(userDetails);
-        System.out.println("Service: JWT token created for " + userDetails.getUsername());
-
-        return LoginTokenDto.builder()
-                .accessToken(accessToken)
-                .build();
     }
 
     /**
      * ID(companyEmail) Check
      */
-    public boolean checkId(String company_email){
-        log.debug("user id : " + company_email);
-        return !companyRepository.existsByManagerEmail(company_email);
+    public boolean checkId(String company_email) {
+        try {
+            return companyRepository.existsByManagerEmail(company_email);
+        } catch (Exception e) {
+            log.error("Error checking ID: {}", e.getMessage());
+            throw new CompanyException(NOT_FOUND_MEMBER_EMAIL);
+        }
     }
 
     // 회원 정보 수정
@@ -219,7 +215,8 @@ public class CompanyService {
         if (requestBody.containsKey("salaries")) {
             String salariesJson = requestBody.get("salaries");
             try {
-                List<Map<String, String>> salaryList = new ObjectMapper().readValue(salariesJson, new TypeReference<List<Map<String, String>>>() {});
+                List<Map<String, String>> salaryList = new ObjectMapper().readValue(salariesJson, new TypeReference<List<Map<String, String>>>() {
+                });
                 for (Map<String, String> salaryMap : salaryList) {
                     String position = salaryMap.get("position");
                     Optional<Salary> existingSalaryOpt = salaryRepository.findByCompanyIdAndPosition(company.getCompanyId(), position);
@@ -232,6 +229,7 @@ public class CompanyService {
                     salaryRepository.save(salary);
                 }
             } catch (Exception e) {
+                log.error("Error updating salaries: {}", e.getMessage());
                 throw new CompanyException(INVALID_REQUEST_FORMAT);
             }
         }
@@ -240,10 +238,16 @@ public class CompanyService {
     // 회원 탈퇴
     @Transactional
     public void deleteUser(UserDetailsImpl userDetails) {
-        Company company = companyRepository.findById(userDetails.getId())
-                .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
+        try{
+            Company company = companyRepository.findById(userDetails.getId())
+                    .orElseThrow(() -> new CompanyException(FORBIDDEN_DELETE_MEMBER));
 
-        companyRepository.delete(company);
+            company.setStatus(StatusType.INACTIVE);
+
+            companyRepository.save(company);
+        }catch (Exception e){
+            throw new CompanyException(FORBIDDEN_DELETE_MEMBER);
+        }
     }
 
     public Company getUserInfo(UserDetailsImpl userDetails) {
@@ -256,7 +260,7 @@ public class CompanyService {
         if (companyOptional.isPresent()) {
             return companyOptional.get().getCompanyName();
         } else {
-            throw new IllegalArgumentException("Company not found for username: " + userDetails.getUsername());
+            throw new CompanyException(NOT_FOUND_MEMBER_EMAIL);
         }
     }
 }

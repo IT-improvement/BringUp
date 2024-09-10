@@ -1,9 +1,11 @@
 package com.bringup.company.headhunt.service;
 
+import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.headhunt.dto.response.HeadhuntResponseDto;
 import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
+import com.bringup.company.user.exception.CompanyException;
 import com.bringup.member.membership.domain.repository.UserMembershipRepository;
 import com.bringup.member.resume.domain.entity.CVEntity;
 import com.bringup.member.resume.domain.repository.CVRepository;
@@ -14,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -113,7 +114,7 @@ public class HeadhuntService {
 
     private HeadhuntResponseDto convertToDto(CVEntity cvEntity) {
         UserEntity user = userRepository.findById(cvEntity.getUserIndex())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new CompanyException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
 
         // 주소에서 OO시 OO동만 추출
         String fullAddress = user.getUserAddress();
@@ -132,7 +133,7 @@ public class HeadhuntService {
                 cvEntity.getSkill(),
                 userAddress, // 가공된 주소
                 cvEntity.getUserIndex(), // 유저 인덱스 추가
-                userNames
+                userNames // 필터링된 이름값
         );
     }
 }

@@ -1,5 +1,6 @@
 package com.bringup.member.notice.dto.response;
 
+import com.bringup.common.enums.StatusType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +18,6 @@ public class UserRecruitmentDto {
     private String skill;
     private String startDate;
     private String period;
-    private String status;
-    private int viewCount;
+    private StatusType status;
+
 }

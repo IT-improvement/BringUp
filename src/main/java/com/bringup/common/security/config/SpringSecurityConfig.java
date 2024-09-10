@@ -153,11 +153,7 @@ public class SpringSecurityConfig {
                 antMatcher(DELETE, "/com/user"),                    // 회원 탈퇴
                 antMatcher(GET, "/com/companyInfo/post"),           // 회원 정보 조회
 
-                antMatcher(POST, "/com/recruitment/register"),       // 채용 등록
-                antMatcher(POST, "/com/recruitment/update/{recruitmentId}"), // 채용 수정
-                antMatcher(POST, "/com/recruitment/delete/{recruitmentId}"), // 채용 삭제
-                antMatcher(GET, "/com/recruitment/list"),           // 채용 리스트 조회
-                antMatcher(GET, "/com/recruitment/detail/**"),
+                antMatcher("/com/recruitment/**"),
 
                 antMatcher(POST, "/com/c_reviews"),                 // 기업 리뷰 열람
                 antMatcher(POST, "/com/c_review/delete"),           // 기업 리뷰 삭제
