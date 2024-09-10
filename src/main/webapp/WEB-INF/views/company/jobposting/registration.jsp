@@ -40,6 +40,52 @@
     <!-- 테마 JS -->
     <script src="/resources/script/common/function/functions.js"></script>
 
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			document.getElementById('recruitmentForm').addEventListener('submit', function(e) {
+					e.preventDefault();
+					const accessToken = localStorage.getItem('accessToken');
+					
+					const formData = {
+						recruitmentTitle: document.getElementById('recruitmentTitle').value,
+						recruitmentType: document.getElementById('recruitmentType').value,
+						category: document.getElementById('category').value,
+						recruitmentContent: document.getElementById('recruitmentContent').value,
+						skill: document.getElementById('skill').value,
+						preferential: document.getElementById('preferential').value,
+						career: document.getElementById('career').value,
+						salary: document.getElementById('salary').value,
+						period: "3 months"
+					}
+					console.log(accessToken);
+					console.log(formData);
+
+					fetch('/com/recruitment/register', {
+						method: 'POST',
+						headers: {
+							'Authorization': `Bearer `+ accessToken,
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify(formData)
+					})
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('서버 응답이 실패했습니다');
+						}
+						return response.json();
+					})
+					.then(data => {
+						alert('공고가 성공적으로 등록되었습니다.');
+						location.href = '/company/jobpost/management';
+					})
+					.catch(error => {
+						console.error('Error:', error);
+						alert('공고 등록에 실패했습니다. 다시 시도해주세요.');
+					});
+				});
+			});
+		</script>
+
     <!-- 메인 JS -->
     <!-- <script src="/resources/script/company/main.js"></script> -->
 
@@ -56,7 +102,7 @@
 				<h4 class="card-title">공고 등록</h4>
 			</div>
 			<div class="card-body">
-				<form action="/com/recruitment/register" method="post">
+				<form action="/com/recruitment/register" method="post" id="recruitmentForm">
 					<div class="mb-3">
 						<label for="recruitmentTitle" class="form-label">공고 제목</label>
 						<input type="text" class="form-control" id="recruitmentTitle" name="recruitmentTitle" required>
@@ -64,8 +110,9 @@
 					<div class="mb-3">
 						<label for="recruitmentType" class="form-label">채용 형태</label>
 						<select class="form-select" id="recruitmentType" name="recruitmentType">
-							<option value="정규직">정규직</option>
-							<option value="비정규직">비정규직</option>
+							<option value="REGULAR_WORKER">정규직</option>
+							<option value="IRREGULAR_WORKER">비정규직</option>
+							<option value="PART_TIME_WORKER">아르바이트</option>
 						</select>
 					</div>
 					<div class="mb-3">
@@ -91,14 +138,6 @@
 					<div class="mb-3">
 						<label for="salary" class="form-label">최소 연봉</label>
 						<input type="number" class="form-control" id="salary" name="salary" required>
-					</div>
-					<div class="mb-3">
-						<label for="startDate" class="form-label">시작 날짜</label>
-						<input type="date" class="form-control" id="startDate" name="startDate" required>
-					</div>
-					<div class="mb-3">
-						<label for="period" class="form-label">기간</label>
-						<input type="text" class="form-control" id="period" name="period" required>
 					</div>
 					<button type="button" class="btn btn-secondary" onclick="location.href='/company/jobpost/management'">돌아가기</button>
 					<button type="submit" class="btn btn-primary" style="float: right;">등록</button>
