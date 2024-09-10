@@ -28,6 +28,6 @@
         <a href="/member/join">회원가입</a> <!-- 회원가입 페이지로 이동 -->
     </div>
 </div>
-<script src="/resources/script/member/userLogin.js"></script>
+    <script src="/resources/script/member/userLogin.js"></script>
 </body>
 </html>
