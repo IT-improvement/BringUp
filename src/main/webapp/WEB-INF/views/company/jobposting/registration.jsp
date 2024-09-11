@@ -55,7 +55,7 @@
 						preferential: document.getElementById('preferential').value,
 						career: document.getElementById('career').value,
 						salary: document.getElementById('salary').value,
-						period: "3 months"
+						period: document.getElementById('period').value
 					}
 					console.log(accessToken);
 					console.log(formData);
@@ -120,7 +120,7 @@
 						<input type="text" class="form-control" id="category" name="category" required>
 					</div>
 					<div class="mb-3">
-						<label for="recruitmentContent" class="form-label">업무 내용</label>
+						<label for="workDetailㄴ" class="form-label">업무 내용</label>
 						<textarea class="form-control" id="recruitmentContent" name="recruitmentContent" rows="10" required></textarea>
 					</div>
 					<div class="mb-3">
@@ -128,7 +128,7 @@
 						<input type="text" class="form-control" id="skill" name="skill" required>
 					</div>
 					<div class="mb-3">
-						<label for="preferential" class="form-label">우대 사항</label>
+						<label for="hospitality" class="form-label">우대 사항</label>
 						<textarea class="form-control" id="preferential" name="preferential" rows="10" required></textarea>
 					</div>
 					<div class="mb-3">
@@ -138,6 +138,10 @@
 					<div class="mb-3">
 						<label for="salary" class="form-label">최소 연봉</label>
 						<input type="number" class="form-control" id="salary" name="salary" required>
+					</div>
+					<div class="mb-3">
+						<label for="period" class="form-label">모집 기간</label>
+						<input type="text" class="form-control" id="period" name="period" required>
 					</div>
 					<button type="button" class="btn btn-secondary" onclick="location.href='/company/jobpost/management'">돌아가기</button>
 					<button type="submit" class="btn btn-primary" style="float: right;">등록</button>
