@@ -1,8 +1,7 @@
-package com.bringup.member.companybookmark.domain.entity;
+package com.bringup.common.bookmark.domain.entity;
 
-import com.bringup.member.companybookmark.dto.request.CompanyBookMarkRequestDto;
+import com.bringup.common.enums.BookmarkType;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,8 +14,13 @@ import lombok.Setter;
 public class CompanyBookMarkEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "company_index")
     private int companyIndex;
 
+    @Column(name = "user_index")
     private int userIndex;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private BookmarkType status = BookmarkType.BOOKMARK;
 }
