@@ -1,4 +1,4 @@
-package com.bringup.member.companybookmark.dto.request;
+package com.bringup.common.bookmark.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;

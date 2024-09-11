@@ -1,9 +1,8 @@
-package com.bringup.member.companybookmark.controller;
+package com.bringup.common.bookmark.controller;
 
-import com.bringup.member.companybookmark.domain.entity.CompanyBookMarkEntity;
-import com.bringup.member.companybookmark.domain.service.CompanyBookMarkService;
-import com.bringup.member.companybookmark.dto.request.CompanyBookMarkRequestDto;
-import com.bringup.member.companybookmark.dto.response.CompanyBookMarkResponseDto;
+import com.bringup.common.bookmark.domain.service.CompanyBookMarkService;
+import com.bringup.common.bookmark.dto.request.CompanyBookMarkRequestDto;
+import com.bringup.common.bookmark.dto.response.CompanyBookMarkResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,4 +33,6 @@ public class CompanyBookMarkContoller {
         companyBookMarkService.removeCompanyBookMark(companyBookMarkRequestDto);
         return ResponseEntity.ok().build();
     }
+
+
 }

@@ -1,6 +1,6 @@
-package com.bringup.member.companybookmark.dto.response;
+package com.bringup.common.bookmark.dto.response;
 
-import com.bringup.member.companybookmark.domain.entity.CompanyBookMarkEntity;
+import com.bringup.common.bookmark.domain.entity.CompanyBookMarkEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

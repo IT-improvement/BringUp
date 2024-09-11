@@ -1,7 +1,7 @@
-package com.bringup.member.companybookmark.domain.service.implement;
+package com.bringup.common.bookmark.domain.service.implement;
 
-import com.bringup.member.companybookmark.domain.entity.CompanyBookMarkEntity;
-import com.bringup.member.companybookmark.domain.repository.CompanyBookMarkRepository;
+import com.bringup.common.bookmark.domain.entity.CompanyBookMarkEntity;
+import com.bringup.common.bookmark.domain.repository.CompanyBookMarkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
