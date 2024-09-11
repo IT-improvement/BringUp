@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     row.innerHTML = `
                         <td>${recruitment.recruitmentTitle}</td>
                         <td>${recruitment.recruitmentType}</td>
-                        <td>${recruitment.startDate}</td>
                         <td>${recruitment.category}</td>
                         <td>${recruitment.status}</td>
                     `;
