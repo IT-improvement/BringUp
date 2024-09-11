@@ -2,6 +2,7 @@ package com.bringup.common.bookmark.controller;
 
 import com.bringup.common.bookmark.domain.service.CompanyBookMarkService;
 import com.bringup.common.bookmark.dto.request.CompanyBookMarkRequestDto;
+import com.bringup.common.bookmark.dto.response.CandidateResponseDto;
 import com.bringup.common.bookmark.dto.response.CompanyBookMarkResponseDto;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
@@ -39,10 +40,16 @@ public class CompanyBookMarkContoller {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/com/headhunt/candidate")
-    public ResponseEntity<BfResponse<?>> addcandidate(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        companyBookMarkService.addCandidate(userDetails);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, ""));
+    @GetMapping("/com/headhunt/candidate/{cv_index}")
+    public ResponseEntity<BfResponse<?>> addcandidate(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int cv_index){
+        companyBookMarkService.addCandidate(userDetails, cv_index);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "후보자 저장 완료"));
+    }
+
+    @GetMapping("/com/headhunt/candidate/list")
+    public ResponseEntity<List<CandidateResponseDto>> getCandidateList(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<CandidateResponseDto> candidateList = companyBookMarkService.candidateList(userDetails);
+        return ResponseEntity.ok(candidateList);
     }
 
 
