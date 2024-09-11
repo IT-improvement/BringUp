@@ -1,6 +1,6 @@
-package com.bringup.member.companybookmark.domain.repository;
+package com.bringup.common.bookmark.domain.repository;
 
-import com.bringup.member.companybookmark.domain.entity.CompanyBookMarkEntity;
+import com.bringup.common.bookmark.domain.entity.CompanyBookMarkEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

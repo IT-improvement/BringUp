@@ -1,13 +1,12 @@
-package com.bringup.member.companybookmark.domain.service;
+package com.bringup.common.bookmark.domain.service;
 
-import com.bringup.company.recruitment.repository.RecruitmentRepository;
+import com.bringup.common.bookmark.dto.response.CompanyBookMarkResponseDto;
+import com.bringup.common.enums.BookmarkType;
 import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.repository.CompanyRepository;
-import com.bringup.member.companybookmark.domain.entity.CompanyBookMarkEntity;
-import com.bringup.member.companybookmark.domain.repository.CompanyBookMarkRepository;
-import com.bringup.member.companybookmark.dto.request.CompanyBookMarkRequestDto;
-import com.bringup.member.companybookmark.dto.response.CompanyBookMarkResponseDto;
-import com.bringup.member.resume.domain.repository.CVRepository;
+import com.bringup.common.bookmark.domain.entity.CompanyBookMarkEntity;
+import com.bringup.common.bookmark.domain.repository.CompanyBookMarkRepository;
+import com.bringup.common.bookmark.dto.request.CompanyBookMarkRequestDto;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,12 +37,12 @@ public class CompanyBookMarkService {
 
         if (exitingBookMark.isPresent()){
             companyBookMarkEntity = exitingBookMark.get();
-            companyBookMarkEntity.setStatus("등록");
+            companyBookMarkEntity.setStatus(BookmarkType.BOOKMARK);
         } else {
             companyBookMarkEntity = new CompanyBookMarkEntity();
             companyBookMarkEntity.setCompanyIndex(companyBookMarkRequestDto.getCompanyIndex());
             companyBookMarkEntity.setUserIndex(companyBookMarkRequestDto.getUserIndex());
-            companyBookMarkEntity.setStatus("등록");
+            companyBookMarkEntity.setStatus(BookmarkType.BOOKMARK);
         }
         CompanyBookMarkEntity saveBookMark = companyBookMarkRepository.save(companyBookMarkEntity);
         return new CompanyBookMarkResponseDto(saveBookMark);
@@ -59,7 +58,8 @@ public class CompanyBookMarkService {
     public void removeCompanyBookMark(CompanyBookMarkRequestDto companyBookMarkRequestDto){
         CompanyBookMarkEntity companyBookMarkEntity = companyBookMarkRepository.findByUserIndexAndCompanyIndex(companyBookMarkRequestDto.getUserIndex(), companyBookMarkRequestDto.getCompanyIndex())
                 .orElseThrow(()->new RuntimeException("해당되는 북마크가 없습니다."));
-        companyBookMarkEntity.setStatus("삭제");
+        companyBookMarkEntity.setStatus(BookmarkType.BOOKMARK); // 그냥 reposiroty 내에서 삭제하는걸로 변경하쇼
         companyBookMarkRepository.save(companyBookMarkEntity);
     }
+    
 }
