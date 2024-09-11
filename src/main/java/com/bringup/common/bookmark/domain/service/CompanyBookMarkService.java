@@ -2,6 +2,7 @@ package com.bringup.common.bookmark.domain.service;
 
 import com.bringup.common.bookmark.dto.response.CompanyBookMarkResponseDto;
 import com.bringup.common.enums.BookmarkType;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.repository.CompanyRepository;
 import com.bringup.common.bookmark.domain.entity.CompanyBookMarkEntity;
@@ -60,6 +61,10 @@ public class CompanyBookMarkService {
                 .orElseThrow(()->new RuntimeException("해당되는 북마크가 없습니다."));
         companyBookMarkEntity.setStatus(BookmarkType.BOOKMARK); // 그냥 reposiroty 내에서 삭제하는걸로 변경하쇼
         companyBookMarkRepository.save(companyBookMarkEntity);
+    }
+
+    public void addCandidate(UserDetailsImpl userDetails){
+
     }
     
 }

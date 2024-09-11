@@ -3,12 +3,17 @@ package com.bringup.common.bookmark.controller;
 import com.bringup.common.bookmark.domain.service.CompanyBookMarkService;
 import com.bringup.common.bookmark.dto.request.CompanyBookMarkRequestDto;
 import com.bringup.common.bookmark.dto.response.CompanyBookMarkResponseDto;
+import com.bringup.common.response.BfResponse;
+import com.bringup.common.security.service.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +37,12 @@ public class CompanyBookMarkContoller {
     public ResponseEntity<Void> removeCompanyBookMark(@RequestBody CompanyBookMarkRequestDto companyBookMarkRequestDto){
         companyBookMarkService.removeCompanyBookMark(companyBookMarkRequestDto);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/com/headhunt/candidate")
+    public ResponseEntity<BfResponse<?>> addcandidate(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        companyBookMarkService.addCandidate(userDetails);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, ""));
     }
 
 
