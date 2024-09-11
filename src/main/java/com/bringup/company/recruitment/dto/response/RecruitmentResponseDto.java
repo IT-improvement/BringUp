@@ -18,10 +18,11 @@ public class RecruitmentResponseDto {
     private RecruitmentType recruitmentType; // 정규직, 비정규직, 아르바이트 중 하나
     private String category;
     private String skill;
+    private String career;
+    private int salary;
     private String workDetail;
     private String companyImg;
     private String hospitality;
-    private String startDate;
     private String period;
     private StatusType status;
 }

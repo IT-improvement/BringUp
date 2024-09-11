@@ -66,13 +66,14 @@ public class RecruitmentService {
         recruitment.setWorkDetail(requestDto.getWorkDetail());
         recruitment.setHospitality(requestDto.getHospitality());
         recruitment.setCategory(requestDto.getCategory());
+        recruitment.setCareer(requestDto.getCareer());
+        recruitment.setSalary(requestDto.getSalary());
         recruitment.setSkill(requestDto.getSkill());
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate startDate = LocalDate.parse(requestDto.getStartDate(), formatter);
-        LocalDate periodEndDate = calculatePeriod(startDate, requestDto.getPeriod());
-        recruitment.setStartDate(requestDto.getStartDate());
-        recruitment.setPeriod(periodEndDate.format(formatter));
+        if(requestDto.getPeriod() == null){
+            recruitment.setPeriod("마감시 까지");
+        } else {
+            recruitment.setPeriod(requestDto.getPeriod());
+        }
 
         recruitment.setStatus(StatusType.CRT_WAIT);
 
@@ -89,14 +90,19 @@ public class RecruitmentService {
             throw new RecruitmentException(BAD_REQUEST);
         }
 
-        recruitment.setRecruitmentType(requestDto.getRecruitmentType());
         recruitment.setRecruitmentTitle(requestDto.getRecruitmentTitle());
-        recruitment.setCategory(requestDto.getCategory());
-        recruitment.setSkill(requestDto.getSkill());
+        recruitment.setRecruitmentType(requestDto.getRecruitmentType());
         recruitment.setWorkDetail(requestDto.getWorkDetail());
         recruitment.setHospitality(requestDto.getHospitality());
-        recruitment.setStartDate(requestDto.getStartDate());
-        recruitment.setPeriod(requestDto.getPeriod());
+        recruitment.setCategory(requestDto.getCategory());
+        recruitment.setCareer(requestDto.getCareer());
+        recruitment.setSalary(requestDto.getSalary());
+        recruitment.setSkill(requestDto.getSkill());
+        if(requestDto.getPeriod() == null){
+            recruitment.setPeriod("마감시 까지");
+        } else {
+            recruitment.setPeriod(requestDto.getPeriod());
+        }
         recruitment.setStatus(StatusType.ACTIVE);
 
         recruitmentRepository.save(recruitment);
@@ -133,11 +139,6 @@ public class RecruitmentService {
         return convertToDto(recruitment, images);
     }
 
-    private LocalDate calculatePeriod(LocalDate startDate, String periodDuration) {
-        int durationInMonths = Integer.parseInt(periodDuration.replace("months", "").trim());
-        return startDate.plusMonths(durationInMonths);
-    }
-
     @Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행
     @Transactional
     public void updateRecruitmentStatus() {
@@ -163,8 +164,9 @@ public class RecruitmentService {
                 .skill(recruitment.getSkill())
                 .workDetail(recruitment.getWorkDetail())
                 .hospitality(recruitment.getHospitality())
+                .career(recruitment.getCareer())
+                .salary(recruitment.getSalary())
                 .companyImg(Arrays.toString(image))
-                .startDate(recruitment.getStartDate())
                 .period(recruitment.getPeriod())
                 .status(recruitment.getStatus())
                 .build();
