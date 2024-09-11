@@ -13,7 +13,7 @@
 <body>
 <input type="button" value="일반 사용자 로그인" onclick="location.href='/member/userLoginForm'">
 <input type="button" value="기업 사용자 로그인" onclick="location.href='/company/auth/login'">
-<input type="button" value="">
+<input type="button" value="메인 페이지" onclick="location.href='/member/main'">
 <input type="button" value="">
 <input type="button" value="">
 </body>
