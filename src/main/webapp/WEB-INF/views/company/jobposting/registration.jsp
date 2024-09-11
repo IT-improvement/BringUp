@@ -50,9 +50,9 @@
 						recruitmentTitle: document.getElementById('recruitmentTitle').value,
 						recruitmentType: document.getElementById('recruitmentType').value,
 						category: document.getElementById('category').value,
-						recruitmentContent: document.getElementById('recruitmentContent').value,
+						workDetail: document.getElementById('workDetail').value,
 						skill: document.getElementById('skill').value,
-						preferential: document.getElementById('preferential').value,
+						hospitality: document.getElementById('hospitality').value,
 						career: document.getElementById('career').value,
 						salary: document.getElementById('salary').value,
 						period: document.getElementById('period').value
@@ -120,8 +120,8 @@
 						<input type="text" class="form-control" id="category" name="category" required>
 					</div>
 					<div class="mb-3">
-						<label for="workDetailㄴ" class="form-label">업무 내용</label>
-						<textarea class="form-control" id="recruitmentContent" name="recruitmentContent" rows="10" required></textarea>
+						<label for="workDetail" class="form-label">업무 내용</label>
+						<textarea class="form-control" id="workDetail" name="workDetail" rows="10" required></textarea>
 					</div>
 					<div class="mb-3">
 						<label for="skill" class="form-label">필요 기술</label>
@@ -129,7 +129,7 @@
 					</div>
 					<div class="mb-3">
 						<label for="hospitality" class="form-label">우대 사항</label>
-						<textarea class="form-control" id="preferential" name="preferential" rows="10" required></textarea>
+						<textarea class="form-control" id="hospitality" name="hospitality" rows="10" required></textarea>
 					</div>
 					<div class="mb-3">
 						<label for="career" class="form-label">경력</label>

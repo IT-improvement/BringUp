@@ -27,6 +27,22 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if(recruitmentList) {
                 recruitmentList.forEach(recruitment => {
                     const row = document.createElement('tr');
+                    const type = recruitment.recruitmentType;
+                    const typeText = '';
+                    switch(type) {
+                        case 'PART_TIME_WORKER':
+                            typeText = '아르바이트';
+                            break;
+                        case 'REGULAR_WORKER':
+                            typeText = '정규직';
+                            break;
+                        case 'IRREGULAR_WORKER':
+                            typeText = '비정규직';
+                            break;
+                        default:
+                            typeText = type;
+                    }
+                    
                     row.addEventListener('click', function() {
                         window.location.href = `/company/jobpost/detail?recruitmentIndex=${recruitment.recruitmentIndex}`;
                     });
