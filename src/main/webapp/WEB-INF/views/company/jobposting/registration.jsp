@@ -141,7 +141,7 @@
 					</div>
 					<div class="mb-3">
 						<label for="period" class="form-label">모집 기간</label>
-						<input type="text" class="form-control" id="period" name="period" required>
+						<input type="date" class="form-control" id="period" name="period" required min="<%= java.time.LocalDate.now() %>">
 					</div>
 					<button type="button" class="btn btn-secondary" onclick="location.href='/company/jobpost/management'">돌아가기</button>
 					<button type="submit" class="btn btn-primary" style="float: right;">등록</button>
