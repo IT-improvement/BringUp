@@ -37,14 +37,17 @@ public class Recruitment {
     @Column(name = "skill", length = 30)
     private String skill;
 
+    @Column(name = "career")
+    private String career;
+
+    @Column(name = "salary")
+    private int salary;
+
     @Column(name = "work_detail")
     private String workDetail;
 
     @Column(name = "hospitality")
     private String hospitality;
-
-    @Column(name = "start_date", nullable = false, length = 50)
-    private String startDate;
 
     @Column(name = "period", nullable = false, length = 30)
     private String period;
