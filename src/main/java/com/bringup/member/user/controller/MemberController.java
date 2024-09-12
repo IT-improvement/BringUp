@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Member;
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
@@ -39,11 +41,14 @@ public class MemberController {
 
 
 
+
     @PostMapping("/name")
     public ResponseEntity<BfResponse<?>> getMemberName(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         String userName = memberService.getUserName(userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, userName));
     }
+
+
 
 
     //회원정보 변경 폼 "Get"
