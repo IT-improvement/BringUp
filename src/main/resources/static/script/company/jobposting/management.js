@@ -43,9 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     case 'techStack':
                         value = recruitment.skill;
                         break;
-                    case 'startDate':
-                        value = recruitment.startDate;
-                        break;
                     case 'duration':
                         value = recruitment.period;
                         break;
@@ -83,7 +80,6 @@ function displayRecruitments(recruitments) {
             <td>${recruitment.recruitmentType}</td>
             <td>${recruitment.category}</td>
             <td>${recruitment.skill}</td>
-            <td>${recruitment.startDate}</td>
             <td>${recruitment.period}</td>
             <td>${recruitment.status}</td>
             <td>${recruitment.recruitmentClass}</td>
