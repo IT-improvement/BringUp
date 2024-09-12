@@ -41,13 +41,19 @@ public class Recruitment {
     private String career;
 
     @Column(name = "salary")
-    private int salary;
+    private String salary;
 
     @Column(name = "work_detail")
     private String workDetail;
 
     @Column(name = "hospitality")
     private String hospitality;
+
+    @Column(name = "start_date", nullable = false, length = 50)
+    private String startDate;
+
+    @Column(name = "requirement")
+    private String requirement;
 
     @Column(name = "period", nullable = false, length = 30)
     private String period;
@@ -58,5 +64,7 @@ public class Recruitment {
     private StatusType status;
 
     @Column(name = "view_count")
-    private int view_count;
-}
+    private int viewCount;
+
+    }
+

@@ -81,6 +81,7 @@ public class UserRecruitmentService {
         dto.setSkill(recruitment.getSkill());
         dto.setPeriod(recruitment.getPeriod());
         dto.setStatus(recruitment.getStatus());
+        dto.setViewCount(recruitment.getViewCount());
         return dto;
     }
 }

@@ -6,6 +6,8 @@ import com.bringup.common.enums.StatusType;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.recruitment.dto.request.RecruitmentRequestDto;
+import com.bringup.company.recruitment.dto.response.RecruitmentDetailResponseDto;
+import com.bringup.company.recruitment.dto.response.RecruitmentMainResponseDto;
 import com.bringup.company.recruitment.dto.response.RecruitmentResponseDto;
 import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.company.user.entity.Company;
@@ -46,11 +48,35 @@ public class RecruitmentService {
 
         List<RecruitmentResponseDto> recruitmentResponseDtos = new ArrayList<>();
         for (Recruitment recruitment : recruitments) {
-            RecruitmentResponseDto dto = convertToDto(recruitment, null);
-            recruitmentResponseDtos.add(dto);
+            RecruitmentResponseDto dto = convertToDto(recruitment); // DTO로 변환
+            recruitmentResponseDtos.add(dto); // 리스트에 추가
         }
 
-        return recruitmentResponseDtos;
+        return recruitmentResponseDtos; // 변환된 DTO 리스트 반환
+    }
+
+    public List<RecruitmentMainResponseDto> getRecruitmentsinMain(UserDetailsImpl userDetails) {
+        // 공고를 가져옴
+        List<Recruitment> recruitments = recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId());
+
+        // 공고가 없을 경우 예외를 던짐
+        if (recruitments == null || recruitments.isEmpty()) {
+            throw new RecruitmentException(NOT_FOUND_RECRUITMENT); // 적절한 에러 코드 사용
+        }
+
+        List<RecruitmentMainResponseDto> RecruitmentMainResponseDtos = new ArrayList<>();
+        for (Recruitment recruitment : recruitments) {
+            RecruitmentMainResponseDto dto = RecruitmentMainResponseDto.builder()
+                    .r_title(recruitment.getRecruitmentTitle())
+                    .r_career(recruitment.getCareer())
+                    .r_period(recruitment.getPeriod())
+                    .r_requirement(recruitment.getRequirement())
+                    .r_workdetail(recruitment.getWorkDetail())
+                    .build();
+
+            RecruitmentMainResponseDtos.add(dto);
+        }
+        return RecruitmentMainResponseDtos;
     }
 
     // 공고 작성
@@ -65,15 +91,18 @@ public class RecruitmentService {
         recruitment.setRecruitmentType(requestDto.getRecruitmentType());
         recruitment.setWorkDetail(requestDto.getWorkDetail());
         recruitment.setHospitality(requestDto.getHospitality());
+        recruitment.setRequirement(requestDto.getRequirement());
         recruitment.setCategory(requestDto.getCategory());
+        recruitment.setSkill(requestDto.getSkill());
         recruitment.setCareer(requestDto.getCareer());
         recruitment.setSalary(requestDto.getSalary());
-        recruitment.setSkill(requestDto.getSkill());
-        if(requestDto.getPeriod() == null){
-            recruitment.setPeriod("마감시 까지");
-        } else {
-            recruitment.setPeriod(requestDto.getPeriod());
-        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String startDate;
+        startDate = LocalDate.now().format(formatter);
+
+        recruitment.setStartDate(startDate);
+        recruitment.setPeriod(requestDto.getPeriod());
 
         recruitment.setStatus(StatusType.CRT_WAIT);
 
@@ -90,19 +119,16 @@ public class RecruitmentService {
             throw new RecruitmentException(BAD_REQUEST);
         }
 
-        recruitment.setRecruitmentTitle(requestDto.getRecruitmentTitle());
         recruitment.setRecruitmentType(requestDto.getRecruitmentType());
-        recruitment.setWorkDetail(requestDto.getWorkDetail());
-        recruitment.setHospitality(requestDto.getHospitality());
+        recruitment.setRecruitmentTitle(requestDto.getRecruitmentTitle());
         recruitment.setCategory(requestDto.getCategory());
+        recruitment.setSkill(requestDto.getSkill());
         recruitment.setCareer(requestDto.getCareer());
         recruitment.setSalary(requestDto.getSalary());
-        recruitment.setSkill(requestDto.getSkill());
-        if(requestDto.getPeriod() == null){
-            recruitment.setPeriod("마감시 까지");
-        } else {
-            recruitment.setPeriod(requestDto.getPeriod());
-        }
+        recruitment.setWorkDetail(requestDto.getWorkDetail());
+        recruitment.setHospitality(requestDto.getHospitality());
+        recruitment.setRequirement(requestDto.getRequirement());
+        recruitment.setPeriod(requestDto.getPeriod());
         recruitment.setStatus(StatusType.ACTIVE);
 
         recruitmentRepository.save(recruitment);
@@ -123,7 +149,7 @@ public class RecruitmentService {
     }
 
     @Transactional
-    public RecruitmentResponseDto getRecruitmentDetail(UserDetailsImpl userDetails, Integer recruitmentId) {
+    public RecruitmentDetailResponseDto getRecruitmentDetail(UserDetailsImpl userDetails, Integer recruitmentId) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
                 .orElseThrow(() -> new RecruitmentException(NOT_FOUND_RECRUITMENT));
 
@@ -154,21 +180,41 @@ public class RecruitmentService {
         }
     }
 
-    private RecruitmentResponseDto convertToDto(Recruitment recruitment, String[] image) {
+    private RecruitmentDetailResponseDto convertToDto(Recruitment recruitment, String[] image) {
+        return RecruitmentDetailResponseDto.builder()
+                .c_name(recruitment.getCompany().getCompanyName())
+                .c_address(recruitment.getCompany().getCompanyAddress())
+                .c_img(image)
+                .c_intro(recruitment.getCompany().getCompanyVision())
+                .c_welfare(recruitment.getCompany().getCompanyWelfare())
+                .c_logo(recruitment.getCompany().getCompanyLogo())
+                .r_career(recruitment.getCareer())
+                .r_hospitality(recruitment.getHospitality())
+                .r_title(recruitment.getRecruitmentTitle())
+                .r_period(recruitment.getPeriod())
+                .r_requirement(recruitment.getRequirement())
+                .r_salary(recruitment.getSalary())
+                .r_workdetail(recruitment.getWorkDetail())
+                .build();
+        }
+
+    // convertToDto 메서드 추가
+    private RecruitmentResponseDto convertToDto(Recruitment recruitment) {
         return RecruitmentResponseDto.builder()
                 .recruitmentIndex(recruitment.getRecruitmentIndex())
-                .managerEmail(recruitment.getCompany().getManagerEmail())
                 .recruitmentTitle(recruitment.getRecruitmentTitle())
+                .managerEmail(recruitment.getCompany().getManagerEmail())
                 .recruitmentType(recruitment.getRecruitmentType())
                 .category(recruitment.getCategory())
                 .skill(recruitment.getSkill())
                 .workDetail(recruitment.getWorkDetail())
+                .companyImg(recruitment.getCompany().getCompanyImg())
                 .hospitality(recruitment.getHospitality())
-                .career(recruitment.getCareer())
-                .salary(recruitment.getSalary())
-                .companyImg(Arrays.toString(image))
+                .requirement(recruitment.getRequirement())
                 .period(recruitment.getPeriod())
                 .status(recruitment.getStatus())
                 .build();
     }
+
+
 }
