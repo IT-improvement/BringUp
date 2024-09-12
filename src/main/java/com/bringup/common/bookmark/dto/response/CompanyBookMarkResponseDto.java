@@ -15,8 +15,8 @@ public class CompanyBookMarkResponseDto{
     private BookmarkType status;
 
     public CompanyBookMarkResponseDto(CompanyBookMarkEntity companyBookMarkEntity){
-        this.userIndex = companyBookMarkEntity.getUserIndex();
-        this.companyIndex = companyBookMarkEntity.getCompanyIndex();
+        this.userIndex = companyBookMarkEntity.getUser().getUserIndex();
+        this.companyIndex = companyBookMarkEntity.getCompany().getCompanyId();
         this.status = companyBookMarkEntity.getStatus();
     }
 }
