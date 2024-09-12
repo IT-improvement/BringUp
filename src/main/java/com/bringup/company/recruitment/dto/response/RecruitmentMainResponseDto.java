@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RecruitmentMainResponseDto {
     private String r_title;
-    private String r_workdetail;
+    private String r_category;
     private String r_requirement;
     private String r_career;
     private String r_period;
