@@ -2,12 +2,14 @@ package com.bringup.member.user.controller;
 
 import com.bringup.common.response.BfResponse;
 
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.user.domain.service.UserLoginService;
 import com.bringup.member.user.dto.UserLoginDTO;
 import com.bringup.member.user.dto.UserLoginTokenDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,8 +57,41 @@ public class LoginController {
     }*/
 
     @GetMapping("/userMain")
-    public String userMain()
+    public String userMain(@AuthenticationPrincipal UserDetailsImpl userDetails)
     {
+        if (userDetails == null) {
+            return "redirect:/member/userLoginForm"; // 인증되지 않은 경우 로그인 페이지로 리다이렉트
+        }
         return "member/user/userMain";
     }
+
+    @GetMapping("/potofolio")
+    public String potofolio()
+    {
+        return "member/user/career/potofolio";
+    }
+    @GetMapping("/letter")
+    public String letter()
+    {
+        return "member/user/career/letter";
+    }
+    @GetMapping("/resume")
+    public String resume()
+    {
+        return "member/user/career/resume";
+    }
+    @GetMapping("/companyReview")
+    public String companyReview() {
+        return "member/user/review/companyReview";
+    }
+    @GetMapping("/interviewReview")
+    public String interviewReview() {
+        return "member/user/review/interviewReview";
+    }
+    @GetMapping("/notice")
+    public String notice() {
+        return "member/user/notice/notice";
+    }
+
+
 }

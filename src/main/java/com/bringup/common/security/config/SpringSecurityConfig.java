@@ -136,8 +136,16 @@ public class SpringSecurityConfig {
                 antMatcher("/ws/**"),
 
                 antMatcher("/github/**"),// 정적 리소스
+                antMatcher("/member/potofolio"),
+                antMatcher("/member/letter"),//이력서
+                antMatcher("/member/resume"),//자소서
+                antMatcher("/member/companyReview"),
+                antMatcher("/member/interviewReview"),
+                antMatcher("/member/notice"),
+                antMatcher(GET, "image/**"),
+                antMatcher("/recruitment/**")
 
-                antMatcher(GET, "image/**")
+
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
@@ -163,9 +171,10 @@ public class SpringSecurityConfig {
 
                 antMatcher(GET, "/com/headhunt/**"),
 
-                antMatcher("/recruitment/**"), // 사용자 스크랩기업 리스트
                 antMatcher("/membership/**"), // 사용자 멤버십
                 antMatcher("/member/name"),
+
+                antMatcher("/member/userMain"),
                 antMatcher("/main/memberInfo")
 
         );

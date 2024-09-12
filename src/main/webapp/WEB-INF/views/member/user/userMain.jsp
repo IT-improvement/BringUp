@@ -233,8 +233,7 @@
 
 				<div class="status">
 					<span class="badge">999+</span>
-					<span>쪽지 0</span>
-					<span>해피빈</span>
+					<span>내 정보</span>
 				</div>
 
 				<button class="logout-btn">로그아웃</button>
@@ -303,8 +302,8 @@
 					})
 					.then(data => {
 						// 가져온 데이터에서 이름과 이메일을 추출합니다
-						const userName = data.data.name;
-						const userEmail = data.data.email;
+						const userName = data.data.userName;
+						const userEmail = data.data.userEmail;
 
 						// HTML 요소에 데이터를 삽입합니다
 						document.querySelector('.user-info strong').textContent = userName;  // 이름 삽입

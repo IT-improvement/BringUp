@@ -240,40 +240,34 @@
 
 					<script>
 						document.addEventListener('DOMContentLoaded', function() {
-							const accessToken = localStorage.getItem("accessToken");
-							console.log("Access token: " + accessToken);
 							const url = "/recruitment/list"; // 공고 리스트를 가져오는 API 엔드포인트
 
-							if (accessToken) {
-								fetch(url, {
-									method: 'GET',
-									headers: {
-										'Authorization': `Bearer ` + accessToken,
-										'Content-Type': 'application/json' // JSON 형식으로 요청
-									}
-								})
-										.then(response => {
-											if (!response.ok) {
-												throw new Error('Network response was not ok');
-											}
-											return response.json();
-										})
-										.then(data => {
-											console.log("Received recruitment data:", data);
-											if (Array.isArray(data)) {
-												renderRecruitmentList(data);
-											} else if (Array.isArray(data.data)) {
-												renderRecruitmentList(data.data);
-											} else {
-												console.error("Unexpected data format:", data);
-											}
-										})
-										.catch(error => {
-											console.error('Error fetching recruitment data:', error);
-										});
-							} else {
-								console.log("Access token not found.");
-							}
+							// 토큰 여부와 상관없이 데이터를 요청
+							fetch(url, {
+								method: 'GET',
+								headers: {
+									'Content-Type': 'application/json' // JSON 형식으로 요청
+								}
+							})
+									.then(response => {
+										if (!response.ok) {
+											throw new Error('Network response was not ok');
+										}
+										return response.json();
+									})
+									.then(data => {
+										console.log("Received recruitment data:", data);
+										if (Array.isArray(data)) {
+											renderRecruitmentList(data);
+										} else if (Array.isArray(data.data)) {
+											renderRecruitmentList(data.data);
+										} else {
+											console.error("Unexpected data format:", data);
+										}
+									})
+									.catch(error => {
+										console.error('Error fetching recruitment data:', error);
+									});
 						});
 
 						function renderRecruitmentList(recruitments) {
