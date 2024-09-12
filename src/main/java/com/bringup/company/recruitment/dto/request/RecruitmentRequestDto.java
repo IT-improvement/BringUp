@@ -14,9 +14,11 @@ public class RecruitmentRequestDto {
     private String recruitmentTitle;
     private String category;
     private String skill;
+    private String career;
+    private String salary;
     private String workDetail;
     private String hospitality;
-    private String startDate;
+    private String requirement;
     private String period;
     private StatusType status;
 
