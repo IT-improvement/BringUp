@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RecruitmentMainResponseDto {
+    private int r_index;
     private String r_title;
     private String r_category;
     private String r_requirement;
