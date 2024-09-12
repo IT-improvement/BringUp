@@ -163,7 +163,7 @@
                 <ul class="navbar-nav mx-auto">
                     <!-- 네비 아이템 2 공고 -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="jobPostingMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">공고</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="jobPostingMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">채용 정보</a>
                         <ul class="dropdown-menu" aria-labelledby="jobPostingMenu">
                             <li><a class="dropdown-item" href="#">공고 관리</a></li>
                             <li><a class="dropdown-item" href="#">공고 등록</a></li>
@@ -172,7 +172,7 @@
 
                     <!-- 네비 아이템 3 상품 -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="pagesMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">상품</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="pagesMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">신입 / 인턴</a>
                         <ul class="dropdown-menu" aria-labelledby="pagesMenu">
                             <li><a class="dropdown-item" href="#">상품 관리</a></li>
                             <li><a class="dropdown-item" href="#">프리미엄 공고</a></li>
@@ -182,14 +182,14 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="reviewMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">리뷰</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="reviewMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">기업 / 연봉</a>
                         <ul class="dropdown-menu" aria-labelledby="postMenu">
                             <li><a class="dropdown-item" href="#">기업 리뷰</a></li>
                             <li><a class="dropdown-item" href="#">면접 리뷰</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" id="recommendMenu">인재 추천</a>
+                        <a class="nav-link" href="#" id="recommendMenu">만남의 광장</a>
                     </li>
                 </ul>
             </div>

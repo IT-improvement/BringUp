@@ -5,6 +5,8 @@ import com.bringup.common.event.exception.ErrorResponseHandler;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.recruitment.dto.request.RecruitmentRequestDto;
+import com.bringup.company.recruitment.dto.response.RecruitmentDetailResponseDto;
+import com.bringup.company.recruitment.dto.response.RecruitmentMainResponseDto;
 import com.bringup.company.recruitment.dto.response.RecruitmentResponseDto;
 import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.company.recruitment.service.RecruitmentService;
@@ -69,11 +71,6 @@ public class RecruitmentController {
 
     @GetMapping("/list")
     public ResponseEntity<BfResponse<?>> listRecruitments(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails == null) {
-            System.out.println("UserDetails is null");
-            return null;
-        }
-
         try {
             List<RecruitmentResponseDto> recruitments = recruitmentService.getRecruitments(userDetails);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, recruitments));
@@ -84,11 +81,23 @@ public class RecruitmentController {
         }
     }
 
+    @GetMapping("/mainlist")
+    public ResponseEntity<BfResponse<?>> listInMain(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        try{
+            List<RecruitmentMainResponseDto> list = recruitmentService.getRecruitmentsinMain(userDetails);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, list));
+        } catch (RecruitmentException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (Exception e){
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/detail/{recruitmentId}")
     public ResponseEntity<BfResponse<?>> getRecruitmentDetail(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                                    @PathVariable("recruitmentId") int recruitmentId) {
         try {
-            RecruitmentResponseDto recruitmentDetail = recruitmentService.getRecruitmentDetail(userDetails, recruitmentId);
+            RecruitmentDetailResponseDto recruitmentDetail = recruitmentService.getRecruitmentDetail(userDetails, recruitmentId);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, recruitmentDetail));
         } catch (RecruitmentException e) {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());

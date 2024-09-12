@@ -2,7 +2,6 @@ package com.bringup.company.recruitment.dto.request;
 
 import com.bringup.common.enums.RecruitmentType;
 import com.bringup.common.enums.StatusType;
-import com.bringup.company.user.entity.Salary;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,11 +14,12 @@ public class RecruitmentRequestDto {
     private String recruitmentTitle;
     private String category;
     private String skill;
+    private String career;
+    private String salary;
     private String workDetail;
     private String hospitality;
+    private String requirement;
     private String period;
-    private int salary;
-    private String career;
     private StatusType status;
 
 }
