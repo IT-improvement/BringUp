@@ -41,7 +41,61 @@
     <script src="/resources/script/common/function/functions.js"></script>
 
     <!-- 메인 JS -->
-    <script src="/resources/script/company/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const accessToken = localStorage.getItem('accessToken');
+            console.log("token:"+accessToken);
+            if (!accessToken) {
+                window.location.href = '/company/auth/login';
+                return;
+            }
+
+            fetch('/com/recruitment/mainlist', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer `+accessToken,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const recruitmentListBody = document.getElementById('recruitment-list-body');
+                recruitmentListBody.innerHTML = ''; // 기존 내용 초기화
+                if (data.data && Array.isArray(data.data) && data.data.length > 0) {
+                    data.data.forEach(recruitment => {
+                        const row = document.createElement('tr');
+                        const index = data.data.indexOf(recruitment) + 1; // 배열의 인덱스 + 1로 번호를 정의
+                        const title = recruitment.r_title;
+                        const category = recruitment.r_category;
+                        const recruit = recruitment.r_requirement;
+                        const career = recruitment.r_career;
+                        const period = recruitment.r_period;
+                        row.innerHTML = `
+                            <td>${"${index}"}</td>
+                            <td>${"${title}"}</td>
+                            <td>${"${category}"}</td>
+                            <td>${"${recruit}"}</td>
+                            <td>${"${career}"}</td>
+                            <td>${"${period}"}</td>
+                        `;
+                        recruitmentListBody.appendChild(row);
+                        document.getElementById('jobCount').textContent = data.data.length;
+                        document.getElementById('totalEntries').textContent = "총 "+data.data.length+" 개";
+                    });
+                } else {
+                    recruitmentListBody.innerHTML = '<tr><td colspan="6" class="text-center">등록된 공고가 없습니다.</td></tr>';
+                    document.getElementById('jobCount').textContent = '0';
+                    document.getElementById('totalEntries').textContent = '총 0개';
+                }
+            })
+            .catch(error => {
+                console.error('채용 목록을 가져오는 중 오류 발생:', error);
+                const recruitmentListBody = document.getElementById('recruitment-list-body');
+                recruitmentListBody.innerHTML = '<tr><td colspan="6" class="text-center">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>';
+            });
+        });
+
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -118,9 +172,10 @@
                                             <select id="categorySelect" class="form-select z-index-9 bg-transparent" aria-label=".form-select-sm">
                                                 <option value="전체">전체</option>
                                                 <option value="공고 제목">공고 제목</option>
-                                                <option value="공고 타입">공고 타입</option>
-                                                <option value="모집 분야">모집 분야</option>
-                                                <option value="상태">상태</option>
+                                                <option value="공고 타입">모집 분야</option>
+                                                <option value="기술">기술</option>
+                                                <option value="모집 분야">경력</option>
+                                                <option value="상태">마감일</option>
                                             </select>
                                         </form>
                                     </div>
@@ -129,11 +184,12 @@
                                     <table class="table align-middle p-4 mb-0 table-hover table-shrink">
                                         <thead class="table-dark">
                                         <tr>
-                                            <th scope="col" class="border-0 rounded-start">공고 제목</th>
-                                            <th scope="col" class="border-0">공고 타입</th>
-                                            <th scope="col" class="border-0">게시일</th>
-                                            <th scope="col" class="border-0">모집 분야</th>
-                                            <th scope="col" class="border-0">상태</th>
+                                            <th scope="col">전체</th>
+                                            <th scope="col">공고 제목</th>
+                                            <th scope="col">모집 분야</th>
+                                            <th scope="col">기술</th>
+                                            <th scope="col">경력</th>
+                                            <th scope="col">마감일</th>
                                         </tr>
                                         </thead>
                                         <tbody id="recruitment-list-body" class="border-top-0">
@@ -141,7 +197,7 @@
                                     </table>
                                 </div>
                                 <div class="d-sm-flex justify-content-sm-between align-items-sm-center mt-4 mt-sm-3">
-                                    <p id="totalEntries" class="mb-sm-0 text-center text-sm-start">총${jobPostings.length}</p>
+                                    <p id="totalEntries" class="mb-sm-0 text-center text-sm-start"></p>
                                     <nav class="mb-sm-0 d-flex justify-content-center" aria-label="navigation">
                                         <ul class="pagination pagination-sm pagination-bordered mb-0">
                                             <li class="page-item" id="prevPage">
