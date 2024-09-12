@@ -67,6 +67,7 @@ public class RecruitmentService {
         List<RecruitmentMainResponseDto> RecruitmentMainResponseDtos = new ArrayList<>();
         for (Recruitment recruitment : recruitments) {
             RecruitmentMainResponseDto dto = RecruitmentMainResponseDto.builder()
+                    .r_index(recruitment.getRecruitmentIndex())
                     .r_title(recruitment.getRecruitmentTitle())
                     .r_career(recruitment.getCareer())
                     .r_period(recruitment.getPeriod())
