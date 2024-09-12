@@ -40,15 +40,11 @@ public class MemberController {
     private final MemberService memberService;
 
 
-
-
     @PostMapping("/name")
     public ResponseEntity<BfResponse<?>> getMemberName(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         String userName = memberService.getUserName(userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, userName));
     }
-
-
 
 
     //회원정보 변경 폼 "Get"
@@ -68,4 +64,7 @@ public class MemberController {
 //        memberService.updateMember(memberUpdateDto);
         return "redirect:/member/myprofile";
     }
+
+
+
 }

@@ -1,17 +1,13 @@
 package com.bringup.member.notice.controller;
 
-import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.notice.domain.service.UserRecruitmentService;
 import com.bringup.member.notice.dto.response.UserRecruitmentDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.bringup.company.recruitment.entity.Recruitment;
+
 import java.util.List;
 
 @Controller
@@ -22,25 +18,36 @@ public class UserRecruitmentController {
     private UserRecruitmentService userRecruitmentService;
 
 
-    @GetMapping("/auth")
-    public String showRecruitmentListPage(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        // 인증된 사용자만 이 페이지에 접근할 수 있음
-        if (userDetails == null) {
-            return "redirect:/member/userLoginForm"; // 인증되지 않은 경우 로그인 페이지로 리다이렉트
-        }
+    @GetMapping("/recruitmentPage")
+    public String showRecruitmentListPage() {
+        return "member/user/recruitment/recruitmentList";
+    }
 
-        // 인증된 사용자라면 recruitmentList.jsp 페이지를 렌더링
-        return "member/user/recruitmentList";
+    @GetMapping("/topRecruitment")
+    public String topRecruitment() {
+        return "member/user/recruitment/topRecruitment";
+    }
+
+    @GetMapping("/confirmRecruitment")
+    public String confirmRecruitment() {
+        return "member/user/recruitment/confirmRecruitment";
+    }
+    @GetMapping("/AnnouncementRecruitment")
+    public String AnnouncementRecruitment() {
+        return "member/user/recruitment/AnnouncementRecruitment";
+    }
+    @GetMapping("/proposeRecruitment")
+    public String proposeRecruitment() {
+        return "member/user/recruitment/proposeRecruitment";
     }
 
 
 
 
+
+
     @GetMapping("/list")
-    public ResponseEntity<List<UserRecruitmentDto>> getAllRecruitments(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails == null) {
-            return ResponseEntity.status(401).build(); // 인증되지 않은 경우
-        }
+    public ResponseEntity<List<UserRecruitmentDto>> getAllRecruitments() {
 
         List<UserRecruitmentDto> recruitments = userRecruitmentService.getAllRecruitments();
         return ResponseEntity.ok(recruitments); // JSON 형식으로 반환
