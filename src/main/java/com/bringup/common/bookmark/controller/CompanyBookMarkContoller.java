@@ -22,23 +22,17 @@ public class CompanyBookMarkContoller {
     @Autowired
     private CompanyBookMarkService companyBookMarkService;
 
-    /*@PostMapping("/company_bookmark/add")
-    public ResponseEntity<CompanyBookMarkResponseDto> addCompanyBookMark(@RequestBody CompanyBookMarkRequestDto companyBookMarkRequestDto){
-        CompanyBookMarkResponseDto companyBookMarkResponseDto = companyBookMarkService.addCompanyBookMark(companyBookMarkRequestDto);
-        return ResponseEntity.ok(companyBookMarkResponseDto);
+    @GetMapping("/mem/addCompany")
+    public ResponseEntity<BfResponse<?>> addCompany(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        companyBookMarkService.addCompany(userDetails);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "기업 저장 완료"));
     }
 
-    @GetMapping("/company_bookmark/{userIndex}")
-    public ResponseEntity<List<CompanyBookMarkResponseDto>> getCompanyBookMarks(@PathVariable int userIndex){
-        List<CompanyBookMarkResponseDto> companyBookMarkEntityList = companyBookMarkService.getCompanyBookMarks(userIndex);
-        return ResponseEntity.ok(companyBookMarkEntityList);
+    @GetMapping("/mem/addCompany/list")
+    public ResponseEntity<List<CompanyBookMarkResponseDto>> getCompanyBookMarkList(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        List<CompanyBookMarkResponseDto> companyBookMarkResponseDtoList = companyBookMarkService.companyBookMarkList(userDetails);
+        return ResponseEntity.ok(companyBookMarkResponseDtoList);
     }
-
-    @PutMapping("/company_bookmark/delete")
-    public ResponseEntity<Void> removeCompanyBookMark(@RequestBody CompanyBookMarkRequestDto companyBookMarkRequestDto){
-        companyBookMarkService.removeCompanyBookMark(companyBookMarkRequestDto);
-        return ResponseEntity.ok().build();
-    }*/
 
     @GetMapping("/com/headhunt/candidate/{cv_index}")
     public ResponseEntity<BfResponse<?>> addcandidate(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int cv_index){
