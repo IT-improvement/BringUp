@@ -45,13 +45,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     button.addEventListener('click', function () {
                         const cvIndex = this.getAttribute('data-cvindex');
 
-                        fetch('/com/headhunt/candidate/save', {
-                            method: 'POST',
+                        // cvIndex 값을 URL 경로에 포함시켜 요청
+                        fetch(`/com/headhunt/candidate/${cvIndex}`, {
+                            method: 'GET',
                             headers: {
                                 'Authorization': `Bearer ` + accessToken,
                                 'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ cvIndex: cvIndex })
+                            }
                         })
                             .then(response => {
                                 if (response.ok) {
