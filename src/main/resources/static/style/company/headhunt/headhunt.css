@@ -25,11 +25,11 @@
 }
 
 .user-image {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     margin-right: 20px;
-    border: 3px solid #9400d3;
+    border: 2px solid #000000;
 }
 
 .user-info {
@@ -56,4 +56,16 @@
 
 .user-actions .btn {
     margin-left: 10px;
+}
+
+/* 후보자 저장 (파란색) */
+.btn-save {
+    background-color: #437CA1;
+    color: white;
+}
+
+/* 저장된 후보자 (회색) */
+.btn-saved {
+    background-color: #E3F2FF;
+    color: black;
 }
