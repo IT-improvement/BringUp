@@ -30,6 +30,9 @@
 	<!-- 테마 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
 
+    <!-- 추가된 스타일 -->
+    <link rel="stylesheet" type="text/css" href="/resources/style/company/main/main.css"></link>
+
     <!-- Bootstrap JS -->
     <script src="/resources/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -41,61 +44,7 @@
     <script src="/resources/script/common/function/functions.js"></script>
 
     <!-- 메인 JS -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const accessToken = localStorage.getItem('accessToken');
-            console.log("token:"+accessToken);
-            if (!accessToken) {
-                window.location.href = '/company/auth/login';
-                return;
-            }
-
-            fetch('/com/recruitment/mainlist', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer `+accessToken,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                const recruitmentListBody = document.getElementById('recruitment-list-body');
-                recruitmentListBody.innerHTML = ''; // 기존 내용 초기화
-                if (data.data && Array.isArray(data.data) && data.data.length > 0) {
-                    data.data.forEach(recruitment => {
-                        const row = document.createElement('tr');
-                        const index = data.data.indexOf(recruitment) + 1; // 배열의 인덱스 + 1로 번호를 정의
-                        const title = recruitment.r_title;
-                        const category = recruitment.r_category;
-                        const recruit = recruitment.r_requirement;
-                        const career = recruitment.r_career;
-                        const period = recruitment.r_period;
-                        row.innerHTML = `
-                            <td>${"${index}"}</td>
-                            <td>${"${title}"}</td>
-                            <td>${"${category}"}</td>
-                            <td>${"${recruit}"}</td>
-                            <td>${"${career}"}</td>
-                            <td>${"${period}"}</td>
-                        `;
-                        recruitmentListBody.appendChild(row);
-                        document.getElementById('jobCount').textContent = data.data.length;
-                        document.getElementById('totalEntries').textContent = "총 "+data.data.length+" 개";
-                    });
-                } else {
-                    recruitmentListBody.innerHTML = '<tr><td colspan="6" class="text-center">등록된 공고가 없습니다.</td></tr>';
-                    document.getElementById('jobCount').textContent = '0';
-                    document.getElementById('totalEntries').textContent = '총 0개';
-                }
-            })
-            .catch(error => {
-                console.error('채용 목록을 가져오는 중 오류 발생:', error);
-                const recruitmentListBody = document.getElementById('recruitment-list-body');
-                recruitmentListBody.innerHTML = '<tr><td colspan="6" class="text-center">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>';
-            });
-        });
-
-    </script>
+    <script src="/resources/script/company/main.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -198,15 +147,8 @@
                                 </div>
                                 <div class="d-sm-flex justify-content-sm-between align-items-sm-center mt-4 mt-sm-3">
                                     <p id="totalEntries" class="mb-sm-0 text-center text-sm-start"></p>
-                                    <nav class="mb-sm-0 d-flex justify-content-center" aria-label="navigation">
-                                        <ul class="pagination pagination-sm pagination-bordered mb-0">
-                                            <li class="page-item" id="prevPage">
-                                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true" onclick="changePage(currentPage - 1)">Prev</a>
-                                            </li>
-                                            <span id="paginationNumbers"></span>
-                                            <li class="page-item" id="nextPage">
-                                                <a class="page-link" href="#" onclick="changePage(currentPage + 1)">Next</a>
-                                            </li>
+                                    <nav class="mb-sm-0 d-flex justify-content-center" aria-label="Page navigation">
+                                        <ul class="pagination pagination-sm pagination-bordered mb-0" id="paginationContainer">
                                         </ul>
                                     </nav>
                                 </div>
