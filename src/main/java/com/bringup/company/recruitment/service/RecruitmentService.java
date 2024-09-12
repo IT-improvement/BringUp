@@ -71,7 +71,7 @@ public class RecruitmentService {
                     .r_career(recruitment.getCareer())
                     .r_period(recruitment.getPeriod())
                     .r_requirement(recruitment.getRequirement())
-                    .r_workdetail(recruitment.getWorkDetail())
+                    .r_category(recruitment.getCategory())
                     .build();
 
             RecruitmentMainResponseDtos.add(dto);
