@@ -21,7 +21,7 @@ public class RecruitmentResponseDto {
     private String workDetail;
     private String companyImg;
     private String hospitality;
-    private String startDate;
+    private String requirement;
     private String period;
     private StatusType status;
 }
