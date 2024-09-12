@@ -22,7 +22,7 @@ public class CompanyBookMarkContoller {
     @Autowired
     private CompanyBookMarkService companyBookMarkService;
 
-    @PostMapping("/company_bookmark/add")
+    /*@PostMapping("/company_bookmark/add")
     public ResponseEntity<CompanyBookMarkResponseDto> addCompanyBookMark(@RequestBody CompanyBookMarkRequestDto companyBookMarkRequestDto){
         CompanyBookMarkResponseDto companyBookMarkResponseDto = companyBookMarkService.addCompanyBookMark(companyBookMarkRequestDto);
         return ResponseEntity.ok(companyBookMarkResponseDto);
@@ -38,7 +38,7 @@ public class CompanyBookMarkContoller {
     public ResponseEntity<Void> removeCompanyBookMark(@RequestBody CompanyBookMarkRequestDto companyBookMarkRequestDto){
         companyBookMarkService.removeCompanyBookMark(companyBookMarkRequestDto);
         return ResponseEntity.ok().build();
-    }
+    }*/
 
     @GetMapping("/com/headhunt/candidate/{cv_index}")
     public ResponseEntity<BfResponse<?>> addcandidate(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int cv_index){
