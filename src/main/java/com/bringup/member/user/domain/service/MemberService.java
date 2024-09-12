@@ -50,8 +50,19 @@ public class MemberService implements UserDetailsService{
 
     public String getUserName(UserDetailsImpl userDetails) {
         Optional<UserEntity> userOptional = userRepository.findByUserEmail(userDetails.getUsername());
+
         if (userOptional.isPresent()) {
             return userOptional.get().getUserName();
+        } else {
+            throw new IllegalArgumentException("User not found for email: " + userDetails.getUsername());
+        }
+    }
+
+    public String getUserEmail(UserDetailsImpl userDetails) {
+        Optional<UserEntity> userOptional = userRepository.findByUserEmail(userDetails.getUsername());
+
+        if (userOptional.isPresent()) {
+            return userOptional.get().getUserEmail();
         } else {
             throw new IllegalArgumentException("User not found for email: " + userDetails.getUsername());
         }

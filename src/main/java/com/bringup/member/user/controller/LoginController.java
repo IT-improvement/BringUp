@@ -54,4 +54,9 @@ public class LoginController {
         return ResponseEntity.ok(new BfResponse<>(isAvailable));
     }*/
 
+    @GetMapping("/userMain")
+    public String userMain()
+    {
+        return "member/user/userMain";
+    }
 }
