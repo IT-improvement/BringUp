@@ -32,7 +32,7 @@ public class CompanyBookMarkService {
     private final CompanyRepository companyRepository;
     private final CVRepository cvRepository;
 
-    @Transactional
+    /*@Transactional
     public CompanyBookMarkResponseDto addCompanyBookMark(CompanyBookMarkRequestDto companyBookMarkRequestDto){
         UserEntity userEntity = userRepository.findByUserIndex(companyBookMarkRequestDto.getUserIndex())
                 .orElseThrow(()->new RuntimeException("사용자를 찾을 수 없습니다."));
@@ -48,8 +48,8 @@ public class CompanyBookMarkService {
             companyBookMarkEntity.setStatus(BookmarkType.BOOKMARK);
         } else {
             companyBookMarkEntity = new CompanyBookMarkEntity();
-            companyBookMarkEntity.setCompanyIndex(companyBookMarkRequestDto.getCompanyIndex());
-            companyBookMarkEntity.setUserIndex(companyBookMarkRequestDto.getUserIndex());
+            companyBookMarkEntity.setCompany(company);
+            companyBookMarkEntity.setUser(userEntity);
             companyBookMarkEntity.setStatus(BookmarkType.BOOKMARK);
         }
         CompanyBookMarkEntity saveBookMark = companyBookMarkRepository.save(companyBookMarkEntity);
@@ -68,7 +68,7 @@ public class CompanyBookMarkService {
                 .orElseThrow(()->new RuntimeException("해당되는 북마크가 없습니다."));
         companyBookMarkEntity.setStatus(BookmarkType.BOOKMARK); // 그냥 reposiroty 내에서 삭제하는걸로 변경하쇼
         companyBookMarkRepository.save(companyBookMarkEntity);
-    }
+    }*/
 
     public void addCandidate(UserDetailsImpl userDetails, int cvIndex){
         Company company = companyRepository.findById(userDetails.getId())
@@ -76,25 +76,27 @@ public class CompanyBookMarkService {
 
         CVEntity cv = cvRepository.findByCvIndex(cvIndex);
 
+        UserEntity user = userRepository.findById(cv.getUserIndex())
+                .orElseThrow(() -> new BookmarkException(NOT_FOUND_MEMBER_ID));
+
         CompanyBookMarkEntity companyBookMarkEntity = new CompanyBookMarkEntity();
-        companyBookMarkEntity.setCompanyIndex(company.getCompanyId());
-        companyBookMarkEntity.setUserIndex(cv.getUserIndex());
+        companyBookMarkEntity.setCompany(company);
+        companyBookMarkEntity.setUser(user);
         companyBookMarkEntity.setStatus(BookmarkType.VOLUNTEER);
         companyBookMarkRepository.save(companyBookMarkEntity);
     }
 
     @Transactional
     public List<CandidateResponseDto> candidateList(UserDetailsImpl userDetails){
-        int companyIndex = companyRepository.findBycompanyId(userDetails.getId())
-                .orElseThrow(() -> new BookmarkException(NOT_FOUND_MEMBER_ID))
-                .getCompanyId();
+        Company company = companyRepository.findBycompanyId(userDetails.getId())
+                .orElseThrow(() -> new BookmarkException(NOT_FOUND_MEMBER_ID));
 
-        List<CompanyBookMarkEntity> bookmarks = companyBookMarkRepository.findByCompanyIndexAndStatus(companyIndex, BookmarkType.VOLUNTEER);
+        List<CompanyBookMarkEntity> bookmarks = companyBookMarkRepository.findByCompanyAndStatus(company, BookmarkType.VOLUNTEER);
 
         // 북마크된 후보자 리스트를 DTO로 변환
         return bookmarks.stream()
                 .map(bookmark -> {
-                    CVEntity cv = cvRepository.findByUserIndex(bookmark.getUserIndex())
+                    CVEntity cv = cvRepository.findByUserIndex(bookmark.getUser().getUserIndex())
                             .orElseThrow(() -> new RuntimeException("해당 유저의 이력서를 찾을 수 없습니다."));
                     UserEntity user = userRepository.findById(cv.getUserIndex())
                             .orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다."));
