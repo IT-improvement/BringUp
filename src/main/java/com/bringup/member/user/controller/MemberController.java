@@ -18,13 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Member;
 import java.security.Principal;
+import java.util.Map;
 
 import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
@@ -37,30 +35,27 @@ public class MemberController {
     private final UserRepository userRepository;
     private final MemberService memberService;
 
-
-
     @PostMapping("/name")
     public ResponseEntity<BfResponse<?>> getMemberName(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         String userName = memberService.getUserName(userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, userName));
     }
 
-
-    //회원정보 변경 폼 "Get"
-    @GetMapping(value = "/updateForm")
-    public String updateMemberForm(Principal principal, Model model){
-        String loginId = principal.getName();
-        UserEntity memberId;
-        //Optional 오류
-        /*UserEntity memberId = userRepository.findByUserEmail(loginId);
-        model.addAttribute("member", memberId);*/
-        return "/settings/MemberUpdateForm";
+    @PutMapping("/mem")
+    public ResponseEntity<BfResponse<?>> updateMember(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam Map<String, String> requestBody){
+        memberService.updateMember(userDetails, requestBody);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "Member update successful")));
     }
 
-    @PostMapping(value = "/updateForm")
-    public String updateMember(@Valid MemberUpdateDto memberUpdateDto, Model model){
-        model.addAttribute("member", memberUpdateDto);
-//        memberService.updateMember(memberUpdateDto);
-        return "redirect:/member/myprofile";
+    @DeleteMapping("/mem")
+    public ResponseEntity<BfResponse<?>> deleteMember(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        memberService.deleteMember(userDetails);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "Member update successful")));
+    }
+
+    @GetMapping("/memberInfo/post")
+    public ResponseEntity<BfResponse<?>> getMemberInfo(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        UserEntity user = memberService.getMemberInfo(userDetails);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, user));
     }
 }
