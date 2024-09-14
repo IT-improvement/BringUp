@@ -36,10 +36,10 @@ public class MainController {
     }
 
 
-    @GetMapping("/advertisement")
+    @PostMapping("/advertisement")
     public ResponseEntity<List<UserAdvertisementResponseDto>> getAllAdvertisements(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         // 광고 데이터를 가져와서 클라이언트로 반환
-        List<UserAdvertisementResponseDto> advertisements = mainService.getAdvertisements(userDetails);
+        List<UserAdvertisementResponseDto> advertisements = mainService.getRandomAdvertisements(userDetails);
         return ResponseEntity.ok(advertisements);
     }
 

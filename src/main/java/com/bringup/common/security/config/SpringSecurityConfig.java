@@ -175,7 +175,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/name"),
 
                 antMatcher("/member/userMain"),
-                antMatcher("/main/memberInfo")
+                antMatcher("/main/**")
 
         );
 

@@ -9,10 +9,6 @@ import lombok.Setter;
 @Setter
 @Builder
 public class UserAdvertisementResponseDto {
-    private Integer advertisementIndex;
-    private Integer recruitmentIndex;
     private String advertisementImage;
-    private String type;
-    private String displayTime;
-    private StatusType status;
+
 }
