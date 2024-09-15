@@ -86,7 +86,7 @@ function displayRecruitments(recruitments) {
             <td>${recruitment.jobPostingTitle}</td>
         `;
         row.addEventListener('click', function() {
-            window.location.href = `/company/jobpost/detail?recruitmentIndex=${recruitment.recruitmentIndex}`;
+            window.location.href = `/company/jobpost/detail?r_index=${recruitment.recruitmentIndex}`;
         });
         recruitmentListBody.appendChild(row);
     });
