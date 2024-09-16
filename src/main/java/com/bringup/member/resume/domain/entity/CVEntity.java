@@ -23,6 +23,7 @@ public class CVEntity {
     private String status;
 
     public CVEntity(CVInsertRequestDto dto){
+        this.cvIndex = dto.getCvIndex();
         this.cvImage = dto.getCvimage();
         this.mainCv = dto.isMaincv();
         this.education=dto.getEducation();
