@@ -1,14 +1,17 @@
 package com.bringup.member.main.dto;
 
-import com.bringup.common.enums.StatusType;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
+@AllArgsConstructor
 public class UserAdvertisementResponseDto {
+    private Integer advertisementIndex;
     private String advertisementImage;
-
+    private String type;
+    private String displayTime;
 }
+

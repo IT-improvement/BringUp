@@ -37,11 +37,12 @@ public class MainService {
     }
 
 
-    public List<UserAdvertisementResponseDto> getRandomAdvertisements(UserDetailsImpl userDetails) {
-        // 모든 광고 리스트를 불러옴
+    // 광고 목록 중 ACTIVE 상태인 광고를 랜덤으로 최대 5개 가져오는 메서드
+    public List<UserAdvertisementResponseDto> getRandomActiveAdvertisements() {
+        // 모든 광고를 불러옴
         List<Advertisement> allAdvertisements = advertisementRepository.findAll();
 
-        // ACTIVE 상태의 광고만 필터링 (반복문 사용)
+        // ACTIVE 상태인 광고만 필터링
         List<Advertisement> activeAdvertisements = new ArrayList<>();
         for (Advertisement ad : allAdvertisements) {
             if (ad.getStatus() == StatusType.ACTIVE) {
@@ -49,37 +50,31 @@ public class MainService {
             }
         }
 
-        // 랜덤으로 5개의 광고 선택
-        Random random = new Random();
+        // 최대 5개의 랜덤 광고를 선택
         List<UserAdvertisementResponseDto> randomAdvertisements = new ArrayList<>();
-        Set<Integer> selectedIndexes = new HashSet<>();
+        Random random = new Random();
+        int maxAdvertisements = Math.min(5, activeAdvertisements.size());
+        List<Integer> selectedIndexes = new ArrayList<>();
 
-        while (randomAdvertisements.size() < 5 && !activeAdvertisements.isEmpty()) {
+        while (randomAdvertisements.size() < maxAdvertisements) {
             int randomIndex = random.nextInt(activeAdvertisements.size());
             if (!selectedIndexes.contains(randomIndex)) {
                 selectedIndexes.add(randomIndex);
                 Advertisement ad = activeAdvertisements.get(randomIndex);
-                randomAdvertisements.add(
-                        UserAdvertisementResponseDto.builder()
-                                .advertisementImage(ad.getAdvertisementImage())  // 이미지 정보만 빌더에 추가
-                                .build()
-                );
+                randomAdvertisements.add(convertToDto(ad));
             }
         }
 
         return randomAdvertisements;
     }
 
+    // Advertisement 엔티티를 AdvertisementResponseDto로 변환하는 메서드
     private UserAdvertisementResponseDto convertToDto(Advertisement advertisement) {
-        return UserAdvertisementResponseDto.builder()
-                .advertisementIndex(advertisement.getAdvertisementIndex())
-                .recruitmentIndex(advertisement.getRecruitmentIndex())
-                .advertisementImage(advertisement.getAdvertisementImage())
-                .type(advertisement.getType())
-                .displayTime(advertisement.getDisplayTime())
-                .status(advertisement.getStatus())
-                .build();
+        return new UserAdvertisementResponseDto(
+                advertisement.getAdvertisementIndex(),
+                advertisement.getAdvertisementImage(),
+                advertisement.getType(),
+                advertisement.getDisplayTime()
+        );
     }
 }
-
-
