@@ -17,6 +17,7 @@ public enum MemberErrorCode implements BaseErrorCode {
     INVALID_REQUEST_FORMAT(400,"잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
     NOT_FOUND_1st(400, "진위여부 파악이 완료되지 않았습니다.", HttpStatus.BAD_REQUEST),
     NOT_FOUND_RECRUITMENT(400, "공고가 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
+    NOT_FOUND_CV(400,"이력서가 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
     // 403 FORBIDDEN
     FORBIDDEN_DELETE_MEMBER(403, "권한이 없습니다. 본인 계정만 탈퇴할 수 있습니다.", HttpStatus.FORBIDDEN),
     FORBIDDEN_RESET_PASSWORD(403, "권한이 없습니다. 본인 계정만 비밀번호 변경이 가능합니다.", HttpStatus.FORBIDDEN),
