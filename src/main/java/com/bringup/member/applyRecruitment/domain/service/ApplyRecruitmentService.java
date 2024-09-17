@@ -16,6 +16,7 @@ import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.exception.MemberException;
 import com.bringup.member.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,7 +38,15 @@ public class ApplyRecruitmentService {
         return null;
     }
 
-    public List<ApplyRecruitmentResponseDto> applyRecruitmentList(UserDetailsImpl userDetails){
+    public void addApplyRecruitment(UserDetailsImpl userDetails){
+        UserEntity user = userRepository.findById(userDetails.getId())
+                .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
+
+        CVEntity cv = cvRepository.findByUserIndex(user.getUserIndex())
+                .orElseThrow(()->new RuntimeException("해당 유저의 이력서를 찾을 수 없습니다."));
+    }
+
+    public List<ApplyRecruitmentResponseDto> getApplyRecruitmentList(UserDetailsImpl userDetails){
         UserEntity user = userRepository.findById(userDetails.getId())
                 .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
 
