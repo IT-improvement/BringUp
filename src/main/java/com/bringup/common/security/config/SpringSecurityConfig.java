@@ -143,8 +143,8 @@ public class SpringSecurityConfig {
                 antMatcher("/member/interviewReview"),
                 antMatcher("/member/notice"),
                 antMatcher(GET, "image/**"),
-                antMatcher("/recruitment/**")
-
+                antMatcher("/recruitment/**"),
+                antMatcher("/main/advertisements")
 
         );
 
@@ -175,7 +175,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/name"),
 
                 antMatcher("/member/userMain"),
-                antMatcher("/main/**")
+                antMatcher("/main/memberInfo")
 
         );
 
@@ -195,4 +195,5 @@ public class SpringSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 생성을 하지 않음
                 .anonymous(AbstractHttpConfigurer::disable); // 익명 사용자 접근 제한, 모든 요청이 인증 필요
     }
+
 }
