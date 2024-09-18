@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
@@ -23,7 +21,6 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 @RequestMapping("/main")
 @RequiredArgsConstructor
 public class MainController {
-
 
     private final MainService mainService;
 
@@ -35,11 +32,10 @@ public class MainController {
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, memberInfoDto));
     }
 
-
-    @PostMapping("/advertisement")
-    public ResponseEntity<List<UserAdvertisementResponseDto>> getAllAdvertisements(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<UserAdvertisementResponseDto> randomAds = mainService.getRandomActiveAdvertisements();
-        return ResponseEntity.ok(randomAds);
-        }
-
+    @GetMapping("/advertisements")
+    public ResponseEntity<List<UserAdvertisementResponseDto>> getAdvertisements() {
+        // 서비스에서 광고 데이터를 받아 응답으로 반환
+        List<UserAdvertisementResponseDto> advertisements = mainService.getRandomActiveAdvertisements();
+        return ResponseEntity.ok(advertisements);
+    }
 }

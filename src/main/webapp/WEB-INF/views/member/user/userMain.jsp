@@ -69,29 +69,18 @@
 			height: 300px;
 			overflow: hidden;
 			text-align: center;
-			flex: 3;
 			margin: 20px;
 		}
 
-		.ad-images {
-			position: absolute;
+		.ad-image {
 			width: 100%;
 			height: 100%;
-			object-fit: cover;
-			transition: transform 1s ease-in-out;
-			transform: translateX(100%); /* 기본적으로 오른쪽으로 이동 */
-		}
-
-		.ad-images.active {
-			transform: translateX(0); /* 활성화된 이미지는 제자리에 표시 */
-		}
-
-		.ad-images.inactive {
-			transform: translateX(-100%); /* 나간 이미지는 왼쪽으로 사라짐 */
+			object-fit: contain; /* 이미지 비율 유지 및 부모 영역에 맞춤 */
+			transition: opacity 1s ease-in-out;
 		}
 
 		/* 이전, 다음 버튼 스타일 */
-		.ad1 .prev, .ad1 .next {
+		.ad1 .prev-btn, .ad1 .next-btn {
 			position: absolute;
 			top: 50%;
 			transform: translateY(-50%);
@@ -104,17 +93,17 @@
 			border-radius: 5px;
 		}
 
-		.ad1 .prev {
+		.ad1 .prev-btn {
 			left: 10px;
 		}
 
-		.ad1 .next {
+		.ad1 .next-btn {
 			right: 10px;
 		}
 
 		/* 로그인 스타일 */
 		.login-box {
-			width: 370px;
+			width: 600px;
 			padding: 20px;
 			background-color: #f0f0f0;
 			border-radius: 10px;
@@ -235,16 +224,14 @@
 			color: #333;
 		}
 
-		.label.active {
-			background-color: #cce5ff; /* 연한 파란색 배경 */
-			color: #0056b3; /* 텍스트 색상 */
-			z-index: 10;
+		.label:hover {
+			background-color: #e9e9e9;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 			opacity: 1;
 		}
 
-		.label:hover {
-			background-color: #e9e9e9; /* Hover 시 밝게 */
-			box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+		.label.active {
+			z-index: 10;
 			opacity: 1;
 		}
 
@@ -272,25 +259,6 @@
 			text-align: center;
 			margin-bottom: 20px;
 			margin-top: 20px;
-			overflow: hidden;
-			position: relative;
-		}
-
-		.ad3-images {
-			position: absolute;
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			transition: transform 1s ease-in-out;
-			transform: translateX(100%);
-		}
-
-		.ad3-images.active {
-			transform: translateX(0);
-		}
-
-		.ad3-images.inactive {
-			transform: translateX(-100%);
 		}
 		.grid-container {
 			display: grid;
@@ -310,7 +278,7 @@
 		}
 
 		/* 버튼 클릭 시 반짝이는 효과 */
-		button.prev, button.next {
+		button.prev-btn, button.next-btn {
 			background-color: rgba(0, 0, 0, 0.5);
 			color: white;
 			padding: 10px;
@@ -338,13 +306,9 @@
 	<!-- 광고 1번과 로그인 폼 -->
 	<div class="top-section">
 		<div class="ad1">
-			<img class="ad-images" src="https://via.placeholder.com/800x300?text=Ad1" alt="광고 이미지 1">
-			<img class="ad-images" src="https://via.placeholder.com/800x300?text=Ad2" alt="광고 이미지 2" style="display:none;">
-			<img class="ad-images" src="https://via.placeholder.com/800x300?text=Ad3" alt="광고 이미지 3" style="display:none;">
-
-			<!-- 이전, 다음 버튼 추가 -->
-			<button class="prev">❮</button>
-			<button class="next">❯</button>
+			<img class="ad-image" src="" alt="광고 이미지" style="display:none;">
+			<button class="prev-btn">❮</button>
+			<button class="next-btn">❯</button>
 		</div>
 
 		<div class="login-box">
@@ -418,46 +382,84 @@
 <!-- 이미지 슬라이드 쇼 스크립트 -->
 <script>
 	document.addEventListener('DOMContentLoaded', function () {
+		const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+		const imageElement = document.querySelector('.ad-image');
+		const prevButton = document.querySelector('.prev-btn');
+		const nextButton = document.querySelector('.next-btn');
 		let currentIndex = 0;
-		const images = document.querySelectorAll('.ad-images');
-		const totalImages = images.length;
-		let slideInterval;
+		let ads = [];
 
-		// 이미지 슬라이드 애니메이션 함수
-		function showNextImage() {
-			images[currentIndex].classList.remove('active');
-			images[currentIndex].classList.add('inactive'); // 현재 이미지를 왼쪽으로 스크롤 아웃
-			currentIndex = (currentIndex + 1) % totalImages; // 다음 이미지 인덱스 계산
-			images[currentIndex].classList.remove('inactive');
-			images[currentIndex].classList.add('active'); // 다음 이미지를 왼쪽에서 스크롤 인
+		// 광고 데이터를 가져오는 함수
+		function fetchAdvertisements() {
+			fetch('/main/advertisements', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+					.then(response => {
+						if (!response.ok) {
+							console.error('광고 데이터를 불러오는 중 오류 발생:', response.status);
+							throw new Error('광고를 불러오지 못했습니다.');
+						}
+						return response.json();
+					})
+					.then(data => {
+						ads = data;
+						if (ads.length > 0) {
+							displayImage(currentIndex); // 첫 번째 광고 이미지 표시
+							startAutoSlide();  // 광고 데이터를 다 가져온 후 자동 슬라이드 시작
+							console.log('첫 번째 광고 이미지:', ads[0].advertisementImage); // 첫 번째 이미지 콘솔 출력
+							if (ads.length > 1) {
+								console.log('두 번째 광고 이미지:', ads[1].advertisementImage); // 두 번째 이미지 콘솔 출력
+							}
+						}
+					})
+					.catch(error => {
+						console.error('광고 데이터를 가져오는 중 오류 발생:', error);
+						alert('이미지를 가져오는 중 오류가 발생했습니다.');
+					});
 		}
 
-		// 3초마다 showNextImage 함수 호출
-		function startSlideShow() {
-			slideInterval = setInterval(showNextImage, 3000);
+		// 광고 이미지를 표시하는 함수
+		function displayImage(index) {
+			const adImageSrc = ads[index].advertisementImage;
+
+			// 이미지가 로드될 때 오류가 발생하면 로그 남기기
+			imageElement.onerror = function() {
+				console.error('이미지를 로드하는 중 오류 발생:', adImageSrc);
+				alert('이미지를 불러오는 중 오류가 발생했습니다. 파일 경로를 확인해주세요.');
+			};
+
+			imageElement.src = adImageSrc;
+			imageElement.style.display = 'block';
 		}
 
-		// 처음 슬라이드 쇼 시작
-		startSlideShow();
+		// 자동 슬라이드 시작
+		function startAutoSlide() {
+			setInterval(() => {
+				currentIndex = (currentIndex + 1) % ads.length;
+				displayImage(currentIndex);
+			}, 3000);
+		}
 
-		// 이전, 다음 버튼을 이용한 수동 슬라이드
-		document.querySelector('.prev').addEventListener('click', function() {
-			images[currentIndex].classList.remove('active');
-			images[currentIndex].classList.add('inactive');
-			currentIndex = (currentIndex - 1 + totalImages) % totalImages;
-			images[currentIndex].classList.remove('inactive');
-			images[currentIndex].classList.add('active');
+		// 이전 이미지로 이동하는 함수
+		prevButton.addEventListener('click', function () {
+			currentIndex = (currentIndex - 1 + ads.length) % ads.length;
+			displayImage(currentIndex);
 		});
 
-		document.querySelector('.next').addEventListener('click', function() {
-			images[currentIndex].classList.remove('active');
-			images[currentIndex].classList.add('inactive');
-			currentIndex = (currentIndex + 1) % totalImages;
-			images[currentIndex].classList.remove('inactive');
-			images[currentIndex].classList.add('active');
+		// 다음 이미지로 이동하는 함수
+		nextButton.addEventListener('click', function () {
+			currentIndex = (currentIndex + 1) % ads.length;
+			displayImage(currentIndex);
 		});
+
+		// 페이지 로드 시 광고 데이터 가져오기
+		fetchAdvertisements();
+
 		// JWT 토큰을 사용하여 사용자 정보 가져오기
-		const token = localStorage.getItem('accessToken');
+
 		fetch('/main/memberInfo', {
 			method: 'POST',
 			headers: {
@@ -553,26 +555,27 @@
 
 	//3번 광고
 	document.addEventListener('DOMContentLoaded', function () {
-		// 광고 3번 슬라이드 쇼
 		let ad3CurrentIndex = 0;
 		const ad3Images = document.querySelectorAll('.ad3-images');
 		const ad3TotalImages = ad3Images.length;
 		let ad3SlideInterval;
 
+		// 광고 3번 이미지 슬라이드 쇼 함수
 		function showNextAd3Image() {
-			ad3Images[ad3CurrentIndex].classList.remove('active');
-			ad3Images[ad3CurrentIndex].classList.add('inactive');
-			ad3CurrentIndex = (ad3CurrentIndex + 1) % ad3TotalImages;
-			ad3Images[ad3CurrentIndex].classList.remove('inactive');
-			ad3Images[ad3CurrentIndex].classList.add('active');
+			ad3Images[ad3CurrentIndex].style.display = 'none'; // 현재 이미지를 숨김
+			ad3CurrentIndex = (ad3CurrentIndex + 1) % ad3TotalImages; // 다음 이미지 인덱스 계산
+			ad3Images[ad3CurrentIndex].style.display = 'block'; // 다음 이미지를 표시
 		}
 
+		// 3초마다 showNextAd3Image 함수 호출
 		function startAd3SlideShow() {
-			ad3SlideInterval = setInterval(showNextAd3Image, 3000);
+			ad3SlideInterval = setInterval(showNextAd3Image, 3000); // 3초마다 광고 3 이미지 변경
 		}
 
+		// 처음 광고 3 슬라이드 쇼 시작
 		startAd3SlideShow();
 	});
+
 
 </script>
 
