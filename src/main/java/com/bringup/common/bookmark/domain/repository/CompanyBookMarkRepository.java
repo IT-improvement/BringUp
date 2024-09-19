@@ -26,4 +26,6 @@ public interface CompanyBookMarkRepository extends JpaRepository<CompanyBookMark
     boolean existsByCompanyAndUserAndStatus(Company company, UserEntity user, BookmarkType status);
 
     List<CompanyBookMarkEntity> findByCompanyAndStatus(Company company, BookmarkType bookmarkType);
+    
+    int countByStatusAndCompany(BookmarkType bookmarkType, Company company);
 }

@@ -145,4 +145,13 @@ public class CompanyBookMarkService {
 
         return savedStatusMap;
     }
+
+    public int countBookmark(UserDetailsImpl userDetails) {
+        Company company = companyRepository.findBycompanyId(userDetails.getId())
+                .orElseThrow(() -> new BookmarkException(NOT_FOUND_MEMBER_ID));
+
+        int bookmarkCount = companyBookMarkRepository.countByStatusAndCompany(BookmarkType.BOOKMARK, company);
+
+        return bookmarkCount;
+    }
 }
