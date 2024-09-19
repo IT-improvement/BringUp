@@ -70,4 +70,11 @@ public class CompanyBookMarkContoller {
 
         return ResponseEntity.ok(new BfResponse<>(savedStatusMap));
     }
+
+    @GetMapping("/com/bookmarkCount")
+    public ResponseEntity<BfResponse<?>> countBookmark(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        int count = companyBookMarkService.countBookmark(userDetails);
+
+        return ResponseEntity.ok(new BfResponse<>(count));
+    }
 }
