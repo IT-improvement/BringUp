@@ -1,5 +1,6 @@
 package com.bringup.member.applyRecruitment.domain.service;
 
+import com.bringup.common.enums.ApplyCVType;
 import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.enums.RecruitmentType;
 import com.bringup.common.security.service.UserDetailsImpl;
@@ -44,6 +45,18 @@ public class ApplyRecruitmentService {
 
         CVEntity cv = cvRepository.findByUserIndex(user.getUserIndex())
                 .orElseThrow(()->new RuntimeException("해당 유저의 이력서를 찾을 수 없습니다."));
+
+        Company company = companyRepository.findById(userDetails.getId())
+                .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
+
+        Recruitment recruitment = recruitmentRepository.findByCompanyCompanyId(company.getCompanyId())
+                .orElseThrow(()->new RuntimeException("해당 기업의 공고를 찾을 수 없습니다."));
+
+        ApplyRecruitmentEntity applyRecruitmentEntity = new ApplyRecruitmentEntity();
+        applyRecruitmentEntity.setCvIndex(cv.getCvIndex());
+        applyRecruitmentEntity.setRecruitmentIndex(recruitment.getRecruitmentIndex());
+        applyRecruitmentEntity.setStatus(ApplyCVType.IN_PROGRESS);
+        applyRecruitmentRepository.save(applyRecruitmentEntity);
     }
 
     public List<ApplyRecruitmentResponseDto> getApplyRecruitmentList(UserDetailsImpl userDetails){
