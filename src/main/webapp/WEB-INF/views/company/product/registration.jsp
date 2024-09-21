@@ -41,17 +41,46 @@
     <script src="/resources/script/common/function/functions.js"></script>
 
     <!-- 메인 JS -->
-    <!-- <script src="/resources/script/company/main.js"></script> -->
+    <script src="/resources/script/company/product/registration.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
 </head>
 
 <body class="d-flex flex-column min-vh-100">
+    <!-- 기존 헤더 코드 -->
+    <div id="headerOverlay" class="header-overlay"></div>
+    <!-- 나머지 기존 코드 -->
 
 	<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
     <main class="flex-grow-1">
-		<p>프리미엄 공고</p>
+		<form action="/company/product/registration" method="post">
+			<p><%= request.getParameter("productName") %> 상품 신청</p>
+			<input type="hidden" name="productName" value="<%= request.getParameter("productName") %>">
+		<div class="mb-3">
+			<input type="text" class="form-control" id="selectedAdvertisement" placeholder="내 공고 선택" readonly>
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#advertisementModal">선택</button>
+		</div>
+
+		<!-- 모달 창 -->
+		<div class="modal fade" id="advertisementModal" tabindex="-1" aria-labelledby="advertisementModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+
+					<div class="modal-header">
+						<h5 class="modal-title" id="advertisementModalLabel">공고 선택</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div id="advertisement-list">
+							<!-- 여기에 공고 목록이 동적으로 추가됩니다 -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</form>
     </main>
 
 	<jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
