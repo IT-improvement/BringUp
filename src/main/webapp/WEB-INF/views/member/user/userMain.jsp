@@ -193,6 +193,8 @@
 			background-color: #ccc;
 			text-align: center;
 			height: 450px;
+
+			overflow: hidden; /* 이미지가 넘치는 것을 숨김 */
 			position: relative;
 			z-index: 1; /* 광고 2는 레이블보다 뒤에 위치 */
 			margin-left: 120px;
@@ -242,14 +244,18 @@
 
 		/* 애니메이션이 부드럽게 적용되도록 변경 */
 		.ad2-image {
-			display: none;
-			opacity: 0;
-			transition: opacity 0.5s ease-in-out; /* fade in/out 애니메이션 */
+			width: 100%;
+			height: 100%;
+			object-fit: cover; /* 이미지가 부모 요소의 크기에 맞게 조정됨 */
+			object-position: center; /* 이미지 중앙을 기준으로 맞춤 */
+			transition: opacity 0.5s ease-in-out;
+			display: block; /* 항상 표시되도록 설정 */
 		}
 
 		.ad2-image.active {
 			display: block;
 			opacity: 1;
+			object-fit: contain; /* 이미지 비율 유지 및 부모 영역에 맞춤 */
 		}
 
 		/* 광고 3번과 무한 스크롤 */
@@ -338,9 +344,7 @@
 
 	<div class="main-content">
 		<div class="ad2">
-			<img class="ad2-image" src="https://via.placeholder.com/800x300?text=광고+2+이미지1" alt="광고 2 이미지 1">
-			<img class="ad2-image" src="https://via.placeholder.com/800x300?text=광고+2+이미지2" alt="광고 2 이미지 2" style="display:none;">
-			<img class="ad2-image" src="https://via.placeholder.com/800x300?text=광고+2+이미지3" alt="광고 2 이미지 3" style="display:none;">
+			<img class="ad2-image" src="http://localhost:8080/image/default.png" alt="광고 2 이미지 1">
 		</div>
 
 		<div class="labels">
@@ -399,57 +403,72 @@
 			})
 					.then(response => {
 						if (!response.ok) {
-							console.error('광고 데이터를 불러오는 중 오류 발생:', response.status);
-							throw new Error('광고를 불러오지 못했습니다.');
+							throw new Error(`광고를 불러오지 못했습니다: ${response.status}`);
 						}
 						return response.json();
 					})
 					.then(data => {
-						ads = data;
+						ads = data.map(ad => {
+							// 광고 이미지 경로 설정
+							// DB에서 제공한 경로를 그대로 사용합니다.
+							let adImageSrc = ad.advertisementImage;
+
+							// 상대 경로인 경우 절대 경로로 변경
+							if (!adImageSrc.startsWith('/image/')) {
+								adImageSrc = `http://localhost:8080/image/`+ adImageSrc;
+							}
+
+							return {
+								...ad,
+								advertisementImage: adImageSrc
+							};
+						});
+
 						if (ads.length > 0) {
 							displayImage(currentIndex); // 첫 번째 광고 이미지 표시
-							startAutoSlide();  // 광고 데이터를 다 가져온 후 자동 슬라이드 시작
-							console.log('첫 번째 광고 이미지:', ads[0].advertisementImage); // 첫 번째 이미지 콘솔 출력
-							if (ads.length > 1) {
-								console.log('두 번째 광고 이미지:', ads[1].advertisementImage); // 두 번째 이미지 콘솔 출력
-							}
+							startAutoSlide();  // 자동 슬라이드 시작
+						} else {
+							console.error('광고 데이터가 비어 있습니다.');
 						}
 					})
 					.catch(error => {
 						console.error('광고 데이터를 가져오는 중 오류 발생:', error);
-						alert('이미지를 가져오는 중 오류가 발생했습니다.');
 					});
 		}
 
-		// 광고 이미지를 표시하는 함수
+		// 이미지를 표시하는 함수
 		function displayImage(index) {
-			const adImageSrc = ads[index].advertisementImage;
+			if (ads.length === 0) {
+				console.error('광고 데이터가 없습니다.');
+				return;
+			}
 
-			// 이미지가 로드될 때 오류가 발생하면 로그 남기기
+			// 광고 이미지 경로를 그대로 사용
+			let adImageSrc = ads[index].advertisementImage;
+
+			imageElement.src = adImageSrc;
+			imageElement.style.display = 'block';
+			console.log('이미지경로:', adImageSrc);
 			imageElement.onerror = function() {
 				console.error('이미지를 로드하는 중 오류 발생:', adImageSrc);
 				alert('이미지를 불러오는 중 오류가 발생했습니다. 파일 경로를 확인해주세요.');
 			};
-
-			imageElement.src = adImageSrc;
-			imageElement.style.display = 'block';
 		}
-
-		// 자동 슬라이드 시작
+		/*// 자동 슬라이드 시작
 		function startAutoSlide() {
 			setInterval(() => {
 				currentIndex = (currentIndex + 1) % ads.length;
 				displayImage(currentIndex);
-			}, 3000);
-		}
+			}, 3000); // 3초마다 슬라이드 전환
+		}*/
 
-		// 이전 이미지로 이동하는 함수
+		// 이전 이미지로 이동
 		prevButton.addEventListener('click', function () {
 			currentIndex = (currentIndex - 1 + ads.length) % ads.length;
 			displayImage(currentIndex);
 		});
 
-		// 다음 이미지로 이동하는 함수
+		// 다음 이미지로 이동
 		nextButton.addEventListener('click', function () {
 			currentIndex = (currentIndex + 1) % ads.length;
 			displayImage(currentIndex);
@@ -457,7 +476,6 @@
 
 		// 페이지 로드 시 광고 데이터 가져오기
 		fetchAdvertisements();
-
 		// JWT 토큰을 사용하여 사용자 정보 가져오기
 
 		fetch('/main/memberInfo', {

@@ -1,17 +1,18 @@
 package com.bringup.member.main.controller;
 
+import com.bringup.common.image.ImageService;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.main.dto.UserAdvertisementResponseDto;
 import com.bringup.member.main.dto.MemberInfoDto;
 import com.bringup.member.main.service.MainService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 public class MainController {
 
     private final MainService mainService;
+    private final ImageService imageService;
 
     @PostMapping("/memberInfo")
     public ResponseEntity<BfResponse<?>> getMemberInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -38,4 +40,5 @@ public class MainController {
         List<UserAdvertisementResponseDto> advertisements = mainService.getRandomActiveAdvertisements();
         return ResponseEntity.ok(advertisements);
     }
+
 }

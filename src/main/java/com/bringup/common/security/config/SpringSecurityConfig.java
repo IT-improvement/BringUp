@@ -144,6 +144,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/notice"),
                 antMatcher(GET, "image/**"),
                 antMatcher("/recruitment/**"),
+                antMatcher("/main/image/**"),
                 antMatcher("/main/advertisements")
 
         );
