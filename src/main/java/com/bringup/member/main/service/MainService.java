@@ -1,6 +1,7 @@
 package com.bringup.member.main.service;
 
 import com.bringup.common.enums.StatusType;
+import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.entity.Advertisement;
 import com.bringup.company.advertisement.repository.AdvertisementRepository;
@@ -10,6 +11,7 @@ import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +24,6 @@ public class MainService {
     private final UserRepository userRepository;
     private final AdvertisementRepository advertisementRepository;
 
-    @Value("${file.url}")
-    private String fileUrl;
 
     public MemberInfoDto getMemberInfo(UserDetailsImpl userDetails) {
         // userDetails에서 이메일을 가져와서 해당 이메일로 유저 정보를 조회
@@ -37,10 +37,12 @@ public class MainService {
                 .build();
     }
 
-
     // 광고 목록 중 ACTIVE 상태인 광고를 랜덤으로 최대 5개 가져오는 메서드
     public List<UserAdvertisementResponseDto> getRandomActiveAdvertisements() {
+        // 모든 광고를 불러옵니다.
         List<Advertisement> allAdvertisements = advertisementRepository.findAll();
+
+        // ACTIVE 상태인 광고만 필터링
         List<Advertisement> activeAdvertisements = new ArrayList<>();
         for (Advertisement ad : allAdvertisements) {
             if (ad.getStatus() == StatusType.ACTIVE) {
@@ -48,31 +50,27 @@ public class MainService {
             }
         }
 
+        // 최대 5개의 랜덤 광고를 선택
         List<UserAdvertisementResponseDto> randomAdvertisements = new ArrayList<>();
         Random random = new Random();
-        int maxAdvertisements = Math.min(5, activeAdvertisements.size());
+        int maxAdvertisements = Math.min(2, activeAdvertisements.size());
 
         while (randomAdvertisements.size() < maxAdvertisements) {
             int randomIndex = random.nextInt(activeAdvertisements.size());
             Advertisement ad = activeAdvertisements.get(randomIndex);
+
+            // DTO 변환 및 이미지 경로 설정
             randomAdvertisements.add(convertToDto(ad));
         }
 
         return randomAdvertisements;
     }
-
-    // Advertisement 엔티티를 UserAdvertisementResponseDto로 변환하는 메서드
     private UserAdvertisementResponseDto convertToDto(Advertisement advertisement) {
-        String imageUrl = advertisement.getAdvertisementImage();
 
-        // 이미지 경로가 '/'로 시작하지 않으면 '/'를 추가
-        if (!imageUrl.startsWith("/")) {
-            imageUrl = "/" + imageUrl;
-        }
 
         return new UserAdvertisementResponseDto(
                 advertisement.getAdvertisementIndex(),
-                imageUrl,
+                advertisement.getAdvertisementImage(),
                 advertisement.getType(),
                 advertisement.getDisplayTime()
         );
