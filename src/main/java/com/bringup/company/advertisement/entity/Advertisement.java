@@ -22,6 +22,9 @@ public class Advertisement {
     @Column(name = "advertisement_image")
     private String advertisementImage;
 
+    @Column(name = "view_count")
+    private Integer count = 0;
+
     @Column(name = "type")
     private String type;
 
