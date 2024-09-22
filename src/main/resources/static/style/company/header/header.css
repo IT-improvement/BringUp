@@ -58,3 +58,8 @@
         border-top: 1px solid rgba(0,0,0,.1);
     }
 }
+
+.header {
+    /* 기존 스타일 유지 */
+    z-index: 1000; /* modal-backdrop보다 낮은 값으로 설정 */
+}

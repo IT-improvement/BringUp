@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- =======================
 헤더 시작 -->
-<header class="header-static border-bottom" style="z-index: 1060; position: fixed; width: 100%; top: 0;">
+<header class="header-static border-bottom" style="position: fixed; width: 100%; top: 0; z-index: 1001;">
     <!-- 상단 헤더 -->
     <nav class="navbar navbar-expand-xl">
         <div class="container-fluid px-3" style="max-width: 1260px;">
@@ -145,7 +145,7 @@
 <!-- 알림 프로필 부분 끝 -->
 
 <!-- 메인 네비게이션 부분 시작 -->
-<header class="border-bottom" style="position: fixed; width: 100%; top: 50px; z-index: 1060;">
+<header class="border-bottom" style="position: fixed; width: 100%; top: 50px; z-index: 1000;">
     <!-- 하단 헤더 (메인 네비게이션) -->
     <nav class="navbar navbar-expand-lg navbar-dashboard">
         <div class="container px-3" style="max-width: 1260px;">
