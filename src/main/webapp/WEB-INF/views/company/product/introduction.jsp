@@ -42,6 +42,11 @@
 
     <!-- 메인 JS -->
     <!-- <script src="/resources/script/company/main.js"></script> -->
+    <script>
+        function applyProduct(productName) {
+            window.location.href = "/company/product/registration?productName=" + productName;
+        }
+    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
@@ -59,7 +64,7 @@
                     <img src="/resources/style/company/product/프리미엄광고.png">
                 </div>
                 <div class="d-flex justify-content-end mx-4 my-2">
-                    <button class="btn btn-primary">신청하기</button>
+                    <button class="btn btn-primary" onclick="applyProduct('프리미엄')">신청하기</button>
                 </div>
             </div>
         </div>
@@ -71,7 +76,7 @@
                     <img src="/resources/style/company/product/메인광고.png">
                 </div>
                 <div class="d-flex justify-content-end mx-4 my-2">
-                    <button class="btn btn-primary">신청하기</button>
+                    <button class="btn btn-primary" onclick="applyProduct('메인')">신청하기</button>
                 </div>
             </div>
         </div>
@@ -83,7 +88,7 @@
                     <img src="/resources/style/company/product/배너광고.png">
                 </div>
                 <div class="d-flex justify-content-end mx-4 my-2">
-                    <button class="btn btn-primary">신청하기</button>
+                    <button class="btn btn-primary" onclick="applyProduct('배너')">신청하기</button>
                 </div>
             </div>
         </div>
