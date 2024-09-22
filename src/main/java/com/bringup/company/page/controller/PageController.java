@@ -41,9 +41,9 @@ public class PageController {
         return "company/product/management";
     }
 
-    @GetMapping("/product/premium_job_posting")
-    public String productPremiumJobPosting(){
-        return "company/product/premium_job_posting";
+    @GetMapping("/product/registration")
+    public String productRegistration(){
+        return "company/product/registration";
     }
 
     @GetMapping("/product/introduction")
