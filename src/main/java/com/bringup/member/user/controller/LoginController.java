@@ -25,11 +25,6 @@ public class LoginController {
 
     private final UserLoginService userLoginService;
 
-    @GetMapping("/userLoginForm")
-    public String loginP(){
-        
-        return "member/user/login";
-    }
 
 
 
@@ -64,34 +59,4 @@ public class LoginController {
         }
         return "member/user/userMain";
     }
-
-    @GetMapping("/potofolio")
-    public String potofolio()
-    {
-        return "member/user/career/potofolio";
-    }
-    @GetMapping("/letter")
-    public String letter()
-    {
-        return "member/user/career/letter";
-    }
-    @GetMapping("/resume")
-    public String resume()
-    {
-        return "member/user/career/resume";
-    }
-    @GetMapping("/companyReview")
-    public String companyReview() {
-        return "member/user/review/companyReview";
-    }
-    @GetMapping("/interviewReview")
-    public String interviewReview() {
-        return "member/user/review/interviewReview";
-    }
-    @GetMapping("/notice")
-    public String notice() {
-        return "member/user/notice/notice";
-    }
-
-
 }
