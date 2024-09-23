@@ -48,12 +48,13 @@
 			min-height: 100vh;
 		}
 
+		.start-content{
+			justify-content: center;
+		}
+
 		main {
 			flex-grow: 1;
-			/* padding: 70px; */
-			padding-top: 30px;
-			padding-right: 350px;
-			padding-left: 350px;
+			justify-content: center;
 		}
 
 		/* 광고 1번과 로그인 폼 */
@@ -61,6 +62,7 @@
 			display: flex;
 			gap: 20px;
 			margin-bottom: 20px;
+			width: 1260px;
 		}
 
 		.ad1 {
@@ -103,7 +105,7 @@
 
 		/* 로그인 스타일 */
 		.login-box {
-			width: 600px;
+			width: 40%;
 			padding: 20px;
 			background-color: #f0f0f0;
 			border-radius: 10px;
@@ -308,9 +310,10 @@
 <jsp:include page="/WEB-INF/views/member/header/member_header.jsp" flush="true" />
 
 <!-- 메인 콘텐츠 -->
+<div class="start-content">
 <main>
 	<!-- 광고 1번과 로그인 폼 -->
-	<div class="top-section">
+	<div class="top-section flex justify-content-center">
 		<div class="ad1">
 			<img class="ad-image" src="" alt="광고 이미지" style="display:none;">
 			<button class="prev-btn">❮</button>
@@ -471,6 +474,7 @@
 		</div>
 	</div>
 </main>
+</div>
 
 <!-- 푸터 -->
 <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
@@ -596,7 +600,6 @@
 					// 모든 광고 이미지를 숨기고 클릭한 레이블에 해당하는 이미지를 표시
 					const index = this.getAttribute('data-index');
 					ad2Images.forEach((img, imgIndex) => {
-						img.style.display = imgIndex == index ? 'block' : 'none';
 					});
 				});
 			});
@@ -638,14 +641,13 @@
 			});
 		});
 
-		// 광고 2 이미지 설정을 위한 코드 추가
 		const ad2ImageElement = document.querySelector('.ad2-image');
 		const labels = document.querySelectorAll('.label');
 		let companyImages = []; // 회사 이미지 데이터를 저장할 배열
 
 		// 서버에서 회사 이미지 데이터를 가져오는 함수
 		function fetchCompanyImages() {
-			fetch('/main/recruitmentImage') // '/company/images'는 회사 이미지 데이터를 반환하는 API 엔드포인트
+			fetch('/main/recruitmentImage')
 					.then(response => {
 						if (!response.ok) {
 							throw new Error(`이미지를 불러오지 못했습니다: ${response.status}`);
@@ -653,18 +655,64 @@
 						return response.json();
 					})
 					.then(data => {
-						companyImages = data; // 서버에서 받아온 데이터를 companyImages 배열에 저장
+						companyImages = data;
+						console.log("가져온 회사 이미지 데이터:", companyImages); // 데이터 확인용 로그 추가
+
+						// 첫 번째 레이블을 클릭한 것처럼 설정하여 광고 1번 이미지 표시
+						displayAd2Image(0);
+
+						// 모든 레이블 버튼에 클릭 이벤트 추가
 						labels.forEach((label, index) => {
-							label.addEventListener('click', function() {
-								if (index < companyImages.length) {
-									ad2ImageElement.src = companyImages[index].companyImg; // 해당 인덱스의 이미지 URL을 ad2ImageElement에 설정
-								}
+							label.addEventListener('click', function () {
+								displayAd2Image(index);
 							});
 						});
 					})
 					.catch(error => {
 						console.error('이미지 데이터를 가져오는 중 오류 발생:', error);
 					});
+		}
+
+		// 광고 2 이미지를 표시하는 함수
+		function displayAd2Image(labelIndex) {
+			if (companyImages.length === 0) {
+				console.error('회사 이미지 데이터가 없습니다.');
+				return;
+			}
+
+			if (labelIndex < companyImages.length) {
+				// 여러 이미지를 쉼표로 구분하여 저장된 경우, 각 이미지로 분리하여 배열로 저장
+				let imageUrls = companyImages[labelIndex].companyImg.split(',');
+
+				if (imageUrls.length === 0) {
+					console.error(`label index ${labelIndex}에 대한 이미지 데이터가 비어 있습니다.`);
+					return;
+				}
+
+				// 인덱스에 해당하는 첫 번째 이미지를 가져오기
+				let imageUrl = imageUrls[0].trim(); // 앞뒤 공백 제거
+
+				// 이미지 URL을 체크하여 '/image/'로 시작하지 않으면 기본 경로 추가
+				if (!imageUrl.startsWith('/image/')) {
+					imageUrl = `http://localhost:8080/image/` + imageUrl;
+				}
+
+				ad2ImageElement.src = imageUrl;
+				console.log(`선택된 광고 이미지 URL (label index ${labelIndex}): ${imageUrl}`);
+
+				// 이미지 로드 에러 핸들링
+				ad2ImageElement.onerror = function() {
+					console.error('이미지 로드 오류:', imageUrl);
+					alert('이미지를 불러오는 중 오류가 발생했습니다. 파일 경로를 확인해주세요.');
+				};
+
+				// 이미지 로드 성공 로그
+				ad2ImageElement.onload = function() {
+					console.log(`이미지 로드 성공 (label index ${labelIndex}): ${imageUrl}`);
+				};
+			} else {
+				console.warn(`label index ${labelIndex}에 대한 이미지 데이터가 존재하지 않습니다.`);
+			}
 		}
 
 		// 페이지 로드 시 회사 이미지 데이터를 가져옴
