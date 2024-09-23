@@ -5,6 +5,9 @@ import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.entity.Advertisement;
 import com.bringup.company.advertisement.repository.AdvertisementRepository;
+import com.bringup.company.user.entity.Company;
+import com.bringup.company.user.repository.CompanyRepository;
+import com.bringup.member.main.dto.CompanyImageDto;
 import com.bringup.member.main.dto.UserAdvertisementResponseDto;
 import com.bringup.member.main.dto.MemberInfoDto;
 import com.bringup.member.user.domain.entity.UserEntity;
@@ -23,6 +26,7 @@ import java.util.*;
 public class MainService {
     private final UserRepository userRepository;
     private final AdvertisementRepository advertisementRepository;
+    private final CompanyRepository  companyRepository;
 
 
     public MemberInfoDto getMemberInfo(UserDetailsImpl userDetails) {
@@ -65,6 +69,25 @@ public class MainService {
 
         return randomAdvertisements;
     }
+
+
+
+    public List<CompanyImageDto> getActiveCompanyImages() {
+
+        List<Company> activeCompanies = companyRepository.findAllByStatus(StatusType.ACTIVE);
+
+        List<CompanyImageDto> companyImageList = new ArrayList<>();
+
+        for (Company company : activeCompanies) {
+            CompanyImageDto dto = new CompanyImageDto(
+                    company.getCompanyId(),
+                    company.getCompanyImg()
+            );
+            companyImageList.add(dto);
+        }
+        return companyImageList;
+    }
+
     private UserAdvertisementResponseDto convertToDto(Advertisement advertisement) {
 
 
