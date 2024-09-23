@@ -123,7 +123,7 @@
                             <hr>
                         </li>
                         <!-- 링크 -->
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-person fa-fw me-2"></i>프로필 수정</a></li>
+                        <li><a class="dropdown-item" href="/member/memberProfile"><i class="bi bi-person fa-fw me-2"></i>프로필 수정</a></li>
                         <li><a class="dropdown-item" href="#"><i class="bi bi-gear fa-fw me-2"></i>계정 설정</a></li>
                         <li><a class="dropdown-item" href="#" id="logoutButton"><i class="bi bi-power fa-fw me-2"></i>로그아웃</a></li>
                         <li class="dropdown-divider mb-2"></li>

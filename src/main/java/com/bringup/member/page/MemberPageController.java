@@ -80,6 +80,9 @@ public class MemberPageController {
         return "member/user/notice/notice";
     }
 
-
+    @GetMapping("/memberProfile")
+    public String memberProfile(){
+        return "member/user/profile/memberProfile";
+    }
 
 }
