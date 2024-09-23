@@ -1,6 +1,7 @@
-package com.bringup.member.companybookmark.dto.response;
+package com.bringup.common.bookmark.dto.response;
 
-import com.bringup.member.companybookmark.domain.entity.CompanyBookMarkEntity;
+import com.bringup.common.bookmark.domain.entity.CompanyBookMarkEntity;
+import com.bringup.common.enums.BookmarkType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,11 +12,11 @@ import lombok.Setter;
 public class CompanyBookMarkResponseDto{
     private int userIndex;
     private int companyIndex;
-    private String status;
+    private BookmarkType status;
 
     public CompanyBookMarkResponseDto(CompanyBookMarkEntity companyBookMarkEntity){
-        this.userIndex = companyBookMarkEntity.getUserIndex();
-        this.companyIndex = companyBookMarkEntity.getCompanyIndex();
+        this.userIndex = companyBookMarkEntity.getUser().getUserIndex();
+        this.companyIndex = companyBookMarkEntity.getCompany().getCompanyId();
         this.status = companyBookMarkEntity.getStatus();
     }
 }
