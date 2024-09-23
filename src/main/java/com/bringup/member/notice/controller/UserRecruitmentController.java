@@ -18,31 +18,6 @@ public class UserRecruitmentController {
     private UserRecruitmentService userRecruitmentService;
 
 
-    @GetMapping("/recruitmentPage")
-    public String showRecruitmentListPage() {
-        return "member/user/recruitment/recruitmentList";
-    }
-
-    @GetMapping("/topRecruitment")
-    public String topRecruitment() {
-        return "member/user/recruitment/topRecruitment";
-    }
-
-    @GetMapping("/confirmRecruitment")
-    public String confirmRecruitment() {
-        return "member/user/recruitment/confirmRecruitment";
-    }
-    @GetMapping("/AnnouncementRecruitment")
-    public String AnnouncementRecruitment() {
-        return "member/user/recruitment/AnnouncementRecruitment";
-    }
-    @GetMapping("/proposeRecruitment")
-    public String proposeRecruitment() {
-        return "member/user/recruitment/proposeRecruitment";
-    }
-
-
-
 
 
 
