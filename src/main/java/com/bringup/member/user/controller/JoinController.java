@@ -22,8 +22,6 @@ public class JoinController {
 
     private final JoinService joinService;
 
-
-
     @Autowired
     public JoinController(JoinService joinService) {
         this.joinService = joinService;
