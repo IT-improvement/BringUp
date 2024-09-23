@@ -42,10 +42,10 @@ public class MainController {
         return ResponseEntity.ok(advertisements);
     }
 
-    @GetMapping("/recruitmentImage")
-    public ResponseEntity<List<CompanyImageDto>> getActiveCompanyImages() {
-        List<CompanyImageDto> companyImages = mainService.getActiveCompanyImages();
-        return ResponseEntity.ok(companyImages);
+        @GetMapping("/recruitmentImage")
+        public ResponseEntity<List<CompanyImageDto>> getActiveCompanyImages() {
+            List<CompanyImageDto> companyImages = mainService.getActiveCompanyImages();
+            return ResponseEntity.ok(companyImages);
     }
 
 }

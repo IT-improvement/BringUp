@@ -71,20 +71,40 @@ public class MainService {
     }
 
 
-
     public List<CompanyImageDto> getActiveCompanyImages() {
-
         List<Company> activeCompanies = companyRepository.findAllByStatus(StatusType.ACTIVE);
 
-        List<CompanyImageDto> companyImageList = new ArrayList<>();
-
-        for (Company company : activeCompanies) {
-            CompanyImageDto dto = new CompanyImageDto(
-                    company.getCompanyId(),
-                    company.getCompanyImg()
-            );
-            companyImageList.add(dto);
+        if (activeCompanies.isEmpty()) {
+            return new ArrayList<>(); // 회사 목록이 비어 있을 경우 빈 리스트 반환
         }
+
+        List<CompanyImageDto> companyImageList = new ArrayList<>();
+        Random random = new Random();
+
+        // 최대 6개의 랜덤한 회사 선택 (단, 회사 수가 6개 미만일 경우 그만큼만 선택)
+        int maxCompanies = Math.min(6, activeCompanies.size());
+        Set<Integer> selectedIndices = new HashSet<>(); // 중복 방지를 위한 인덱스 저장
+
+        while (selectedIndices.size() < maxCompanies) {
+            int randomIndex = random.nextInt(activeCompanies.size());
+            if (!selectedIndices.contains(randomIndex)) {
+                selectedIndices.add(randomIndex);
+                Company company = activeCompanies.get(randomIndex);
+
+                // companyImg에서 첫 번째 이미지 URL만 가져오기
+                String companyImg = company.getCompanyImg();
+                if (companyImg.contains(",")) {
+                    companyImg = companyImg.split(",")[0]; // 첫 번째 이미지 URL만 사용
+                }
+
+                CompanyImageDto dto = new CompanyImageDto(
+                        company.getCompanyId(),
+                        companyImg // 첫 번째 이미지 URL만 설정
+                );
+                companyImageList.add(dto);
+            }
+        }
+
         return companyImageList;
     }
 
