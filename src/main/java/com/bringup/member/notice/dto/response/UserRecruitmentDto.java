@@ -20,5 +20,4 @@ public class UserRecruitmentDto {
     private String period;
     private int viewCount;
     private StatusType status;
-    private int viewCount;
 }

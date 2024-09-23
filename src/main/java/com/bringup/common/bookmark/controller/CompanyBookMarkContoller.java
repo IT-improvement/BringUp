@@ -35,11 +35,6 @@ public class CompanyBookMarkContoller {
         List<CompanyBookMarkResponseDto> companyBookMarkResponseDtoList = companyBookMarkService.companyBookMarkList(userDetails);
         return ResponseEntity.ok(companyBookMarkResponseDtoList);
     }
-    @GetMapping("/com/headhunt/candidate/{cv_index}")
-    public ResponseEntity<Void> removeCompanyBookMark(@RequestBody CompanyBookMarkRequestDto companyBookMarkRequestDto){
-        companyBookMarkService.removeCompanyBookMark(companyBookMarkRequestDto);
-        return ResponseEntity.ok().build();
-    }
 
     @PostMapping("/com/headhunt/candidate/save/{cv_index}")
     public ResponseEntity<BfResponse<?>> addcandidate(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int cv_index){
