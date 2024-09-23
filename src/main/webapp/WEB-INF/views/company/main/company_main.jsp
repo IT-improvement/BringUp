@@ -30,6 +30,9 @@
 	<!-- 테마 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
 
+    <!-- 추가된 스타일 -->
+    <link rel="stylesheet" type="text/css" href="/resources/style/company/main/main.css"></link>
+
     <!-- Bootstrap JS -->
     <script src="/resources/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -118,9 +121,10 @@
                                             <select id="categorySelect" class="form-select z-index-9 bg-transparent" aria-label=".form-select-sm">
                                                 <option value="전체">전체</option>
                                                 <option value="공고 제목">공고 제목</option>
-                                                <option value="공고 타입">공고 타입</option>
-                                                <option value="모집 분야">모집 분야</option>
-                                                <option value="상태">상태</option>
+                                                <option value="공고 타입">모집 분야</option>
+                                                <option value="기술">기술</option>
+                                                <option value="모집 분야">경력</option>
+                                                <option value="상태">마감일</option>
                                             </select>
                                         </form>
                                     </div>
@@ -129,11 +133,12 @@
                                     <table class="table align-middle p-4 mb-0 table-hover table-shrink">
                                         <thead class="table-dark">
                                         <tr>
-                                            <th scope="col" class="border-0 rounded-start">공고 제목</th>
-                                            <th scope="col" class="border-0">공고 타입</th>
-                                            <th scope="col" class="border-0">게시일</th>
-                                            <th scope="col" class="border-0">모집 분야</th>
-                                            <th scope="col" class="border-0">상태</th>
+                                            <th scope="col">전체</th>
+                                            <th scope="col">공고 제목</th>
+                                            <th scope="col">모집 분야</th>
+                                            <th scope="col">기술</th>
+                                            <th scope="col">경력</th>
+                                            <th scope="col">마감일</th>
                                         </tr>
                                         </thead>
                                         <tbody id="recruitment-list-body" class="border-top-0">
@@ -141,16 +146,9 @@
                                     </table>
                                 </div>
                                 <div class="d-sm-flex justify-content-sm-between align-items-sm-center mt-4 mt-sm-3">
-                                    <p id="totalEntries" class="mb-sm-0 text-center text-sm-start">총${jobPostings.length}</p>
-                                    <nav class="mb-sm-0 d-flex justify-content-center" aria-label="navigation">
-                                        <ul class="pagination pagination-sm pagination-bordered mb-0">
-                                            <li class="page-item" id="prevPage">
-                                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true" onclick="changePage(currentPage - 1)">Prev</a>
-                                            </li>
-                                            <span id="paginationNumbers"></span>
-                                            <li class="page-item" id="nextPage">
-                                                <a class="page-link" href="#" onclick="changePage(currentPage + 1)">Next</a>
-                                            </li>
+                                    <p id="totalEntries" class="mb-sm-0 text-center text-sm-start"></p>
+                                    <nav class="mb-sm-0 d-flex justify-content-center" aria-label="Page navigation">
+                                        <ul class="pagination pagination-sm pagination-bordered mb-0" id="paginationContainer">
                                         </ul>
                                     </nav>
                                 </div>

@@ -1,7 +1,7 @@
 document.getElementById('companySignupForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    const businessNumber = document.getElementById('businessNumber').value;
+    const businessNumber = document.getElementById('businessNumber').value.replace(/-/g, '');
     const companyName = document.getElementById('name').value;
     const startDate = document.getElementById('startDate').value;
 

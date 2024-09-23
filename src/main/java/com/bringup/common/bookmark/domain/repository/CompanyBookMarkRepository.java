@@ -15,11 +15,17 @@ import java.util.Optional;
 public interface CompanyBookMarkRepository extends JpaRepository<CompanyBookMarkEntity, Integer> {
     List<CompanyBookMarkEntity> findByUserAndStatus(UserEntity user, BookmarkType status);
 
+    boolean existsByCompanyAndUser(Company company, UserEntity user);
+
     Optional<CompanyBookMarkEntity> findByUserAndCompany(UserEntity user, Company company);
 
     Optional<CompanyBookMarkEntity> findByCompany(Company company);
 
     //List<CandidateResponseDto> findAllByCompany(Company company);
 
+    boolean existsByCompanyAndUserAndStatus(Company company, UserEntity user, BookmarkType status);
+
     List<CompanyBookMarkEntity> findByCompanyAndStatus(Company company, BookmarkType bookmarkType);
+    
+    int countByStatusAndCompany(BookmarkType bookmarkType, Company company);
 }

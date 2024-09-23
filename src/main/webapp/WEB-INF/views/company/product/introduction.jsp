@@ -42,16 +42,56 @@
 
     <!-- 메인 JS -->
     <!-- <script src="/resources/script/company/main.js"></script> -->
-
+    <script>
+        function applyProduct(productName) {
+            window.location.href = "/company/product/registration?productName=" + productName;
+        }
+    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body>
 
 	<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
-    <main class="flex-grow-1">
-		<p>프리미엄 공고</p>
+    <main class="container mt-5">
+        <h2 class="mb-4">광고 상품</h2>
+        
+        <div class="mb-4 border">
+            <div>
+                <h3 class="mx-4 my-2">프리미엄</h3>
+                <div class="border p-3 mb-3 mx-auto" style="width: 577px; height: 353px;">
+                    <img src="/resources/style/company/product/프리미엄광고.png">
+                </div>
+                <div class="d-flex justify-content-end mx-4 my-2">
+                    <button class="btn btn-primary" onclick="applyProduct('프리미엄')">신청하기</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-4 border">
+            <div>
+                <h3 class="mx-4 my-2">메인</h3>
+                <div class="border p-3 mb-3 mx-auto" style="width: 577px; height: 353px;">
+                    <img src="/resources/style/company/product/메인광고.png">
+                </div>
+                <div class="d-flex justify-content-end mx-4 my-2">
+                    <button class="btn btn-primary" onclick="applyProduct('메인')">신청하기</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mb-4 border">
+            <div>
+                <h3 class="mx-4 my-2">배너</h3>
+                <div class="border p-3 mb-3 mx-auto" style="width: 577px; height: 353px;">
+                    <img src="/resources/style/company/product/배너광고.png">
+                </div>
+                <div class="d-flex justify-content-end mx-4 my-2">
+                    <button class="btn btn-primary" onclick="applyProduct('배너')">신청하기</button>
+                </div>
+            </div>
+        </div>
     </main>
 
 	<jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
