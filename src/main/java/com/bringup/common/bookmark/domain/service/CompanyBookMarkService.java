@@ -18,7 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -82,6 +84,21 @@ public class CompanyBookMarkService {
         companyBookMarkRepository.save(companyBookMarkEntity);
     }
 
+    public void delCandidate(UserDetailsImpl userDetails, int cvIndex){
+        Company company = companyRepository.findById(userDetails.getId())
+                .orElseThrow(()->new BookmarkException(NOT_FOUND_MEMBER_ID));
+
+        CVEntity cv = cvRepository.findByCvIndex(cvIndex);
+
+        UserEntity user = userRepository.findById(cv.getUserIndex())
+                .orElseThrow(() -> new BookmarkException(NOT_FOUND_MEMBER_ID));
+
+        CompanyBookMarkEntity companyBookMarkEntity = companyBookMarkRepository.findByUserAndCompany(user, company)
+                        .orElseThrow(() -> new BookmarkException(NOT_FOUND_MEMBER_ID));
+
+        companyBookMarkRepository.delete(companyBookMarkEntity);
+    }
+
     @Transactional
     public List<CandidateResponseDto> candidateList(UserDetailsImpl userDetails){
         Company company = companyRepository.findBycompanyId(userDetails.getId())
@@ -93,13 +110,44 @@ public class CompanyBookMarkService {
         return bookmarks.stream()
                 .map(bookmark -> {
                     CVEntity cv = cvRepository.findByUserIndex(bookmark.getUser().getUserIndex())
-                            .orElseThrow(() -> new RuntimeException("해당 유저의 이력서를 찾을 수 없습니다."));
+                            .orElseThrow(()->new BookmarkException(NOT_FOUND_MEMBER_ID));
                     UserEntity user = userRepository.findById(cv.getUserIndex())
-                            .orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다."));
+                            .orElseThrow(()->new BookmarkException(NOT_FOUND_MEMBER_ID));
 
                     return new CandidateResponseDto(cv, user);
                 })
                 .collect(Collectors.toList());
     }
-    
+
+    public Map<Integer, Boolean> checkCandidatesSaved(UserDetailsImpl userDetails, List<Integer> cvIndices) {
+        Map<Integer, Boolean> savedStatusMap = new HashMap<>();
+
+        for (Integer cvIndex : cvIndices) {
+            Company company = companyRepository.findBycompanyId(userDetails.getId())
+                    .orElseThrow(()->new BookmarkException(NOT_FOUND_MEMBER_ID));
+
+            CVEntity cvEntity = cvRepository.findById(cvIndex)
+                    .orElseThrow(() -> new BookmarkException(NOT_FOUND_MEMBER_ID));
+
+            UserEntity user = userRepository.findByUserIndex(cvEntity.getUserIndex())
+                    .orElseThrow(() -> new BookmarkException(NOT_FOUND_MEMBER_ID));
+
+            // userIndex를 이용해 companyBookMarkRepository에서 북마크 여부를 확인합니다.
+            boolean isSaved = companyBookMarkRepository.existsByCompanyAndUserAndStatus(
+                    company, user, BookmarkType.VOLUNTEER);
+
+            savedStatusMap.put(cvIndex, isSaved);
+        }
+
+        return savedStatusMap;
+    }
+
+    public int countBookmark(UserDetailsImpl userDetails) {
+        Company company = companyRepository.findBycompanyId(userDetails.getId())
+                .orElseThrow(() -> new BookmarkException(NOT_FOUND_MEMBER_ID));
+
+        int bookmarkCount = companyBookMarkRepository.countByStatusAndCompany(BookmarkType.BOOKMARK, company);
+
+        return bookmarkCount;
+    }
 }

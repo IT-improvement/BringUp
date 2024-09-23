@@ -37,6 +37,12 @@ public class Recruitment {
     @Column(name = "skill", length = 30)
     private String skill;
 
+    @Column(name = "career")
+    private String career;
+
+    @Column(name = "salary")
+    private String salary;
+
     @Column(name = "work_detail")
     private String workDetail;
 
@@ -45,6 +51,9 @@ public class Recruitment {
 
     @Column(name = "start_date", nullable = false, length = 50)
     private String startDate;
+
+    @Column(name = "requirement")
+    private String requirement;
 
     @Column(name = "period", nullable = false, length = 30)
     private String period;
@@ -56,7 +65,6 @@ public class Recruitment {
 
     @Column(name = "view_count")
     private int viewCount;
-
 
     }
 

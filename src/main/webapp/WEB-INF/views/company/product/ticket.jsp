@@ -51,7 +51,7 @@
 	<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
     <main class="flex-grow-1">
-		<p>광고 배너</p>
+		<p>매칭 티켓 관리 페이지</p>
     </main>
 
 	<jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />

@@ -9,6 +9,7 @@ public enum AdvertisementErrorCode implements BaseErrorCode {
     // 404 NOT_FOUND
     NOT_FOUND_ADVERTISEMENT(404, "광고를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     NOT_FOUND_RECRUITMENT(404, "채용 공고를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    NOT_FOUND_IMG_AND_DATE(404, "이미지와 일자가 모두 입력되지 않았습니다.", HttpStatus.NOT_FOUND),
 
     // 403 FORBIDDEN
     UNAUTHORIZED_ADVERTISEMENT_ACCESS(403, "이 광고에 대한 접근 권한이 없습니다.", HttpStatus.FORBIDDEN),

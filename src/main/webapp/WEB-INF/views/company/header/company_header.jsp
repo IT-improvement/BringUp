@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- =======================
 헤더 시작 -->
-<header class="header-static border-bottom" style="z-index: 9999; position: fixed; width: 100%; top: 0;">
+<header class="header-static border-bottom" style="position: fixed; width: 100%; top: 0; z-index: 1001;">
     <!-- 상단 헤더 -->
     <nav class="navbar navbar-expand-xl">
         <div class="container-fluid px-3" style="max-width: 1260px;">
@@ -145,7 +145,7 @@
 <!-- 알림 프로필 부분 끝 -->
 
 <!-- 메인 네비게이션 부분 시작 -->
-<header class="border-bottom" style="position: fixed; width: 100%; top: 50px; z-index: 9998;">
+<header class="border-bottom" style="position: fixed; width: 100%; top: 50px; z-index: 1000;">
     <!-- 하단 헤더 (메인 네비게이션) -->
     <nav class="navbar navbar-expand-lg navbar-dashboard">
         <div class="container px-3" style="max-width: 1260px;">
@@ -166,9 +166,8 @@
                         <a class="nav-link dropdown-toggle" href="#" id="pagesMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">상품</a>
                         <ul class="dropdown-menu" aria-labelledby="pagesMenu">
                             <li><a class="dropdown-item" href="/company/product/management">상품 관리</a></li>
-                            <li><a class="dropdown-item" href="/company/product/premium_job_posting">프리미엄 공고</a></li>
-                            <li><a class="dropdown-item" href="/company/product/advertising_banner">광고 배너</a></li>
-                            <li><a class="dropdown-item" href="/company/product/resume_key">이력서 열람</a></li>
+                            <li><a class="dropdown-item" href="/company/product/introduction">상품 등록</a></li>
+                            <li><a class="dropdown-item" href="/company/product/ticket">매칭 티켓</a></li>
                         </ul>
                     </li>
 

@@ -41,19 +41,19 @@ public class PageController {
         return "company/product/management";
     }
 
-    @GetMapping("/product/premium_job_posting")
-    public String productPremiumJobPosting(){
-        return "company/product/premium_job_posting";
+    @GetMapping("/product/registration")
+    public String productRegistration(){
+        return "company/product/registration";
     }
 
-    @GetMapping("/product/advertising_banner")
+    @GetMapping("/product/introduction")
     public String productAdvertisingBanner(){
-        return "company/product/advertising_banner";
+        return "company/product/introduction";
     }
 
-    @GetMapping("/product/resume_key")
-    public String productResumeKey(){
-        return "company/product/resume_key";
+    @GetMapping("/product/ticket")
+    public String productTicket(){
+        return "company/product/ticket";
     }
 
     @GetMapping("/review/corporation")

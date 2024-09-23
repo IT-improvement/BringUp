@@ -1,10 +1,16 @@
 package com.bringup.company.advertisement.controller;
 
+import com.bringup.common.enums.GlobalErrorCode;
+import com.bringup.common.event.exception.ErrorResponseHandler;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.dto.response.AdvertisementResponseDto;
 import com.bringup.company.advertisement.dto.request.AdvertisementRequestDto;
+import com.bringup.company.advertisement.exception.AdvertisementException;
 import com.bringup.company.advertisement.service.AdvertisementService;
+import com.bringup.company.recruitment.dto.response.RecruitmentDetailResponseDto;
+import com.bringup.company.recruitment.dto.response.RecruitmentResponseDto;
+import com.bringup.company.recruitment.exception.RecruitmentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,78 +27,70 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 public class AdvertisementController {
 
     private final AdvertisementService advertisementService;
-
-    @PostMapping("/select")
-    public ResponseEntity<BfResponse<?>> selectAdvertisement(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody AdvertisementRequestDto requestDto,
-            @RequestPart("image") MultipartFile img) {
-        advertisementService.createAdvertisement(userDetails, requestDto, img);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 선택 완료"));
-    }
+    private final ErrorResponseHandler errorResponseHandler;
 
     @PostMapping("/upload")
-    public ResponseEntity<BfResponse<?>> uploadAdvertisementImage(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestParam("recruitmentIndex") int recruitmentIndex,
-            @RequestPart("image") MultipartFile image) {
-        advertisementService.uploadAdvertisementImage(userDetails, recruitmentIndex, image);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "이미지 업로드 성공"));
-    }
-
-    @PostMapping("/type")
-    public ResponseEntity<BfResponse<?>> selectAdvertisementType(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody AdvertisementRequestDto requestDto) {
-        advertisementService.updateAdvertisementType(userDetails, requestDto);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 타입 선택 완료"));
-    }
-
-    @PostMapping("/display-time")
-    public ResponseEntity<BfResponse<?>> selectDisplayTime(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody AdvertisementRequestDto requestDto) {
-        advertisementService.updateAdvertisementDisplayTime(userDetails, requestDto);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 게시 시간 설정완료"));
-    }
-
-    @PostMapping("/extend")
-    public ResponseEntity<BfResponse<?>> extendAdvertisement(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody AdvertisementRequestDto requestDto) {
-        advertisementService.extendAdvertisement(userDetails, requestDto);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 게시 시간 연장 완료"));
-    }
-
-    @PostMapping("/delete")
-    public ResponseEntity<BfResponse<?>> deleteAdvertisement(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody AdvertisementRequestDto requestDto) {
-        advertisementService.deleteAdvertisement(userDetails, requestDto);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 삭제 완료"));
-    }
-
-    @PostMapping("/updateImage")
-    public ResponseEntity<BfResponse<?>> updateAdvertisementImage(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestParam("recruitmentIndex") int recruitmentIndex,
-            @RequestPart("image") MultipartFile image) {
-        advertisementService.uploadAdvertisementImage(userDetails, recruitmentIndex, image);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "광고 업로드 완료"));
+    public ResponseEntity<BfResponse<?>> uploadAd(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                  @RequestBody AdvertisementRequestDto advertisementRequestDto,
+                                                  @RequestPart("image") MultipartFile img) {
+        try {
+            advertisementService.createAdvertisement(userDetails, advertisementRequestDto, img);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, "업로드 성공"));
+        } catch (AdvertisementException e) {
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
     }
 
     @GetMapping("/list")
-    public ResponseEntity<BfResponse<List<AdvertisementResponseDto>>> listAdvertisements(
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<AdvertisementResponseDto> advertisements = advertisementService.getAdvertisements(userDetails);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, advertisements));
+    public ResponseEntity<BfResponse<?>> listAd(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            List<AdvertisementResponseDto> advertisements = advertisementService.getAdvertisements(userDetails);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, advertisements));
+        } catch (RecruitmentException e) {
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (Exception e) {
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @GetMapping("/detail/{advertisementId}")
-    public ResponseEntity<BfResponse<AdvertisementResponseDto>> getAdvertisementDetail(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Integer advertisementId) {
-        AdvertisementResponseDto advertisementDetail = advertisementService.getAdvertisementDetail(userDetails, advertisementId);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, advertisementDetail));
+    @PostMapping("/{ad_index}") // 광고 디테일 확인
+    public ResponseEntity<BfResponse<?>> detailAd(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                  @PathVariable("ad_index") int ad_index) {
+        try {
+            AdvertisementResponseDto ad_detail = advertisementService.getAdvertisementDetail(userDetails, ad_index);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, ad_detail));
+        } catch (AdvertisementException e) {
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (Exception e) {
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/{ad_index}")
+    public ResponseEntity<BfResponse<?>> delAd(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                               @PathVariable("ad_index") int ad_index,
+                                               @RequestBody String reason) {
+        try {
+            advertisementService.deleteAdvertisement(userDetails, ad_index, reason);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, "삭제완료"));
+        } catch (AdvertisementException e) {
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (Exception e) {
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/{ad_index}")
+    public ResponseEntity<BfResponse<?>> updateAd(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                  @PathVariable("ad_index") int ad_index,
+                                                  @RequestPart("image") MultipartFile image,
+                                                  @RequestBody Integer date){
+        try {
+            advertisementService.updateAdvertisement(userDetails, ad_index, image, date);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, "업데이트 완료"));
+        } catch (AdvertisementException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+
     }
 }
