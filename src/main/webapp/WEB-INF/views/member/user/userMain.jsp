@@ -480,244 +480,218 @@
 
 <!-- 이미지 슬라이드 쇼 스크립트 -->
 <script>
-	document.addEventListener('DOMContentLoaded', function () {
-		const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
-		const imageElement = document.querySelector('.ad-image');
-		const prevButton = document.querySelector('.prev-btn');
-		const nextButton = document.querySelector('.next-btn');
-		let currentIndex = 0;
-		let ads = [];
+		document.addEventListener('DOMContentLoaded', function () {
+			const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+			const imageElement = document.querySelector('.ad-image');
+			const prevButton = document.querySelector('.prev-btn');
+			const nextButton = document.querySelector('.next-btn');
+			let currentIndex = 0;
+			let ads = [];
 
-		// 광고 데이터를 가져오는 함수
-		function fetchAdvertisements() {
-			fetch('/main/advertisements', {
-				method: 'GET',
+			// 광고 데이터를 가져오는 함수
+			function fetchAdvertisements() {
+				fetch('/main/advertisements', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+						.then(response => {
+							if (!response.ok) {
+								throw new Error(`광고를 불러오지 못했습니다: ${response.status}`);
+							}
+							return response.json();
+						})
+						.then(data => {
+							ads = data.map(ad => {
+								let adImageSrc = ad.advertisementImage;
+
+								if (!adImageSrc.startsWith('/image/')) {
+									adImageSrc = `http://localhost:8080/image/`+ adImageSrc;
+								}
+
+								return {
+									...ad,
+									advertisementImage: adImageSrc
+								};
+							});
+
+							if (ads.length > 0) {
+								displayImage(currentIndex);
+							} else {
+								console.error('광고 데이터가 비어 있습니다.');
+							}
+						})
+						.catch(error => {
+							console.error('광고 데이터를 가져오는 중 오류 발생:', error);
+						});
+			}
+
+			function displayImage(index) {
+				if (ads.length === 0) {
+					console.error('광고 데이터가 없습니다.');
+					return;
+				}
+
+				// 광고 이미지 경로를 그대로 사용
+				let adImageSrc = ads[index].advertisementImage;
+
+				imageElement.src = adImageSrc;
+				imageElement.style.display = 'block';
+				console.log('이미지경로:', adImageSrc);
+				imageElement.onerror = function() {
+					console.error('이미지를 로드하는 중 오류 발생:', adImageSrc);
+					alert('이미지를 불러오는 중 오류가 발생했습니다. 파일 경로를 확인해주세요.');
+				};
+			}
+
+			// 이전 이미지로 이동
+			prevButton.addEventListener('click', function () {
+				currentIndex = (currentIndex - 1 + ads.length) % ads.length;
+				displayImage(currentIndex);
+			});
+
+			// 다음 이미지로 이동
+			nextButton.addEventListener('click', function () {
+				currentIndex = (currentIndex + 1) % ads.length;
+				displayImage(currentIndex);
+			});
+
+			// 페이지 로드 시 광고 데이터 가져오기
+			fetchAdvertisements();
+
+			// JWT 토큰을 사용하여 사용자 정보 가져오기
+			fetch('/main/memberInfo', {
+				method: 'POST',
 				headers: {
+					'Authorization': `Bearer ` + token,
 					'Content-Type': 'application/json'
 				}
 			})
 					.then(response => {
 						if (!response.ok) {
-							throw new Error(`광고를 불러오지 못했습니다: ${response.status}`);
+							throw new Error('인증되지 않았습니다.');
 						}
 						return response.json();
 					})
 					.then(data => {
-						ads = data.map(ad => {
-							let adImageSrc = ad.advertisementImage;
+						const userName = data.data.userName;
+						const userEmail = data.data.userEmail;
 
-							if (!adImageSrc.startsWith('/image/')) {
-								adImageSrc = `http://localhost:8080/image/`+ adImageSrc;
-							}
-
-							return {
-								...ad,
-								advertisementImage: adImageSrc
-							};
-						});
-
-						if (ads.length > 0) {
-							displayImage(currentIndex);
-							startAutoSlide();
-						} else {
-							console.error('광고 데이터가 비어 있습니다.');
-						}
+						document.querySelector('.user-info strong').textContent = userName;
+						document.querySelector('.user-info small').textContent = userEmail;
 					})
 					.catch(error => {
-						console.error('광고 데이터를 가져오는 중 오류 발생:', error);
+						console.error('Error:', error);
+						alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
 					});
-		}
 
-		function displayImage(index) {
-			if (ads.length === 0) {
-				console.error('광고 데이터가 없습니다.');
-				return;
-			}
+			// 광고 2 이미지 목록
+			const ad2Images = document.querySelectorAll('.ad2-image');
 
-			// 광고 이미지 경로를 그대로 사용
-			let adImageSrc = ads[index].advertisementImage;
-
-			imageElement.src = adImageSrc;
-			imageElement.style.display = 'block';
-			console.log('이미지경로:', adImageSrc);
-			imageElement.onerror = function() {
-				console.error('이미지를 로드하는 중 오류 발생:', adImageSrc);
-				alert('이미지를 불러오는 중 오류가 발생했습니다. 파일 경로를 확인해주세요.');
-			};
-		}
-/*		// 자동 슬라이드 시작
-		function startAutoSlide() {
-			setInterval(() => {
-				currentIndex = (currentIndex + 1) % ads.length;
-				displayImage(currentIndex);
-			}, 3000); // 3초마다 슬라이드 전환
-		}*/
-
-		// 이전 이미지로 이동
-		prevButton.addEventListener('click', function () {
-			currentIndex = (currentIndex - 1 + ads.length) % ads.length;
-			displayImage(currentIndex);
-		});
-
-		// 다음 이미지로 이동
-		nextButton.addEventListener('click', function () {
-			currentIndex = (currentIndex + 1) % ads.length;
-			displayImage(currentIndex);
-		});
-
-		// 페이지 로드 시 광고 데이터 가져오기
-		fetchAdvertisements();
-		// JWT 토큰을 사용하여 사용자 정보 가져오기
-
-		fetch('/main/memberInfo', {
-			method: 'POST',
-			headers: {
-				'Authorization': `Bearer ` + token,
-				'Content-Type': 'application/json'
-			}
-		})
-				.then(response => {
-					if (!response.ok) {
-						throw new Error('인증되지 않았습니다.');
-					}
-					return response.json();
-				})
-				.then(data => {
-					const userName = data.data.userName;
-					const userEmail = data.data.userEmail;
-
-					document.querySelector('.user-info strong').textContent = userName;
-					document.querySelector('.user-info small').textContent = userEmail;
-				})
-				.catch(error => {
-					console.error('Error:', error);
-					alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
-				});
-		// 광고 2 이미지 목록
-		const ad2Images = document.querySelectorAll('.ad2-image');
-
-		// 모든 레이블 버튼에 클릭 이벤트 추가
-		const labels = document.querySelectorAll('.label');
-		labels.forEach(label => {
-			label.addEventListener('click', function() {
-				// 모든 광고 이미지를 숨기고 클릭한 레이블에 해당하는 이미지를 표시
-				const index = this.getAttribute('data-index');
-				ad2Images.forEach((img, imgIndex) => {
-					img.style.display = imgIndex == index ? 'block' : 'none';
+			// 모든 레이블 버튼에 클릭 이벤트 추가
+			const labels = document.querySelectorAll('.label');
+			labels.forEach(label => {
+				label.addEventListener('click', function() {
+					// 모든 광고 이미지를 숨기고 클릭한 레이블에 해당하는 이미지를 표시
+					const index = this.getAttribute('data-index');
+					ad2Images.forEach((img, imgIndex) => {
+						img.style.display = imgIndex == index ? 'block' : 'none';
+					});
 				});
 			});
 		});
-	});
-	document.addEventListener('DOMContentLoaded', function () {
-		// 광고 2 이미지 목록
-		const ad2Images = document.querySelectorAll('.ad2-image');
 
-		// 모든 레이블 버튼에 클릭 이벤트 추가
-		const labels = document.querySelectorAll('.label');
-		labels.forEach(label => {
-			label.addEventListener('click', function() {
-				// 모든 광고 이미지를 숨기고 클릭한 레이블에 해당하는 이미지를 표시
-				const index = this.getAttribute('data-index');
-				ad2Images.forEach((img, imgIndex) => {
-					img.style.display = imgIndex == index ? 'block' : 'none';
+		document.addEventListener('DOMContentLoaded', function () {
+			const labels = document.querySelectorAll('.label');
+			const ad2Images = document.querySelectorAll('.ad2-image');
+
+			// 첫 번째 레이블과 이미지 기본 활성화
+			labels[0].classList.add('active');
+			ad2Images[0].classList.add('active');
+
+			// 모든 레이블 버튼에 클릭 이벤트 추가
+			labels.forEach(label => {
+				label.addEventListener('click', function() {
+					const index = this.getAttribute('data-index');
+
+					// 클릭된 레이블을 앞으로 보내고 나머지는 뒤로 보냄
+					labels.forEach((otherLabel, otherIndex) => {
+						if (otherIndex != index) {
+							otherLabel.classList.remove('active');
+							otherLabel.classList.add('inactive');
+						} else {
+							otherLabel.classList.remove('inactive');
+							otherLabel.classList.add('active');
+						}
+					});
+
+					// 광고 이미지 전환, active 클래스로 fade in/out 처리
+					ad2Images.forEach((img, imgIndex) => {
+						if (imgIndex == index) {
+							img.classList.add('active');
+						} else {
+							img.classList.remove('active');
+						}
+					});
 				});
 			});
 		});
-	});
 
-	//중앙광고 사이드 레이블
-	document.addEventListener('DOMContentLoaded', function () {
+		// 광고 2 이미지 설정을 위한 코드 추가
+		const ad2ImageElement = document.querySelector('.ad2-image');
 		const labels = document.querySelectorAll('.label');
-		const ad2Images = document.querySelectorAll('.ad2-image');
+		let companyImages = []; // 회사 이미지 데이터를 저장할 배열
 
-		// 첫 번째 레이블과 이미지 기본 활성화
-		labels[0].classList.add('active');
-		ad2Images[0].classList.add('active');
-
-		// 모든 레이블 버튼에 클릭 이벤트 추가
-		labels.forEach(label => {
-			label.addEventListener('click', function() {
-				const index = this.getAttribute('data-index');
-
-				// 클릭된 레이블을 앞으로 보내고 나머지는 뒤로 보냄
-				labels.forEach((otherLabel, otherIndex) => {
-					if (otherIndex != index) {
-						otherLabel.classList.remove('active');
-						otherLabel.classList.add('inactive');
-					} else {
-						otherLabel.classList.remove('inactive');
-						otherLabel.classList.add('active');
-					}
-				});
-
-				// 광고 이미지 전환, active 클래스로 fade in/out 처리
-				ad2Images.forEach((img, imgIndex) => {
-					if (imgIndex == index) {
-						img.classList.add('active');
-					} else {
-						img.classList.remove('active');
-					}
-				});
-			});
-		});
-	});
-	const ad2ImageElement = document.querySelector('.ad2-image');
-	const labels = document.querySelectorAll('.label');
-	let companyImages = []; // 회사 이미지 데이터를 저장할 배열
-
-	// 서버에서 회사 이미지 데이터를 가져오는 함수
-	function fetchCompanyImages() {
-		fetch('/main/recruitmentImage') // '/company/images'는 회사 이미지 데이터를 반환하는 API 엔드포인트
-				.then(response => {
-					if (!response.ok) {
-						throw new Error(`이미지를 불러오지 못했습니다: ${response.status}`);
-					}
-					return response.json();
-				})
-				.then(data => {
-					companyImages = data; // 서버에서 받아온 데이터를 companyImages 배열에 저장
-					labels.forEach((label, index) => {
-						label.addEventListener('click', function() {
-							if (index < companyImages.length) {
-								ad2ImageElement.src = companyImages[index].companyImg; // 해당 인덱스의 이미지 URL을 ad2ImageElement에 설정
-							}
+		// 서버에서 회사 이미지 데이터를 가져오는 함수
+		function fetchCompanyImages() {
+			fetch('/main/recruitmentImage') // '/company/images'는 회사 이미지 데이터를 반환하는 API 엔드포인트
+					.then(response => {
+						if (!response.ok) {
+							throw new Error(`이미지를 불러오지 못했습니다: ${response.status}`);
+						}
+						return response.json();
+					})
+					.then(data => {
+						companyImages = data; // 서버에서 받아온 데이터를 companyImages 배열에 저장
+						labels.forEach((label, index) => {
+							label.addEventListener('click', function() {
+								if (index < companyImages.length) {
+									ad2ImageElement.src = companyImages[index].companyImg; // 해당 인덱스의 이미지 URL을 ad2ImageElement에 설정
+								}
+							});
 						});
+					})
+					.catch(error => {
+						console.error('이미지 데이터를 가져오는 중 오류 발생:', error);
 					});
-				})
-				.catch(error => {
-					console.error('이미지 데이터를 가져오는 중 오류 발생:', error);
-				});
-	}
-
-	// 페이지 로드 시 회사 이미지 데이터를 가져옴
-	fetchCompanyImages();
-
-
-
-
-
-	//3번 광고
-	document.addEventListener('DOMContentLoaded', function () {
-		let ad3CurrentIndex = 0;
-		const ad3Images = document.querySelectorAll('.ad3-images');
-		const ad3TotalImages = ad3Images.length;
-		let ad3SlideInterval;
-
-		// 광고 3번 이미지 슬라이드 쇼 함수
-		function showNextAd3Image() {
-			ad3Images[ad3CurrentIndex].style.display = 'none'; // 현재 이미지를 숨김
-			ad3CurrentIndex = (ad3CurrentIndex + 1) % ad3TotalImages; // 다음 이미지 인덱스 계산
-			ad3Images[ad3CurrentIndex].style.display = 'block'; // 다음 이미지를 표시
 		}
 
-		// 3초마다 showNextAd3Image 함수 호출
-		function startAd3SlideShow() {
-			ad3SlideInterval = setInterval(showNextAd3Image, 3000); // 3초마다 광고 3 이미지 변경
-		}
+		// 페이지 로드 시 회사 이미지 데이터를 가져옴
+		fetchCompanyImages();
 
-		// 처음 광고 3 슬라이드 쇼 시작
-		startAd3SlideShow();
-	});
+		// 광고 3번 슬라이드 설정
+		document.addEventListener('DOMContentLoaded', function () {
+			let ad3CurrentIndex = 0;
+			const ad3Images = document.querySelectorAll('.ad3-images');
+			const ad3TotalImages = ad3Images.length;
+			let ad3SlideInterval;
+
+			// 광고 3번 이미지 슬라이드 쇼 함수
+			function showNextAd3Image() {
+				ad3Images[ad3CurrentIndex].style.display = 'none'; // 현재 이미지를 숨김
+				ad3CurrentIndex = (ad3CurrentIndex + 1) % ad3TotalImages; // 다음 이미지 인덱스 계산
+				ad3Images[ad3CurrentIndex].style.display = 'block'; // 다음 이미지를 표시
+			}
+
+			// 3초마다 showNextAd3Image 함수 호출
+			function startAd3SlideShow() {
+				ad3SlideInterval = setInterval(showNextAd3Image, 3000); // 3초마다 광고 3 이미지 변경
+			}
+
+			// 처음 광고 3 슬라이드 쇼 시작
+			startAd3SlideShow();
+		});
 
 
 </script>
