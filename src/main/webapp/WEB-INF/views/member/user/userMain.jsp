@@ -52,8 +52,8 @@
 			flex-grow: 1;
 			/* padding: 70px; */
 			padding-top: 30px;
-			padding-right: 100px;
-			padding-left: 100px;
+			padding-right: 350px;
+			padding-left: 350px;
 		}
 
 		/* 광고 1번과 로그인 폼 */
@@ -324,11 +324,106 @@
 					<strong></strong>
 					<small></small>
 				</div>
-			</div>
+				<div class="nav flex-nowrap align-items-center ms-auto">
+					<!-- 알림 드롭다운 시작 -->
+					<div class="nav-item ms-2 ms-md-3 dropdown">
+						<!-- 알림 버튼 -->
+						<a class="btn btn-round mb-0" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" onmouseover="setNotificationButtonStyle(this)" onmouseout="resetNotificationButtonStyle(this)">
+							<i class="bi bi-bell fa-fw"></i>
+						</a>
+						<!-- 알림 점 -->
+						<span class="notif-badge animation-blink"></span>
+
+						<!-- 알림 드롭다운 메뉴 시작 -->
+						<div class="dropdown-menu dropdown-animation dropdown-menu-end dropdown-menu-size-md p-0 shadow-lg border-0">
+							<div class="card bg-transparent">
+								<div class="card-header bg-transparent border-bottom p-3 d-flex justify-content-between align-items-center">
+									<h6 class="m-0">알림 <span class="badge bg-danger bg-opacity-10 text-danger ms-2">2개 새 알림</span></h6>
+									<a class="small" href="#">모두 지우기</a>
+								</div>
+								<div class="card-body p-0">
+									<div class="scrollable-notifications" style="max-height: 300px; overflow-y: auto;">
+										<ul class="list-group list-unstyled list-group-flush">
+											<!-- 알림 아이템 -->
+											<li>
+												<a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
+													<div>
+														<h6 class="mb-1">12명의 새로운 멤버가 가입했습니다</h6>
+														<span class="small"> <i class="bi bi-clock"></i> 3분 전</span>
+													</div>
+													<div class="ms-auto">
+														<button type="button" class="btn btn-sm btn-outline-danger remove-notification">
+															<i class="bi bi-x"></i>
+														</button>
+													</div>
+												</a>
+											</li>
+
+											<!-- 알림 아이템 -->
+											<li>
+												<a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
+													<div>
+														<h6 class="mb-1">Larry Lawson이 계정을 삭제했습니다</h6>
+														<span class="small"> <i class="bi bi-clock"></i> 6분 전</span>
+													</div>
+													<div class="ms-auto">
+														<button type="button" class="btn btn-sm btn-outline-danger remove-notification">
+															<i class="bi bi-x"></i>
+														</button>
+													</div>
+												</a>
+											</li>
+
+											<!-- 알림 아이템 -->
+											<li>
+												<a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
+													<div>
+														<h6 class="mb-1">Byan이 당신의 게시물에 댓글을 달았습니다</h6>
+														<span class="small"> <i class="bi bi-clock"></i> 10분 전</span>
+													</div>
+													<div class="ms-auto">
+														<button type="button" class="btn btn-sm btn-outline-danger remove-notification">
+															<i class="bi bi-x"></i>
+														</button>
+													</div>
+												</a>
+											</li>
+
+											<!-- 알림 아이템 -->
+											<li>
+												<a href="#" class="list-group-item-action border-0 border-bottom d-flex p-3">
+													<div>
+														<h6 class="mb-1">설정이 업데이트되었습니다</h6>
+														<span class="small"> <i class="bi bi-clock"></i> 어제</span>
+													</div>
+													<div class="ms-auto">
+														<button type="button" class="btn btn-sm btn-outline-danger remove-notification">
+															<i class="bi bi-x"></i>
+														</button>
+													</div>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<!-- 버튼 -->
+								<div class="card-footer bg-transparent border-0 py-3 text-center position-relative">
+									<a href="#" class="stretched-link">모든 활동 보기</a>
+								</div>
+							</div>
+							<!-- 알림 드롭다운 메뉴 내용 -->
+						</div>
+						<!-- 알림 드롭다운 메뉴 끝 -->
+					</div>
+				</div>
+
+
+				</div>
+
 
 			<div class="status">
-				<span class="badge">999+</span>
-				<span>내 정보</span>
+				<span>MY 프로필</span>
+				<span class="badge">4+</span>
 			</div>
 
 			<button class="logout-btn">로그아웃</button>
@@ -344,7 +439,7 @@
 
 	<div class="main-content">
 		<div class="ad2">
-			<img class="ad2-image" src="http://localhost:8080/image/default.png" alt="광고 2 이미지 1">
+			<img class="ad2-image" src="" alt="광고 2 이미지 1">
 		</div>
 
 		<div class="labels">
@@ -409,11 +504,8 @@
 					})
 					.then(data => {
 						ads = data.map(ad => {
-							// 광고 이미지 경로 설정
-							// DB에서 제공한 경로를 그대로 사용합니다.
 							let adImageSrc = ad.advertisementImage;
 
-							// 상대 경로인 경우 절대 경로로 변경
 							if (!adImageSrc.startsWith('/image/')) {
 								adImageSrc = `http://localhost:8080/image/`+ adImageSrc;
 							}
@@ -425,8 +517,8 @@
 						});
 
 						if (ads.length > 0) {
-							displayImage(currentIndex); // 첫 번째 광고 이미지 표시
-							startAutoSlide();  // 자동 슬라이드 시작
+							displayImage(currentIndex);
+							startAutoSlide();
 						} else {
 							console.error('광고 데이터가 비어 있습니다.');
 						}
@@ -436,7 +528,6 @@
 					});
 		}
 
-		// 이미지를 표시하는 함수
 		function displayImage(index) {
 			if (ads.length === 0) {
 				console.error('광고 데이터가 없습니다.');
@@ -454,7 +545,7 @@
 				alert('이미지를 불러오는 중 오류가 발생했습니다. 파일 경로를 확인해주세요.');
 			};
 		}
-		/*// 자동 슬라이드 시작
+/*		// 자동 슬라이드 시작
 		function startAutoSlide() {
 			setInterval(() => {
 				currentIndex = (currentIndex + 1) % ads.length;
@@ -570,6 +661,40 @@
 			});
 		});
 	});
+	const ad2ImageElement = document.querySelector('.ad2-image');
+	const labels = document.querySelectorAll('.label');
+	let companyImages = []; // 회사 이미지 데이터를 저장할 배열
+
+	// 서버에서 회사 이미지 데이터를 가져오는 함수
+	function fetchCompanyImages() {
+		fetch('/main/recruitmentImage') // '/company/images'는 회사 이미지 데이터를 반환하는 API 엔드포인트
+				.then(response => {
+					if (!response.ok) {
+						throw new Error(`이미지를 불러오지 못했습니다: ${response.status}`);
+					}
+					return response.json();
+				})
+				.then(data => {
+					companyImages = data; // 서버에서 받아온 데이터를 companyImages 배열에 저장
+					labels.forEach((label, index) => {
+						label.addEventListener('click', function() {
+							if (index < companyImages.length) {
+								ad2ImageElement.src = companyImages[index].companyImg; // 해당 인덱스의 이미지 URL을 ad2ImageElement에 설정
+							}
+						});
+					});
+				})
+				.catch(error => {
+					console.error('이미지 데이터를 가져오는 중 오류 발생:', error);
+				});
+	}
+
+	// 페이지 로드 시 회사 이미지 데이터를 가져옴
+	fetchCompanyImages();
+
+
+
+
 
 	//3번 광고
 	document.addEventListener('DOMContentLoaded', function () {

@@ -3,6 +3,7 @@ package com.bringup.member.main.controller;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
+import com.bringup.member.main.dto.CompanyImageDto;
 import com.bringup.member.main.dto.UserAdvertisementResponseDto;
 import com.bringup.member.main.dto.MemberInfoDto;
 import com.bringup.member.main.service.MainService;
@@ -39,6 +40,12 @@ public class MainController {
         // 서비스에서 광고 데이터를 받아 응답으로 반환
         List<UserAdvertisementResponseDto> advertisements = mainService.getRandomActiveAdvertisements();
         return ResponseEntity.ok(advertisements);
+    }
+
+    @GetMapping("/recruitmentImage")
+    public ResponseEntity<List<CompanyImageDto>> getActiveCompanyImages() {
+        List<CompanyImageDto> companyImages = mainService.getActiveCompanyImages();
+        return ResponseEntity.ok(companyImages);
     }
 
 }

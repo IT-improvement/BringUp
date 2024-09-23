@@ -12,7 +12,7 @@
             </a>
             <!-- 로고 끝 -->
             <!-- 네비 오른쪽 시작 -->
-            <div class="nav flex-nowrap align-items-center ms-auto">
+         <%--   <div class="nav flex-nowrap align-items-center ms-auto">
                 <!-- 알림 드롭다운 시작 -->
                 <div class="nav-item ms-2 ms-md-3 dropdown">
                     <!-- 알림 버튼 -->
@@ -103,7 +103,7 @@
                     </div>
                     <!-- 알림 드롭다운 메뉴 끝 -->
                 </div>
-
+--%>
                 <!-- 프로필 드롭다운 시작 -->
                 <div class="nav-item ms-2 ms-md-3 dropdown">
                     <!-- 아바타 -->
