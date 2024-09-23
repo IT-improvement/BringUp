@@ -1,6 +1,7 @@
 package com.bringup.company.advertisement.entity;
 
 
+import com.bringup.common.enums.StatusType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,8 @@ public class Advertisement {
     @Column(name = "displaytime")
     private String displayTime; // 년-월-일 형태로 저장
 
-    @Column(name = "status")
-    private String status;
+    @Setter
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private StatusType status = StatusType.ACTIVE;
 }

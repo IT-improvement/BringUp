@@ -1,5 +1,4 @@
 // recruitment.js
-
 document.addEventListener('DOMContentLoaded', function () {
     // /auth 엔드포인트에서 데이터 가져오기
     fetch('/auth')

@@ -30,11 +30,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     // 다음 페이지로 이동 (토큰을 포함하여 이동)
                     const accessToken = localStorage.getItem('accessToken');
 
-                    fetch('/recruitment/auth', {
+                /*    fetch('/recruitment/auth', {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
+                        }*/
+
+                        fetch('/member/userMain', {
+                        method: 'GET',
+                            headers: {
+                            'Authorization': `Bearer ${accessToken}`
                         }
+
                     })
                         .then(response => {
                             if (!response.ok) {
