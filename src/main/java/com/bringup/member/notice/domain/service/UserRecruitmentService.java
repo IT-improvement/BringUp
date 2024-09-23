@@ -82,6 +82,7 @@ public class UserRecruitmentService {
         dto.setStartDate(recruitment.getStartDate().toString());
         dto.setPeriod(recruitment.getPeriod());
         dto.setStatus(recruitment.getStatus());
+        dto.setViewCount(recruitment.getViewCount());
         return dto;
     }
 }

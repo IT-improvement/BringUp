@@ -58,4 +58,7 @@ public class MemberController {
         UserEntity user = memberService.getMemberInfo(userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, user));
     }
+
+
+
 }
