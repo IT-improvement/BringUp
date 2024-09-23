@@ -1,5 +1,6 @@
 package com.bringup.member.applyRecruitment.domain.entity;
 
+import com.bringup.common.enums.ApplyCVType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,6 @@ public class ApplyRecruitmentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cvIndex;
     private int recruitmentIndex;
-    private String status;
+    private ApplyCVType status = ApplyCVType.IN_PROGRESS;
     private String applyCVDate;
 }
