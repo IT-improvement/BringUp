@@ -151,6 +151,7 @@ public class SpringSecurityConfig {
                 antMatcher("/recruitment/**"),
                 antMatcher("/main/image/**"),
                 antMatcher("/main/advertisements"),
+                antMatcher("/main/ad3Advertisements"),
                 antMatcher("/main/recruitmentImage")
         );
 
