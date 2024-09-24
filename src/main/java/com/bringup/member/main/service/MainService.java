@@ -5,9 +5,12 @@ import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.entity.Advertisement;
 import com.bringup.company.advertisement.repository.AdvertisementRepository;
+import com.bringup.company.recruitment.entity.Recruitment;
+import com.bringup.company.recruitment.repository.RecruitmentRepository;
 import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.repository.CompanyRepository;
 import com.bringup.member.main.dto.CompanyImageDto;
+import com.bringup.member.main.dto.MainRecruitmentDto;
 import com.bringup.member.main.dto.UserAdvertisementResponseDto;
 import com.bringup.member.main.dto.MemberInfoDto;
 import com.bringup.member.user.domain.entity.UserEntity;
@@ -18,6 +21,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.*;
 
 @Transactional(readOnly = true)
@@ -27,6 +31,7 @@ public class MainService {
     private final UserRepository userRepository;
     private final AdvertisementRepository advertisementRepository;
     private final CompanyRepository  companyRepository;
+    private final RecruitmentRepository recruitmentRepository;
 
 
     public MemberInfoDto getMemberInfo(UserDetailsImpl userDetails) {
@@ -135,6 +140,50 @@ public class MainService {
         return randomMainAdvertisements;
     }
 
+    @Transactional(readOnly = true)
+    public List<MainRecruitmentDto> getMainRecruitment() {
+        List<Recruitment> activeRecruitments = recruitmentRepository.findAllByStatus(StatusType.ACTIVE);
+
+        if (activeRecruitments.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        List<MainRecruitmentDto> mainRecruitmentDtos = new ArrayList<>();
+
+        for (Recruitment recruitment : activeRecruitments) {
+            Optional<Company> companyOpt = companyRepository.findBycompanyId(recruitment.getCompany().getCompanyId());
+
+            if (companyOpt.isPresent()) {
+                Company company = companyOpt.get();
+
+                String companyImg = company.getCompanyImg();
+
+                if (companyImg.contains(",")) {
+                    companyImg = companyImg.split(",")[0].trim();
+                }
+
+                MainRecruitmentDto dto = new MainRecruitmentDto();
+                dto.setRecruitmentIndex(recruitment.getRecruitmentIndex());
+                dto.setCompanyId(BigInteger.valueOf(company.getCompanyId()));
+                dto.setRecruitmentTitle(recruitment.getRecruitmentTitle());
+                dto.setRecruitmentType(recruitment.getRecruitmentType().name());
+                dto.setCategory(recruitment.getCategory());
+                dto.setSkill(recruitment.getSkill());
+                dto.setStartDate(recruitment.getStartDate());
+                dto.setPeriod(recruitment.getPeriod());
+                dto.setViewCount(recruitment.getViewCount());
+                dto.setStatus(recruitment.getStatus());
+
+                CompanyImageDto companyImageDto = new CompanyImageDto(company.getCompanyId(), companyImg);
+
+                dto.setCompanyImg(companyImageDto.getCompanyImg());
+
+                mainRecruitmentDtos.add(dto);
+            }
+        }
+
+        return mainRecruitmentDtos;
+    }
 
 
     private UserAdvertisementResponseDto convertToDto(Advertisement advertisement) {
