@@ -244,7 +244,7 @@
 			opacity: 0.5;
 		}
 
-		/* 애니메이션이 부드럽게 적용되도록 변경 */
+	
 		.ad2-image {
 			width: 100%;
 			height: 100%;
@@ -262,29 +262,96 @@
 
 		/* 광고 3번과 무한 스크롤 */
 		.ad3 {
-			background-color: #ccc;
-			height: 150px;
-			text-align: center;
-			margin-bottom: 20px;
-			margin-top: 20px;
+			   background-color: #ccc;
+			   height: 150px;
+				text-align: center;
+				margin-bottom: 20px;
+				margin-top: 20px;
+				position: relative;
+				overflow: hidden; /* 이미지가 부모 요소를 벗어나지 않도록 설정 */
+						   }
+
+		.ad3-images {
+			width: 100%; /* 광고 3 영역의 너비에 맞추기 */
+			height: 100%; /* 광고 3 영역의 높이에 맞추기 */
+			object-fit: cover; /* 이미지 비율을 유지하면서 광고 3 영역을 채우기 */
+			position: absolute; /* 부모 요소(ad3)를 기준으로 위치 설정 */
+			top: 0; /* 부모 요소의 위쪽에 맞추기 */
+			left: 0; /* 부모 요소의 왼쪽에 맞추기 */
+			display: none; /* 기본적으로 보이지 않게 설정 */
+		}
+
+		.ad3-images.active {
+			display: block; /* active 클래스가 있을 때만 이미지 표시 */
 		}
 		.grid-container {
 			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			grid-gap: 20px;
+			grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개의 아이템 */
+			grid-gap: 20px; /* 아이템 간의 간격 */
+			padding: 20px; /* 전체 grid에 여백 추가 */
+			max-width: 1200px; /* 전체 너비 제한 */
+			margin: 0 auto; /* 중앙 정렬 */
 		}
 
 		.grid-item {
-			background-color: #ddd;
+			background-color: #fff; /* 카드 배경색 */
+			border-radius: 10px; /* 모서리 둥글게 */
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+			overflow: hidden; /* 넘치는 내용 숨김 */
+			transition: transform 0.3s ease; /* 마우스 오버 시 애니메이션 */
+		}
+
+		.grid-item img {
+			width: 100%;
+			height: 150px; /* 이미지 높이 설정 */
+			object-fit: cover; /* 이미지가 카드에 맞게 조정 */
+		}
+
+		.grid-item:hover {
+			transform: translateY(-5px); /* 마우스 오버 시 살짝 위로 이동 */
+		}
+
+		.grid-item .content {
+			padding: 15px; /* 텍스트와 이미지 간의 여백 */
+		}
+
+		.grid-item .content h4 {
+			font-size: 18px;
+			font-weight: bold;
+			margin-bottom: 10px;
+		}
+
+		.grid-item .content p {
+			font-size: 14px;
+			color: #777;
+			margin-bottom: 10px;
+		}
+
+		.grid-item .content .tags {
+			font-size: 12px;
+			color: #555;
+		}
+
+		.grid-item .content .tags span {
+			background-color: #f0f0f0;
+			border-radius: 5px;
+			padding: 2px 5px;
+			margin-right: 5px;
+		}
+
+		.grid-item .content .button {
+			background-color: #007bff;
+			color: white;
 			text-align: center;
-			padding: 20px;
+			padding: 10px;
+			border-radius: 5px;
+			cursor: pointer;
+			margin-top: 10px;
+			display: inline-block;
+			width: 100%;
+			text-decoration: none;
+			font-weight: bold;
 		}
-
-		.infinite-scroll {
-			max-height: 400px;
-			overflow-y: auto;
-		}
-
 		/* 버튼 클릭 시 반짝이는 효과 */
 		button.prev-btn, button.next-btn {
 			background-color: rgba(0, 0, 0, 0.5);
@@ -296,7 +363,6 @@
 			border-radius: 5px;
 			transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 		}
-
 
 	</style>
 
@@ -455,24 +521,44 @@
 		</div>
 	</div>
 
-	<!-- 광고 3번과 무한 스크롤 -->
-	<div class="infinite-scroll">
+	<!-- 광고 3번-->
 		<div class="ad3">
-			<img class="ad3-images" src="https://via.placeholder.com/800x100?text=광고3-1" alt="광고 3 이미지 1">
-			<img class="ad3-images" src="https://via.placeholder.com/800x100?text=광고3-2" alt="광고 3 이미지 2" style="display:none;">
-			<img class="ad3-images" src="https://via.placeholder.com/800x100?text=광고3-3" alt="광고 3 이미지 3" style="display:none;">
+			<img class="ad3-images" src="" alt="광고 3 이미지 1">
+			<img class="ad3-images" src="" alt="광고 3 이미지 2" style="display:none;">
+			<img class="ad3-images" src="" alt="광고 3 이미지 3" style="display:none;">
 		</div>
 
-		<!-- 무한 스크롤 콘텐츠 -->
+		<!-- 공고 리스트 -->
 		<div class="grid-container">
-			<div class="grid-item">Item 1</div>
-			<div class="grid-item">Item 2</div>
-			<div class="grid-item">Item 3</div>
-			<div class="grid-item">Item 4</div>
-			<div class="grid-item">Item 5</div>
-			<div class="grid-item">Item 6</div>
+			<div class="grid-item">
+				<img src="https://via.placeholder.com/300x150" alt="공고 이미지">
+				<div class="content">
+					<h4>공고 제목</h4>
+					<p>기업명</p>
+					<p>직무 정보</p>
+					<div class="tags">
+						<span>Kubernetes</span>
+						<span>Python</span>
+						<span>미들 (4-8년)</span>
+					</div>
+					<a href="#" class="button">자세히 보기</a>
+				</div>
+			</div>
+			<div class="grid-item">
+				<img src="https://via.placeholder.com/300x150" alt="공고 이미지">
+				<div class="content">
+					<h4>공고 제목</h4>
+					<p>기업명</p>
+					<p>직무 정보</p>
+					<div class="tags">
+						<span>HTML/CSS</span>
+						<span>JavaScript</span>
+						<span>신입/경력</span>
+					</div>
+					<a href="#" class="button">자세히 보기</a>
+				</div>
+			</div>
 		</div>
-	</div>
 </main>
 </div>
 
@@ -486,13 +572,17 @@
 <script>
 		document.addEventListener('DOMContentLoaded', function () {
 			const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
-			const imageElement = document.querySelector('.ad-image');
+			const ad1ImageElement = document.querySelector('.ad-image'); // ad1 이미지 요소
+			const ad3ImageElements = document.querySelectorAll('.ad3-images'); // ad3 이미지 요소들
 			const prevButton = document.querySelector('.prev-btn');
 			const nextButton = document.querySelector('.next-btn');
-			let currentIndex = 0;
-			let ads = [];
+			let currentIndex = 0; // ad1 슬라이드 현재 인덱스
+			let ad3CurrentIndex = 0; // ad3 슬라이드 현재 인덱스
+			let ads = []; // ad1 이미지 데이터
+			let ad3Images = []; // ad3 이미지 데이터
+			let ad3SlideInterval; // ad3 슬라이드 쇼 타이머
 
-			// 광고 데이터를 가져오는 함수
+			// 광고 데이터를 가져오는 함수 (ad1용)
 			function fetchAdvertisements() {
 				fetch('/main/advertisements', {
 					method: 'GET',
@@ -509,11 +599,9 @@
 						.then(data => {
 							ads = data.map(ad => {
 								let adImageSrc = ad.advertisementImage;
-
 								if (!adImageSrc.startsWith('/image/')) {
-									adImageSrc = `http://localhost:8080/image/`+ adImageSrc;
+									adImageSrc = `http://localhost:8080/image/` + adImageSrc;
 								}
-
 								return {
 									...ad,
 									advertisementImage: adImageSrc
@@ -521,7 +609,7 @@
 							});
 
 							if (ads.length > 0) {
-								displayImage(currentIndex);
+								displayAd1Image(currentIndex);
 							} else {
 								console.error('광고 데이터가 비어 있습니다.');
 							}
@@ -531,38 +619,107 @@
 						});
 			}
 
-			function displayImage(index) {
+			// ad1 슬라이드 이미지를 표시하는 함수
+			function displayAd1Image(index) {
 				if (ads.length === 0) {
 					console.error('광고 데이터가 없습니다.');
 					return;
 				}
 
-				// 광고 이미지 경로를 그대로 사용
 				let adImageSrc = ads[index].advertisementImage;
-
-				imageElement.src = adImageSrc;
-				imageElement.style.display = 'block';
-				console.log('이미지경로:', adImageSrc);
-				imageElement.onerror = function() {
+				ad1ImageElement.src = adImageSrc;
+				ad1ImageElement.style.display = 'block';
+				console.log('ad1 이미지경로:', adImageSrc);
+				ad1ImageElement.onerror = function() {
 					console.error('이미지를 로드하는 중 오류 발생:', adImageSrc);
 					alert('이미지를 불러오는 중 오류가 발생했습니다. 파일 경로를 확인해주세요.');
 				};
 			}
 
-			// 이전 이미지로 이동
+			// ad1 이전 이미지로 이동
 			prevButton.addEventListener('click', function () {
 				currentIndex = (currentIndex - 1 + ads.length) % ads.length;
-				displayImage(currentIndex);
+				displayAd1Image(currentIndex);
 			});
 
-			// 다음 이미지로 이동
+			// ad1 다음 이미지로 이동
 			nextButton.addEventListener('click', function () {
 				currentIndex = (currentIndex + 1) % ads.length;
-				displayImage(currentIndex);
+				displayAd1Image(currentIndex);
 			});
 
-			// 페이지 로드 시 광고 데이터 가져오기
+			// 광고 3 데이터를 가져오는 함수
+			function fetchAd3Images() {
+				fetch('/main/ad3Advertisements', { // ad3 전용 API 사용
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+						.then(response => {
+							if (!response.ok) {
+								throw new Error(`광고 3 이미지를 불러오지 못했습니다: ${response.status}`);
+							}
+							return response.json();
+						})
+						.then(data => {
+							ad3Images = data.map(ad => {
+								let adImageSrc = ad.advertisementImage;
+								if (!adImageSrc.startsWith('/image/')) {
+									adImageSrc = `http://localhost:8080/image/` + adImageSrc;
+								}
+								return adImageSrc;
+							});
+
+							if (ad3Images.length > 0) {
+								displayAd3Image(ad3CurrentIndex); // ad3 첫 이미지 표시
+							} else {
+								console.error('광고 3 데이터가 비어 있습니다.');
+							}
+						})
+						.catch(error => {
+							console.error('광고 3 데이터를 가져오는 중 오류 발생:', error);
+						});
+			}
+
+			// ad3 슬라이드 이미지를 표시하는 함수
+			function displayAd3Image(index) {
+				if (ad3Images.length === 0) {
+					console.error('광고 3 데이터가 없습니다.');
+					return;
+				}
+
+				// ad3 영역의 모든 이미지를 숨김
+				ad3ImageElements.forEach(img => img.style.display = 'none');
+
+				// 현재 인덱스의 이미지 표시
+				ad3ImageElements[index].src = ad3Images[index];
+				ad3ImageElements[index].style.display = 'block';
+
+				console.log('ad3 이미지경로:', ad3Images[index]);
+				ad3ImageElements[index].onerror = function() {
+					console.error('이미지를 로드하는 중 오류 발생:', ad3Images[index]);
+					alert('광고 3 이미지를 불러오는 중 오류가 발생했습니다. 파일 경로를 확인해주세요.');
+				};
+			}
+
+			// ad3 슬라이드 쇼 시작 함수
+			function startAd3SlideShow() {
+				ad3SlideInterval = setInterval(() => {
+					ad3CurrentIndex = (ad3CurrentIndex + 1) % ad3Images.length;
+					displayAd3Image(ad3CurrentIndex);
+				}, 3000); // 3초마다 이미지 변경
+			}
+
+			// 페이지 로드 시 광고 데이터 가져오기 (ad1용)
 			fetchAdvertisements();
+
+			// 광고 3번 데이터 가져오기 (ad3용)
+			fetchAd3Images();
+
+			// 광고 3번 슬라이드 쇼 시작 (ad3용)
+			startAd3SlideShow();
+
 
 			// JWT 토큰을 사용하여 사용자 정보 가져오기
 			fetch('/main/memberInfo', {
@@ -718,28 +875,6 @@
 		// 페이지 로드 시 회사 이미지 데이터를 가져옴
 		fetchCompanyImages();
 
-		// 광고 3번 슬라이드 설정
-		document.addEventListener('DOMContentLoaded', function () {
-			let ad3CurrentIndex = 0;
-			const ad3Images = document.querySelectorAll('.ad3-images');
-			const ad3TotalImages = ad3Images.length;
-			let ad3SlideInterval;
-
-			// 광고 3번 이미지 슬라이드 쇼 함수
-			function showNextAd3Image() {
-				ad3Images[ad3CurrentIndex].style.display = 'none'; // 현재 이미지를 숨김
-				ad3CurrentIndex = (ad3CurrentIndex + 1) % ad3TotalImages; // 다음 이미지 인덱스 계산
-				ad3Images[ad3CurrentIndex].style.display = 'block'; // 다음 이미지를 표시
-			}
-
-			// 3초마다 showNextAd3Image 함수 호출
-			function startAd3SlideShow() {
-				ad3SlideInterval = setInterval(showNextAd3Image, 3000); // 3초마다 광고 3 이미지 변경
-			}
-
-			// 처음 광고 3 슬라이드 쇼 시작
-			startAd3SlideShow();
-		});
 
 
 </script>

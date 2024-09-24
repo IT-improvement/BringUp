@@ -108,6 +108,35 @@ public class MainService {
         return companyImageList;
     }
 
+    // 광고 목록 중 ACTIVE 상태이고, 타입이 MAIN인 광고를 랜덤으로 최대 3개 가져오는 메서드
+    public List<UserAdvertisementResponseDto> getAd3Advertisements() {
+        // 상태가 ACTIVE이고 타입이 MAIN인 광고만 필터링
+        List<Advertisement> mainAdvertisements = advertisementRepository.findByStatusAndType(StatusType.ACTIVE, "MAIN");
+
+        if (mainAdvertisements.isEmpty()) {
+            return new ArrayList<>(); // MAIN 광고가 없을 경우 빈 리스트 반환
+        }
+
+        List<UserAdvertisementResponseDto> randomMainAdvertisements = new ArrayList<>();
+        Random random = new Random();
+        int maxAdvertisements = Math.min(3, mainAdvertisements.size()); // 최대 3개까지 선택
+
+        Set<Integer> selectedIndices = new HashSet<>(); // 중복 방지를 위한 인덱스 저장
+
+        while (selectedIndices.size() < maxAdvertisements) {
+            int randomIndex = random.nextInt(mainAdvertisements.size());
+            if (!selectedIndices.contains(randomIndex)) {
+                selectedIndices.add(randomIndex);
+                Advertisement ad = mainAdvertisements.get(randomIndex);
+                randomMainAdvertisements.add(convertToDto(ad));
+            }
+        }
+
+        return randomMainAdvertisements;
+    }
+
+
+
     private UserAdvertisementResponseDto convertToDto(Advertisement advertisement) {
 
 
