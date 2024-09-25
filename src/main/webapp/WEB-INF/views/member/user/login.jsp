@@ -74,6 +74,13 @@
                 </div>
             </div>
         </div>
+        <button type="submit" class="btn">로그인</button>
+    </form>
+    <div class="links">
+        <a href="/company/login">컴퍼니 로그인</a> <!-- 컴퍼니 로그인 페이지로 이동 -->
+        <a href="#">비밀번호 찾기</a> <!-- 비밀번호 찾기 페이지로 이동 -->
+        <a href="/member/join">회원가입</a> <!-- 회원가입 페이지로 이동 -->
+        <button value="kakao" onclick="kakaoapiLogin()">카카오 로그인</button>
     </div>
 
 </main>
@@ -81,5 +88,6 @@
 <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
 <div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
 <script src="/resources/script/member/userLogin.js"></script>
+<script src="/resources/script/member/kakaoapi.js"></script>
 </body>
 </html>
