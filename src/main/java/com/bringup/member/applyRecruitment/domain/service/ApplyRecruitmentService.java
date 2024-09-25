@@ -35,7 +35,10 @@ public class ApplyRecruitmentService {
     private final RecruitmentRepository recruitmentRepository;
 
     public ApplyRecruitmentEntity getApplyRecruitment(UserDetailsImpl userDetails){
-        //applyRecruitmentRepository.findByCvIndexAndRecruitmentIndex(userDetails.);
+        UserEntity user = userRepository.findById(userDetails.getId())
+                .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
+        CVEntity cv = cvRepository.findByUserIndex(user.getUserIndex())
+                .orElseThrow(()->new RuntimeException("해당 유저의 이력서를 찾을 수 없습니다."));
         return null;
     }
 
