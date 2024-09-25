@@ -40,6 +40,52 @@
     <!-- 테마 JS -->
     <script src="/resources/script/common/function/functions.js"></script>
 
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			document.getElementById('recruitmentForm').addEventListener('submit', function(e) {
+					e.preventDefault();
+					const accessToken = localStorage.getItem('accessToken');
+					
+					const formData = {
+						recruitmentTitle: document.getElementById('recruitmentTitle').value,
+						recruitmentType: document.getElementById('recruitmentType').value,
+						category: document.getElementById('category').value,
+						workDetail: document.getElementById('workDetail').value,
+						skill: document.getElementById('skill').value,
+						hospitality: document.getElementById('hospitality').value,
+						career: document.getElementById('career').value,
+						salary: document.getElementById('salary').value,
+						period: document.getElementById('period').value
+					}
+					console.log(accessToken);
+					console.log(formData);
+
+					fetch('/com/recruitment/register', {
+						method: 'POST',
+						headers: {
+							'Authorization': `Bearer `+ accessToken,
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify(formData)
+					})
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('서버 응답이 실패했습니다');
+						}
+						return response.json();
+					})
+					.then(data => {
+						alert('공고가 성공적으로 등록되었습니다.');
+						location.href = '/company/jobpost/management';
+					})
+					.catch(error => {
+						console.error('Error:', error);
+						alert('공고 등록에 실패했습니다. 다시 시도해주세요.');
+					});
+				});
+			});
+		</script>
+
     <!-- 메인 JS -->
     <!-- <script src="/resources/script/company/main.js"></script> -->
 
@@ -56,7 +102,7 @@
 				<h4 class="card-title">공고 등록</h4>
 			</div>
 			<div class="card-body">
-				<form action="/com/recruitment/register" method="post">
+				<form action="/com/recruitment/register" method="post" id="recruitmentForm">
 					<div class="mb-3">
 						<label for="recruitmentTitle" class="form-label">공고 제목</label>
 						<input type="text" class="form-control" id="recruitmentTitle" name="recruitmentTitle" required>
@@ -64,8 +110,9 @@
 					<div class="mb-3">
 						<label for="recruitmentType" class="form-label">채용 형태</label>
 						<select class="form-select" id="recruitmentType" name="recruitmentType">
-							<option value="정규직">정규직</option>
-							<option value="비정규직">비정규직</option>
+							<option value="REGULAR_WORKER">정규직</option>
+							<option value="IRREGULAR_WORKER">비정규직</option>
+							<option value="PART_TIME_WORKER">아르바이트</option>
 						</select>
 					</div>
 					<div class="mb-3">
@@ -73,16 +120,16 @@
 						<input type="text" class="form-control" id="category" name="category" required>
 					</div>
 					<div class="mb-3">
-						<label for="recruitmentContent" class="form-label">업무 내용</label>
-						<textarea class="form-control" id="recruitmentContent" name="recruitmentContent" rows="10" required></textarea>
+						<label for="workDetail" class="form-label">업무 내용</label>
+						<textarea class="form-control" id="workDetail" name="workDetail" rows="10" required></textarea>
 					</div>
 					<div class="mb-3">
 						<label for="skill" class="form-label">필요 기술</label>
 						<input type="text" class="form-control" id="skill" name="skill" required>
 					</div>
 					<div class="mb-3">
-						<label for="preferential" class="form-label">우대 사항</label>
-						<textarea class="form-control" id="preferential" name="preferential" rows="10" required></textarea>
+						<label for="hospitality" class="form-label">우대 사항</label>
+						<textarea class="form-control" id="hospitality" name="hospitality" rows="10" required></textarea>
 					</div>
 					<div class="mb-3">
 						<label for="career" class="form-label">경력</label>
@@ -93,12 +140,8 @@
 						<input type="number" class="form-control" id="salary" name="salary" required>
 					</div>
 					<div class="mb-3">
-						<label for="startDate" class="form-label">시작 날짜</label>
-						<input type="date" class="form-control" id="startDate" name="startDate" required>
-					</div>
-					<div class="mb-3">
-						<label for="period" class="form-label">기간</label>
-						<input type="text" class="form-control" id="period" name="period" required>
+						<label for="period" class="form-label">모집 기간</label>
+						<input type="date" class="form-control" id="period" name="period" required min="<%= java.time.LocalDate.now() %>">
 					</div>
 					<button type="button" class="btn btn-secondary" onclick="location.href='/company/jobpost/management'">돌아가기</button>
 					<button type="submit" class="btn btn-primary" style="float: right;">등록</button>

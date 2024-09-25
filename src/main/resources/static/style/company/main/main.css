@@ -1,0 +1,8 @@
+.pagination .page-link:hover {
+    background-color: transparent !important;
+    color: inherit !important;
+}
+.pagination .page-item:not(.active) .page-link:hover {
+    background-color: transparent !important;
+    color: inherit !important;
+}

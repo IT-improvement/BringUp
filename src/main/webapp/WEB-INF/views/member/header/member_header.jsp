@@ -6,13 +6,13 @@
     <nav class="navbar navbar-expand-xl">
         <div class="container-fluid px-3" style="max-width: 1260px;">
             <!-- 로고 시작 -->
-            <a class="navbar-brand justify-content-center" href=#">
+            <a class="navbar-brand justify-content-center" href="/member/userLoginForm">
                 <img class="navbar-brand-item light-mode-item" src="/resources/style/common/images/Logo.png" alt="로고">
                 <img class="navbar-brand-item dark-mode-item" src="/resources/style/common/images/Logo_darkmode.png" alt="로고">
             </a>
             <!-- 로고 끝 -->
             <!-- 네비 오른쪽 시작 -->
-            <div class="nav flex-nowrap align-items-center ms-auto">
+         <%--   <div class="nav flex-nowrap align-items-center ms-auto">
                 <!-- 알림 드롭다운 시작 -->
                 <div class="nav-item ms-2 ms-md-3 dropdown">
                     <!-- 알림 버튼 -->
@@ -103,7 +103,7 @@
                     </div>
                     <!-- 알림 드롭다운 메뉴 끝 -->
                 </div>
-
+--%>
                 <!-- 프로필 드롭다운 시작 -->
                 <div class="nav-item ms-2 ms-md-3 dropdown">
                     <!-- 아바타 -->
@@ -163,34 +163,40 @@
                 <ul class="navbar-nav mx-auto">
                     <!-- 네비 아이템 2 공고 -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="jobPostingMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">공고</a>
+                        <a class="nav-link dropdown-toggle"  id="jobPostingMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">채용 정보</a>
                         <ul class="dropdown-menu" aria-labelledby="jobPostingMenu">
-                            <li><a class="dropdown-item" href="#">공고 관리</a></li>
-                            <li><a class="dropdown-item" href="#">공고 등록</a></li>
+                            <li><a class="dropdown-item" href="/recruitment/recruitmentPage">홈</a></li>
+                            <li><a class="dropdown-item" href="/recruitment/topRecruitment">인기 공고 TOP 100</a></li>
+                            <li><a class="dropdown-item" href="/recruitment/confirmRecruitment">내가 본 공고</a></li>
+                            <li><a class="dropdown-item" href="/recruitment/AnnouncementRecruitment">내가 지원한 공고</a></li>
+                            <li><a class="dropdown-item" href="/recruitment/proposeRecruitment">제안 받은 공고</a></li>
                         </ul>
                     </li>
 
                     <!-- 네비 아이템 3 상품 -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="pagesMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">상품</a>
+                        <a class="nav-link dropdown-toggle" id="pagesMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">마이 커리어</a>
                         <ul class="dropdown-menu" aria-labelledby="pagesMenu">
-                            <li><a class="dropdown-item" href="#">상품 관리</a></li>
-                            <li><a class="dropdown-item" href="#">프리미엄 공고</a></li>
-                            <li><a class="dropdown-item" href="#">광고 배너</a></li>
-                            <li><a class="dropdown-item" href="#">이력서 열람</a></li>
+                            <li><a class="dropdown-item" href="/member/potofolio">내 포토폴리오</a></li>
+                            <li><a class="dropdown-item" href="/member/letter">내 이력서</a></li>
+                            <li><a class="dropdown-item" href="/member/resume">내 자소서</a></li>
+                            <li><a class="dropdown-item" href="#">프리랜서</a></li>
+                            <li><a class="dropdown-item" href="#">채팅방</a></li>
                         </ul>
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="reviewMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">리뷰</a>
+                        <a class="nav-link dropdown-toggle" id="reviewMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">기업</a>
                         <ul class="dropdown-menu" aria-labelledby="postMenu">
-                            <li><a class="dropdown-item" href="#">기업 리뷰</a></li>
-                            <li><a class="dropdown-item" href="#">면접 리뷰</a></li>
+                            <li><a class="dropdown-item" href="/member/companyReview">기업 리뷰</a></li>
+                            <li><a class="dropdown-item" href="/member/interviewReview">면접 후기</a></li>
                         </ul>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" href="#" id="recommendMenu">인재 추천</a>
+                        <a class="nav-link" href="/member/notice" id="recommendMenu">만남의 광장</a>
                     </li>
+
                 </ul>
             </div>
             <!-- 메인 네비게이션 끝 -->

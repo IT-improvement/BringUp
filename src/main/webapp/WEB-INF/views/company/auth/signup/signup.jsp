@@ -38,7 +38,7 @@
             <form id="companySignupForm" name="companySignupForm">
                 <div class="mb-3">
                     <label for="businessNumber" class="form-label"><i class="fas fa-building"></i> 사업자 번호</label>
-                    <input type="text" class="form-control" id="businessNumber" name="businessNumber" placeholder="사업자 번호를 입력하세요" required>
+                    <input type="text" class="form-control" id="businessNumber" name="businessNumber" placeholder="사업자 번호를 입력하세요" required oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{2})(\d{5})/, '$1-$2-$3')" maxlength="10">
                 </div>
                 <div class="mb-3">
                     <label for="name" class="form-label"><i class="fas fa-user"></i> 회사 대표 이름</label>
