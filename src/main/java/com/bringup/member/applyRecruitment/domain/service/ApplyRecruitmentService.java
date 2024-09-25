@@ -39,17 +39,15 @@ public class ApplyRecruitmentService {
         return null;
     }
 
-    public void addApplyRecruitment(UserDetailsImpl userDetails){
+
+    public void addApplyRecruitment(UserDetailsImpl userDetails, int recruitmentIndex){
         UserEntity user = userRepository.findById(userDetails.getId())
                 .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
 
         CVEntity cv = cvRepository.findByUserIndex(user.getUserIndex())
                 .orElseThrow(()->new RuntimeException("해당 유저의 이력서를 찾을 수 없습니다."));
 
-        Company company = companyRepository.findById(userDetails.getId())
-                .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
-
-        Recruitment recruitment = recruitmentRepository.findByCompanyCompanyId(company.getCompanyId())
+        Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(recruitmentIndex)
                 .orElseThrow(()->new RuntimeException("해당 기업의 공고를 찾을 수 없습니다."));
 
         ApplyRecruitmentEntity applyRecruitmentEntity = new ApplyRecruitmentEntity();
