@@ -1,6 +1,7 @@
 package com.bringup.common.response;
 
 
+import com.bringup.common.enums.GlobalErrorCode;
 import com.bringup.common.enums.GlobalSuccessCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
@@ -32,5 +33,11 @@ public class BfResponse<T> {
     public BfResponse(GlobalSuccessCode statusCode) {
         this.code = statusCode.getCode();
         this.message = statusCode.getMessage();
+    }
+
+    // 에러 응답을 위한 생성자
+    public BfResponse(int code, String message) {
+        this.code = code;
+        this.message = message;
     }
 }

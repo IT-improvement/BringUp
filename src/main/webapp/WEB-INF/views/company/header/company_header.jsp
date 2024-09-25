@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- =======================
 헤더 시작 -->
-<header class="header-static border-bottom" style="z-index: 9999; position: fixed; width: 100%; top: 0;">
+<header class="header-static border-bottom" style="position: fixed; width: 100%; top: 0; z-index: 1001;">
     <!-- 상단 헤더 -->
     <nav class="navbar navbar-expand-xl">
         <div class="container-fluid px-3" style="max-width: 1260px;">
@@ -113,17 +113,8 @@
 
                     <!-- 프로필 드롭다운 시작 -->
                     <ul class="dropdown-menu dropdown-animation dropdown-menu-end shadow pt-3" aria-labelledby="profileDropdown">
-                        <!-- 프로필 정보 -->
-                        <li class="px-3">
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <a class="h6 mt-2 mt-sm-0" href="/company/auth/profile"><span id="companyNameLink">로딩 중...</span></a>
-                                </div>
-                            </div>
-                            <hr>
-                        </li>
                         <!-- 링크 -->
-                        <li><a class="dropdown-item" href="/company/auth/updateProfile"><i class="bi bi-person fa-fw me-2"></i>프로필 수정</a></li>
+                        <li><a class="dropdown-item" href="/company/auth/profile"><i class="bi bi-person fa-fw me-2"></i>프로필</a></li>
                         <li><a class="dropdown-item" href="/company/auth/updateAuth"><i class="bi bi-gear fa-fw me-2"></i>계정 설정</a></li>
                         <li><a class="dropdown-item" href="#" id="logoutButton"><i class="bi bi-power fa-fw me-2"></i>로그아웃</a></li>
                         <li class="dropdown-divider mb-2"></li>
@@ -154,7 +145,7 @@
 <!-- 알림 프로필 부분 끝 -->
 
 <!-- 메인 네비게이션 부분 시작 -->
-<header class="border-bottom" style="position: fixed; width: 100%; top: 50px; z-index: 9998;">
+<header class="border-bottom" style="position: fixed; width: 100%; top: 50px; z-index: 1000;">
     <!-- 하단 헤더 (메인 네비게이션) -->
     <nav class="navbar navbar-expand-lg navbar-dashboard">
         <div class="container px-3" style="max-width: 1260px;">
@@ -175,9 +166,8 @@
                         <a class="nav-link dropdown-toggle" href="#" id="pagesMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">상품</a>
                         <ul class="dropdown-menu" aria-labelledby="pagesMenu">
                             <li><a class="dropdown-item" href="/company/product/management">상품 관리</a></li>
-                            <li><a class="dropdown-item" href="/company/product/premium_job_posting">프리미엄 공고</a></li>
-                            <li><a class="dropdown-item" href="/company/product/advertising_banner">광고 배너</a></li>
-                            <li><a class="dropdown-item" href="/company/product/resume_key">이력서 열람</a></li>
+                            <li><a class="dropdown-item" href="/company/product/introduction">상품 등록</a></li>
+                            <li><a class="dropdown-item" href="/company/product/ticket">매칭 티켓</a></li>
                         </ul>
                     </li>
 

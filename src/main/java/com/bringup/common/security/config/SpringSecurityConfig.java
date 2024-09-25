@@ -136,8 +136,17 @@ public class SpringSecurityConfig {
                 antMatcher("/ws/**"),
 
                 antMatcher("/github/**"),// 정적 리소스
-
-                antMatcher(GET, "image/**")
+                antMatcher("/member/potofolio"),
+                antMatcher("/member/letter"),//이력서
+                antMatcher("/member/resume"),//자소서
+                antMatcher("/member/companyReview"),
+                antMatcher("/member/interviewReview"),
+                antMatcher("/member/notice"),
+                antMatcher(GET, "image/**"),
+                antMatcher("/recruitment/**"),
+                antMatcher("/main/image/**"),
+                antMatcher("/main/advertisements"),
+                antMatcher("/main/recruitmentImage")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
@@ -153,11 +162,7 @@ public class SpringSecurityConfig {
                 antMatcher(DELETE, "/com/user"),                    // 회원 탈퇴
                 antMatcher(GET, "/com/companyInfo/post"),           // 회원 정보 조회
 
-                antMatcher(POST, "/com/recruitment/register"),       // 채용 등록
-                antMatcher(POST, "/com/recruitment/update/{recruitmentId}"), // 채용 수정
-                antMatcher(POST, "/com/recruitment/delete/{recruitmentId}"), // 채용 삭제
-                antMatcher(GET, "/com/recruitment/list"),           // 채용 리스트 조회
-                antMatcher(GET, "/com/recruitment/detail/**"),
+                antMatcher("/com/recruitment/**"),
 
                 antMatcher(POST, "/com/c_reviews"),                 // 기업 리뷰 열람
                 antMatcher(POST, "/com/c_review/delete"),           // 기업 리뷰 삭제
@@ -165,13 +170,16 @@ public class SpringSecurityConfig {
                 antMatcher(POST, "/com/i_reviews"),                 // 면접 리뷰 열람
                 antMatcher(POST, "/com/i_review/delete"),         // 면접 리뷰 삭제
 
-                antMatcher(GET, "/com/headhunt/**"),
+                antMatcher("/com/headhunt/**"),
 
-                antMatcher("/recruitment/**"), // 사용자 스크랩기업 리스트
                 antMatcher("/membership/**"), // 사용자 멤버십
 
                 antMatcher("/kakao/**")
 
+                antMatcher("/member/name"),
+
+                antMatcher("/member/userMain"),
+                antMatcher("/main/memberInfo")
 
         );
 
@@ -191,4 +199,5 @@ public class SpringSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 생성을 하지 않음
                 .anonymous(AbstractHttpConfigurer::disable); // 익명 사용자 접근 제한, 모든 요청이 인증 필요
     }
+
 }

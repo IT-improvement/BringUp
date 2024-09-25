@@ -79,9 +79,9 @@ public class UserRecruitmentService {
         dto.setRecruitmentType(recruitment.getRecruitmentType().name());
         dto.setCategory(recruitment.getCategory());
         dto.setSkill(recruitment.getSkill());
-        dto.setStartDate(recruitment.getStartDate().toString());
         dto.setPeriod(recruitment.getPeriod());
         dto.setStatus(recruitment.getStatus());
+        dto.setViewCount(recruitment.getViewCount());
         return dto;
     }
 }

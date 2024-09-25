@@ -1,54 +1,150 @@
 document.addEventListener('DOMContentLoaded', function() {
     const accessToken = localStorage.getItem('accessToken');
-    console.log("token:"+accessToken);
     if (!accessToken) {
         window.location.href = '/company/auth/login';
         return;
     }
 
-    fetch('/com/recruitment/list', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('채용 목록 응답:', data); // 이 부분이 추가되었습니다.
-        const recruitmentList = data.data;
-        const recruitmentListBody = document.getElementById('recruitment-list-body');
-        const totalEntries = document.getElementById('totalEntries');
-        const jobCount = document.getElementById('jobCount');
-        if (recruitmentListBody && totalEntries && jobCount) {
-            recruitmentListBody.innerHTML = ''; // 기존 내용을 지웁니다
-            if (recruitmentList && recruitmentList.length === 0) {
-                recruitmentListBody.innerHTML = '<tr><td colspan="5">공고가 없습니다.</td></tr>';
-            } else if(recruitmentList) {
-                recruitmentList.forEach(recruitment => {
-                    const row = document.createElement('tr');
-                    row.addEventListener('click', function() {
-                        window.location.href = `/company/jobpost/detail?recruitmentIndex=${recruitment.recruitmentIndex}`;
-                    });
-                    row.innerHTML = `
-                        <td>${recruitment.recruitmentTitle}</td>
-                        <td>${recruitment.recruitmentType}</td>
-                        <td>${recruitment.startDate}</td>
-                        <td>${recruitment.category}</td>
-                        <td>${recruitment.status}</td>
-                    `;
-                    recruitmentListBody.appendChild(row);
-                });
+    let currentPage = 1;
+    const itemsPerPage = 5;
+    let totalItems = 0;
+    let allData = [];
+
+    function fetchData() {
+        fetch('/com/recruitment/mainlist', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
             }
-            // 채용 목록의 총 개수를 업데이트합니다.
-            totalEntries.textContent = `총${recruitmentList ? recruitmentList.length : 0}`;
-            jobCount.textContent = `${recruitmentList ? recruitmentList.length : 0}개`;
-        } else {
-            console.error('recruitment-list-body, totalEntries, 또는 jobCount 요소를 찾을 수 없습니다.');
-            alert('채용 목록을 표시할 수 없습니다. 페이지를 새로고침하거나 나중에 다시 시도해주세요.');
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("받은 데이터:", data);
+            allData = data.data;
+            totalItems = allData.length;
+            renderPage(currentPage);
+            updatePagination();
+        })
+        .catch(error => {
+            console.error('채용 목록을 가져오는 중 오류 발생:', error);
+            const recruitmentListBody = document.getElementById('recruitment-list-body');
+            if (recruitmentListBody) {
+                recruitmentListBody.innerHTML = '<tr><td colspan="6" class="text-center">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>';
+            }
+        });
+    }
+
+    function renderPage(page) {
+        const recruitmentListBody = document.getElementById('recruitment-list-body');
+        recruitmentListBody.innerHTML = '';
+
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageData = allData.slice(start, end);
+
+        pageData.forEach((recruitment, index) => {
+            const row = document.createElement('tr');
+            const number = recruitment.r_index;
+            row.innerHTML = `
+                <td>${start + index + 1}</td>
+                <td>${recruitment.r_title || ''}</td>
+                <td>${recruitment.r_category || ''}</td>
+                <td>${recruitment.r_skill || ''}</td>
+                <td>${recruitment.r_career || ''}</td>
+                <td>${recruitment.r_period || ''}</td>
+            `;
+            row.style.cursor = 'pointer';
+            row.addEventListener('click', () => {
+                window.location.href = `/company/jobpost/detail?r_index=`+number;
+            });
+            recruitmentListBody.appendChild(row);
+        });
+
+        updateJobCountAndTotal(totalItems);
+    }
+
+    function updatePagination() {
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        const paginationContainer = document.getElementById('paginationContainer');
+        paginationContainer.innerHTML = '';
+
+        // 이전 페이지 버튼
+        const prevLi = document.createElement('li');
+        prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+        prevLi.innerHTML = '<a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>';
+        paginationContainer.appendChild(prevLi);
+
+        // 현재 페이지 / 전체 페이지 입력 필드
+        const pageInputLi = document.createElement('li');
+        pageInputLi.className = 'page-item';
+        pageInputLi.innerHTML = `
+            <span class="page-link page-input-container">
+                <input id="currentPageInput" type="text" inputmode="numeric" min="1" max="${totalPages}" value="${currentPage}" style="width: 10px; text-align: center; border: none; background: transparent; ">
+                / ${totalPages}
+            </span>
+        `;
+        paginationContainer.appendChild(pageInputLi);
+
+        // 다음 페이지 버튼
+        const nextLi = document.createElement('li');
+        nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+        nextLi.innerHTML = '<a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>';
+        paginationContainer.appendChild(nextLi);
+
+        // 이벤트 리스너 제거 및 다시 추가
+        paginationContainer.removeEventListener('click', paginationClickHandler);
+        paginationContainer.addEventListener('click', paginationClickHandler);
+
+        // 페이지 입력 필드에 이벤트 리스너 추가
+        const currentPageInput = document.getElementById('currentPageInput');
+        currentPageInput.addEventListener('input', function(e) {
+            let value = this.value.replace(/[^0-9]/g, '');
+            value = value === '' ? '' : Math.min(parseInt(value), totalPages).toString();
+            this.value = value;
+        });
+        currentPageInput.addEventListener('change', function() {
+            let newPage = parseInt(this.value) || 1;
+            if (newPage < 1) newPage = 1;
+            if (newPage > totalPages) newPage = totalPages;
+            this.value = newPage;
+            if (newPage !== currentPage) {
+                currentPage = newPage;
+                renderPage(currentPage);
+                updatePagination();
+            }
+        });
+    }
+
+    function paginationClickHandler(e) {
+        e.preventDefault();
+        if (e.target.tagName === 'A' || e.target.parentElement.tagName === 'A') {
+            const pageItem = e.target.closest('.page-item');
+            if (pageItem.classList.contains('disabled')) return;
+
+            if (pageItem.querySelector('[aria-label="Previous"]')) {
+                currentPage--;
+            } else if (pageItem.querySelector('[aria-label="Next"]')) {
+                currentPage++;
+            }
+
+            renderPage(currentPage);
+            updatePagination();
         }
-    })
-    .catch(error => {
-        console.error('채용 목록을 가져오는 중 오류 발생:', error);
-    });
+    }
+
+    function updateJobCountAndTotal(count) {
+        const jobCountElement = document.getElementById('jobCount');
+        const totalEntriesElement = document.getElementById('totalEntries');
+        
+        if (jobCountElement) {
+            jobCountElement.textContent = count;
+        }
+        
+        if (totalEntriesElement) {
+            totalEntriesElement.textContent = `총 ${count} 개`;
+        }
+    }
+
+    fetchData();
 });
