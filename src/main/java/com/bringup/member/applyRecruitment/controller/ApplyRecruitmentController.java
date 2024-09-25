@@ -25,7 +25,6 @@ public class ApplyRecruitmentController {
         return ResponseEntity.ok(new BfResponse<>("이력서 지원 완료"));
     }
 
-
     @GetMapping("/mem/applyRecruitment/list")
     public ResponseEntity<List<ApplyRecruitmentResponseDto>> getApplyRecruitmentList(@AuthenticationPrincipal UserDetailsImpl userDetails){
         List<ApplyRecruitmentResponseDto> applyRecruitmentList = applyRecruitmentService.getApplyRecruitmentList(userDetails);
