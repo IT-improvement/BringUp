@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,8 +20,8 @@ import java.util.List;
 public class ApplyRecruitmentController {
     private final ApplyRecruitmentService applyRecruitmentService;
 
-    public ResponseEntity<BfResponse<?>> addApplyRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        applyRecruitmentService.addApplyRecruitment(userDetails);
+    public ResponseEntity<BfResponse<?>> addApplyRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int recruitmentIndex){
+        applyRecruitmentService.addApplyRecruitment(userDetails, recruitmentIndex);
         return ResponseEntity.ok(new BfResponse<>("이력서 지원 완료"));
     }
 
