@@ -1,10 +1,10 @@
-package com.bringup.member.notice.domain.service;
+package com.bringup.member.recruitment.domain.service;
 
 import com.bringup.company.recruitment.entity.Recruitment;
-import com.bringup.member.notice.domain.repository.ScrapRecruitmentRepository;
+import com.bringup.member.recruitment.domain.repository.ScrapRecruitmentRepository;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
-import com.bringup.member.notice.dto.response.UserRecruitmentDto;
+import com.bringup.member.recruitment.dto.response.UserRecruitmentDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,9 +1,8 @@
-package com.bringup.member.notice.controller;
+package com.bringup.member.recruitment.controller;
 
-import com.bringup.member.notice.domain.service.UserRecruitmentService;
-import com.bringup.member.notice.dto.response.UserRecruitmentDto;
+import com.bringup.member.recruitment.domain.service.UserRecruitmentService;
+import com.bringup.member.recruitment.dto.response.UserRecruitmentDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
