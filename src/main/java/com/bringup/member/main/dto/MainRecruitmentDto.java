@@ -18,4 +18,6 @@ public class MainRecruitmentDto {
     private int viewCount;
     private StatusType status;
     private String companyImg; // 회사 이미지
+    private String companyName; // 회사 이미지
+
 }
