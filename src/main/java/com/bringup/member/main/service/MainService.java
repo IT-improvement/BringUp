@@ -1,7 +1,7 @@
 package com.bringup.member.main.service;
 
 import com.bringup.common.enums.StatusType;
-import com.bringup.common.image.ImageService;
+
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.entity.Advertisement;
 import com.bringup.company.advertisement.repository.AdvertisementRepository;
@@ -16,8 +16,6 @@ import com.bringup.member.main.dto.MemberInfoDto;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,9 +28,8 @@ import java.util.*;
 public class MainService {
     private final UserRepository userRepository;
     private final AdvertisementRepository advertisementRepository;
-    private final CompanyRepository  companyRepository;
+    private final CompanyRepository companyRepository;
     private final RecruitmentRepository recruitmentRepository;
-
 
     public MemberInfoDto getMemberInfo(UserDetailsImpl userDetails) {
         // userDetails에서 이메일을 가져와서 해당 이메일로 유저 정보를 조회
@@ -75,7 +72,7 @@ public class MainService {
         return randomAdvertisements;
     }
 
-
+    // 회사 이미지 데이터를 가져오는 메서드 (ACTIVE 상태인 회사만 랜덤으로 최대 6개 가져오기)
     public List<CompanyImageDto> getActiveCompanyImages() {
         List<Company> activeCompanies = companyRepository.findAllByStatus(StatusType.ACTIVE);
 
@@ -102,8 +99,10 @@ public class MainService {
                     companyImg = companyImg.split(",")[0]; // 첫 번째 이미지 URL만 사용
                 }
 
+                // 회사명과 이미지 정보를 DTO에 설정
                 CompanyImageDto dto = new CompanyImageDto(
                         company.getCompanyId(),
+                        company.getCompanyName(), // companyName 필드 추가
                         companyImg // 첫 번째 이미지 URL만 설정
                 );
                 companyImageList.add(dto);
@@ -115,8 +114,7 @@ public class MainService {
 
     // 광고 목록 중 ACTIVE 상태이고, 타입이 MAIN인 광고를 랜덤으로 최대 3개 가져오는 메서드
     public List<UserAdvertisementResponseDto> getAd3Advertisements() {
-        // 상태가 ACTIVE이고 타입이 MAIN인 광고만 필터링
-        List<Advertisement> mainAdvertisements = advertisementRepository.findByStatusAndType(StatusType.ACTIVE, "MAIN");
+        List<Advertisement> mainAdvertisements = advertisementRepository.findAllByStatus(StatusType.ACTIVE);
 
         if (mainAdvertisements.isEmpty()) {
             return new ArrayList<>(); // MAIN 광고가 없을 경우 빈 리스트 반환
@@ -162,21 +160,20 @@ public class MainService {
                     companyImg = companyImg.split(",")[0].trim();
                 }
 
+                // MainRecruitmentDto에 필요한 모든 정보를 설정
                 MainRecruitmentDto dto = new MainRecruitmentDto();
                 dto.setRecruitmentIndex(recruitment.getRecruitmentIndex());
                 dto.setCompanyId(BigInteger.valueOf(company.getCompanyId()));
+                dto.setCompanyName(company.getCompanyName()); // 기업명 설정
                 dto.setRecruitmentTitle(recruitment.getRecruitmentTitle());
-                dto.setRecruitmentType(recruitment.getRecruitmentType().name());
+                dto.setRecruitmentType(recruitment.getRecruitmentType().name()); // 공고 형태 설정
                 dto.setCategory(recruitment.getCategory());
                 dto.setSkill(recruitment.getSkill());
                 dto.setStartDate(recruitment.getStartDate());
                 dto.setPeriod(recruitment.getPeriod());
                 dto.setViewCount(recruitment.getViewCount());
                 dto.setStatus(recruitment.getStatus());
-
-                CompanyImageDto companyImageDto = new CompanyImageDto(company.getCompanyId(), companyImg);
-
-                dto.setCompanyImg(companyImageDto.getCompanyImg());
+                dto.setCompanyImg(companyImg); // 회사 이미지 설정
 
                 mainRecruitmentDtos.add(dto);
             }
@@ -185,14 +182,12 @@ public class MainService {
         return mainRecruitmentDtos;
     }
 
-
+    // Advertisement 엔티티를 DTO로 변환하는 메서드
     private UserAdvertisementResponseDto convertToDto(Advertisement advertisement) {
-
-
         return new UserAdvertisementResponseDto(
                 advertisement.getAdvertisementIndex(),
                 advertisement.getAdvertisementImage(),
-                advertisement.getType(),
+                advertisement.getStatus(),
                 advertisement.getDisplayTime()
         );
     }

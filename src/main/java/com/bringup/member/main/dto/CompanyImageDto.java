@@ -7,5 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class CompanyImageDto {
     private Integer companyId;
+    private String companyName;
     private String companyImg;
 }
