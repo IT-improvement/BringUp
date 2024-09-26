@@ -1,4 +1,4 @@
-package com.bringup.member.notice.domain.entity;
+package com.bringup.member.recruitment.domain.entity;
 
 import com.bringup.member.user.domain.entity.UserEntity;
 import jakarta.persistence.*;
