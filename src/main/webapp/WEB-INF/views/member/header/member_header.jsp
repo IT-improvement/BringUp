@@ -54,7 +54,7 @@
             </div>
             <div class="d-flex justify-content-end" id="login">
                 <div class="nav-item ms-2 ms-md-3" id="memberLogin">
-                    <a href="/member/userLoginForm">로그인</a>
+                    <a href="/member/Login">로그인</a>
                 </div>
                 <div class="nav-item ms-2 ms-md-3" id="companyLogin">
                     <a href="/company">기업로그인</a>
@@ -94,7 +94,6 @@
                             <li><a class="dropdown-item" href="/member/letter">내 이력서</a></li>
                             <li><a class="dropdown-item" href="/member/resume">내 자소서</a></li>
                             <li><a class="dropdown-item" href="#">프리랜서</a></li>
-                            <li><a class="dropdown-item" href="#">채팅방</a></li>
                         </ul>
                     </li>
 
