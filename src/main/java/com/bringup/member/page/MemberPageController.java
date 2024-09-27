@@ -1,7 +1,9 @@
 package com.bringup.member.page;
 
 
+import com.bringup.common.security.service.UserDetailsImpl;
 import lombok.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,17 @@ public class MemberPageController {
 
     @GetMapping("/main")
     public String mainPage(){return "common/main/main";}
+
+    @GetMapping("/userMain")
+    public String userMain(@AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        if (userDetails == null) {
+            return "redirect:/member/userLoginForm"; // 인증되지 않은 경우 로그인 페이지로 리다이렉트
+        }
+        return "member/user/userMain";
+    }
+    @GetMapping("/join")
+    public String joinProcess() {return "member/user/userJoin";} // 회원가입 완료 후 리다이렉트할 페이지}
 
     @GetMapping()
     public String companyPage(){

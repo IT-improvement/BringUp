@@ -4,6 +4,7 @@ import com.bringup.common.image.ImageService;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.main.dto.CompanyImageDto;
+import com.bringup.member.main.dto.MainRecruitmentDto;
 import com.bringup.member.main.dto.UserAdvertisementResponseDto;
 import com.bringup.member.main.dto.MemberInfoDto;
 import com.bringup.member.main.service.MainService;
@@ -42,17 +43,24 @@ public class MainController {
         return ResponseEntity.ok(advertisements);
     }
 
-        @GetMapping("/recruitmentImage")
-        public ResponseEntity<List<CompanyImageDto>> getActiveCompanyImages() {
-            List<CompanyImageDto> companyImages = mainService.getActiveCompanyImages();
-            return ResponseEntity.ok(companyImages);
+    @GetMapping("/recruitmentImage")
+    public ResponseEntity<List<CompanyImageDto>> getActiveCompanyImages() {
+        List<CompanyImageDto> companyImages = mainService.getActiveCompanyImages();
+        return ResponseEntity.ok(companyImages);
     }
 
-        @GetMapping("/ad3Advertisements")
-        public ResponseEntity<List<UserAdvertisementResponseDto>> getAd3Advertisements() {
-            List<UserAdvertisementResponseDto> ad3Advertisements = mainService.getAd3Advertisements();
-             return ResponseEntity.ok(ad3Advertisements);
+    @GetMapping("/ad3Advertisements")
+    public ResponseEntity<List<UserAdvertisementResponseDto>> getAd3Advertisements() {
+        List<UserAdvertisementResponseDto> ad3Advertisements = mainService.getAd3Advertisements();
+        return ResponseEntity.ok(ad3Advertisements);
     }
+
+    @GetMapping("/recruitment")
+    public ResponseEntity<List<MainRecruitmentDto>> getMainRecruitment() {
+        List<MainRecruitmentDto> getMainRecruitment = mainService.getMainRecruitment();
+        return ResponseEntity.ok(getMainRecruitment);
+    }
+
 
 
 }
