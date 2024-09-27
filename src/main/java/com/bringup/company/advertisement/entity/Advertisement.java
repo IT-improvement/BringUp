@@ -25,10 +25,6 @@ public class Advertisement {
     @Column(name = "view_count")
     private Integer count = 0;
 
-    //현재 광고 디비에 이 컬럼 없음 이거 삭제하면 에러 사라짐
-    @Column(name = "type")
-    private String type;
-
     @Column(name = "displaytime")
     private String displayTime; // 년-월-일 형태로 저장
 
