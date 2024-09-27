@@ -531,29 +531,31 @@
 		<!-- 공고 리스트 -->
 		<div class="grid-container">
 			<div class="grid-item">
-				<img src="https://via.placeholder.com/300x150" alt="공고 이미지">
+				<img src="" alt="공고 이미지">
 				<div class="content">
 					<h4>공고 제목</h4>
-					<p>기업명</p>
-					<p>직무 정보</p>
+					<p>기업명 : </p>
+					<p>고용형태 : </p>
+					<p>직무 정보 : </p>
 					<div class="tags">
-						<span>Kubernetes</span>
-						<span>Python</span>
-						<span>미들 (4-8년)</span>
+						<span></span>
+						<span></span>
+						<span></span>
 					</div>
 					<a href="#" class="button">자세히 보기</a>
 				</div>
 			</div>
 			<div class="grid-item">
-				<img src="https://via.placeholder.com/300x150" alt="공고 이미지">
+				<img src="" alt="공고 이미지">
 				<div class="content">
 					<h4>공고 제목</h4>
-					<p>기업명</p>
-					<p>직무 정보</p>
+					<p>기업명 : </p>
+					<p>고용형태 : </p>
+					<p>직무 정보 : </p>
 					<div class="tags">
-						<span>HTML/CSS</span>
-						<span>JavaScript</span>
-						<span>신입/경력</span>
+						<span></span>
+						<span></span>
+						<span></span>
 					</div>
 					<a href="#" class="button">자세히 보기</a>
 				</div>
@@ -871,11 +873,98 @@
 				console.warn(`label index ${labelIndex}에 대한 이미지 데이터가 존재하지 않습니다.`);
 			}
 		}
-
 		// 페이지 로드 시 회사 이미지 데이터를 가져옴
 		fetchCompanyImages();
 
+		// 공고 데이터를 가져오는 함수 (공고와 회사 이미지)
+		function fetchRecruitmentData() {
+			fetch('/main/recruitment', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+					.then(response => {
+						if (!response.ok) {
+							throw new Error(`공고 데이터를 불러오지 못했습니다: ${response.status}`);
+						}
+						return response.json();
+					})
+					.then(data => {
+						console.log('받은 공고 데이터:', data); // 데이터 확인용 로그 추가
+						displayRecruitmentData(data);
+					})
+					.catch(error => {
+						console.error('공고 데이터를 가져오는 중 오류 발생:', error);
+					});
+		}
 
+		const gridContainer = document.querySelector('.grid-container');
+		function displayRecruitmentData(data) {
+			gridContainer.innerHTML = ''; // 기존 내용을 비우고 새로 추가
+
+			data.forEach(item => {
+				const gridItem = document.createElement('div');
+				gridItem.className = 'grid-item';
+
+				// 이미지 설정
+				const img = document.createElement('img');
+				img.src = item.companyImg.startsWith('/image/') ? item.companyImg : `http://localhost:8080${item.companyImg}`;
+				img.alt = '공고 이미지';
+				img.onerror = function() {
+					img.src = 'https://via.placeholder.com/150'; // 기본 이미지로 대체
+					console.error('이미지 로드 오류 발생:', img.src);
+				};
+
+				// 텍스트 컨텐츠 설정
+				const content = document.createElement('div');
+				content.className = 'content';
+
+				const title = document.createElement('h4');
+				title.textContent = item.recruitmentTitle; // 공고 제목
+
+				const companyName = document.createElement('p');
+				companyName.textContent = `기업명: `+ item.companyName; // 기업명 바인딩
+
+				const recruitmentType = document.createElement('p');
+				recruitmentType.textContent = `고용형태: `+ item.recruitmentType; // 고용형태 바인딩
+
+				const jobInfo = document.createElement('p');
+				jobInfo.textContent = `직무 정보: `+ item.category; // 직무 정보 바인딩
+
+				const tags = document.createElement('div');
+				tags.className = 'tags';
+				const skillTag = document.createElement('span');
+				skillTag.textContent = item.skill;
+				tags.appendChild(skillTag);
+
+				// 자세히 보기 버튼
+				const detailButton = document.createElement('a');
+				detailButton.href = `#`; // 클릭 시 이동할 링크 설정
+				detailButton.className = 'button';
+				detailButton.textContent = '자세히 보기';
+
+				// 요소 추가
+				content.appendChild(title);
+				content.appendChild(companyName); // 기업명 추가
+				content.appendChild(recruitmentType); // 고용형태 추가
+				content.appendChild(jobInfo); // 직무 정보 추가
+				content.appendChild(tags);
+				content.appendChild(detailButton);
+
+				gridItem.appendChild(img);
+				gridItem.appendChild(content);
+
+				gridContainer.appendChild(gridItem);
+			});
+		}
+
+
+		// 페이지 로드 시 회사 이미지 데이터 가져오기 (광고 2용)
+		fetchCompanyImages();
+
+		// 페이지 로드 시 공고 데이터 가져오기 (grid-item용)
+		fetchRecruitmentData();
 
 </script>
 

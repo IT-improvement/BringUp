@@ -1,4 +1,4 @@
-package com.bringup.member.notice.dto.response;
+package com.bringup.member.recruitment.dto.response;
 
 import com.bringup.common.enums.StatusType;
 import lombok.Getter;

@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Integer> {
     Optional<Advertisement> findByRecruitmentIndex(int recruitmentIndex);
     Optional<Advertisement> findByAdvertisementIndex(int advertisementIndex);
-    List<Advertisement> findByStatusAndType(StatusType status, String type);
+    List<Advertisement> findAllByStatus(StatusType status);
 
 }

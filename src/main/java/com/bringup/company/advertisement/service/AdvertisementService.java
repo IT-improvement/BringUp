@@ -65,7 +65,6 @@ public class AdvertisementService {
 
         advertisement.setRecruitmentIndex(requestDto.getRecruitmentIndex());
         advertisement.setAdvertisementImage(imageUrl);
-        advertisement.setType(requestDto.getType());
         advertisement.setDisplayTime(requestDto.getDisplayTime());
         advertisement.setStatus(StatusType.CRT_WAIT);
 
@@ -186,7 +185,6 @@ public class AdvertisementService {
                 .advertisementIndex(advertisement.getAdvertisementIndex())
                 .recruitmentIndex(advertisement.getRecruitmentIndex())
                 .advertisementImage(advertisement.getAdvertisementImage())
-                .type(advertisement.getType())
                 .displayTime(advertisement.getDisplayTime())
                 .status(advertisement.getStatus())
                 .build();

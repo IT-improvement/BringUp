@@ -25,9 +25,6 @@ public class Advertisement {
     @Column(name = "view_count")
     private Integer count = 0;
 
-    @Column(name = "type")
-    private String type;
-
     @Column(name = "displaytime")
     private String displayTime; // 년-월-일 형태로 저장
 
