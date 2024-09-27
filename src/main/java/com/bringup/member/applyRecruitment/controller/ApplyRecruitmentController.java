@@ -36,6 +36,7 @@ public class ApplyRecruitmentController {
         }
     }
 
+    @GetMapping("/mem/applyRecruitment/{recruitment_index}")
     public ResponseEntity<BfResponse<?>> addApplyRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int recruitmentIndex){
         applyRecruitmentService.addApplyRecruitment(userDetails, recruitmentIndex);
         return ResponseEntity.ok(new BfResponse<>("이력서 지원 완료"));
