@@ -146,7 +146,9 @@ public class SpringSecurityConfig {
                 antMatcher("/recruitment/**"),
                 antMatcher("/main/image/**"),
                 antMatcher("/main/advertisements"),
-                antMatcher("/main/recruitmentImage")
+                antMatcher("/main/recruitmentImage"),
+                antMatcher("/api/**"),
+                antMatcher("/login/**")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
@@ -173,8 +175,6 @@ public class SpringSecurityConfig {
                 antMatcher("/com/headhunt/**"),
 
                 antMatcher("/membership/**"), // 사용자 멤버십
-
-                antMatcher("/kakao/**"),
 
                 antMatcher("/member/name"),
 
