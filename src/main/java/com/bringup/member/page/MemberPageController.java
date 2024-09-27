@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/member")
 public class MemberPageController {
 
-    @GetMapping("/userLoginForm")
-    public String loginP(){return "member/user/login";}
+    @GetMapping("/Login")
+    public String loginPage(){return "member/user/login";}
 
     @GetMapping("/main")
     public String mainPage(){return "common/main/main";}

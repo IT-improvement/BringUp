@@ -13,7 +13,6 @@
     <!-- 다크 모드 -->
     <script src="/resources/script/common/darkmode/darkmode.js"></script>
 
-    <script src="/resources/script/common/notification/notification.js"></script>
     <!-- 파비콘 -->
     <link rel="shortcut icon" href="/resources/style/common/images/favicon.ico">
 

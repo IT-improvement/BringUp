@@ -1,150 +1,62 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const logoutButton = document.getElementById('logoutButton');
-    const notificationButton = document.querySelector('.btn-round'); // 알림 버튼
-    const notifBadge = document.querySelector('.notif-badge'); // 알림 배지 (blink 효과)
+const profileDropdownElement = document.getElementById('profileDropdown');
+const loginElement = document.getElementById('login');
+const memberNameSpan = document.getElementById('memberNameSpan');
+const memberNameLink = document.getElementById('memberNameLink');
+const accessToken = localStorage.getItem('accessToken');
+
+// 전역 함수로 logout 정의
+function logout() {
+    localStorage.removeItem('accessToken');
+    updateUIForLoggedOutUser();
+    window.location.href = '/';
+}
+
+// 페이지 로드 시 실행되는 함수
+function checkAccessToken() {
     const accessToken = localStorage.getItem('accessToken');
-
-    // 로그아웃 처리
-    if (logoutButton) {
-        logoutButton.addEventListener('click', function(event) {
-            event.preventDefault();
-            localStorage.removeItem('accessToken');
-            window.location.href = '/'; // 로그아웃 후 메인 페이지로 이동
-        });
+    console.log('Checking accessToken:', accessToken);
+    if (accessToken) {
+        // accessToken이 있는 경우 (로그인 상태)
+        updateUIForLoggedInUser();
+    } else {
+        // accessToken이 없는 경우 (로그아웃 상태)
+        updateUIForLoggedOutUser();
     }
+}
 
-    // 알림 버튼과 배지 제거 함수
-    function removeNotificationElements() {
-        if (notificationButton) {
-            notificationButton.style.display = 'none'; // 알림 버튼 숨기기
-        }
-        if (notifBadge) {
-            notifBadge.style.display = 'none'; // 알림 배지 숨기기
-        }
-    }
-
-    // 알림 버튼과 배지 추가 함수 (로그인 상태일 때만 표시)
-    function showNotificationElements() {
-        if (notificationButton) {
-            notificationButton.style.display = 'inline-block'; // 알림 버튼 표시
-        }
-        if (notifBadge) {
-            notifBadge.style.display = 'inline-block'; // 알림 배지 표시
-        }
-    }
-
-    // 토큰이 없으면 비회원 상태로 설정하고, 알림 버튼 및 배지 제거
-    if (!accessToken) {
-        console.log('Access Token이 없으므로 비회원 상태로 설정합니다.');
-        updateMemberName('비회원');
-        removeNotificationElements();
-        return; // 토큰이 없으므로 더 이상 서버 요청을 하지 않음
-    }
-
-    // 토큰이 있으면 알림 버튼 및 배지 활성화
-    showNotificationElements();
-
-    // 회원 이름 업데이트 함수
-    function updateMemberName(memberName) {
-        const memberNameSpan = document.getElementById('memberNameSpan');
-        const memberNameLink = document.getElementById('memberNameLink');
-
-        if (memberNameSpan) {
-            memberNameSpan.textContent = memberName;
-            memberNameSpan.style.display = 'inline'; // 데이터 로드 후 표시
-        }
-        if (memberNameLink) {
-            memberNameLink.textContent = memberName;
-        }
-    }
-
-    // 회원 이름을 가져오기 위한 API 요청
+// 로그인 상태 UI 업데이트
+function updateUIForLoggedInUser() {
+    loginElement.classList.add('d-none');
+    loginElement.classList.remove('d-flex');
+    profileDropdownElement.classList.remove('d-none');
+    profileDropdownElement.classList.add('d-flex');
+    
     fetch('/member/name', {
         method: 'POST',
         headers: {
-            'Authorization': 'Bearer ' + accessToken,
-            'Content-Type': 'application/json'
+            'Authorization': `Bearer ${accessToken}`
         }
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.data) {
-                updateMemberName(data.data); // 회원 이름 업데이트
-            } else {
-                console.error('멤버 이름 데이터가 올바르지 않습니다:', data);
-                updateMemberName('알 수 없음'); // 오류 시 기본값 설정
-            }
-        })
-        .catch(error => {
-            console.error('멤버 이름을 가져오는 데 실패했습니다:', error);
-            updateMemberName('알 수 없음'); // 오류 시 기본값 설정
-        });
-
-    // 테마 모드 전환 기능 이하 기존 코드
-    const lightModeBtn = document.getElementById('lightMode');
-    const darkModeBtn = document.getElementById('darkMode');
-
-    function setTheme(themeName) {
-        localStorage.setItem('theme', themeName);
-        document.documentElement.setAttribute('data-bs-theme', themeName);
-    }
-
-    function toggleTheme() {
-        if (localStorage.getItem('theme') === 'dark') {
-            setTheme('light');
-            lightModeBtn.checked = true;
-        } else {
-            setTheme('dark');
-            darkModeBtn.checked = true;
-        }
-    }
-
-    (function () {
-        if (localStorage.getItem('theme') === 'dark') {
-            setTheme('dark');
-            darkModeBtn.checked = true;
-        } else {
-            setTheme('light');
-            lightModeBtn.checked = true;
-        }
-    })();
-
-    lightModeBtn.addEventListener('change', () => setTheme('light'));
-    darkModeBtn.addEventListener('change', () => setTheme('dark'));
-});
-
-// 기존의 테마 관련 함수들 유지
-function getCurrentTheme() {
-    return document.documentElement.getAttribute('data-bs-theme');
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        const userName = data.data;
+        memberNameSpan.textContent = userName;
+        memberNameSpan.style.display = 'inline';
+        memberNameLink.textContent = userName;
+    })
+    .catch(error => console.error('Error fetching user name:', error));
 }
 
-function setNotificationButtonStyle(element) {
-    const currentTheme = getCurrentTheme();
-    if (currentTheme === 'dark') {
-        element.style.backgroundColor = '#192233';
-    } else {
-        element.style.backgroundColor = '#E8F0FC';
-    }
+// 로그아웃 상태 UI 업데이트
+function updateUIForLoggedOutUser() {
+    loginElement.classList.remove('d-none');
+    loginElement.classList.add('d-flex');
+    profileDropdownElement.classList.add('d-none');
+    profileDropdownElement.classList.remove('d-flex');
+    memberNameSpan.style.display = 'none';
 }
 
-function resetNotificationButtonStyle(element) {
-    element.style.backgroundColor = '';
-}
+// 페이지 로드 시 checkAccessToken 함수 실행
+document.addEventListener('DOMContentLoaded', checkAccessToken);
 
-document.addEventListener('themeChanged', function(e) {
-    const notificationButton = document.querySelector('.btn-round');
-    if (notificationButton && notificationButton.matches(':hover')) {
-        setNotificationButtonStyle(notificationButton);
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const navbarToggler = document.querySelector('.navbar-toggler');
-    const navbarCollapse = document.querySelector('.navbar-collapse');
-
-    if (navbarToggler && navbarCollapse) {
-        navbarToggler.addEventListener('click', function() {
-            navbarCollapse.classList.toggle('show');
-        });
-    }
-});

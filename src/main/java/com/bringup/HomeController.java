@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
     @GetMapping("")
     public String main(){
-        return "common/main_ex";
+        return "member/user/userMain";
     }
 }
