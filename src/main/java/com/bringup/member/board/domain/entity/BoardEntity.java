@@ -30,13 +30,4 @@ public class BoardEntity extends TimeStamped{
         this.boardImage = boardRequestDto.getBoardImage();
     }
 
-    public BoardEntity() {
-    }
-
-    public void updatePost(BoardRequestDto boardRequestDto){
-        this.userEmail = boardRequestDto.getUserEmail();
-        this.title = boardRequestDto.getTitle();
-        this.content = boardRequestDto.getContent();
-        this.boardImage = boardRequestDto.getBoardImage();
-    }
 }
