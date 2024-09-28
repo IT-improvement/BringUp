@@ -35,7 +35,7 @@ public class BoardService {
         );
     }
 
-    @Transactional
+  /*  @Transactional
     public BoardResponseDto updatePost(int userIndex, BoardRequestDto boardRequestDto) throws Exception{
         BoardEntity boardEntity = boardRepository.findById(userIndex).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
@@ -45,7 +45,7 @@ public class BoardService {
         }
         boardEntity.updatePost(boardRequestDto);
         return new BoardResponseDto(boardEntity);
-    }
+    }*/
 
     @Transactional
     public SuccessResponseDto deletePost(int userIndex, BoardRequestDto boardRequestDto) throws Exception{

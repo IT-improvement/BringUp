@@ -30,10 +30,12 @@ public class BoardController {
         return boardService.getPost(userIndex);
     }
 
+/*
     @PutMapping("/post/{userIndex}")
     public BoardResponseDto updatePost(@PathVariable int userIndex, @RequestBody BoardRequestDto boardRequestDto) throws Exception{
         return boardService.updatePost(userIndex, boardRequestDto);
     }
+*/
 
     @DeleteMapping("/post/{userIndex}")
     public SuccessResponseDto deletePost(@PathVariable int userIndex, @RequestBody BoardRequestDto boardRequestDto) throws Exception{
