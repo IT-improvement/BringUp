@@ -3,15 +3,10 @@ package com.bringup.member.main.controller;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
-import com.bringup.member.main.dto.CompanyImageDto;
-import com.bringup.member.main.dto.MainRecruitmentDto;
-import com.bringup.member.main.dto.UserAdvertisementResponseDto;
-import com.bringup.member.main.dto.MemberInfoDto;
+import com.bringup.member.main.dto.*;
+
 import com.bringup.member.main.service.MainService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -36,26 +31,24 @@ public class MainController {
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, memberInfoDto));
     }
 
-    @GetMapping("/advertisements")
-    public ResponseEntity<List<UserAdvertisementResponseDto>> getAdvertisements() {
-        // 서비스에서 광고 데이터를 받아 응답으로 반환
-        List<UserAdvertisementResponseDto> advertisements = mainService.getRandomActiveAdvertisements();
+    @GetMapping("/premium")
+    public ResponseEntity<List<PremiumAdvertisementDto>> getAdvertisements() {
+        List<PremiumAdvertisementDto> advertisements = mainService.getPremiumAdvertisement();
         return ResponseEntity.ok(advertisements);
     }
 
-    @GetMapping("/recruitmentImage")
-    public ResponseEntity<List<CompanyImageDto>> getActiveCompanyImages() {
-        List<CompanyImageDto> companyImages = mainService.getActiveCompanyImages();
-        return ResponseEntity.ok(companyImages);
+    @GetMapping("/main")
+    public ResponseEntity<List<MainAdvertisementDto>> getActiveCompanyImages() {
+        List<MainAdvertisementDto>MainAdvertisementImage= mainService.getMainAdvertisement();
+        return ResponseEntity.ok(MainAdvertisementImage);
     }
 
-    @GetMapping("/ad3Advertisements")
-    public ResponseEntity<List<UserAdvertisementResponseDto>> getAd3Advertisements() {
-        List<UserAdvertisementResponseDto> ad3Advertisements = mainService.getAd3Advertisements();
+    @GetMapping("/banner")
+    public ResponseEntity<List<BannerAdvertisementDto>> getAd3Advertisements() {
+        List<BannerAdvertisementDto> ad3Advertisements = mainService.getBannerAdvertisement();
         return ResponseEntity.ok(ad3Advertisements);
     }
-
-    @GetMapping("/recruitment")
+    @GetMapping("/list")
     public ResponseEntity<List<MainRecruitmentDto>> getMainRecruitment() {
         List<MainRecruitmentDto> getMainRecruitment = mainService.getMainRecruitment();
         return ResponseEntity.ok(getMainRecruitment);
