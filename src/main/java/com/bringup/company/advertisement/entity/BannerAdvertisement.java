@@ -27,7 +27,8 @@ public class BannerAdvertisement {
     @Column(name = "price", nullable = false)
     private int price;
 
-    @Column(name = "has_priority", nullable = false)
-    private boolean hasPriority;
+    @Column(name = "banner_image", nullable = false)
+    private String bannerImage;
+
 }
 

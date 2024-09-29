@@ -39,5 +39,10 @@ public class PremiumAdvertisement {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate; // 종료 날짜 (start_date와 동일)
 
+    @Column(name = "premium_image", nullable = false)
+    private String premiumImage;
+
+
+
     // getters and setters
 }

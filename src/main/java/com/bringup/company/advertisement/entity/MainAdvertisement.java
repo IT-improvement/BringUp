@@ -29,4 +29,7 @@ public class MainAdvertisement {
 
     @Column(name = "discount_rate", precision = 5, scale = 2)
     private BigDecimal discountRate;
+
+    @Column(name = "main_image", nullable = false)
+    private String mainImage;
 }
