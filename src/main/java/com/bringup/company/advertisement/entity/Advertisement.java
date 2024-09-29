@@ -32,4 +32,17 @@ public class Advertisement {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private StatusType status = StatusType.ACTIVE;
+
+    // 관계 설정 (각각의 광고 유형과 연관됨)
+    @OneToOne(mappedBy = "advertisement")
+    private PremiumAdvertisement premiumAdvertisement;
+
+    @OneToOne(mappedBy = "advertisement")
+    private MainAdvertisement mainAdvertisement;
+
+    @OneToOne(mappedBy = "advertisement")
+    private BannerAdvertisement bannerAdvertisement;
+
+    @OneToOne(mappedBy = "advertisement")
+    private AnnouncementAdvertisement announcementAdvertisement;
 }
