@@ -57,7 +57,6 @@
             $("#before-login").hide();
             $("#after-login").show();
             
-            // 사용자 정보 가져오기 (예시)
             fetch('/member/name', {
                 method: 'POST',
                 headers: {
@@ -78,16 +77,16 @@
             $("#after-login").hide();
         }
 
-		// 이미지 파일 경로 설정
+		
         fetch('/main/advertisements', {
             method: 'GET',
         })
         .then(response => response.json())
         .then(data => {
-            console.log("프리미엄 광고 이미지 요청 : "+data);
+            console.log("프리미엄 광고 이미지 요청 결과:", data);
         })
-        .catch(() => {
-            console.log("광고 이미지를 가져오는 중 오류가 발생했습니다.");
+        .catch((error) => {
+            console.error("광고 이미지를 가져오는 중 오류가 발생했습니다:", error);
         });
 
 
@@ -96,7 +95,7 @@
         })
         .then(response => response.json())
         .then(data => {
-            console.log("메인 광고 이미지 요청 : "+data);
+            console.log("메인 광고 이미지 요청 : ",data);
         })
         .catch(() => {
             console.log("광고 이미지를 가져오는 중 오류가 발생했습니다.");
@@ -107,7 +106,7 @@
         })
         .then(response => response.json())
         .then(data => {
-            console.log("배너 광고 이미지 요청 : "+data);
+            console.log("배너 광고 이미지 요청 : ",data);
         })
         .catch(() => {
             console.log("광고 이미지를 가져오는 중 오류가 발생했습니다.");
@@ -119,7 +118,7 @@
         })
         .then(response => response.json())
         .then(data => {
-            console.log("메인 공고 리스트 요청 : "+data);
+            console.log("메인 공고 리스트 요청 : ",data);
         })
         .catch(() => {
             console.log("채용 공고 이미지를 가져오는 중 오류가 발생했습니다.");
