@@ -586,7 +586,7 @@
 
 			// 광고 데이터를 가져오는 함수 (ad1용)
 			function fetchAdvertisements() {
-				fetch('/main/advertisements', {
+				fetch('/main/premium', {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json'
@@ -650,9 +650,9 @@
 				displayAd1Image(currentIndex);
 			});
 
-			// 광고 3 데이터를 가져오는 함수
+
 			function fetchAd3Images() {
-				fetch('/main/ad3Advertisements', { // ad3 전용 API 사용
+				fetch('/main/banner', {
 					method: 'GET',
 					headers: {
 						'Content-Type': 'application/json'
@@ -804,9 +804,9 @@
 		const labels = document.querySelectorAll('.label');
 		let companyImages = []; // 회사 이미지 데이터를 저장할 배열
 
-		// 서버에서 회사 이미지 데이터를 가져오는 함수
+
 		function fetchCompanyImages() {
-			fetch('/main/recruitmentImage')
+			fetch('/main/main')
 					.then(response => {
 						if (!response.ok) {
 							throw new Error(`이미지를 불러오지 못했습니다: ${response.status}`);
@@ -878,7 +878,7 @@
 
 		// 공고 데이터를 가져오는 함수 (공고와 회사 이미지)
 		function fetchRecruitmentData() {
-			fetch('/main/recruitment', {
+			fetch('/main/list', {
 				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json'
