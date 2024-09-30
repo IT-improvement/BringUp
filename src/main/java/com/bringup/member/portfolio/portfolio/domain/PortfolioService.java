@@ -1,5 +1,6 @@
 package com.bringup.member.portfolio.portfolio.domain;
 
+import com.bringup.member.portfolio.portfolio.dto.PortfolioInsertResponseDto;
 import com.bringup.member.portfolio.portfolio.dto.PortfolioReponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,5 +19,10 @@ public class PortfolioService {
         int userIndexInt = Integer.parseInt(userIndex);
         List<PortfolioEntity> list = portfolioRepository.findByUserIndex(userIndexInt);
         return PortfolioReponseDto.success(list);
+    }
+
+    public ResponseEntity<? super PortfolioInsertResponseDto> insertPortfolio(){
+
+        return PortfolioInsertResponseDto.success();
     }
 }
