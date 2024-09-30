@@ -27,9 +27,6 @@ public class KakaoService {
         KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
     }
 
-    public void login(String uri){
-        WebClient.create(uri);
-    }
     public String getAccessTokenFromKakao(String code) {
 
         KakaoResponseDto kakaoTokenResponseDto = WebClient.create(KAUTH_TOKEN_URL_HOST).post()
