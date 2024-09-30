@@ -105,4 +105,9 @@ public class MemberPageController {
         return "member/user/recruitment/detail";
     }
 
+    @GetMapping("/freelancer")
+    public String freelancer() {
+        return "member/user/career/freelancer";
+    }
+
 }
