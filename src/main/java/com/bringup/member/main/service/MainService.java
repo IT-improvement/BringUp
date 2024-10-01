@@ -17,6 +17,7 @@ import com.bringup.member.main.dto.*;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,8 @@ public class MainService {
     private final BannerAdvertisementRepository bannerAdvertisementRepository;
     private final MainAdvertisementRepository mainAdvertisementRepository;
 
+    private int currentAdIndex = 0; // 현재 광고 인덱스를 관리
+
     public MemberInfoDto getMemberInfo(UserDetailsImpl userDetails) {
         // userDetails에서 이메일을 가져와서 해당 이메일로 유저 정보를 조회
         UserEntity userEntity = userRepository.findByUserEmail(userDetails.getUsername())
@@ -50,39 +53,45 @@ public class MainService {
                 .build();
     }
 
-    //프리미엄 광고 사진가져오는 메서드
-    public List<PremiumAdvertisementDto> getPremiumAdvertisement() {
+    // 선착순으로 매진되지 않은 광고 하나를 가져오는 메서드
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * ?")  // 매일 자정에 실행
+    public PremiumAdvertisementDto getSinglePremiumAdvertisement() {
         // 현재 시간 가져오기
         LocalTime now = LocalTime.now();
+        LocalDate today = LocalDate.now();
 
-        // 모든 프리미엄 광고를 가져와서 현재 시간과 일치하는 광고 필터링
-        List<PremiumAdvertisement> premiumAdvertisements = premiumAdvertisementRepository.findAll();
-
-        List<PremiumAdvertisementDto> result = new ArrayList<>();
-        for (PremiumAdvertisement premiumAd : premiumAdvertisements) {
-            // 엔티티 정보 각 변수에 할당
-            int premiumId = premiumAd.getPremiumId();
-            String timeSlot = premiumAd.getTimeSlot();
-            LocalTime startTime = LocalTime.parse(timeSlot.split(" ~ ")[0], DateTimeFormatter.ofPattern("HH:mm"));
-            LocalTime endTime = LocalTime.parse(timeSlot.split(" ~ ")[1], DateTimeFormatter.ofPattern("HH:mm"));
-            LocalDate startDate = premiumAd.getStartDate();
-            LocalDate endDate = premiumAd.getEndDate();
-            String premiumImage = premiumAd.getPremiumImage();
-
-            // 현재 시간과 광고 시간대가 일치하는지 확인
-            if (now.isAfter(startTime) && now.isBefore(endTime)) {
-                // DTO로 변환하여 리스트에 추가
-                PremiumAdvertisementDto dto = new PremiumAdvertisementDto();
-                        dto.setPremiumId(premiumId);
-                        dto.setTimeSlot(timeSlot);
-                        dto.setStartDate(startDate);
-                        dto.setEndDate(endDate);
-                        dto.setPremiumImage(premiumImage);
-                result.add(dto);
-            }
+        // 1. 날짜가 지난 광고를 매진 처리 (is_sold_out = 0)
+        List<PremiumAdvertisement> expiredAdvertisements = premiumAdvertisementRepository.findAllByEndDateBefore(today);
+        for (PremiumAdvertisement ad : expiredAdvertisements) {
+            ad.setSoldOut(false); // 매진 처리 (0)
+            premiumAdvertisementRepository.save(ad);  // 상태 업데이트 저장
         }
 
-        return result;
+        // 2. 매진되지 않은 광고만 가져옴 (is_sold_out = 1)
+        List<PremiumAdvertisement> availableAds = premiumAdvertisementRepository.findAllByIsSoldOutTrueOrderByPremiumIdAsc();
+
+        if (availableAds.isEmpty()) {
+            return null; // 매진되지 않은 광고가 없으면 null 반환
+        }
+
+        // 3. 선착순으로 하나의 광고만 선택
+        PremiumAdvertisement premiumAd = availableAds.get(currentAdIndex);
+
+        // 다음 요청 시 다음 광고가 나오도록 인덱스 증가
+        currentAdIndex = (currentAdIndex + 1) % availableAds.size();
+
+        // 4. DTO로 변환하여 반환
+        PremiumAdvertisementDto dto = new PremiumAdvertisementDto();
+        dto.setPremiumId(premiumAd.getPremiumId());
+        dto.setAdvertisement(premiumAd.getAdvertisement().getAdvertisementIndex());
+        dto.setRecruitmentIndex(premiumAd.getAdvertisement().getRecruitmentIndex());
+        dto.setTimeSlot(premiumAd.getTimeSlot());
+        dto.setStartDate(premiumAd.getStartDate());
+        dto.setEndDate(premiumAd.getEndDate());
+        dto.setPremiumImage(premiumAd.getPremiumImage());
+
+        return dto;
     }
 
     // 선착순으로 먼저 신청한 광고 6개를 가져오는 메서드
@@ -96,11 +105,14 @@ public class MainService {
             // 필요한 값들을 각 변수에 저장
             int mainId = ad.getMainId();
             String mainImage = ad.getMainImage();
+            int recruitmentIndex = ad.getAdvertisement().getRecruitmentIndex();  // 모집 인덱스
 
             // DTO에 변수 값을 할당하여 추가
             MainAdvertisementDto dto = new MainAdvertisementDto();
             dto.setMainId(mainId);
             dto.setMainImage(mainImage);
+            dto.setRecruitmentIndex(recruitmentIndex);  // 모집 인덱스 추가
+
 
             result.add(dto);
         }
@@ -126,6 +138,7 @@ public class MainService {
             dto.setBannerId(bannerId);
             dto.setBannerImage(bannerImage);
             dto.setExposureDays(exposureDays);
+
 
 
             result.add(dto);
