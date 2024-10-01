@@ -58,7 +58,7 @@
 <body class="d-flex flex-column min-vh-100">
 	<div class="container" style="max-width: 1260px;">
 		<main class="flex-grow-1">
-			<p>지원한 공고</p>
+			<p>프리랜서</p>
 		</main>
 	</div>
 </body>

@@ -316,7 +316,7 @@
 
 								// 상세보기 링크 생성
 								const linkElement = document.createElement('a');
-								linkElement.href = `/recruitment/details/${recruitment.recruitmentIndex}`;
+								linkElement.href = `/member/recruitment/details/${"${recruitment.recruitmentIndex}"}`;
 								linkElement.className = 'btn btn-outline-primary';
 								linkElement.textContent = '상세 내용';
 

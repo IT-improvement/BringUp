@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!-- =======================
 헤더 시작 -->
 <header class="header-static border-bottom" style="z-index: 9999;">
@@ -19,19 +20,10 @@
                     </a>
                     <!-- 프로필 드롭다운 메뉴 -->
                     <ul class="dropdown-menu dropdown-menu-end shadow pt-3" aria-labelledby="profileDropdownToggle" style="margin-top: 0.5rem;">
-                        <!-- 프로필 정보 -->
-                        <li class="px-3">
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <a class="h6 mt-2 mt-sm-0" href="#"><span id="memberNameLink">로딩 중...</span></a>
-                                </div>
-                            </div>
-                            <hr>
-                        </li>
                         <!-- 링크 -->
-                        <li><a class="dropdown-item" href="/member/memberProfile"><i class="bi bi-person fa-fw me-2"></i>프로필 수정</a></li>
+                        <li><a class="dropdown-item" href="/member/memberProfile"><i class="bi bi-person fa-fw me-2"></i>프로필</a></li>
                         <li><a class="dropdown-item" href="#"><i class="bi bi-gear fa-fw me-2"></i>계정 설정</a></li>
-                        <li><a class="dropdown-item" href="/" onclick="logout()"><i class="bi bi-power fa-fw me-2"></i>로그아웃</a></li>
+                        <li><a class="dropdown-item" href="/" id="logoutButton"><i class="bi bi-power fa-fw me-2"></i>로그아웃</a></li>
                         <li class="dropdown-divider mb-2"></li>
                         <li>
                             <!-- 다크 모드 버튼 수정 -->
@@ -93,7 +85,7 @@
                             <li><a class="dropdown-item" href="/member/potofolio">내 포토폴리오</a></li>
                             <li><a class="dropdown-item" href="/member/letter">내 이력서</a></li>
                             <li><a class="dropdown-item" href="/member/resume">내 자소서</a></li>
-                            <li><a class="dropdown-item" href="#">프리랜서</a></li>
+                            <li><a class="dropdown-item" href="/member/freelancer">프리랜서</a></li>
                         </ul>
                     </li>
 
