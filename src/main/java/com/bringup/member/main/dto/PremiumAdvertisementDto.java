@@ -11,6 +11,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PremiumAdvertisementDto {
     private int premiumId;
+    private int advertisement;
+    private int recruitmentIndex;  // 추가된 필드
     private String timeSlot;
     private LocalDate startDate;
     private LocalDate endDate;
