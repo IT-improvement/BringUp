@@ -1,20 +1,30 @@
 package com.bringup.member.board.domain.service;
 
+import com.bringup.common.image.ImageService;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.board.domain.entity.BoardEntity;
 import com.bringup.member.board.domain.repository.BoardRepository;
 import com.bringup.member.board.dto.request.BoardRequestDto;
 import com.bringup.member.board.dto.response.BoardResponseDto;
 import com.bringup.member.board.dto.response.SuccessResponseDto;
+import com.bringup.member.user.domain.entity.UserEntity;
+import com.bringup.member.user.domain.exception.MemberException;
+import com.bringup.member.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
 
 @Service
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
+    private final ImageService imageService;
 
     @Transactional(readOnly = true)
     public List<BoardResponseDto> getPosts(){
@@ -22,10 +32,18 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardResponseDto createPost(BoardRequestDto boardRequestDto){
-        BoardEntity boardEntity = new BoardEntity(boardRequestDto);
-        boardRepository.save(boardEntity);
-        return new BoardResponseDto(boardEntity);
+    public void createPost(UserDetailsImpl userDetails, BoardRequestDto boardRequestDto, MultipartFile[] boardImage){
+        UserEntity user = userRepository.findById(userDetails.getId())
+                .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
+
+        BoardEntity board = new BoardEntity();
+        board.setUserIndex(user.getUserIndex());
+        board.setUserEmail(user.getUserEmail());
+        board.setTitle(boardRequestDto.getTitle());
+        board.setContent(boardRequestDto.getContent());
+        board.setBoardImage(imageService.uploadImages(boardImage));
+
+        boardRepository.save(board);
     }
 
     @Transactional

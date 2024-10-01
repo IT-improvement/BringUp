@@ -11,6 +11,7 @@ import com.bringup.company.user.repository.CompanyRepository;
 import com.bringup.member.applyRecruitment.domain.entity.ApplyRecruitmentEntity;
 import com.bringup.member.applyRecruitment.domain.repository.ApplyRecruitmentRepository;
 import com.bringup.member.applyRecruitment.dto.response.ApplyRecruitmentResponseDto;
+import com.bringup.member.applyRecruitment.exception.ApplyRecruitmentException;
 import com.bringup.member.resume.domain.entity.CVEntity;
 import com.bringup.member.resume.domain.repository.CVRepository;
 import com.bringup.member.user.domain.entity.UserEntity;
@@ -23,6 +24,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.bringup.common.enums.ApplyRecruitmentErrorCode.NOT_FOUND_APPLY_RECRUITMENT;
+import static com.bringup.common.enums.ApplyRecruitmentErrorCode.NOT_FOUND_MEMBER_CV;
+import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_CV;
 import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
 
 @Service
@@ -34,9 +38,16 @@ public class ApplyRecruitmentService {
     private final CVRepository cvRepository;
     private final RecruitmentRepository recruitmentRepository;
 
-    public ApplyRecruitmentEntity getApplyRecruitment(UserDetailsImpl userDetails){
-        //applyRecruitmentRepository.findByCvIndexAndRecruitmentIndex(userDetails.);
-        return null;
+    public ApplyRecruitmentEntity getApplyRecruitment(UserDetailsImpl userDetails, int recruitmentIndex){
+        UserEntity user = userRepository.findById(userDetails.getId())
+                .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
+        CVEntity cv = cvRepository.findByUserIndex(user.getUserIndex())
+                .orElseThrow(()->new ApplyRecruitmentException(NOT_FOUND_MEMBER_CV));
+        Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(recruitmentIndex)
+                .orElseThrow(()->new ApplyRecruitmentException(NOT_FOUND_APPLY_RECRUITMENT));
+        ApplyRecruitmentEntity applyRecruitment = applyRecruitmentRepository.findByCvIndexAndRecruitmentIndex(cv.getCvIndex(), recruitment.getRecruitmentIndex())
+                .orElseThrow(()->new RuntimeException("지원한 공고가 없습니다."));
+        return applyRecruitment;
     }
 
 
@@ -48,7 +59,7 @@ public class ApplyRecruitmentService {
                 .orElseThrow(()->new RuntimeException("해당 유저의 이력서를 찾을 수 없습니다."));
 
         Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(recruitmentIndex)
-                .orElseThrow(()->new RuntimeException("해당 기업의 공고를 찾을 수 없습니다."));
+                .orElseThrow(()->new RuntimeException("해당 공고를 찾을 수 없습니다."));
 
         ApplyRecruitmentEntity applyRecruitmentEntity = new ApplyRecruitmentEntity();
         applyRecruitmentEntity.setCvIndex(cv.getCvIndex());
