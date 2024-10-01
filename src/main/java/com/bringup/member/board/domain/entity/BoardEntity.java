@@ -20,7 +20,7 @@ public class BoardEntity extends TimeStamped{
     private String content;
     private String boardImage;
     // JPA가 사용할 기본 생성자 (no-arg constructor)
-    protected BoardEntity() {
+    public BoardEntity() {
     }
     public BoardEntity(BoardRequestDto boardRequestDto){
         this.userEmail = boardRequestDto.getUserEmail();
