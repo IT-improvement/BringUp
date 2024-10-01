@@ -134,7 +134,6 @@ public class SpringSecurityConfig {
                 antMatcher("/member/**"),
 */
                 antMatcher("/ws/**"),
-
                 antMatcher("/github/**"),// 정적 리소스
                 antMatcher("/member/potofolio"),
                 antMatcher("/member/letter"),//이력서
@@ -142,13 +141,22 @@ public class SpringSecurityConfig {
                 antMatcher("/member/companyReview"),
                 antMatcher("/member/interviewReview"),
                 antMatcher("/member/notice"),
-                antMatcher(GET, "image/**"),
+                antMatcher("/member/recruitmentPage"),
+                antMatcher("/member/topRecruitment"),
+                antMatcher("/member/confirmRecruitment"),
+                antMatcher("/member/AnnouncementRecruitment"),
+                antMatcher("/member/proposeRecruitment"),
+                antMatcher("/image/**"),
                 antMatcher("/recruitment/**"),
                 antMatcher("/main/image/**"),
                 antMatcher("/main/advertisements"),
                 antMatcher("/main/recruitmentImage"),
                 antMatcher("/api/**"),
-                antMatcher("/login/**")
+                antMatcher("/login/**"),
+                antMatcher("/main/premium"),
+                antMatcher("/main/main"),
+                antMatcher("/main/banner"),
+                antMatcher("/main/list")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);

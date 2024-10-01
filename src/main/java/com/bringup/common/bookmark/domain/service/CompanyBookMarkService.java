@@ -6,6 +6,7 @@ import com.bringup.common.bookmark.exception.BookmarkException;
 import com.bringup.common.enums.BookmarkType;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.user.entity.Company;
+import com.bringup.company.user.exception.CompanyException;
 import com.bringup.company.user.repository.CompanyRepository;
 import com.bringup.common.bookmark.domain.entity.CompanyBookMarkEntity;
 import com.bringup.common.bookmark.domain.repository.CompanyBookMarkRepository;
@@ -13,6 +14,7 @@ import com.bringup.common.bookmark.dto.request.CompanyBookMarkRequestDto;
 import com.bringup.member.resume.domain.entity.CVEntity;
 import com.bringup.member.resume.domain.repository.CVRepository;
 import com.bringup.member.user.domain.entity.UserEntity;
+import com.bringup.member.user.domain.exception.MemberException;
 import com.bringup.member.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -66,6 +68,19 @@ public class CompanyBookMarkService {
                     return new CompanyBookMarkResponseDto(bookMark);
                 })
                 .collect(Collectors.toList());
+    }
+
+    public void delCompany(UserDetailsImpl userDetails, int companyIndex){
+        UserEntity user = userRepository.findById(userDetails.getId())
+                .orElseThrow(()->new BookmarkException(NOT_FOUND_MEMBER_ID));
+
+        Company company = companyRepository.findBycompanyId(companyIndex)
+                .orElseThrow(()->new CompanyException(NOT_FOUND_MEMBER_ID));
+
+        CompanyBookMarkEntity bookMark = companyBookMarkRepository.findByUserAndCompany(user, company)
+                .orElseThrow(()->new BookmarkException(NOT_FOUND_MEMBER_ID));
+
+        companyBookMarkRepository.delete(bookMark);
     }
 
     public void addCandidate(UserDetailsImpl userDetails, int cvIndex){

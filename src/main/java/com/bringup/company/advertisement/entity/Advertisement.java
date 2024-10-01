@@ -25,9 +25,6 @@ public class Advertisement {
     @Column(name = "view_count")
     private Integer count = 0;
 
-    @Column(name = "type")
-    private String type;
-
     @Column(name = "displaytime")
     private String displayTime; // 년-월-일 형태로 저장
 
@@ -35,4 +32,17 @@ public class Advertisement {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private StatusType status = StatusType.ACTIVE;
+
+    // 관계 설정 (각각의 광고 유형과 연관됨)
+    @OneToOne(mappedBy = "advertisement")
+    private PremiumAdvertisement premiumAdvertisement;
+
+    @OneToOne(mappedBy = "advertisement")
+    private MainAdvertisement mainAdvertisement;
+
+    @OneToOne(mappedBy = "advertisement")
+    private BannerAdvertisement bannerAdvertisement;
+
+    @OneToOne(mappedBy = "advertisement")
+    private AnnouncementAdvertisement announcementAdvertisement;
 }
