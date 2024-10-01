@@ -130,6 +130,7 @@ public class SpringSecurityConfig {
                 antMatcher(GET, "/WEB-INF/views/**"),          // 웹 리소스
                 antMatcher(GET, "/resources/**"),
                 antMatcher(GET, "/company/**"),              // 기업 페이지
+                antMatcher("/"),
 /*
                 antMatcher("/member/**"),
 */
