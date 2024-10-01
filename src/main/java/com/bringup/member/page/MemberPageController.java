@@ -6,7 +6,9 @@ import lombok.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -96,6 +98,16 @@ public class MemberPageController {
     @GetMapping("/memberProfile")
     public String memberProfile(){
         return "member/user/profile/memberProfile";
+    }
+
+    @GetMapping("/recruitment/details/{r_index}")
+    public String recruitmentDetails(@PathVariable("r_index") Long r_index) {
+        return "member/user/recruitment/detail";
+    }
+
+    @GetMapping("/freelancer")
+    public String freelancer() {
+        return "member/user/career/freelancer";
     }
 
 }
