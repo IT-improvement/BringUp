@@ -32,7 +32,8 @@ public class ApplyRecruitmentController {
             ApplyRecruitmentEntity applyRecruitment = applyRecruitmentService.getApplyRecruitment(userDetails, recruitmentIndex);
             return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.valueOf(SUCCESS), applyRecruitment));
         }catch (ApplyRecruitmentException e){
-            return errorResponseHandler.handleErrorResponse(e.getErrorCode);
+            //return errorResponseHandler.handleErrorResponse(e.getErrorCode);
+            return null;
         }
     }
 
