@@ -36,6 +36,12 @@ public class CompanyBookMarkContoller {
         return ResponseEntity.ok(companyBookMarkResponseDtoList);
     }
 
+    @GetMapping("/mem/delCompany/{company_index}")
+    public ResponseEntity<BfResponse<?>> delCompany(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int companyIndex){
+        companyBookMarkService.delCompany(userDetails, companyIndex);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "기업 삭제 완료"));
+    }
+
     @PostMapping("/com/headhunt/candidate/save/{cv_index}")
     public ResponseEntity<BfResponse<?>> addcandidate(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int cv_index){
         companyBookMarkService.addCandidate(userDetails, cv_index);
