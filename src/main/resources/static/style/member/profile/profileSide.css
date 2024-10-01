@@ -1,7 +1,11 @@
 .profile-side{
-    width: 250px;
-    background-color: #f4f4f4;
+    display: flex;
+    position: relative;
     padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
 }
 .profile-ul{
     list-style-type: none;
