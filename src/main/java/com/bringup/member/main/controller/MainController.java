@@ -32,8 +32,8 @@ public class MainController {
     }
 
     @GetMapping("/premium")
-    public ResponseEntity<List<PremiumAdvertisementDto>> getAdvertisements() {
-        List<PremiumAdvertisementDto> advertisements = mainService.getPremiumAdvertisement();
+    public ResponseEntity<PremiumAdvertisementDto> getAdvertisements() {
+        PremiumAdvertisementDto advertisements = mainService.getSinglePremiumAdvertisement();
         return ResponseEntity.ok(advertisements);
     }
 
