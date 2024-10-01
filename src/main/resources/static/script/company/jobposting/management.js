@@ -45,11 +45,14 @@ function updateRecruitmentList(recruitmentList) {
             row.addEventListener('click', function() {
                 window.location.href = `/company/jobpost/detail?r_index=${recruitment.recruitmentIndex}`;
             });
+            const type = recruitment.recruitmentType === 'IRREGULAR_WORKER' ? '비정규직' :
+                          recruitment.recruitmentType === 'REGULAR_WORKER' ? '정규직' :
+                          recruitment.recruitmentType === 'PART_TIME_WORKER' ? '파트타임' : '기타';
             row.innerHTML = `
                 <td>${index + 1}</td>
                 <td>${recruitment.recruitmentTitle || '-'}</td>
                 <td>${recruitment.managerEmail || '-'}</td>
-                <td>${recruitment.recruitmentType || '-'}</td>
+                <td>${type || '-'}</td>
                 <td>${recruitment.category || '-'}</td>
                 <td>${recruitment.skill || '-'}</td>
                 <td>${recruitment.period || '-'}</td>
