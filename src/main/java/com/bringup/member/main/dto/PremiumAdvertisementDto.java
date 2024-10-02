@@ -10,8 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor // 기본 생성자 추가
 @AllArgsConstructor
 public class PremiumAdvertisementDto {
-    private int premiumId;
-    private int advertisement;
+    private int premiumIndex;
     private int recruitmentIndex;  // 추가된 필드
     private String timeSlot;
     private LocalDate startDate;

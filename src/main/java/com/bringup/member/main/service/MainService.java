@@ -52,39 +52,47 @@ public class MainService {
                 .userEmail(userEntity.getUserEmail())
                 .build();
     }
-
-    // 선착순으로 매진되지 않은 광고 하나를 가져오는 메서드
     @Transactional
-    @Scheduled(cron = "0 0 0 * * ?")  // 매일 자정에 실행
-    public PremiumAdvertisementDto getSinglePremiumAdvertisement() {
-        // 현재 시간 가져오기
-        LocalTime now = LocalTime.now();
+    public PremiumAdvertisementDto getPremiumAdvertisement() {
+        // 현재 시간과 날짜를 가져옴
         LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
 
-        // 1. 날짜가 지난 광고를 매진 처리 (is_sold_out = 0)
-        List<PremiumAdvertisement> expiredAdvertisements = premiumAdvertisementRepository.findAllByEndDateBefore(today);
-        for (PremiumAdvertisement ad : expiredAdvertisements) {
-            ad.setSoldOut(false); // 매진 처리 (0)
-            premiumAdvertisementRepository.save(ad);  // 상태 업데이트 저장
-        }
-
-        // 2. 매진되지 않은 광고만 가져옴 (is_sold_out = 1)
-        List<PremiumAdvertisement> availableAds = premiumAdvertisementRepository.findAllByIsSoldOutTrueOrderByPremiumIdAsc();
+        // 매진되지 않고, 현재 날짜에 해당하는 광고만 가져옴
+        List<PremiumAdvertisement> availableAds = premiumAdvertisementRepository.findAllByIsSoldOutFalseAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPremiumIdAsc(today, today);
 
         if (availableAds.isEmpty()) {
-            return null; // 매진되지 않은 광고가 없으면 null 반환
+            return null; // 해당 시간대에 맞는 매진되지 않은 광고가 없으면 null 반환
         }
 
-        // 3. 선착순으로 하나의 광고만 선택
+        // 시간대 필터링: 현재 시간에 해당하지 않는 광고는 제거
+        availableAds.removeIf(ad -> {
+            String[] times = ad.getTimeSlot().split(" ~ ");
+            LocalTime startTime = LocalTime.parse(times[0], DateTimeFormatter.ofPattern("HH:mm"));
+            LocalTime endTime = LocalTime.parse(times[1], DateTimeFormatter.ofPattern("HH:mm"));
+
+            // 현재 시간이 startTime과 endTime 사이에 있는지 확인 (startTime <= now < endTime)
+            if (endTime.isBefore(startTime)) {
+                // 예: 밤 10시 ~ 새벽 1시와 같은 경우
+                return !(now.isAfter(startTime) || now.isBefore(endTime));
+            } else {
+                return !(now.isAfter(startTime) && now.isBefore(endTime));
+            }
+        });
+
+        if (availableAds.isEmpty()) {
+            return null; // 시간대에 맞는 광고가 없으면 null 반환
+        }
+
+        // 선착순으로 하나의 광고만 선택
         PremiumAdvertisement premiumAd = availableAds.get(currentAdIndex);
 
         // 다음 요청 시 다음 광고가 나오도록 인덱스 증가
         currentAdIndex = (currentAdIndex + 1) % availableAds.size();
 
-        // 4. DTO로 변환하여 반환
+        // DTO로 변환하여 반환 (builder 사용하지 않음)
         PremiumAdvertisementDto dto = new PremiumAdvertisementDto();
-        dto.setPremiumId(premiumAd.getPremiumId());
-        dto.setAdvertisement(premiumAd.getAdvertisement().getAdvertisementIndex());
+        dto.setPremiumIndex(premiumAd.getPremiumId());
         dto.setRecruitmentIndex(premiumAd.getAdvertisement().getRecruitmentIndex());
         dto.setTimeSlot(premiumAd.getTimeSlot());
         dto.setStartDate(premiumAd.getStartDate());
@@ -93,6 +101,7 @@ public class MainService {
 
         return dto;
     }
+
 
     // 선착순으로 먼저 신청한 광고 6개를 가져오는 메서드
     public List<MainAdvertisementDto> getMainAdvertisement() {

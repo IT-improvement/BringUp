@@ -13,7 +13,7 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
     Optional<Company> findByCompanyPassword(String companyPassword);
     Optional<Company> findByManagerEmail(String managerEmail);
     Optional<Company> findBycompanyId(int companyIndex);
-
+    Optional<Company> findByCompanyName(String companyName);
     boolean existsByManagerEmail(String managerEmail);
 
     boolean existsByManagerPhonenumber(String managerPhone);
