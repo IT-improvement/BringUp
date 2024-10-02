@@ -156,7 +156,10 @@ public class SpringSecurityConfig {
                 antMatcher("/main/premium"),
                 antMatcher("/main/main"),
                 antMatcher("/main/banner"),
+                antMatcher("/member/m_reviews"),
+
                 antMatcher("/main/list")
+
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
@@ -187,8 +190,8 @@ public class SpringSecurityConfig {
                 antMatcher("/member/name"),
 
                 antMatcher("/member/userMain"),
-                antMatcher("/main/memberInfo")
-
+                antMatcher("/main/memberInfo"),
+                antMatcher("/member/m_create")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);

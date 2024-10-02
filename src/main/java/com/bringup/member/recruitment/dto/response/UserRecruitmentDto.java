@@ -19,5 +19,5 @@ public class UserRecruitmentDto {
     private String startDate;
     private String period;
     private int viewCount;
-    private StatusType status;
+
 }

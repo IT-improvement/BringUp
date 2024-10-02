@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface CompanyReviewRepository extends JpaRepository<CompanyReview, Integer> {
     List<CompanyReview> findAllByCompanyCompanyId(int companyId);
+
 }

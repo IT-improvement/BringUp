@@ -33,7 +33,7 @@ public class MainController {
 
     @GetMapping("/premium")
     public ResponseEntity<PremiumAdvertisementDto> getAdvertisements() {
-        PremiumAdvertisementDto advertisements = mainService.getSinglePremiumAdvertisement();
+        PremiumAdvertisementDto advertisements = mainService.getPremiumAdvertisement();
         return ResponseEntity.ok(advertisements);
     }
 

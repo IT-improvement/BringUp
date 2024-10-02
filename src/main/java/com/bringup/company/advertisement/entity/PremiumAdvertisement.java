@@ -14,7 +14,7 @@ public class PremiumAdvertisement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "premium_id")
+    @Column(name = "premium_index")
     private int premiumId;
 
     @OneToOne
@@ -24,8 +24,6 @@ public class PremiumAdvertisement {
     @Column(name = "ad_type", nullable = false, length = 10)
     private String adType; // 광고 타입 (GP, P1, P2, P3)
 
-    @Column(name = "price", nullable = false)
-    private int price;
 
     @Column(name = "time_slot", nullable = false, length = 50)
     private String timeSlot; // 노출 시간대 (예: 01:00 ~ 04:00)
