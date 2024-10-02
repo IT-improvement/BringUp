@@ -46,56 +46,51 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        .profile-side{
+        .profile-main{
             display: flex;
-            position: relative;
-            padding: 20px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-
-            height: 722px;
-        }
-        .profile-ul{
-            all: unset;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            background-color: rgb(255,255,255);
-            width: 15rem;
-            padding: 20px 0 12px;
-        }
-        .profile-li{
-            all: unset;
-            box-sizing: border-box;
-            display: flex;
-            -webkit-box-align: center;
-            align-items: center;
-            height: 3.5rem;
-        }
-        .profile-a{
-            display: flex;
-            -webkit-box-align: center;
-            align-items: center;
-            padding-left: 12px;
             width: 100%;
-            height: 100%;
-            font-size: 20px;
-            font-stretch: normal;
-            font-style: normal;
-            line-height: 1.33;
-            letter-spacing: normal;
-            cursor: pointer;
-            border-radius: 6px;
-            color: rgb(33,37,42);
-            font-weight: bold;
-
+            min-width: 100%;
+            transition: opacity 1s;
+            opacity: 1;
         }
-        .profile-banner{
-            background-color: #e0f7fa;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
+        .profile-input{
+            display: grid;
+            flex-direction: column-reverse;
+            column-gap: 6.5rem;
+            padding: 72px 104px 24px 104px;
+            background-color: rgb(233, 236, 239);
+            border-radius: 6px;
+            position: relative;
+            top: 0;
+            margin: 32px auto;
+            width: 100%;
+            max-width: 80%;
+            min-width: 0;
+            height: fit-content;
+            word-break: keep-all;
+        }
+        .profile-email{
+            display: flex;
+            height: 25px;
+        }
+        .profile-name{
+            text-align: left;
+            margin: 0 0 4px;
+            font-size: 40px;
+            line-height: 56px;
+            font-weight: 700;
+            color: rgb(33, 37, 42);
+        }
+        .profile-email-fixed{
+            margin: 0;
+            min-width: 40px;
+            color: rgb(135,142,152);
+            line-height: 25px;
+        }
+        .profile-email-variable{
+            margin: 0 0 0 40px;
+            line-height: 25px;
+            color: rgb(33,37,42);
         }
         .profile-banner p{
             margin: 0;
@@ -141,33 +136,18 @@
 <main class="flex-grow-1">
     <div class="container" style="max-width: 1260px;">
         <div class="row">
-            <div class="col-3">
-                <div class="profile-side">
-                    <ul class="profile-ul">
-                        <li class="profile-li">
-                            <a class="profile-a" href="#">내 정보</a>
-                        </li>
-                        <li class="profile-li">
-                            <a class="profile-a" href="#">이력서</a>
-                        </li>
-                        <li class="profile-li">
-                            <a class="profile-a" href="#">포트폴리오</a>
-                        </li>
-                        <li class="profile-li">
-                            <a class="profile-a" href="#">지원한 이력서</a>
-                        </li>
-                        <li class="profile-li">
-                            <a class="profile-a" href="#">북마크한 기업</a>
-                        </li>
-                        <li class="profile-li">
-                            <a class="profile-a" href="#">북마크한 공고</a>
-                        </li>
-                    </ul>
+            <div class="col">
+                <div class="profile-main">
+                    <div class="profile-input">
+                        <div>
+                            <dd class="profile-name">퉤</dd>
+                        </div>
+                        <div class="profile-email">
+                            <dl class="profile-email-fixed">이메일</dl>
+                            <dd class="profile-email-variable">111@naver.com</dd>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="profile-line"></div>
-            <div class="col-9">
-
             </div>
         </div>
     </div>
