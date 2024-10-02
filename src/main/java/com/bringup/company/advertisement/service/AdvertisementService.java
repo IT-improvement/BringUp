@@ -64,7 +64,7 @@ public class AdvertisementService {
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         advertisement.setRecruitmentIndex(requestDto.getRecruitmentIndex());
-        advertisement.setAdvertisementImage(imageUrl);
+        //advertisement.setAdvertisementImage(imageUrl);
         advertisement.setDisplayTime(requestDto.getDisplayTime());
         advertisement.setStatus(StatusType.CRT_WAIT);
 
@@ -152,7 +152,7 @@ public class AdvertisementService {
 
         // img가 존재하면 이미지를 저장
         if (!img.isEmpty()) {
-            advertisement.setAdvertisementImage(imageService.saveImage(img));
+            //advertisement.setAdvertisementImage(imageService.saveImage(img));
         }
 
         // 광고 수정 내용을 저장
@@ -184,7 +184,7 @@ public class AdvertisementService {
         return AdvertisementResponseDto.builder()
                 .advertisementIndex(advertisement.getAdvertisementIndex())
                 .recruitmentIndex(advertisement.getRecruitmentIndex())
-                .advertisementImage(advertisement.getAdvertisementImage())
+                //.advertisementImage(advertisement.getAdvertisementImage())
                 .displayTime(advertisement.getDisplayTime())
                 .status(advertisement.getStatus())
                 .build();

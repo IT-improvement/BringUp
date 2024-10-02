@@ -4,19 +4,24 @@ import com.bringup.common.enums.GlobalErrorCode;
 import com.bringup.common.event.exception.ErrorResponseHandler;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
+import com.bringup.company.advertisement.dto.request.PremiumAdRequestDto;
 import com.bringup.company.advertisement.dto.response.AdvertisementResponseDto;
 import com.bringup.company.advertisement.dto.request.AdvertisementRequestDto;
+import com.bringup.company.advertisement.entity.PremiumAdvertisement;
+import com.bringup.company.advertisement.enums.TimeSlot;
 import com.bringup.company.advertisement.exception.AdvertisementException;
-import com.bringup.company.advertisement.service.AdvertisementService;
+import com.bringup.company.advertisement.service.*;
 import com.bringup.company.recruitment.dto.response.RecruitmentDetailResponseDto;
 import com.bringup.company.recruitment.dto.response.RecruitmentResponseDto;
 import com.bringup.company.recruitment.exception.RecruitmentException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
@@ -27,7 +32,75 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 public class AdvertisementController {
 
     private final AdvertisementService advertisementService;
+    private final PremiumAdService premiumAdService;
+    private final BannerAdService bannerAdService;
+    private final AnnouncementAdService announcementAdService;
+    private final MainAdService mainAdService;
     private final ErrorResponseHandler errorResponseHandler;
+
+    /**
+     * 프리미엄 가능한 시간 파악하는 컨트롤러
+     * @param date
+     * @return
+     */
+    @GetMapping("/premium/available-times/{date}")
+    public ResponseEntity<BfResponse<?>> getAvailableTimes(@PathVariable LocalDate date) {
+        try{
+            List<TimeSlot> availableTimes = premiumAdService.getAvailableTimes(date);
+            return ResponseEntity.ok(new BfResponse<>(availableTimes));
+        } catch (AdvertisementException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+    }
+
+    /**
+     *
+     * @param premiumAdDto
+     * @param img
+     * @return
+     */
+    @PostMapping("/premium")
+    public ResponseEntity<BfResponse<?>> createPremiumAd(@RequestBody PremiumAdRequestDto premiumAdDto,
+                                                         @RequestPart("image") MultipartFile img) {
+        try{
+            premiumAdService.createPremiumAd(premiumAdDto, img);
+            BfResponse<String> response = new BfResponse<>(SUCCESS, "Premium Advertisement Created Successfully");
+            return ResponseEntity.ok(response);
+        } catch (AdvertisementException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+    }
+
+    @PutMapping("/premium/{premiumAdId}")
+    public ResponseEntity<BfResponse<String>> updatePremiumAd(
+            @PathVariable int premiumAdId,
+            @RequestBody PremiumAdRequestDto premiumAdDto,
+            @RequestParam("image") MultipartFile img) {
+
+        premiumAdService.updatePremiumAd(premiumAdId, premiumAdDto, img);
+        BfResponse<String> response = new BfResponse<>(SUCCESS,"Premium advertisement updated successfully");
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/premium/{premiumAdId}")
+    public ResponseEntity<BfResponse<String>> deletePremiumAd(@PathVariable int premiumAdId) {
+        premiumAdService.deletePremiumAd(premiumAdId);
+        BfResponse<String> response = new BfResponse<>(SUCCESS, "Premium advertisement deleted successfully");
+        return ResponseEntity.ok(response);
+    }
+
+
+    /**
+     * 캘린더 비활성화용
+     * @return
+ */
+    /*@GetMapping("/premium/sold-out-dates")
+    public ResponseEntity<BfResponse<?>> getSoldOutDates() {
+        List<LocalDate> soldOutDates = premiumAdService.getSoldOutDates();
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, soldOutDates));
+    }*/
+
+
 
     @PostMapping("/upload")
     public ResponseEntity<BfResponse<?>> uploadAd(@AuthenticationPrincipal UserDetailsImpl userDetails,
