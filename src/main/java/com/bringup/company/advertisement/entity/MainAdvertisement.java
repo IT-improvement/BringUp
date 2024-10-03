@@ -25,6 +25,9 @@ public class MainAdvertisement {
     @Column(name = "exposure_days", nullable = false)
     private int exposureDays;
 
+    @Column(name = "main_image")
+    private String main_Image;
+
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate; // 시작 날짜
 

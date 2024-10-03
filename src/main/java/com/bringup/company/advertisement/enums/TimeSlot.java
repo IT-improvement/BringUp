@@ -1,5 +1,8 @@
 package com.bringup.company.advertisement.enums;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public enum TimeSlot {
     P3_01_04,
     P1_04_07,

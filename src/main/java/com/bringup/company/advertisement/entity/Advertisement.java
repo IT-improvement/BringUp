@@ -2,6 +2,7 @@ package com.bringup.company.advertisement.entity;
 
 
 import com.bringup.common.enums.StatusType;
+import com.bringup.company.recruitment.entity.Recruitment;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,8 +17,9 @@ public class Advertisement {
     @Column(name = "advertisement_index")
     private Integer advertisementIndex;
 
+    @OneToOne
     @Column(name = "recruitment_index", nullable = false)
-    private Integer recruitmentIndex;
+    private Recruitment recruitment;
 
     @Column(name = "view_count")
     private Integer v_count = 0;
