@@ -44,43 +44,46 @@ public class PremiumAdService {
     private final AdvertisementRepository advertisementRepository;
     private final CompanyRepository companyRepository;
     private final RecruitmentRepository recruitmentRepository;
-    private final TimeSlot timeSlot;
 
     public AvailableDatesResponseDto getAvailableTimeSlotsAndDiscount(LocalDate startDate, PremiumAdRequestDto premiumAdDto) {
 
         LocalDate endDate = startDate.plusDays(2); // 3일간 광고 노출
 
-        // 이미 예약된 타임슬롯 조회
-        List<LocalDate> soldOutDates = premiumAdvertisementRepository
-                .findSoldOutDatesByTimeSlot(premiumAdDto.getTimeSlot(), startDate, endDate);
+        // 해당 타임슬롯과 기간에 예약된 프리미엄 광고를 가져옴
+        List<PremiumAdvertisement> reservedAds = premiumAdvertisementRepository
+                .findAllByTimeSlotAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                        premiumAdDto.getTimeSlot(), startDate, endDate);
 
-        // 요청된 기간 동안 사용 가능한 날짜 조회
-        List<LocalDate> availableDates = startDate.datesUntil(endDate.plusDays(1))
-                .filter(date -> !soldOutDates.contains(date))
+        // 예약된 타임슬롯에 해당하는 날짜를 수집
+        List<LocalDate> soldOutDates = reservedAds.stream()
+                .flatMap(ad -> ad.getStartDate().datesUntil(ad.getEndDate().plusDays(1))) // startDate부터 endDate까지
                 .collect(Collectors.toList());
 
-        // 할인율 계산: 3일 중 예약 가능한 날짜가 부족하면 할인율 적용
-        int totalDays = 3; // 항상 3일
+        // 사용 가능한 날짜 계산 (요청된 기간에서 매진된 날짜 제외)
+        List<LocalDate> availableDates = startDate.datesUntil(endDate.plusDays(1))
+                .filter(date -> !soldOutDates.contains(date)) // 매진된 날짜는 제외
+                .collect(Collectors.toList());
+
+        // 할인율 계산
+        int totalDays = 3;
         int availableDays = availableDates.size();
         BigDecimal discountRate = calculateDiscountRate(totalDays, availableDays);
 
-        // 기본 가격 (프리미엄 광고의 타임슬롯을 기반으로 가격 계산)
+        // 기본 가격 계산 (타임슬롯에 따라)
         BigDecimal basePrice = getBasePrice(premiumAdDto.getTimeSlot());
         BigDecimal finalPrice = calculateFinalPrice(basePrice, totalDays, availableDays, discountRate);
 
-        // 매진된 날짜와 예약 가능한 날짜를 모두 반환
+        // 매진된 날짜와 예약 가능한 날짜 반환
         return AvailableDatesResponseDto.builder()
                 .availableDates(availableDates)
-                .soldOutDates(soldOutDates)  // 매진된 날짜 추가
+                .soldOutDates(soldOutDates)
                 .discountRate(discountRate)
                 .finalPrice(finalPrice)
                 .build();
     }
 
-
-
     private BigDecimal calculateDiscountRate(int totalDays, int availableDays) {
-        if (totalDays > 0 && totalDays != availableDays) {
+        if (totalDays > availableDays) {
             return BigDecimal.valueOf(((totalDays - availableDays) / (double) totalDays) * 100);
         } else {
             return BigDecimal.ZERO;
@@ -92,7 +95,7 @@ public class PremiumAdService {
                 .multiply(BigDecimal.ONE.subtract(discountRate.divide(BigDecimal.valueOf(100))));
     }
 
-    private BigDecimal getBasePrice() {
+    private BigDecimal getBasePrice(TimeSlot timeSlot) {
         switch (timeSlot) {
             case GP_07_10:
             case GP_16_19:

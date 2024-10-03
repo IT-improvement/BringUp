@@ -44,10 +44,12 @@ public class AdvertisementController {
      * @return
      */
     @GetMapping("/premium/available-times/{date}")
-    public ResponseEntity<BfResponse<?>> getAvailableTimes(@PathVariable LocalDate date) {
+    public ResponseEntity<BfResponse<?>> getAvailableTimes(
+            @PathVariable LocalDate date,
+            @RequestBody PremiumAdRequestDto premiumAdDto) {
         try{
-            List<TimeSlot> availableTimes = premiumAdService.getAvailableTimes(date);
-            return ResponseEntity.ok(new BfResponse<>(availableTimes));
+            AvailableDatesResponseDto availableDates = premiumAdService.getAvailableTimeSlotsAndDiscount(date, premiumAdDto);
+            return ResponseEntity.ok(new BfResponse<>(availableDates));
         } catch (AdvertisementException e){
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         }

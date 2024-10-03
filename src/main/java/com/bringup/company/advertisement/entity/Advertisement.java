@@ -18,7 +18,7 @@ public class Advertisement {
     private Integer advertisementIndex;
 
     @OneToOne
-    @Column(name = "recruitment_index", nullable = false)
+    @JoinColumn(name = "recruitment_index", nullable = false)
     private Recruitment recruitment;
 
     @Column(name = "view_count")
