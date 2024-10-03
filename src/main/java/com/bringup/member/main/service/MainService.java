@@ -1,4 +1,4 @@
-/*
+
 package com.bringup.member.main.service;
 import com.bringup.common.enums.StatusType;
 
@@ -33,6 +33,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 public class MainService {
+    /*
     private final UserRepository userRepository;
     private final PremiumAdvertisementRepository premiumAdvertisementRepository;
     private final CompanyRepository companyRepository;
@@ -192,5 +193,5 @@ public class MainService {
         return mainRecruitmentDtos;
     }
 
-
-}*/
+*/
+}

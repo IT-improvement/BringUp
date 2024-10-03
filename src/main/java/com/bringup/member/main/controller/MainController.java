@@ -23,7 +23,7 @@ public class MainController {
     private final MainService mainService;
     private final ImageService imageService;
 
-    @PostMapping("/memberInfo")
+    /*@PostMapping("/memberInfo")
     public ResponseEntity<BfResponse<?>> getMemberInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         // 서비스에서 유저 정보를 가져옴
         MemberInfoDto memberInfoDto = mainService.getMemberInfo(userDetails);
@@ -52,7 +52,7 @@ public class MainController {
     public ResponseEntity<List<MainRecruitmentDto>> getMainRecruitment() {
         List<MainRecruitmentDto> getMainRecruitment = mainService.getMainRecruitment();
         return ResponseEntity.ok(getMainRecruitment);
-    }
+    }*/
 
 
 
