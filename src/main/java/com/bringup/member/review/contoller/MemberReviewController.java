@@ -56,16 +56,16 @@ public class MemberReviewController {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         }
     }
-/*
-    // 리뷰 삭제
-    @DeleteMapping("/{reviewId}")
-    public ResponseEntity<BfResponse<?>> deleteReview(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @DeleteMapping("/delete/{reviewId}")
+    public ResponseEntity<BfResponse<?>> deleteCompanyReview(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable("reviewId") int reviewId) {
         try {
-            memberReviewService.deleteCompanyReview(userDetails);
+            // 리뷰 삭제 요청
+            memberReviewService.deleteCompanyReview(userDetails, reviewId);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, "리뷰가 성공적으로 삭제되었습니다."));
         } catch (MemberReviewException e) {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         }
-    }*/
-
+    }
 }

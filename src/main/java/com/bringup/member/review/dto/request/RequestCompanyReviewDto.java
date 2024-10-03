@@ -1,10 +1,13 @@
 package com.bringup.member.review.dto.request;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class RequestCompanyReviewDto {
     private String companyName;  // 회사 이름 (ID 대신)
     private int advancement;     // 승진 기회 평가

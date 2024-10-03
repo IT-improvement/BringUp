@@ -141,6 +141,8 @@ public class SpringSecurityConfig {
                 antMatcher("/member/companyReview"),
                 antMatcher("/member/interviewReview"),
                 antMatcher("/member/notice"),
+                antMatcher("/member/Login"),
+                antMatcher("/member/userLogin"),
                 antMatcher("/member/recruitmentPage"),
                 antMatcher("/member/topRecruitment"),
                 antMatcher("/member/confirmRecruitment"),
@@ -157,7 +159,6 @@ public class SpringSecurityConfig {
                 antMatcher("/main/main"),
                 antMatcher("/main/banner"),
                 antMatcher("/member/m_reviews"),
-
                 antMatcher("/main/list")
 
         );
@@ -182,15 +183,13 @@ public class SpringSecurityConfig {
 
                 antMatcher(POST, "/com/i_reviews"),                 // 면접 리뷰 열람
                 antMatcher(POST, "/com/i_review/delete"),         // 면접 리뷰 삭제
-
                 antMatcher("/com/headhunt/**"),
-
                 antMatcher("/membership/**"), // 사용자 멤버십
-
                 antMatcher("/member/name"),
-
                 antMatcher("/member/userMain"),
                 antMatcher("/main/memberInfo"),
+                antMatcher("/member/{reviewId}"),
+                antMatcher("/member/delete/{reviewId}"),
                 antMatcher("/member/m_create")
         );
 
