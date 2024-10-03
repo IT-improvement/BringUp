@@ -94,16 +94,20 @@ public class MemberReviewService {
         review.setManagement(reviewDto.getManagement());
         review.setContent(reviewDto.getContent());
         review.setCompanyReviewTitle(reviewDto.getCompanyReviewTitle());
-        review.setCompanyReviewDate(reviewDto.getCompanyReviewDate());
+        // 현재 날짜와 시간을 "년-월-일 시:분" 형식으로 설정
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        String formattedDateTime = LocalDateTime.now().format(formatter);
+        review.setCompanyReviewDate(formattedDateTime);
+
+
 
         companyReviewRepository.save(review);
     }
-/*
 
-    // 리뷰 삭제
     @Transactional
-    public void deleteCompanyReview(UserDetailsImpl userDetails) {
-        CompanyReview review = companyReviewRepository.fin  dByUser(userDetails.getUser())
+    public void deleteCompanyReview(UserDetailsImpl userDetails, int reviewId) {
+        // 리뷰 ID로 리뷰를 조회
+        CompanyReview review = companyReviewRepository.findByCompanyReviewIndex(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
 
         if (!review.getUser().getUserEmail().equals(userDetails.getUsername())) {
@@ -112,8 +116,6 @@ public class MemberReviewService {
 
         companyReviewRepository.delete(review);
     }
-*/
-
 
 
     // CompanyReview 엔티티를 MemberCompanyReviewDto로 변환하는 메서드
