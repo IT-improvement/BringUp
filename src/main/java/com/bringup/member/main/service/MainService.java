@@ -1,3 +1,4 @@
+/*
 package com.bringup.member.main.service;
 import com.bringup.common.enums.StatusType;
 
@@ -192,4 +193,4 @@ public class MainService {
     }
 
 
-}
+}*/

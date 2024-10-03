@@ -16,9 +16,6 @@ public interface PremiumAdvertisementRepository extends JpaRepository<PremiumAdv
     List<PremiumAdvertisement> findAllByEndDateBefore(LocalDate date);  // 마감일이 지난 광고 검색
     List<PremiumAdvertisement> findAllByIsSoldOutTrueOrderByPremiumIdAsc();  // 매진되지 않은 광고 검색
 
-    @Query("SELECT p.timeSlot FROM PremiumAdvertisement p WHERE p.startDate = :date AND p.isSoldOut = true")
-    List<TimeSlot> findSoldOutTimeSlotsByStartDate(@Param("date") LocalDate date);
-
-    @Query("SELECT p.startDate FROM PremiumAdvertisement p WHERE p.isSoldOut = true GROUP BY p.startDate HAVING COUNT(p.timeSlot) = 8")
-    List<LocalDate> findSoldOutDates();
+    @Query("SELECT DISTINCT p.startDate FROM PremiumAdvertisement p WHERE p.timeSlot = :timeSlot AND p.startDate >= :startDate AND p.endDate <= :endDate")
+    List<LocalDate> findSoldOutDatesByTimeSlot(@Param("timeSlot") TimeSlot timeSlot, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }
