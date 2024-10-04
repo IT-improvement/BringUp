@@ -48,6 +48,9 @@ public class RecruitmentFreelancer {
     @Column(name = "work_conditions", nullable = false, length = 255)
     private String workConditions;
 
+    @Column(name = "view_count")
+    private int viewCount;
+
     @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 50)
