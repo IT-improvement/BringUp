@@ -36,12 +36,13 @@ public class BoardService {
         UserEntity user = userRepository.findById(userDetails.getId())
                 .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
 
-        BoardEntity board = new BoardEntity();
-        board.setUserIndex(user.getUserIndex());
-        board.setUserEmail(user.getUserEmail());
-        board.setTitle(boardRequestDto.getTitle());
-        board.setContent(boardRequestDto.getContent());
-        board.setBoardImage(imageService.uploadImages(boardImage));
+        BoardEntity board = BoardEntity.builder()
+                .user(user)
+                .userEmail(user.getUserEmail())
+                .title(boardRequestDto.getTitle())
+                .content(boardRequestDto.getContent())
+                .boardImage(imageService.uploadImages(boardImage))
+                .build();
 
         boardRepository.save(board);
     }
@@ -66,14 +67,12 @@ public class BoardService {
     }*/
 
     @Transactional
-    public SuccessResponseDto deletePost(int userIndex, BoardRequestDto boardRequestDto) throws Exception{
-        BoardEntity boardEntity = boardRepository.findById(userIndex).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
-        );
-        if (!boardRequestDto.getUserEmail().equals(boardEntity.getUserEmail())){
-            throw new Exception("이메일이 일치하지 않습니다.");
-        }
-        boardRepository.deleteById(userIndex);
-        return new SuccessResponseDto(true);
+    public void deletePost(UserDetailsImpl userDetails, BoardRequestDto boardRequestDto){
+        UserEntity user = userRepository.findById(userDetails.getId())
+                .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
+        BoardEntity board = boardRepository.findByUser(user)
+                .orElseThrow(()->new IllegalArgumentException("작성한 유저와 일치하지 않습니다."));
+
+        boardRepository.delete(board);
     }
 }
