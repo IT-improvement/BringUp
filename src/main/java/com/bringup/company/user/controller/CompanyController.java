@@ -140,6 +140,21 @@ public class CompanyController {
 
     }
 
+    // 회원 이미지 수정
+    @PutMapping("/user/image")
+    public ResponseEntity<BfResponse<?>> updateUser_img(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestPart("c_logo") MultipartFile logo,
+            @RequestPart("c_imgs") MultipartFile[] images) {
+        try{
+            companyService.updateUser_img(userDetails, logo, images);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "업데이트 완료")));
+        } catch (CompanyException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+
+    }
+
     // 회원 탈퇴
     @DeleteMapping("/user")
     public ResponseEntity<BfResponse<?>> deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
