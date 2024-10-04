@@ -17,4 +17,7 @@ public interface RecruitmentFreelancerRepository extends JpaRepository<Recruitme
 
     // 프로젝트 상태를 기준으로 검색
     List<RecruitmentFreelancer> findAllByStatusAndCompanyCompanyId(StatusType status, Integer companyId);
+
+    //프로젝트 상세 정보
+    RecruitmentFreelancer findByprojectIndex(int projectIndex);
 }
