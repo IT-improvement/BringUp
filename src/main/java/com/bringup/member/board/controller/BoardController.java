@@ -45,8 +45,9 @@ public class BoardController {
     }
 */
 
-    @DeleteMapping("/post/{userIndex}")
-    public SuccessResponseDto deletePost(@PathVariable int userIndex, @RequestBody BoardRequestDto boardRequestDto) throws Exception{
-        return boardService.deletePost(userIndex, boardRequestDto);
+    @DeleteMapping("/deletePost")
+    public ResponseEntity<BfResponse<?>> deletePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto){
+        boardService.deletePost(userDetails, boardRequestDto);
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS, "delete board successfully"));
     }
 }
