@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @Builder
@@ -16,4 +18,5 @@ public class FreelancerProjectDetailResponseDto {
     private String preferredSkills;         // 우대 기술
     private String workConditions;          // 근무 조건
     private String status;                  // 프로젝트 상태
+    private LocalDate create_day;           // 생성 날짜
 }
