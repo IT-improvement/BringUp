@@ -156,7 +156,8 @@ public class SpringSecurityConfig {
                 antMatcher("/main/premium"),
                 antMatcher("/main/main"),
                 antMatcher("/main/banner"),
-                antMatcher("/main/list")
+                antMatcher("/main/list"),
+                antMatcher("/freelancer/**")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
