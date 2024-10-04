@@ -74,6 +74,7 @@ public class KakaoService {
 
         log.info("[ Kakao Service ] Auth ID ---> {} ", userInfo.getId());
         log.info("[ Kakao Service ] NickName ---> {} ", userInfo.getKakaoAccount().getProfile().getNickName());
+        log.info("[ Kakao Service ] email ---> {} ", userInfo.getKakaoAccount().getEmail());
         log.info("[ Kakao Service ] ProfileImageUrl ---> {} ", userInfo.getKakaoAccount().getProfile().getProfileImageUrl());
 
         return userInfo;
