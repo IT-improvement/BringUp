@@ -235,6 +235,17 @@ public class CompanyService {
         }
     }
 
+    @Transactional
+    public void updateUser_img(UserDetailsImpl userDetails, MultipartFile logo, MultipartFile[] images){
+        Company company = companyRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
+
+        company.setCompanyLogo(imageService.upLoadImage(logo));
+        company.setCompanyImg(imageService.uploadImages(images));
+
+        companyRepository.save(company);
+    }
+
     // 회원 탈퇴
     @Transactional
     public void deleteUser(UserDetailsImpl userDetails) {
