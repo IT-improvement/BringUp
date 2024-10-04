@@ -8,6 +8,7 @@ import com.bringup.company.recruitment.dto.request.RecruitmentRequestDto;
 import com.bringup.company.recruitment.dto.response.RecruitmentDetailResponseDto;
 import com.bringup.company.recruitment.dto.response.RecruitmentMainResponseDto;
 import com.bringup.company.recruitment.dto.response.RecruitmentResponseDto;
+import com.bringup.company.recruitment.dto.response.UnifiedRecruitmentDto;
 import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.company.recruitment.service.RecruitmentService;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +71,18 @@ public class RecruitmentController {
     }
 
     @GetMapping("/list")
+    public ResponseEntity<BfResponse<?>> listAllRecruitments(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            // 일반 공고 및 프리랜서 프로젝트 통합 리스트 가져오기
+            List<UnifiedRecruitmentDto> unifiedRecruitments = recruitmentService.getAllRecruitments(userDetails);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, unifiedRecruitments));
+        } catch (Exception e) {
+            // 에러 처리 (적절한 에러 핸들링 로직 추가)
+            return ResponseEntity.internalServerError().body(new BfResponse<>(null, "Failed to retrieve recruitments"));
+        }
+    }
+
+    @GetMapping("/detail/list")
     public ResponseEntity<BfResponse<?>> listRecruitments(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             List<RecruitmentResponseDto> recruitments = recruitmentService.getRecruitments(userDetails);
@@ -77,18 +90,6 @@ public class RecruitmentController {
         } catch (RecruitmentException e) {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         } catch (Exception e) {
-            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/mainlist")
-    public ResponseEntity<BfResponse<?>> listInMain(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        try{
-            List<RecruitmentMainResponseDto> list = recruitmentService.getRecruitmentsinMain(userDetails);
-            return ResponseEntity.ok(new BfResponse<>(SUCCESS, list));
-        } catch (RecruitmentException e){
-            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
-        } catch (Exception e){
             return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
         }
     }

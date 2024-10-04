@@ -82,20 +82,26 @@ public class FreelancerRecruitmentService {
     }
 
     @Transactional
-    public List<FreelancerProjectResponseDto> getFreelancerProjects(UserDetailsImpl userDetails) {
+    public List<FreelancerProjectDetailResponseDto> getFreelancerProjects(UserDetailsImpl userDetails) {
         List<RecruitmentFreelancer> projects = recruitmentFreelancerRepository.findAllByCompanyCompanyId(userDetails.getId());
 
         if (projects == null || projects.isEmpty()) {
             throw new RecruitmentException(NOT_FOUND_RECRUITMENT);
         }
 
-        List<FreelancerProjectResponseDto> projectResponseDtos = new ArrayList<>();
+        List<FreelancerProjectDetailResponseDto> projectResponseDtos = new ArrayList<>();
         for (RecruitmentFreelancer project : projects) {
-            FreelancerProjectResponseDto dto = FreelancerProjectResponseDto.builder()
+            FreelancerProjectDetailResponseDto dto = FreelancerProjectDetailResponseDto.builder()
                     .projectIndex(project.getProjectIndex())
                     .projectTitle(project.getProjectTitle())
+                    .projectDescription(project.getProjectDescription())
                     .expectedDuration(project.getExpectedDuration())
                     .expectedCost(project.getExpectedCost())
+                    .requiredSkills(project.getRequiredSkills())
+                    .preferredSkills(project.getPreferredSkills())
+                    .workConditions(project.getWorkConditions())
+                    .status(project.getStatus())
+                    .create_day(project.getCreatedAt().toLocalDate())
                     .build();
             projectResponseDtos.add(dto);
         }
