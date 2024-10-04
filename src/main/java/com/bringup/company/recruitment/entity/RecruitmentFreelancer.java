@@ -1,5 +1,6 @@
 package com.bringup.company.recruitment.entity;
 
+import com.bringup.common.enums.StatusType;
 import com.bringup.company.user.entity.Company;
 import com.bringup.member.user.domain.entity.UserEntity;
 import jakarta.persistence.*;
@@ -20,14 +21,14 @@ public class RecruitmentFreelancer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "project_index")
-    private Long projectIndex;
+    private Integer projectIndex;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_index", nullable = false)
     private Company company;  // 회사 정보와 연결
 
-    @Column(name = "project_name", nullable = false, length = 100)
-    private String projectName;
+    @Column(name = "project_title", nullable = false, length = 100)
+    private String projectTitle;
 
     @Column(name = "project_description", nullable = false, columnDefinition = "TEXT")
     private String projectDescription;
@@ -47,11 +48,13 @@ public class RecruitmentFreelancer {
     @Column(name = "work_conditions", nullable = false, length = 255)
     private String workConditions;
 
+    @Setter
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 50)
-    private String status;
+    private StatusType status = StatusType.CRT_WAIT;
 
-    @Column(name = "submission_deadline", nullable = false)
-    private LocalDate submissionDeadline;
+    @Column(name = "period", nullable = false)
+    private LocalDate period;
 
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;

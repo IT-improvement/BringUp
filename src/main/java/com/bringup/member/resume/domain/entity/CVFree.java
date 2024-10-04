@@ -18,7 +18,7 @@ public class CVFree {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cv_index")
-    private Long cvIndex;
+    private Integer cvIndex;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_index", nullable = false)
