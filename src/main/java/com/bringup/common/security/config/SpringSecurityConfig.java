@@ -157,7 +157,8 @@ public class SpringSecurityConfig {
                 antMatcher("/main/premium"),
                 antMatcher("/main/main"),
                 antMatcher("/main/banner"),
-                antMatcher("/main/list")
+                antMatcher("/main/list"),
+                antMatcher("/freelancer/**")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
@@ -180,6 +181,8 @@ public class SpringSecurityConfig {
 
                 antMatcher(POST, "/com/i_reviews"),                 // 면접 리뷰 열람
                 antMatcher(POST, "/com/i_review/delete"),         // 면접 리뷰 삭제
+
+                antMatcher("/com/freelancer/**"),
 
                 antMatcher("/com/headhunt/**"),
 
