@@ -181,6 +181,8 @@ public class SpringSecurityConfig {
                 antMatcher(POST, "/com/i_reviews"),                 // 면접 리뷰 열람
                 antMatcher(POST, "/com/i_review/delete"),         // 면접 리뷰 삭제
 
+                antMatcher("/com/freelancer/**"),
+
                 antMatcher("/com/headhunt/**"),
 
                 antMatcher("/membership/**"), // 사용자 멤버십

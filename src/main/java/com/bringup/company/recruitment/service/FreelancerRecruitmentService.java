@@ -40,6 +40,7 @@ public class FreelancerRecruitmentService {
         project.setRequiredSkills(requestDto.getRequiredSkills());
         project.setPreferredSkills(requestDto.getPreferredSkills());
         project.setWorkConditions(requestDto.getWorkConditions());
+        project.setPeriod(requestDto.getPreiod());
         project.setStatus(StatusType.CRT_WAIT);
 
         recruitmentFreelancerRepository.save(project);
@@ -61,6 +62,7 @@ public class FreelancerRecruitmentService {
         project.setRequiredSkills(requestDto.getRequiredSkills());
         project.setPreferredSkills(requestDto.getPreferredSkills());
         project.setWorkConditions(requestDto.getWorkConditions());
+        project.setPeriod(requestDto.getPreiod());
         project.setStatus(StatusType.CRT_WAIT);
 
         recruitmentFreelancerRepository.save(project);
@@ -118,6 +120,7 @@ public class FreelancerRecruitmentService {
                 .requiredSkills(project.getRequiredSkills())
                 .preferredSkills(project.getPreferredSkills())
                 .workConditions(project.getWorkConditions())
+                .create_day(project.getCreatedAt().toLocalDate())
                 .build();
     }
 }
