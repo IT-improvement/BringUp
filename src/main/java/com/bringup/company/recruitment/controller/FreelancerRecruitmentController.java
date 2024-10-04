@@ -67,10 +67,11 @@ public class FreelancerRecruitmentController {
         }
     }
 
-    @GetMapping("/list")
+    // 프리랜서 프로젝트 리스트 전체 조회
+    @GetMapping("/detail/list")
     public ResponseEntity<BfResponse<?>> listFreelancerProjects(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
-            List<FreelancerProjectResponseDto> projects = freelancerProjectService.getFreelancerProjects(userDetails);
+            List<FreelancerProjectDetailResponseDto> projects = freelancerProjectService.getFreelancerProjects(userDetails);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, projects));
         } catch (RecruitmentException e) {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
