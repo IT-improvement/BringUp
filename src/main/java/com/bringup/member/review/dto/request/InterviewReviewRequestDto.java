@@ -9,10 +9,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class InterviewReviewRequestDto {
-    private int companyIndex;
-    private int userIndex;
+    private String companyName;  // 변경된 필드명
     private String ambience;
     private int difficulty;
     private String interviewReviewTitle;
     private String interviewReviewContent;
+
+
 }

@@ -10,8 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class InterviewReviewResponseDto {
     private int interviewReviewIndex;
-    private int companyIndex;
-    private int userIndex;
     private String ambience;
     private int difficulty;
     private String interviewReviewTitle;

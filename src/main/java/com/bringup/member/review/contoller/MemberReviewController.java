@@ -24,6 +24,7 @@ public class MemberReviewController {
     private final MemberReviewService memberReviewService;
     private final ErrorResponseHandler errorResponseHandler; // 예외 처리를 위한 핸들러
 
+
     //리뷰 전체 리스트
     @GetMapping("/m_reviews")
     public ResponseEntity<BfResponse<?>> getMemberReview() {
@@ -36,8 +37,9 @@ public class MemberReviewController {
         }
     }
     // 리뷰 작성
-    @PostMapping("m_create")
-    public ResponseEntity<BfResponse<?>> createReview(@AuthenticationPrincipal UserDetailsImpl userDetails,@RequestBody RequestCompanyReviewDto reviewDto) {
+    @PostMapping("/m_create")
+    public ResponseEntity<BfResponse<?>> createReview(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                      @RequestBody RequestCompanyReviewDto reviewDto) {
         try {
             memberReviewService.createCompanyReview(userDetails,reviewDto);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, "리뷰가 성공적으로 작성되었습니다."));
@@ -48,14 +50,17 @@ public class MemberReviewController {
 
     // 리뷰 수정
     @PutMapping("/{reviewId}")
-    public ResponseEntity<BfResponse<?>> updateReview(@AuthenticationPrincipal UserDetailsImpl userDetails,@RequestBody MemberCompanyReviewDto reviewDto) {
+    public ResponseEntity<BfResponse<?>> updateReview(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                      @PathVariable int reviewId,
+                                                      @RequestBody MemberCompanyReviewDto reviewDto) {
         try {
-            memberReviewService.updateCompanyReview(userDetails, reviewDto);
+            memberReviewService.updateCompanyReview(userDetails,reviewId, reviewDto);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, "리뷰가 성공적으로 수정되었습니다."));
         } catch (MemberReviewException e) {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         }
     }
+
     @DeleteMapping("/delete/{reviewId}")
     public ResponseEntity<BfResponse<?>> deleteCompanyReview(
             @AuthenticationPrincipal UserDetailsImpl userDetails,

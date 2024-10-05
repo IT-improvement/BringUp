@@ -5,10 +5,7 @@ import com.bringup.common.security.service.UserDetailsImpl;
 import lombok.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -108,6 +105,15 @@ public class MemberPageController {
     @GetMapping("/freelancer")
     public String freelancer() {
         return "member/user/career/freelancer";
+    }
+
+    @GetMapping("/m_reviewDetail")
+    public String c_reviewDetail(@AuthenticationPrincipal UserDetailsImpl userDetails)
+    {
+        if (userDetails == null) {
+            return "redirect:/member/user/login"; // 인증되지 않은 경우 로그인 페이지로 리다이렉트
+        }
+        return "member/user/review/companyReviewDetail";
     }
 
 }

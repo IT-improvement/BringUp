@@ -10,5 +10,4 @@ import java.util.Optional;
 @Repository
 public interface CompanyReviewRepository extends JpaRepository<CompanyReview, Integer> {
     List<CompanyReview> findAllByCompanyCompanyId(int companyId);
-    Optional<CompanyReview> findByCompanyReviewIndex(int reviewId);
 }
