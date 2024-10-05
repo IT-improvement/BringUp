@@ -87,6 +87,11 @@
 						<img id="companyImage0_img" src="" alt="Company Image 0" style="display: none;">
 					</div>
 				</div> 
+
+                <div class="mb-3">
+                    <button type="button" class="btn btn-primary" id="Image-update">이미지 수정</button>
+                </div>
+
                 <div class="mb-3">
                     <h5 for="companyName" class="form-label mb-2">회사 이름</h5>
                     <input type="text" id="companyName" name="companyName" class="form-control" required>
