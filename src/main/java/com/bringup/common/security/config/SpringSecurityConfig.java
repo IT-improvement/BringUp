@@ -159,7 +159,11 @@ public class SpringSecurityConfig {
                 antMatcher("/main/main"),
                 antMatcher("/main/banner"),
                 antMatcher("/member/m_reviews"),
-                antMatcher("/main/list")
+
+                antMatcher("/main/list"),
+
+                antMatcher("/member/interview/iv_list")
+
 
         );
 
@@ -190,7 +194,12 @@ public class SpringSecurityConfig {
                 antMatcher("/main/memberInfo"),
                 antMatcher("/member/{reviewId}"),
                 antMatcher("/member/delete/{reviewId}"),
-                antMatcher("/member/m_create")
+                antMatcher("/member/m_create"),
+                antMatcher("/member/m_reviewDetail"),
+
+                antMatcher("/member/interview/{reviewId}"),
+                antMatcher("/member/interview/delete/{reviewId}"),
+                antMatcher("/member/interview/iv_create")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);

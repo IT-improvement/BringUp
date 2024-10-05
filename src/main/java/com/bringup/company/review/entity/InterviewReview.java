@@ -41,4 +41,5 @@ public class InterviewReview {
 
     @Column(name = "status", nullable = false, length = 10)
     private String status;
+
 }

@@ -79,9 +79,9 @@ public class MemberReviewService {
 
     // 리뷰 수정
     @Transactional
-    public void updateCompanyReview(UserDetailsImpl userDetails, MemberCompanyReviewDto reviewDto) {
-        CompanyReview review = companyReviewRepository.findById(reviewDto.getCompanyReviewIndex())
-                .orElseThrow(() -> new IllegalArgumentException("User not found for email: " + userDetails.getUsername()));
+    public void updateCompanyReview(UserDetailsImpl userDetails,  int reviewId, MemberCompanyReviewDto reviewDto) {
+        CompanyReview review = companyReviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰를 찾을수 없습니다. " + userDetails.getUsername()));
 
         if (!review.getUser().getUserEmail().equals(userDetails.getUsername())) {
             throw new IllegalArgumentException("리뷰를 수정할 권한이 없습니다.");
@@ -107,7 +107,7 @@ public class MemberReviewService {
     @Transactional
     public void deleteCompanyReview(UserDetailsImpl userDetails, int reviewId) {
         // 리뷰 ID로 리뷰를 조회
-        CompanyReview review = companyReviewRepository.findByCompanyReviewIndex(reviewId)
+        CompanyReview review = companyReviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
 
         if (!review.getUser().getUserEmail().equals(userDetails.getUsername())) {
