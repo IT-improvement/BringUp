@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log("imgArray : "+imgArray);
                 // FormData에 배열로 이미지 추가
                 imgArray.forEach((name, index) => {
-                    multipart.append('c_imgs', name);
+                    multipart.append('c_imgs['+index+']', name);
                 });
                     
                 for (let [key, value] of multipart.entries()) {
@@ -106,8 +106,8 @@ document.addEventListener('DOMContentLoaded', function() {
             {
                 console.log("멀티파트로고 : "+multipart.get('c_logo'));
                 for (let [key, value] of multipart.entries()) {
-                    if (key === 'c_imgs') {
-                        console.log(value);
+                    if (key.startsWith('c_imgs')) {
+                        console.log("multipart 이미지 " + key + " : " + value);
                     }
                 }
             }
@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         };
                         fileReader.readAsDataURL(fileInput.files[0]);
 
-                        multipart.set('c_imgs', fileInput.files[0]);
+                        multipart.set('c_imgs['+index+']', fileInput.files[0]);
                         console.log("multipart 이미지 " + index + " : " + multipart.get('c_imgs['+index+']'));
                     } else {
                         fileNameSpan.textContent = '파일을 선택하세요';
