@@ -41,50 +41,7 @@
     <script src="/resources/script/common/function/functions.js"></script>
 
     <!-- 메인 JS -->
-    <!-- <script src="/resources/script/company/main.js"></script> -->
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			const accessToken = localStorage.getItem("accessToken");
-			const url = "/com/companyInfo/post"
-			if (accessToken) {
-				fetch(url, {
-					method: 'GET',
-					headers: {
-						'Authorization': `Bearer ` + accessToken
-					}
-				})
-				.then(response => response.json())
-				.then(data => {
-					console.log(data);
-					console.log(data.data);
-
-					// 폼 필드 채우기
-					document.getElementById('companyName').value = data.data.companyName;
-					document.getElementById('representativeName').value = data.data.masterName;
-					document.getElementById('address').value = data.data.companyAddress;
-					document.getElementById('homepage').value = data.data.companyHomepage;
-					document.getElementById('industry').value = data.data.companyCategory;
-					document.getElementById('employeeCount').value = data.data.companySize;
-					document.getElementById('representativeEmail').value = data.data.managerEmail;
-					document.getElementById('phoneNumber').value = data.data.companyPhonenumber;
-					document.getElementById('companyContent').value = data.data.companyContent;
-					document.getElementById('companyWelfare').value = data.data.companyWelfare;
-					document.getElementById('companyHistory').value = data.data.companyHistory;
-					document.getElementById('companyVision').value = data.data.companyVision;
-					document.getElementById('companyFinancialStatements').value = data.data.companyFinancialStatements || '';
-					document.getElementById('companySubsidiary').value = data.data.companySubsidiary || '';
-					
-					// 이미지 파일 이름 표시 (실제 파일 업로드는 아님)
-					if (data.data.companyLogo) {
-						document.querySelector('#companyLogo #file-chosen').textContent = data.data.companyLogo.split('/').pop();
-					}
-					if (data.data.companyImg) {
-						document.querySelector('#companyImage #file-chosen').textContent = data.data.companyImg.split(',')[0].split('/').pop();
-					}
-				})
-			}
-		});
-	</script>
+    <script src="/resources/script/company/updateAuth.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -100,23 +57,35 @@
                 <div class="mb-3">
                     <h5 for="companyLogo" class="form-label mb-2">회사 로고</h5>
                     <div class="input-group">
-                        <label for="companyLogo" class="form-control d-flex align-items-center cursor-pointer rounded-2">
+                        <label for="companyLogo" class="form-control d-flex align-items-center cursor-pointer rounded-2 me-2">
                             <i class="bi bi-image me-2"></i>
-                            <span id="file-chosen">파일을 선택하세요</span>
+                            <span id="companyLogo-file-chosen">파일을 선택하세요</span>
                         </label>
-                        <input type="file" class="d-none" id="companyLogo" name="companyLogo" accept="image/*">
+                        <input type="file" class="d-none" id="companyLogo" name="companyLogo">
+						<input type="hidden" id="companyLogoHidden" name="companyLogoHidden">
+                        <button type="button" class="btn btn-secondary rounded-2 d-flex justify-content-center align-items-center" id="companyLogo-viewImage" style="height: 40px; width: 40px;">
+							<i class="bi bi-eye"></i>
+						</button>
                     </div>
+					<img id="companyLogo_img" alt="Company Logo" style="display: none;">
                 </div>
                 <div class="mb-3">
 					<h5 for="companyImage" class="form-label mb-2">회사 대표 이미지</h5>
-					<div class="input-group">
-                        <label for="companyImage" class="form-control d-flex align-items-center cursor-pointer rounded-2">
-                            <i class="bi bi-image me-2"></i>
-                            <span id="file-chosen">파일을 선택하세요</span>
-                        </label>
-                        <input type="file" class="d-none" id="companyImage" name="companyImage" accept="image/*">
-						<button type="button" class="btn btn-danger rounded-2 ms-2">-</button>
-                    </div>
+					<div id="companyImage-container">
+						<div class="d-flex mb-2">
+							<label for="companyImage0" class="form-control d-flex align-items-center cursor-pointer rounded-2 me-2" style="height: 40px;">
+								<i class="bi bi-image me-2"></i>
+								<span id="companyImage0-file-chosen">파일을 선택하세요</span>
+							</label>
+							<input type="file" class="d-none" id="companyImage0" name="companyImage[]">
+							<input type="hidden" id="companyImage0Hidden" name="companyImageHidden[]" value="">
+							<button type="button" class="btn btn-secondary rounded-2 d-flex justify-content-center align-items-center me-2" id="companyImage0-viewImage" style="height: 40px; width: 40px;">
+								<i class="bi bi-eye"></i>
+							</button>
+							<button id="addImage" type="button" class="btn btn-primary rounded-2" style="height: 40px; width: 40px;">+</button>
+						</div>
+						<img id="companyImage0_img" src="" alt="Company Image 0" style="display: none;">
+					</div>
 				</div> 
                 <div class="mb-3">
                     <h5 for="companyName" class="form-label mb-2">회사 이름</h5>
@@ -152,7 +121,7 @@
                 </div>
                 <div class="mb-3">
                     <h5 for="companyContent" class="form-label mb-2">회사 소개</h5>
-                    <textarea id="companyContent" name="companyContent" class="form-control" required></textarea>
+					<textarea id="companyContent" name="companyContent" class="form-control form-control-lg" rows="3" required></textarea>
                 </div>
                 <div class="mb-3">
                     <h5 for="companyWelfare" class="form-label mb-2">복지</h5>
@@ -188,4 +157,5 @@
     <div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
 
 </body>
+
 </html>
