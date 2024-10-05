@@ -34,4 +34,10 @@ public class HeadhuntController {
         List<HeadhuntResponseDto> allCVs = headHuntService.listAllCVs();
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, allCVs));
     }
+
+    @GetMapping("/list/saved")
+    public ResponseEntity<BfResponse<List<HeadhuntResponseDto>>> listSavedCVs(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        List<HeadhuntResponseDto> savedCVs = headHuntService.listSavedCVs(userDetails);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, savedCVs));
+    }
 }
