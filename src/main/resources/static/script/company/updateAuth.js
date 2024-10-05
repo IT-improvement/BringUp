@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const accessToken = localStorage.getItem("accessToken");
     const url = "/com/companyInfo/post"
+    const multipart = new FormData();
     if (accessToken) {
         fetch(url, {
             method: 'GET',
@@ -53,11 +54,15 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.data.companyLogo) {
                 document.querySelector('#companyLogo-file-chosen').textContent = data.data.companyLogo;
                 document.getElementById('companyLogoHidden').value = data.data.companyLogo;
+                multipart.set('c_logo', data.data.companyLogo);
+                console.log("multipart 로고: "+multipart.get('c_logo'));
             }
             if (data.data.companyImg) {
                 const img_names = data.data.companyImg.split(',');
+                const imgArray = [];
                 img_names.forEach((name, index) => {
                     console.log("name : "+name);
+                    imgArray.push(name);
                     if (index === 0) {
                         document.querySelector('#companyImage0-file-chosen').textContent = name;
                         document.getElementById('companyImage0Hidden').value = name;
@@ -75,16 +80,37 @@ document.addEventListener('DOMContentLoaded', function() {
                             <button type="button" class="btn btn-secondary rounded-2 d-flex justify-content-center align-items-center me-2" id="companyImage${index}-viewImage" style="height: 40px; width: 40px;">
                                 <i class="bi bi-eye"></i>
                             </button>
-                            <button type="button" class="btn btn-danger rounded-2 remove-image" style="height: 40px; width: 40px;">-</button>
+                            <button type="button" id="${index}-removeImage" class="btn btn-danger rounded-2 remove-image" style="height: 40px; width: 40px;">-</button>
                         </div>
                         <img id="companyImage${index}_img" src="" alt="Company Image ${index}" style="display: none;">
                         `;
                         document.getElementById('companyImage-container').appendChild(newContainer);
                     }
                 });
+
+                
+                console.log("imgArray : "+imgArray);
+                // FormData에 배열로 이미지 추가
+                imgArray.forEach((name, index) => {
+                    multipart.append('c_imgs', name);
+                });
+                    
+                for (let [key, value] of multipart.entries()) {
+                    if (key.startsWith('c_imgs')) {
+                        console.log("multipart 이미지 " + key + " : " + value);
+                    }
+                }
+
                 imageCount = img_names.length;
             }
-
+            {
+                console.log("멀티파트로고 : "+multipart.get('c_logo'));
+                for (let [key, value] of multipart.entries()) {
+                    if (key === 'c_imgs') {
+                        console.log(value);
+                    }
+                }
+            }
             // 이미지 추가 버튼 이벤트 리스너
             document.querySelector('#addImage').addEventListener('click', function() {
                 if (imageCount < 5) {
@@ -100,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <button type="button" class="btn btn-secondary rounded-2 d-flex justify-content-center align-items-center me-2" id="companyImage${imageCount}-viewImage" style="height: 40px; width: 40px;">
                             <i class="bi bi-eye"></i>
                         </button>
-                        <button type="button" class="btn btn-danger rounded-2 remove-image" style="height: 40px; width: 40px;">-</button>
+                        <button type="button" id="${imageCount}-removeImage" class="btn btn-danger rounded-2 remove-image" style="height: 40px; width: 40px;">-</button>
                     `;
                     document.getElementById('companyImage-container').appendChild(newContainer);
                     imageCount++;
@@ -113,6 +139,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // 이미지 제거 버튼 이벤트 리스너
             document.getElementById('companyImage-container').addEventListener('click', function(e) {
                 if (e.target.classList.contains('remove-image')) {
+                    const imgIndex = e.target.id.replace('-removeImage', '');
+                    console.log("타겟 아이디 : "+imgIndex);
                     e.target.closest('.d-flex').remove();
                     imageCount--;
                 }
@@ -136,6 +164,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         sessionStorage.setItem('companyLogo', fileContent);
                     };
                     fileReader.readAsDataURL(fileInput.files[0]);
+
+                    multipart.set('c_logo', fileInput.files[0]);
+                    console.log("multipart 로고: "+multipart.get('c_logo'));
                 } else {
                     fileNameSpan.textContent = '파일을 선택하세요';
                     hiddenInput.value = '';
@@ -204,6 +235,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             sessionStorage.setItem(`companyImage${index}`, fileContent);
                         };
                         fileReader.readAsDataURL(fileInput.files[0]);
+
+                        multipart.set('c_imgs', fileInput.files[0]);
+                        console.log("multipart 이미지 " + index + " : " + multipart.get('c_imgs['+index+']'));
                     } else {
                         fileNameSpan.textContent = '파일을 선택하세요';
                         hiddenInput.value = '';
@@ -212,6 +246,30 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             });
+
+            document.getElementById('Image-update').addEventListener('click', function() {
+                const url = "/com/user/image"
+                console.log("전송 직전 multipart 내용:");
+                for (let [key, value] of multipart.entries()) {
+                    console.log(key + ": " + value);
+                }
+                fetch(url, {
+                    method: 'put',
+                    headers: {
+                        'Authorization': `Bearer ` + accessToken
+                    },
+                    body: multipart
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('수정 중 오류가 발생했습니다. : '+error.message);
+                });
+            });
+
             document.getElementById('updateForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 
