@@ -212,6 +212,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             });
+            document.getElementById('updateForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                var formData = new FormData(this);
+                
+                fetch('/com/user', {
+                    method: 'PUT',
+                    body: formData,
+                    headers: {
+                        'Authorization': `Bearer ` + accessToken
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('수정이 완료되었습니다. : '+response.data);
+                        // 성공 후 처리 (예: 페이지 리다이렉트)
+                    } else {
+                        alert('수정 중 오류가 발생했습니다. : '+response.data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('수정 중 오류가 발생했습니다. : '+error.message);
+                });
+            });
         });
     }
 });

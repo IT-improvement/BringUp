@@ -53,7 +53,7 @@
     <main class="flex-grow-1">
         <div class="container" style="max-width: 1260px;">
             <h2 class="mt-4 mb-3">기업 정보 수정</h2>
-            <form action="/company/auth/updateAuth" method="post" class="mx-4">
+            <form id="updateForm" action="/com/user" method="post" class="mx-4">
                 <div class="mb-3">
                     <h5 for="companyLogo" class="form-label mb-2">회사 로고</h5>
                     <div class="input-group">
@@ -137,11 +137,11 @@
                 </div>
                 <div class="mb-3">
                     <h5 for="companyFinancialStatements" class="form-label mb-2">재무제표</h5>
-                    <textarea id="companyFinancialStatements" name="companyFinancialStatements" class="form-control" required></textarea>
+                    <textarea id="companyFinancialStatements" name="companyFinancialStatements" class="form-control"></textarea>
                 </div>
                 <div class="mb-3">
                     <h5 for="companySubsidiary" class="form-label mb-2">계열사</h5>
-                    <textarea id="companySubsidiary" name="companySubsidiary" class="form-control" required></textarea>
+                    <textarea id="companySubsidiary" name="companySubsidiary" class="form-control"></textarea>
                 </div>
                 <div class="d-flex justify-content-between">
                     <button type="button" class="btn btn-secondary">취소</button>
