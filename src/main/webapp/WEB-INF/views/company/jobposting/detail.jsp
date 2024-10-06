@@ -67,28 +67,27 @@
                     </div>
                     <div class="mb-4">
                         <h3>기업 소개</h3>
-                        <p id="c_intro"></p>
+                        <p id="c_intro" class="mx-2"></p>
                     </div>
                     <div class="mb-4">
                         <h3>업무 소개</h3>
-                        <p id="r_workdetail"></p>
+                        <p id="r_workdetail" class="mx-2"></p>
                     </div>
                     <div class="mb-4">
                         <h3>자격 요건</h3>
-                        <ul id="r_requirement">
-                        </ul>
+                        <p id="r_requirement" class="mx-2"></p>
                     </div>
                     <div class="mb-4">
                         <h3>우대 사항</h3>
-                        <p id="r_hospitality"></p>
+                        <p id="r_hospitality" class="mx-2"></p>
                     </div>
                     <div class="mb-4">
                         <h3>복지 혜택</h3>
-                        <p id="c_welfare"></p>
+                        <p id="c_welfare" class="mx-2"></p>
                     </div>
                     <div class="mb-4">
                         <h3>근무 지역</h3>
-                        <p id="c_address">주소</p>
+                        <p id="c_address" class="mx-2">주소</p>
                         <div id="map" style="width:100%;height:350px;"></div>
                     </div>
                 </div>
@@ -120,6 +119,11 @@
                             </div>
                             <a href="#" class="btn btn-primary mt-2 rounded-pill align-items-center" style="background-color: #8BA5FF; border-color: #8BA5FF;">지원자 목록</a>
                             <a href="#" class="btn btn-primary mt-2 rounded-pill align-items-center" style="background-color: #FF8BA5; border-color: #FF8BA5;">삭제하기</a>
+                        </div>
+                        <div class="card border border-1 border-#C2C2C2 rounded-3 w-100 mt-2">
+                            <div class="card-body">
+                                <p>지도</p>
+                            </div>
                         </div>
                     </div>  
                 </div>
