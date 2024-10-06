@@ -71,6 +71,11 @@ public class PageController {
         return "company/recommendation/recommendation";
     }
 
+    @GetMapping("/recommendation_saved")
+    public String recommendation_saved(){
+        return "company/recommendation/recommendation_saved";
+    }
+
     @GetMapping("/auth/profile")
     public String profile(){
         return "company/auth/profile/profile";
