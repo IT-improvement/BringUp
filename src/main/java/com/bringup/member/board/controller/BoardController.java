@@ -38,6 +38,7 @@ public class BoardController {
         return boardService.getPost(userIndex);
     }
 
+    @PutMapping("/updatePost")
     public ResponseEntity<BfResponse<?>> updatePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto, @RequestPart MultipartFile[] boardImage){
         boardService.updatePost(userDetails, boardImage, boardRequestDto);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS, "update board successfully"));
