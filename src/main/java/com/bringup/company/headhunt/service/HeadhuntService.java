@@ -161,7 +161,7 @@ public class HeadhuntService {
         return bookmarks.stream()
                 .map(bookmark -> {
                     // 유저 인덱스를 통해 이력서(CV)와 유저 정보 가져오기
-                    CVEntity cv = cvRepository.findByUserIndex(bookmark.getUser().getUserIndex())
+                    CVEntity cv = cvRepository.findByUserIndexAndAndMainCvTrue(bookmark.getUser().getUserIndex())
                             .orElseThrow(() -> new BookmarkException(NOT_FOUND_MEMBER_ID));
                     UserEntity user = userRepository.findById(cv.getUserIndex())
                             .orElseThrow(() -> new BookmarkException(NOT_FOUND_MEMBER_ID));
