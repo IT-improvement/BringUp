@@ -6,9 +6,9 @@ import com.bringup.member.board.domain.entity.BoardEntity;
 import com.bringup.member.board.domain.repository.BoardRepository;
 import com.bringup.member.board.dto.request.BoardRequestDto;
 import com.bringup.member.board.dto.response.BoardResponseDto;
-import com.bringup.member.board.dto.response.SuccessResponseDto;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.exception.MemberException;
+import com.bringup.member.board.exception.BoardException;
 import com.bringup.member.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -54,17 +54,20 @@ public class BoardService {
         );
     }
 
-  /*  @Transactional
-    public BoardResponseDto updatePost(int userIndex, BoardRequestDto boardRequestDto) throws Exception{
-        BoardEntity boardEntity = boardRepository.findById(userIndex).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
-        );
-        if (!boardRequestDto.getUserEmail().equals(boardEntity.getUserEmail())){
-            throw new Exception("이메일이 일치하지 않습니다.");
-        }
-        boardEntity.updatePost(boardRequestDto);
-        return new BoardResponseDto(boardEntity);
-    }*/
+    @Transactional
+    public void updatePost(UserDetailsImpl userDetails, MultipartFile[] boardImage, BoardRequestDto boardRequestDto){
+        UserEntity user = userRepository.findById(userDetails.getId())
+                .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
+
+        BoardEntity board = boardRepository.findByUser(user)
+                .orElseThrow(()->new RuntimeException("작성자가 일치하지 않습니다."));
+
+        board.setTitle(boardRequestDto.getTitle());
+        board.setContent(boardRequestDto.getContent());
+        board.setBoardImage(imageService.uploadImages(boardImage));
+
+        boardRepository.save(board);
+    }
 
     @Transactional
     public void deletePost(UserDetailsImpl userDetails, BoardRequestDto boardRequestDto){
