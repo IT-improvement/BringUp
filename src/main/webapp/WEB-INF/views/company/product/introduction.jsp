@@ -92,6 +92,18 @@
                 </div>
             </div>
         </div>
+        <div class="mb-4 border">
+            <div>
+                <h3 class="mx-4 my-2">어나운스</h3>
+                <div class="border p-3 mb-3 mx-auto" style="width: 577px; height: 353px;">
+                    <img src="/resources/style/company/product/어나운스광고.png">
+                </div>
+                <div class="d-flex justify-content-end mx-4 my-2">
+                    <button class="btn btn-primary" onclick="applyProduct('어나운스')">신청하기</button>
+                </div>
+            </div>
+        </div>
+
     </main>
 
 	<jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
