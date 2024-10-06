@@ -170,9 +170,7 @@ public class SpringSecurityConfig {
     private RequestMatcher[] AuthRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
                 antMatcher(POST, "/com/companyName"),               // 기업명 헤더 삽입
-                antMatcher(PUT, "/com/user"),                       // 회원 정보 수정
-                antMatcher(DELETE, "/com/user"),                    // 회원 탈퇴
-                antMatcher(GET, "/com/companyInfo/post"),           // 회원 정보 조회
+                antMatcher("/com/user/**"),
 
                 antMatcher("/com/recruitment/**"),
 
