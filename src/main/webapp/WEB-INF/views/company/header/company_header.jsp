@@ -158,6 +158,7 @@
                         <ul class="dropdown-menu" aria-labelledby="jobPostingMenu">
                             <li><a class="dropdown-item" href="/company/jobpost/management">공고 관리</a></li>
                             <li><a class="dropdown-item" href="/company/jobpost/registration">공고 등록</a></li>
+                            <li><a class="dropdown-item" href="/company/jobpost/freelancer">후리랜서 디테일 확인용</a></li>
                         </ul>
                     </li>
 

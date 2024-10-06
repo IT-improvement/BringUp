@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
-        fetch(`/com/recruitment/list`, {
+        fetch(`/com/recruitment/detail/list`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
