@@ -14,4 +14,6 @@ public interface CVRepository extends JpaRepository<CVEntity, Integer> {
     List<CVEntity> findAllByUserIndex(int index);
     
     Optional<CVEntity> findByUserIndex(int userIndex);
+
+    Optional<CVEntity> findByUserIndexAndAndMainCvTrue(int userIndex);
 }
