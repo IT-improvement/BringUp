@@ -178,8 +178,12 @@
                             <li><a class="dropdown-item" href="/company/review/interview">면접 리뷰</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/company/recommendation" id="recommendMenu">인재 추천</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="headhuntMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">인재 추천</a>
+                        <ul class="dropdown-menu" aria-labelledby="recommendMenu">
+                            <li><a class="dropdown-item" href="/company/recommendation">인재 리스트</a></li>
+                            <li><a class="dropdown-item" href="/company/recommendation_saved">인재 저장 리스트</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>
