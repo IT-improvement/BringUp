@@ -6,9 +6,9 @@ import com.bringup.member.board.domain.entity.BoardEntity;
 import com.bringup.member.board.domain.repository.BoardRepository;
 import com.bringup.member.board.dto.request.BoardRequestDto;
 import com.bringup.member.board.dto.response.BoardResponseDto;
+import com.bringup.member.board.exception.BoardException;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.exception.MemberException;
-import com.bringup.member.board.exception.BoardException;
 import com.bringup.member.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -60,7 +60,7 @@ public class BoardService {
                 .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
 
         BoardEntity board = boardRepository.findByUser(user)
-                .orElseThrow(()->new RuntimeException("작성자가 일치하지 않습니다."));
+                .orElseThrow(()->new BoardException(NOT_FOUND_MEMBER_ID));
 
         board.setTitle(boardRequestDto.getTitle());
         board.setContent(boardRequestDto.getContent());

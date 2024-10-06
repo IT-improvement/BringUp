@@ -38,12 +38,10 @@ public class BoardController {
         return boardService.getPost(userIndex);
     }
 
-/*
-    @PutMapping("/post/{userIndex}")
-    public BoardResponseDto updatePost(@PathVariable int userIndex, @RequestBody BoardRequestDto boardRequestDto) throws Exception{
-        return boardService.updatePost(userIndex, boardRequestDto);
+    public ResponseEntity<BfResponse<?>> updatePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto, @RequestPart MultipartFile[] boardImage){
+        boardService.updatePost(userDetails, boardImage, boardRequestDto);
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS, "update board successfully"));
     }
-*/
 
     @DeleteMapping("/deletePost")
     public ResponseEntity<BfResponse<?>> deletePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto){
