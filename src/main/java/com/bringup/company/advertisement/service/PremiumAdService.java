@@ -185,7 +185,7 @@ public class PremiumAdService {
         Advertisement ad = advertisementRepository.findByAdvertisementIndex(ad_index)
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
-        PremiumAdvertisement premiumAdvertisement = premiumAdvertisementRepository.findById(ad.getPremiumAdvertisement().getPremium_index())
+        PremiumAdvertisement premiumAdvertisement = premiumAdvertisementRepository.findById(ad.getPremiumAdvertisement().getPremiumIndex())
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         companyRepository.findById(userDetails.getId())

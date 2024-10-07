@@ -25,11 +25,11 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final ImageService imageService;
-
+/*
     @Transactional(readOnly = true)
     public List<BoardResponseDto> getPosts(){
         return boardRepository.findAllByOrderByModifiedTimeDesc().stream().map(BoardResponseDto::new).toList();
-    }
+    }*/
 
     @Transactional
     public void createPost(UserDetailsImpl userDetails, BoardRequestDto boardRequestDto, MultipartFile[] boardImage){
