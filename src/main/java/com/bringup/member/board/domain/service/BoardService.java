@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.bringup.common.enums.BoardErrorCode.*;
 import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
@@ -27,6 +29,45 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final ImageService imageService;
+
+    public List<BoardResponseDto> getAllPost(int boardIndex){
+        List<BoardResponseDto> allBoards = new ArrayList<>();
+        List<BoardEntity> boards = boardRepository.findByBoardIndex(boardIndex);
+        if (boards == null || boards.isEmpty()){
+            throw new BoardException(NOT_FOUND_WRITING);
+        }
+        for (BoardEntity board : boards){
+            BoardResponseDto dto = BoardResponseDto.builder()
+                    .boardIndex(board.getBoardIndex())
+                    .user(board.getUser())
+                    .title(board.getTitle())
+                    .content(board.getContent())
+                    .boardImage(board.getBoardImage())
+                    .createPostTime(board.getCreatedPostTime())
+                    .updatePostTime(board.getUpdatePostTime())
+                    .build();
+            allBoards.add(dto);
+        }
+        return allBoards;
+    }
+
+    @Transactional
+    public List<BoardResponseDto> getPostList(UserDetailsImpl userDetails){
+        List<BoardEntity> boardList = boardRepository.findByUserUserIndex(userDetails.getId());
+
+        if (boardList == null || boardList.isEmpty()){
+            throw new BoardException(NOT_FOUND_WRITING);
+        }
+
+        List<BoardResponseDto> boards = new ArrayList<>();
+
+        for (BoardEntity board : boardList){
+            BoardResponseDto dto = convertDto(board);
+            boards.add(dto);
+        }
+
+        return boards;
+    }
 
     @Transactional
     public void createPost(UserDetailsImpl userDetails, BoardRequestDto boardRequestDto, MultipartFile[] boardImage){
@@ -60,11 +101,11 @@ public class BoardService {
             throw new BoardException(NOT_FOUND_USER);
         }
 
-        return null;
+        return convertDto(board);
     }
 
     @Transactional
-    public void updatePost(UserDetailsImpl userDetails, MultipartFile[] boardImage, BoardRequestDto boardRequestDto, int boardIndex){
+    public void updatePost(UserDetailsImpl userDetails, BoardRequestDto boardRequestDto, MultipartFile[] boardImage, int boardIndex){
         BoardEntity board = boardRepository.findById(boardIndex)
                 .orElseThrow(()->new BoardException(NOT_FOUND_WRITING));
 
@@ -100,9 +141,13 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-//    private BoardResponseDto convertDto(BoardEntity board, String[] imgs){
-//        return BoardResponseDto.builder()
-//                .boardIndex(board.getBoardIndex())
-//                .
-//    }
+    private BoardResponseDto convertDto(BoardEntity board){
+        return BoardResponseDto.builder()
+                .boardIndex(board.getBoardIndex())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .boardImage(board.getBoardImage())
+                .createPostTime(board.getCreatedPostTime())
+                .build();
+    }
 }
