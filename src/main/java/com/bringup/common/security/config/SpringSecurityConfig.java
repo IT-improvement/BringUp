@@ -162,6 +162,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/m_reviews"),
 
                 antMatcher("/main/list"),
+                antMatcher("/member/memberProfile"),
 
                 antMatcher("/member/interview/iv_list"),
                 antMatcher("/freelancer/**")
