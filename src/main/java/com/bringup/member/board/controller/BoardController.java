@@ -33,14 +33,9 @@ public class BoardController {
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS, "create board successfully"));
     }
 
-    @GetMapping("/post/{userIndex}")
-    public BoardResponseDto getPost(@PathVariable int userIndex){
-        return boardService.getPost(userIndex);
-    }
-
     @PutMapping("/updatePost")
-    public ResponseEntity<BfResponse<?>> updatePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto, @RequestPart MultipartFile[] boardImage){
-        boardService.updatePost(userDetails, boardImage, boardRequestDto);
+    public ResponseEntity<BfResponse<?>> updatePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto, @RequestPart MultipartFile[] boardImage, @PathVariable int boardIndex){
+        boardService.updatePost(userDetails, boardImage, boardRequestDto, boardIndex);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS, "update board successfully"));
     }
 
