@@ -38,15 +38,15 @@ public class BoardController {
         return boardService.getPost(userIndex);
     }
 
-/*
-    @PutMapping("/post/{userIndex}")
-    public BoardResponseDto updatePost(@PathVariable int userIndex, @RequestBody BoardRequestDto boardRequestDto) throws Exception{
-        return boardService.updatePost(userIndex, boardRequestDto);
+    @PutMapping("/updatePost")
+    public ResponseEntity<BfResponse<?>> updatePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto, @RequestPart MultipartFile[] boardImage){
+        boardService.updatePost(userDetails, boardImage, boardRequestDto);
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS, "update board successfully"));
     }
-*/
 
-    @DeleteMapping("/post/{userIndex}")
-    public SuccessResponseDto deletePost(@PathVariable int userIndex, @RequestBody BoardRequestDto boardRequestDto) throws Exception{
-        return boardService.deletePost(userIndex, boardRequestDto);
+    @DeleteMapping("/deletePost")
+    public ResponseEntity<BfResponse<?>> deletePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto){
+        boardService.deletePost(userDetails, boardRequestDto);
+        return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS, "delete board successfully"));
     }
 }
