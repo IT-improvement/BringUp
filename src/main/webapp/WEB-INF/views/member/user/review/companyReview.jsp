@@ -125,41 +125,7 @@
 			background-color: #0056b3;
 		}
 	</style>
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			document.querySelectorAll('.details-button').forEach(button => {
-				button.addEventListener('click', function() {
 
-					const accessToken = localStorage.getItem('accessToken'); // 로컬 스토리지에서 토큰 가져오기
-					console.log('토큰:', accessToken);
-					if (accessToken) {
-						// 서버에 GET 요청을 보냄
-						fetch(`/member/m_reviewDetail`, {
-							method: 'GET',
-							headers: {
-								'Authorization': `Bearer ` + accessToken, // Bearer 토큰 추가
-								'Content-Type': 'application/json'  // 헤더에 JSON 형식 명시
-							}
-						})
-								.then(response => {
-									if (response.ok) {
-										// 요청 성공 시 상세 페이지로 이동
-										window.location.href = `/member/m_reviewDetail`;
-									} else {
-										alert('리뷰 페이지로 이동하는 중 오류가 발생했습니다.');
-									}
-								})
-								.catch(error => {
-									console.error('오류 발생:', error);
-									alert('서버 요청 중 문제가 발생했습니다.');
-								});
-					} else {
-						alert("로그인 토큰이 없습니다. 로그인 해주세요.");
-					}
-				});
-			});
-		});
-	</script>
 </head>
 <body>
 
@@ -210,7 +176,7 @@
 						</td>
 						<td>2024-10-03</td>
 						<td>
-							<button class="details-button" id="reviewId">자세히 보기</button>
+							<a class="details-button" href="/member/m_reviewDetail">자세히 보기</a>
 						</td>
 					</tr>
 
