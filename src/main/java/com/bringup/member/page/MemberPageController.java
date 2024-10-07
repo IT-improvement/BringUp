@@ -108,11 +108,8 @@ public class MemberPageController {
     }
 
     @GetMapping("/m_reviewDetail")
-    public String c_reviewDetail(@AuthenticationPrincipal UserDetailsImpl userDetails)
+    public String c_reviewDetail()
     {
-        if (userDetails == null) {
-            return "redirect:/member/user/login"; // 인증되지 않은 경우 로그인 페이지로 리다이렉트
-        }
         return "member/user/review/companyReviewDetail";
     }
 

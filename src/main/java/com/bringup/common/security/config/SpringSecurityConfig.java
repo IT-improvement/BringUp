@@ -164,6 +164,8 @@ public class SpringSecurityConfig {
                 antMatcher("/main/list"),
 
                 antMatcher("/member/interview/iv_list"),
+                antMatcher("/member/m_reviewDetail"),
+
                 antMatcher("/freelancer/**")
         );
 
@@ -195,7 +197,6 @@ public class SpringSecurityConfig {
                 antMatcher("/member/{reviewId}"),
                 antMatcher("/member/delete/{reviewId}"),
                 antMatcher("/member/m_create"),
-                antMatcher("/member/m_reviewDetail"),
 
                 antMatcher("/member/interview/{reviewId}"),
                 antMatcher("/member/interview/delete/{reviewId}"),
