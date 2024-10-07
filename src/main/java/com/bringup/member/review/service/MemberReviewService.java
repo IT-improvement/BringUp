@@ -27,7 +27,6 @@ public class MemberReviewService {
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
 
-    // 사용자 리뷰 리스트를 가져오는 서비스
     public List<MemberCompanyReviewDto> getCompanyReviews() {
         // 사용자의 회사 리뷰를 가져옴
         List<CompanyReview> reviews = companyReviewRepository.findAll();
@@ -79,7 +78,7 @@ public class MemberReviewService {
 
     // 리뷰 수정
     @Transactional
-    public void updateCompanyReview(UserDetailsImpl userDetails,  int reviewId, MemberCompanyReviewDto reviewDto) {
+    public void updateCompanyReview(UserDetailsImpl userDetails,  int reviewId, RequestCompanyReviewDto reviewDto) {
         CompanyReview review = companyReviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 리뷰를 찾을수 없습니다. " + userDetails.getUsername()));
 
@@ -121,15 +120,22 @@ public class MemberReviewService {
     // CompanyReview 엔티티를 MemberCompanyReviewDto로 변환하는 메서드
     private MemberCompanyReviewDto convertToDto(CompanyReview review) {
         MemberCompanyReviewDto dto = new MemberCompanyReviewDto();
+
         dto.setCompanyReviewIndex(review.getCompanyReviewIndex());
-        dto.setAdvancement(review.getAdvancement());
-        dto.setBenefit(review.getBenefit());
-        dto.setWorkLife(review.getWorkLife());
-        dto.setCompanyCulture(review.getCompanyCulture());
-        dto.setManagement(review.getManagement());
+        dto.setCompanyName(review.getCompany().getCompanyName()); // 회사 이름 설정
+        dto.setUserEmail(review.getUser().getUserEmail()); // 사용자 이메일 설정
         dto.setContent(review.getContent());
         dto.setCompanyReviewTitle(review.getCompanyReviewTitle());
         dto.setCompanyReviewDate(review.getCompanyReviewDate());
+
+        // 각 항목의 점수로 평균을 계산
+        double averageRating = (review.getAdvancement()
+                + review.getBenefit()
+                + review.getWorkLife()
+                + review.getCompanyCulture()
+                + review.getManagement()) / 5.0;
+        dto.setAverageRating(averageRating); // 평균 점수를 DTO에 설정
+
         return dto;
     }
 }

@@ -12,7 +12,7 @@
 
 	<!-- 다크 모드 -->
 	<script src="/resources/script/common/darkmode/darkmode.js"></script>
-	
+
 	<!-- 파비콘 -->
 	<link rel="shortcut icon" href="/resources/style/common/images/favicon.ico">
 
@@ -25,6 +25,8 @@
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/bootstrap-icons/bootstrap-icons.css">
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/apexcharts/css/apexcharts.css">
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/overlay-scrollbar/css/OverlayScrollbars.min.css">
+	<link rel="stylesheet" type="text/css" href="/resources/style/member/companyReview.css">
+
 
 	<!-- 테마 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
@@ -47,85 +49,73 @@
 
 	<!--  JS -->
 	<!-- <script src="/resources/script/member/user/파일명.js"></script> -->
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			fetchReviews(); // 페이지 로드 시 회사 리뷰 데이터를 가져옴
+		});
 
+		function fetchReviews() {
+			fetch("/member/m_reviews") // 리뷰를 가져오는 API 엔드포인트
+					.then(response => response.json())
+					.then(data => {
+						const reviews = data.data; // 데이터에서 리뷰 목록 추출
+						const reviewTableBody = document.querySelector("tbody");
 
-	<style>
-		.m_review-container {
-			max-width: 1260px;
-			margin: 0 auto;
-		}
-		.m_review-header {
-			padding: 20px;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-		}
-		.m_review-header h1 {
-			font-size: 32px;
-			font-weight: bold;
-		}
-		.search-container {
-			position: relative;
-		}
-		.search-container input[type="text"] {
-			padding: 10px;
-			font-size: 14px;
-			border-radius: 4px;
-			border: 1px solid #ddd;
-			width: 250px;
-		}
-		.search-container button {
-			position: absolute;
-			right: 0;
-			padding: 10px;
-			background-color: #007bff;
-			color: white;
-			border: none;
-			border-radius: 0 4px 4px 0;
-			cursor: pointer;
-		}
-		.search-container button:hover {
-			background-color: #0056b3;
-		}
-		table {
-			width: 100%;
-			border-collapse: collapse;
-			margin-top: 20px;
-			text-align: left;
-		}
-		th, td {
-			padding: 15px;
-			border-bottom: 1px solid #ddd;
-		}
-		th {
-			background-color: #f4f4f4;
-			font-weight: bold;
-		}
-		td {
-			vertical-align: middle;
-		}
-		.m_review-ratings {
-			display: flex;
-			justify-content: start;
-		}
-		.stars i {
-			margin-right: 5px;
-		}
-		.details-button, .apply-button {
-			background-color: #007bff;
-			color: white;
-			padding: 5px 15px;
-			border: none;
-			border-radius: 4px;
-			cursor: pointer;
-			transition: background-color 0.3s ease;
-			margin-left: 10px;
-		}
-		.details-button:hover, .apply-button:hover {
-			background-color: #0056b3;
-		}
-	</style>
+						reviews.forEach(review => {
+							const row = document.createElement("tr");
 
+							// 회사 이름
+							const companyNameCell = document.createElement("td");
+							companyNameCell.textContent = review.companyName;
+							row.appendChild(companyNameCell);
+
+							// 사용자 이메일
+							const userEmailCell = document.createElement("td");
+							userEmailCell.textContent = review.userEmail;
+							row.appendChild(userEmailCell);
+
+							// 제목
+							const titleCell = document.createElement("td");
+							titleCell.textContent = review.companyReviewTitle;
+							row.appendChild(titleCell);
+
+							// 평균 별점
+							const ratingCell = document.createElement("td");
+							const starContainer = document.createElement("div");
+							starContainer.className = "m_review-ratings";
+
+							for (let i = 1; i <= 5; i++) {
+								const star = document.createElement("i");
+								star.className = "fa fa-star";
+								star.style.color = i <= review.averageRating ? "gold" : "#ccc"; // 별점에 따른 색상 설정
+								starContainer.appendChild(star);
+							}
+							ratingCell.appendChild(starContainer);
+							row.appendChild(ratingCell);
+
+							// 작성일자
+							const dateCell = document.createElement("td");
+							dateCell.textContent = review.companyReviewDate;
+							row.appendChild(dateCell);
+
+							// 자세히 보기 버튼
+							const detailButtonCell = document.createElement("td");
+							const detailButton = document.createElement("a");
+							detailButton.className = "details-button";
+							detailButton.textContent = "자세히 보기";
+							detailButton.href = "/member/m_reviewDetail?reviewId=" + review.companyReviewIndex; // 각 리뷰에 맞는 상세보기 링크
+							detailButtonCell.appendChild(detailButton);
+							row.appendChild(detailButtonCell);
+
+							// 테이블에 추가
+							reviewTableBody.appendChild(row);
+						});
+					})
+					.catch(error => {
+						console.error("리뷰를 가져오는 중 오류 발생:", error);
+					});
+		}
+	</script>
 </head>
 <body>
 
@@ -134,78 +124,35 @@
 
 <!-- 메인 콘텐츠 -->
 <body class="d-flex flex-column min-vh-100">
-	<div class="container" style="max-width: 1260px;">
-		<main class="flex-grow-1">
-
-			<div class="m_review-container ">
-				<div class="m_review-header">
-					<h1>전체 기업 리뷰</h1>
-					<div class="search-container">
-						<input type="text" placeholder="검색어 입력..." />
-						<button><i class="fas fa-search"></i></button>
-					</div>
+<div class="container" style="max-width: 1260px;">
+	<main class="flex-grow-1">
+		<div class="m_review-container">
+			<div class="m_review-header">
+				<h1>전체 기업 리뷰</h1>
+				<div class="search-container">
+					<input type="text" placeholder="검색어 입력..." />
+					<button><i class="fas fa-search"></i></button>
 				</div>
-
-				<table>
-					<thead>
-					<tr>
-						<th>회사 이름</th>
-						<th>사용자</th>
-						<th>제목</th>
-						<th>평균별점</th>
-						<th>작성일자</th>
-						<th>자세히 보기</th>
-					</tr>
-					</thead>
-					<tbody>
-					<!-- 리뷰 항목 1 -->
-					<tr>
-						<td>회사1</td>
-						<td>사용자1</td>
-						<td>좋은 회사입니다</td>
-						<td>
-							<div class="m_review-ratings">
-					<span class="stars">
-						<i class="fa fa-star" style="color: gold;"></i>
-						<i class="fa fa-star" style="color: gold;"></i>
-						<i class="fa fa-star" style="color: gold;"></i>
-						<i class="fa fa-star" style="color: gold;"></i>
-						<i class="fa fa-star" style="color: #ccc;"></i>
-					</span>
-							</div>
-						</td>
-						<td>2024-10-03</td>
-						<td>
-							<a class="details-button" href="/member/m_reviewDetail">자세히 보기</a>
-						</td>
-					</tr>
-
-					<!-- 리뷰 항목 2 -->
-					<tr>
-						<td>회사2</td>
-						<td>사용자2</td>
-						<td>훌륭한 복지와 환경</td>
-						<td>
-							<div class="m_review-ratings">
-					<span class="stars">
-						<i class="fa fa-star" style="color: gold;"></i>
-						<i class="fa fa-star" style="color: gold;"></i>
-						<i class="fa fa-star" style="color: gold;"></i>
-						<i class="fa fa-star" style="color: #ccc;"></i>
-						<i class="fa fa-star" style="color: #ccc;"></i>
-					</span>
-							</div>
-						</td>
-						<td>2024-10-02</td>
-						<td>
-							<button class="details-button">자세히 보기</button>
-						</td>
-					</tr>
-					</tbody>
-				</table>
 			</div>
-		</main>
-	</div>
+
+			<table>
+				<thead>
+				<tr>
+					<th>회사 이름</th>
+					<th>사용자</th>
+					<th>제목</th>
+					<th>평균별점</th>
+					<th>작성일자</th>
+					<th>자세히 보기</th>
+				</tr>
+				</thead>
+				<tbody>
+				<!-- 데이터가 스크립트로 추가될 곳 -->
+				</tbody>
+			</table>
+		</div>
+	</main>
+</div>
 
 <!-- 푸터 -->
 <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />

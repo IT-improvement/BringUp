@@ -51,8 +51,8 @@ public class MemberReviewController {
     // 리뷰 수정
     @PutMapping("/{reviewId}")
     public ResponseEntity<BfResponse<?>> updateReview(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                      @PathVariable int reviewId,
-                                                      @RequestBody MemberCompanyReviewDto reviewDto) {
+                                                      @PathVariable("reviewId") int reviewId,
+                                                      @RequestBody RequestCompanyReviewDto reviewDto) {
         try {
             memberReviewService.updateCompanyReview(userDetails,reviewId, reviewDto);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, "리뷰가 성공적으로 수정되었습니다."));
