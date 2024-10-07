@@ -45,9 +45,10 @@ public class PremiumAdService {
     private final CompanyRepository companyRepository;
     private final RecruitmentRepository recruitmentRepository;
 
-    public AvailableDatesResponseDto getAvailableTimeSlotsAndDiscount(LocalDate startDate, PremiumAdRequestDto premiumAdDto) {
+    public AvailableDatesResponseDto getAvailableTimeSlotsAndDiscount(PremiumAdRequestDto premiumAdDto) {
 
-        LocalDate endDate = startDate.plusDays(2); // 3일간 광고 노출
+        LocalDate endDate = premiumAdDto.getEndDate();
+        LocalDate startDate = premiumAdDto.getStartDate();
 
         // 해당 타임슬롯과 기간에 예약된 프리미엄 광고를 가져옴
         List<PremiumAdvertisement> reservedAds = premiumAdvertisementRepository
