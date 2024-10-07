@@ -1,5 +1,6 @@
 package com.bringup.member.board.domain.entity;
 
+import com.bringup.common.enums.BoardType;
 import com.bringup.member.user.domain.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -39,6 +40,10 @@ public class BoardEntity{
 
     @Column(name = "updated_at")
     private LocalDateTime updatePostTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private BoardType status;
 
     @PrePersist
     public void preCreateTime(){
