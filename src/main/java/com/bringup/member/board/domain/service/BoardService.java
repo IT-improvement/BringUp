@@ -16,8 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-import java.util.List;
+
 
 import static com.bringup.common.enums.BoardErrorCode.*;
 import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
@@ -34,32 +33,56 @@ public class BoardService {
         UserEntity user = userRepository.findById(userDetails.getId())
                 .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
 
+        String crateImages;
+        try {
+            crateImages = imageService.uploadImages(boardImage);
+        } catch (BoardException e){
+            throw new BoardException(IMAGE_UPLOAD_FAIL);
+        }
+
         BoardEntity board = BoardEntity.builder()
                 .user(user)
                 .title(boardRequestDto.getTitle())
                 .content(boardRequestDto.getContent())
-                .boardImage(imageService.uploadImages(boardImage))
+                .boardImage(crateImages)
+                .status(BoardType.COMPLETE)
                 .build();
 
         boardRepository.save(board);
     }
 
     @Transactional
-    public BoardResponseDto getPost(int userIndex){
-        return boardRepository.findById(userIndex).map(BoardResponseDto::new).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
-        );
+    public BoardResponseDto getPostDetails(UserDetailsImpl userDetails, int boardIndex){
+        BoardEntity board = boardRepository.findById(boardIndex)
+                .orElseThrow(()->new BoardException(NOT_FOUND_WRITING));
+
+        if (!board.getUser().getUserIndex().equals(userDetails.getId())){
+            throw new BoardException(NOT_FOUND_USER);
+        }
+
+        return null;
     }
 
     @Transactional
     public void updatePost(UserDetailsImpl userDetails, MultipartFile[] boardImage, BoardRequestDto boardRequestDto, int boardIndex){
         BoardEntity board = boardRepository.findById(boardIndex)
                 .orElseThrow(()->new BoardException(NOT_FOUND_WRITING));
+
         if (!board.getUser().getUserIndex().equals(userDetails.getId())){
             throw new BoardException(FORBIDDEN_UPDATE_WRITING);
         }
 
-        
+        String updateImages;
+        try {
+            updateImages = imageService.uploadImages(boardImage);
+        }
+        catch (BoardException e){
+            throw new BoardException(IMAGE_UPLOAD_FAIL);
+        }
+
+        board.setTitle(boardRequestDto.getTitle());
+        board.setContent(boardRequestDto.getContent());
+        board.setBoardImage(updateImages);
 
         boardRepository.save(board);
     }
@@ -76,4 +99,10 @@ public class BoardService {
         board.setStatus(BoardType.DELETE);
         boardRepository.save(board);
     }
+
+//    private BoardResponseDto convertDto(BoardEntity board, String[] imgs){
+//        return BoardResponseDto.builder()
+//                .boardIndex(board.getBoardIndex())
+//                .
+//    }
 }
