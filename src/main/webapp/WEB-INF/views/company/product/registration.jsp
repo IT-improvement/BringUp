@@ -28,6 +28,8 @@
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/overlay-scrollbar/css/OverlayScrollbars.min.css">
 	<!-- 테마 CSS -->
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
+	<!-- 날짜 선택 플러그인 -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     <!-- Bootstrap JS -->
     <script src="/resources/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -40,6 +42,10 @@
     <script src="/resources/script/common/function/functions.js"></script>
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<!-- 날짜 선택 플러그인 -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
 
     <!-- 메인 JS -->
     <script src="/resources/script/company/product/registration.js"></script>
@@ -62,15 +68,82 @@
 				<label for="imageUpload" class="form-label">이미지 업로드</label>
 				<input type="file" class="form-control" id="imageUpload" name="image" accept="image/*">
 			</div>
+			<%
+				String productName = request.getParameter("productName");
+				if (productName.equals("프리미엄")) {
+			%>
 			<div class="mb-3">
-				<label for="productSelect" class="form-label">상품 선택</label>
+				<label for="premiumDateRange" class="form-label">광고 날짜 선택</label>
+				<input type="text" class="form-control" id="premiumDateRange" name="premiumDateRange" readonly>
+			</div>
+			<div class="mb-3">
+				<label for="productSelect" class="form-label">광고 노출 시간대 선택</label>
 				<select class="form-select" id="productSelect" name="displayTime">
-					<option value="">상품 목록</option>
-					<option value="7">7일</option>
-					<option value="15">15일</option>
-					<option value="30">30일</option>
+					<option value="">광고 노출 시간대 선택</option>
+					<option value="22:00~01:00">22:00~01:00</option>
+					<option value="01:00~04:00">01:00~04:00</option>
+					<option value="04:00~07:00">04:00~07:00</option>
+					<option value="07:00~10:00">07:00~10:00</option>
+					<option value="10:00~13:00">10:00~13:00</option>
+					<option value="13:00~16:00">13:00~16:00</option>
+					<option value="16:00~19:00">16:00~19:00</option>
+					<option value="19:00~22:00">19:00~22:00</option>
 				</select>
 			</div>
+			
+			<%
+				} else if (productName.equals("메인")) {
+			%>
+			<div class="mb-3">
+				<label for="productSelect" class="form-label">광고 기간 선택</label>
+				<select class="form-select" id="productSelect" name="durationDays">
+					<option value="">광고 기간 선택</option>
+					<option value="1">1일</option>
+					<option value="3">3일</option>
+					<option value="7">일주일</option>
+				</select>
+			</div>
+			<div class="mb-3">
+				<label for="mainDateRange" class="form-label">광고 날짜 선택</label>
+				<input type="text" class="form-control" id="mainDateRange" name="mainDateRange" readonly>
+			</div>
+			<%
+				} else if (productName.equals("배너")){
+			%>
+			<div class="mb-3">
+				<label for="bannerProductSelect" class="form-label">광고 기간 선택</label>
+				<select class="form-select" id="bannerProductSelect" name="durationDays">
+					<option value="">광고 기간 선택</option>
+					<option value="1">1일</option>
+					<option value="3">3일</option>
+					<option value="7">일주일</option>
+				</select>
+			</div>
+			<div class="mb-3">
+				<label for="bannerDateRange" class="form-label">광고 날짜 선택</label>
+				<input type="text" class="form-control" id="bannerDateRange" name="bannerDateRange" readonly>
+			</div>
+			<%
+				}else{
+			%>
+			<div class="mb-3">
+				<label for="startDate" class="form-label">광고 시작 날짜</label>
+				<input type="date" class="form-control" id="announceStartDate" name="announceStartDate">
+			</div>
+			<div class="mb-3">
+				<label for="productSelect" class="form-label">광고 기간 선택</label>
+				<select class="form-select" id="productSelect" name="durationMonths">
+					<option value="">광고 기간 선택</option>
+					<option value="1">1개월</option>
+					<option value="3">3개월</option>
+					<option value="6">6개월</option>
+					<option value="12">1년</option>
+				</select>
+			</div>		
+			<%
+				}
+			%>
+
 			<div class="d-flex justify-content-between">
 				<button type="button" class="btn btn-secondary" onclick="goBack()">돌아가기</button>
 				<button type="button" class="btn btn-primary" onclick="submitForm()">신청하기</button>

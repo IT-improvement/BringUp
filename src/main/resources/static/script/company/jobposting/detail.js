@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const accessToken = localStorage.getItem('accessToken');
     const urlParams = new URLSearchParams(window.location.search);
-    const recruitmentIndex = urlParams.get('r_index');
+    const recruitmentIndex = urlParams.get('index');
     console.log('recruitmentIndex:', recruitmentIndex);
     
     if (!accessToken) {

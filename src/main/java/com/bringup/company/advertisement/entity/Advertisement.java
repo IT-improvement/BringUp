@@ -2,6 +2,7 @@ package com.bringup.company.advertisement.entity;
 
 
 import com.bringup.common.enums.StatusType;
+import com.bringup.company.recruitment.entity.Recruitment;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,22 +17,20 @@ public class Advertisement {
     @Column(name = "advertisement_index")
     private Integer advertisementIndex;
 
-    @Column(name = "recruitment_index", nullable = false)
-    private Integer recruitmentIndex;
-
-    @Column(name = "advertisement_image")
-    private String advertisementImage;
+    @OneToOne
+    @JoinColumn(name = "recruitment_index", nullable = false)
+    private Recruitment recruitment;
 
     @Column(name = "view_count")
-    private Integer count = 0;
+    private Integer v_count = 0;
 
-    @Column(name = "displaytime")
-    private String displayTime; // 년-월-일 형태로 저장
+    @Column(name = "click_count")
+    private Integer c_count = 0;
 
     @Setter
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private StatusType status = StatusType.ACTIVE;
+    private StatusType status = StatusType.CRT_WAIT;
 
     // 관계 설정 (각각의 광고 유형과 연관됨)
     @OneToOne(mappedBy = "advertisement")

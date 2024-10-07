@@ -1,6 +1,7 @@
 package com.bringup.company.recruitment.service;
 
 import com.bringup.common.enums.NotificationType;
+import com.bringup.common.enums.RecruitmentType;
 import com.bringup.common.enums.RolesType;
 import com.bringup.common.enums.StatusType;
 import com.bringup.common.image.ImageService;
@@ -9,11 +10,16 @@ import com.bringup.company.recruitment.dto.request.RecruitmentRequestDto;
 import com.bringup.company.recruitment.dto.response.RecruitmentDetailResponseDto;
 import com.bringup.company.recruitment.dto.response.RecruitmentMainResponseDto;
 import com.bringup.company.recruitment.dto.response.RecruitmentResponseDto;
+import com.bringup.company.recruitment.dto.response.UnifiedRecruitmentDto;
+import com.bringup.company.recruitment.entity.RecruitmentFreelancer;
 import com.bringup.company.recruitment.exception.RecruitmentException;
+import com.bringup.company.recruitment.repository.RecruitmentFreelancerRepository;
 import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.repository.CompanyRepository;
 import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
+import com.bringup.member.applyRecruitment.domain.enums.ApplicationType;
+import com.bringup.member.applyRecruitment.domain.repository.ApplyRecruitmentRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,6 +41,8 @@ public class RecruitmentService {
 
     private final RecruitmentRepository recruitmentRepository;
     private final CompanyRepository companyRepository;
+    private final RecruitmentFreelancerRepository recruitmentFreelancerRepository;
+    private final ApplyRecruitmentRepository applyCvRepository;
 
     // 공고 리스트업
     public List<RecruitmentResponseDto> getRecruitments(UserDetailsImpl userDetails) {
@@ -55,29 +63,48 @@ public class RecruitmentService {
         return recruitmentResponseDtos; // 변환된 DTO 리스트 반환
     }
 
-    public List<RecruitmentMainResponseDto> getRecruitmentsinMain(UserDetailsImpl userDetails) {
-        // 공고를 가져옴
+    // 통합 공고 리스트 가져오기 (일반 공고 + 프리랜서 프로젝트)
+    @Transactional
+    public List<UnifiedRecruitmentDto> getAllRecruitments(UserDetailsImpl userDetails) {
+        List<UnifiedRecruitmentDto> unifiedRecruitments = new ArrayList<>();
+
+        // 1. 일반 공고 리스트 가져오기
         List<Recruitment> recruitments = recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId());
-
-        // 공고가 없을 경우 예외를 던짐
-        if (recruitments == null || recruitments.isEmpty()) {
-            throw new RecruitmentException(NOT_FOUND_RECRUITMENT); // 적절한 에러 코드 사용
-        }
-
-        List<RecruitmentMainResponseDto> RecruitmentMainResponseDtos = new ArrayList<>();
         for (Recruitment recruitment : recruitments) {
-            RecruitmentMainResponseDto dto = RecruitmentMainResponseDto.builder()
-                    .r_index(recruitment.getRecruitmentIndex())
-                    .r_title(recruitment.getRecruitmentTitle())
-                    .r_career(recruitment.getCareer())
-                    .r_period(recruitment.getPeriod())
-                    .r_skill(recruitment.getSkill())
-                    .r_category(recruitment.getCategory())
-                    .build();
+            // 지원자 수 계산
+            int applyCount = applyCvRepository.countByRecruitmentIndexAndApplicationType(recruitment.getRecruitmentIndex(), ApplicationType.RECRUITMENT);
 
-            RecruitmentMainResponseDtos.add(dto);
+            UnifiedRecruitmentDto dto = UnifiedRecruitmentDto.builder()
+                    .index(recruitment.getRecruitmentIndex())
+                    .title(recruitment.getRecruitmentTitle())
+                    .type(ApplicationType.RECRUITMENT)  // 일반 공고 타입
+                    .recruitmentType(recruitment.getRecruitmentType()) // 정규직/비정규직
+                    .period(recruitment.getPeriod())  // 채용 종료일
+                    .viewCount(recruitment.getViewCount())  // 조회수
+                    .applicantCount(applyCount)  // 지원자 수
+                    .build();
+            unifiedRecruitments.add(dto);
         }
-        return RecruitmentMainResponseDtos;
+
+        // 2. 프리랜서 프로젝트 리스트 가져오기
+        List<RecruitmentFreelancer> freelancerProjects = recruitmentFreelancerRepository.findAllByCompanyCompanyId(userDetails.getId());
+        for (RecruitmentFreelancer project : freelancerProjects) {
+            // 지원자 수 계산
+            int applyCount = applyCvRepository.countByRecruitmentIndexAndApplicationType(project.getProjectIndex().intValue(), ApplicationType.FREELANCER);
+
+            UnifiedRecruitmentDto dto = UnifiedRecruitmentDto.builder()
+                    .index(project.getProjectIndex())
+                    .title(project.getProjectTitle())
+                    .type(ApplicationType.FREELANCER)  // 프리랜서 공고 타입
+                    .recruitmentType(RecruitmentType.FREE)  // 프리랜서 타입으로 설정
+                    .period(project.getPeriod().toString())  // 프로젝트 기간
+                    .viewCount(0)  // 프리랜서 프로젝트의 조회수는 0으로 가정
+                    .applicantCount(applyCount)  // 지원자 수
+                    .build();
+            unifiedRecruitments.add(dto);
+        }
+
+        return unifiedRecruitments;
     }
 
     // 공고 작성

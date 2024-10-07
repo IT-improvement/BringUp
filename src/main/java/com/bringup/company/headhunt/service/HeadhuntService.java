@@ -1,27 +1,39 @@
 package com.bringup.company.headhunt.service;
 
+import com.bringup.common.bookmark.domain.entity.CompanyBookMarkEntity;
+import com.bringup.common.bookmark.domain.repository.CompanyBookMarkRepository;
+import com.bringup.common.bookmark.exception.BookmarkException;
+import com.bringup.common.enums.BookmarkType;
 import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.headhunt.dto.response.HeadhuntResponseDto;
 import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
+import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.exception.CompanyException;
+import com.bringup.company.user.repository.CompanyRepository;
 import com.bringup.member.membership.domain.repository.UserMembershipRepository;
 import com.bringup.member.resume.domain.entity.CVEntity;
 import com.bringup.member.resume.domain.repository.CVRepository;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import com.bringup.member.membership.domain.entity.UserMembership;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
 
 @Service
 @RequiredArgsConstructor
 public class HeadhuntService {
+    private final CompanyRepository companyRepository;
     private final CVRepository cvRepository;
     private final RecruitmentRepository recruitmentRepository;
+    private final CompanyBookMarkRepository companyBookMarkRepository;
     private final UserRepository userRepository;
     private final UserMembershipRepository userMembershipRepository;
 
@@ -114,7 +126,7 @@ public class HeadhuntService {
 
     private HeadhuntResponseDto convertToDto(CVEntity cvEntity) {
         UserEntity user = userRepository.findById(cvEntity.getUserIndex())
-                .orElseThrow(() -> new CompanyException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+                .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_ID));
 
         // 주소에서 OO시 OO동만 추출
         String fullAddress = user.getUserAddress();
@@ -136,4 +148,37 @@ public class HeadhuntService {
                 userNames // 필터링된 이름값
         );
     }
+
+    @Transactional
+    public List<HeadhuntResponseDto> listSavedCVs(UserDetailsImpl userDetails) {
+        Company company = companyRepository.findBycompanyId(userDetails.getId())
+                .orElseThrow(() -> new BookmarkException(NOT_FOUND_MEMBER_ID));
+
+        // 저장된 유저만 가져오기 (BookmarkType.VOLUNTEER)
+        List<CompanyBookMarkEntity> bookmarks = companyBookMarkRepository.findByCompanyAndStatus(company, BookmarkType.VOLUNTEER);
+
+        // 북마크된 유저를 DTO로 변환하여 반환
+        return bookmarks.stream()
+                .map(bookmark -> {
+                    // 유저 인덱스를 통해 이력서(CV)와 유저 정보 가져오기
+                    CVEntity cv = cvRepository.findByUserIndexAndAndMainCvTrue(bookmark.getUser().getUserIndex())
+                            .orElseThrow(() -> new BookmarkException(NOT_FOUND_MEMBER_ID));
+                    UserEntity user = userRepository.findById(cv.getUserIndex())
+                            .orElseThrow(() -> new BookmarkException(NOT_FOUND_MEMBER_ID));
+
+                    // HeadhuntResponseDto로 변환 (CV와 유저 정보를 사용)
+                    return new HeadhuntResponseDto(
+                            cv.getCvIndex(),         // 이력서 인덱스
+                            cv.getCvImage(),         // 이력서 이미지
+                            cv.isMainCv(),           // 메인 이력서 여부
+                            cv.getEducation(),       // 학력 정보
+                            cv.getSkill(),           // 기술 정보
+                            user.getUserAddress(),   // 유저 주소
+                            user.getUserIndex(),     // 유저 인덱스
+                            user.getUserName()       // 유저 이름
+                    );
+                })
+                .collect(Collectors.toList());
+    }
+
 }

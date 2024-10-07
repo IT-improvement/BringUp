@@ -42,7 +42,7 @@
 
     <!-- 메인 JS -->
     <!-- <script src="/resources/script/company/profile.js"></script> -->
-	 <script>
+	<script>
 		document.addEventListener('DOMContentLoaded', function() {
     const accessToken = localStorage.getItem("accessToken");
     console.log("Access token: " + accessToken);
@@ -188,7 +188,7 @@ function initSwiper() {
         mousewheel: false, // 마우스 휠 비활성화
     });
 }
-	 </script>
+	</script>
 	<!-- Swiper JS -->
 	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
@@ -197,114 +197,109 @@ function initSwiper() {
 
 <body class="d-flex flex-column min-vh-100">
 
-	<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
+<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
-    <main class="flex-grow-1 m-4">
-		<div class="company-profile container" style="max-width: 1260px;">
-					<h2>회사 정보</h2>
-							<div class="d-flex align-items-center mb-3">
-								<div class="rounded-circle overflow-hidden border border-secondary" style="width: 47px; height: 47px; position: relative;">
-									<img src="" id="profileImage" alt="프로필 이미지" 
-										style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
-								</div>
-								<p id="companyName" style="margin-left: 10px; margin-bottom: 0; display: flex; align-items: center; height: 47px; font-size: 24px;"></p>
-							</div>
-
-					<!-- Swiper CSS -->
-					<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-
-					<!-- 이미지 슬라이더 컨테이너 -->
-					<div class="swiper-container mb-4" style="width: 100%; max-width: 1260px; height: 480px; border-radius: 20px; border: 1px solid #ddd; overflow: hidden;">
-						<div class="swiper-wrapper">
-							<div class="swiper-slide">
-								<img src="" alt="회사 이미지 1" class="d-block w-100" style="height: 100%; object-fit: cover;">
-							</div>
-							<div class="swiper-slide">
-								<img src="" alt="회사 이미지 2" class="d-block w-100" style="height: 100%; object-fit: cover;">
-							</div>
-							<div class="swiper-slide">
-								<img src="" alt="회사 이미지 3" class="d-block w-100" style="height: 100%; object-fit: cover;">
-							</div>
-						</div>
+<main class="flex-grow-1 m-4">
+	<div class="company-profile container" style="max-width: 1260px;">
+		<h2>회사 정보</h2>
+		<div class="d-flex align-items-center justify-content-between mb-3">
+			<div class="d-flex align-items-center">
+				<div class="rounded-circle overflow-hidden border border-secondary" style="width: 47px; height: 47px; position: relative;">
+					<img src="" id="profileImage" alt="프로필 이미지" 
+						style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+				</div>
+				<p id="companyName" style="margin-left: 10px; margin-bottom: 0; display: flex; align-items: center; height: 47px; font-size: 24px;"></p>
+			</div>
+			<div class="d-flex align-items-center">
+				<button class="btn btn-secondary" onclick="location.href='/company/auth/updateAuth'"><i class="bi bi-pencil-square"></i></button>
+			</div>
+		</div>
+		<!-- Swiper CSS -->
+		<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+		<!-- 이미지 슬라이더 컨테이너 -->
+		<div class="swiper-container mb-4" style="width: 100%; max-width: 1260px; height: 480px; border-radius: 20px; border: 1px solid #ddd; overflow: hidden;">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<img src="" alt="회사 이미지 1" class="d-block w-100" style="height: 100%; object-fit: cover;">
+				</div>
+				<div class="swiper-slide">
+					<img src="" alt="회사 이미지 2" class="d-block w-100" style="height: 100%; object-fit: cover;">
+				</div>
+				<div class="swiper-slide">
+					<img src="" alt="회사 이미지 3" class="d-block w-100" style="height: 100%; object-fit: cover;">
+				</div>
+			</div>
+		</div>
+		<div class="d-flex justify-content-between mb-3">
+			<div class="flex-fill m-2">
+				<label for="companyLicense" class="form-label">사업자등록번호</label>
+				<p id="companyLicense" class="mb-0"></p>
+			</div>
+			<div class="flex-fill m-2">
+				<label for="scale" class="form-label">기업 규모</label>
+				<p id="scale" class="mb-0"></p>
+			</div>
+			<div class="flex-fill m-2">
+				<label for="establishDate" class="form-label">설립일</label>
+				<p id="establishDate" class="mb-0"></p>
+			</div>
+				<div class="m-3">
+				<label for="representativePhoneNumber" class="form-label">대표 전화번호</label>
+				<p id="representativePhoneNumber"></p>
+			</div>
+		</div>
+		<div class="d-flex mb-3">
+			<div class="flex-grow-1 me-3">
+			<h3>기업 소개</h3>
+				<p id="companyContent"></p>
+				<h3>복지</h3>
+				<p id="companyWelfare"></p>
+				<h3>연혁</h3>
+				<p id="companyHistory"></p>
+				<h3>회사 비전</h3>
+				<p id="companyVision"></p>
+				<h3>재무제표</h3>
+				<p id="companyFinancialStatements"></p>
+				<h3>직급 별 연봉 정보</h3>
+				<p id="companySalary"></p>
+				<h3>계열사</h3>
+				<p id="companySubsidiary"></p>
+			</div>
+			<div class="d-flex flex-column" style="width: 380px; height: 710px;">
+				<div class="border border-#ddd rounded mb-3 p-3" style="height: 320px;">
+					<div class="mb-3 d-flex">
+						<label for="representativeName" class="form-label m-0" style="width: 120px; flex-shrink: 0;">회사 대표</label>
+						<p id="representativeName" class="m-0" style="flex-grow: 1;"></p>
 					</div>
-
-					<div class="d-flex justify-content-between mb-3">
-						<div class="flex-fill m-2">
-							<label for="companyLicense" class="form-label">사업자등록번호</label>
-							<p id="companyLicense" class="mb-0"></p>
-						</div>
-						<div class="flex-fill m-2">
-							<label for="scale" class="form-label">기업 규모</label>
-							<p id="scale" class="mb-0"></p>
-						</div>
-						<div class="flex-fill m-2">
-							<label for="establishDate" class="form-label">설립일</label>
-							<p id="establishDate" class="mb-0"></p>
-						</div>
-						<div class="m-3">
-							<label for="representativePhoneNumber" class="form-label">대표 전화번호</label>
-							<p id="representativePhoneNumber"></p>
-						</div>
+				<div class="mb-3 d-flex">
+					<label for="representativeEmail" class="form-label m-0" style="width: 120px; flex-shrink: 0;">대표 이메일</label>
+				<p id="representativeEmail" class="m-0" style="flex-grow: 1;"></p>
+				</div>
+					<div class="mb-3 d-flex">
+					<label for="phoneNumber" class="form-label m-0" style="width: 120px; flex-shrink: 0;">전화번호</label>
+				<p id="phoneNumber" class="m-0" style="flex-grow: 1;"></p>
 					</div>
-
-					<div class="d-flex mb-3">
-						<div class="flex-grow-1 me-3">
-						  <h3>기업 소개</h3>
-						  <p id="companyContent"></p>
-						  <h3>복지</h3>
-						  <p id="companyWelfare"></p>
-						  <h3>연혁</h3>
-						  <p id="companyHistory"></p>
-						  <h3>회사 비전</h3>
-						  <p id="companyVision"></p>
-						  <h3>재무제표</h3>
-						  <p id="companyFinancialStatements"></p>
-						  <h3>직급 별 연봉 정보</h3>
-						  <p id="companySalary"></p>
-						  <h3>계열사</h3>
-						  <p id="companySubsidiary"></p>
-						</div>
-					  
-						<div class="d-flex flex-column" style="width: 380px; height: 710px;">
-						  <div class="border border-#ddd rounded mb-3 p-3" style="height: 320px;">
-							<div class="mb-3 d-flex">
-							  <label for="representativeName" class="form-label m-0" style="width: 120px; flex-shrink: 0;">회사 대표</label>
-							  <p id="representativeName" class="m-0" style="flex-grow: 1;"></p>
-							</div>
-							<div class="mb-3 d-flex">
-							  <label for="representativeEmail" class="form-label m-0" style="width: 120px; flex-shrink: 0;">대표 이메일</label>
-							  <p id="representativeEmail" class="m-0" style="flex-grow: 1;"></p>
-							</div>
-							<div class="mb-3 d-flex">
-							  <label for="phoneNumber" class="form-label m-0" style="width: 120px; flex-shrink: 0;">전화번호</label>
-							  <p id="phoneNumber" class="m-0" style="flex-grow: 1;"></p>
-							</div>
-							<div class="mb-3 d-flex">
-							  <label for="industry" class="form-label m-0" style="width: 120px; flex-shrink: 0;">업종</label>
-							  <p id="industry" class="m-0" style="flex-grow: 1;"></p>
-							</div>
-							<div class="mb-3 d-flex">
-							  <label for="employeeCount" class="form-label m-0" style="width: 120px; flex-shrink: 0;">직원 수</label>
-							  <p id="employeeCount" class="m-0" style="flex-grow: 1;"></p>
-							</div>
-							<div class="mb-3 d-flex">
-							  <label for="homepage" class="form-label m-0" style="width: 120px; flex-shrink: 0;">홈페이지 주소</label>
-							  <p id="homepage" class="m-0" style="flex-grow: 1;"></p>
-							</div>
-							<div class="mb-3 d-flex">
-							  <label for="address" class="form-label m-0" style="width: 120px; flex-shrink: 0;">주소</label>
-							  <p id="address" class="m-0" style="flex-grow: 1;"></p>
-							</div>
-						  </div>
-						  <div class="border border-#ddd rounded" style="height: 380px;">
-							지도
-						  </div>
-						</div>
-					  </div>
-					
-    </main>
-
-	<jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
-
+				<div class="mb-3 d-flex">
+						<label for="industry" class="form-label m-0" style="width: 120px; flex-shrink: 0;">업종</label>
+						<p id="industry" class="m-0" style="flex-grow: 1;"></p>
+				</div>
+				<div class="mb-3 d-flex">
+					<label for="employeeCount" class="form-label m-0" style="width: 120px; flex-shrink: 0;">직원 수</label>
+						<p id="employeeCount" class="m-0" style="flex-grow: 1;"></p>
+					</div>
+				<div class="mb-3 d-flex">
+					<label for="homepage" class="form-label m-0" style="width: 120px; flex-shrink: 0;">홈페이지 주소</label>
+					<p id="homepage" class="m-0" style="flex-grow: 1;"></p>
+				</div>
+				<div class="mb-3 d-flex">
+					<label for="address" class="form-label m-0" style="width: 120px; flex-shrink: 0;">주소</label>
+				<p id="address" class="m-0" style="flex-grow: 1;"></p>
+					</div>
+			</div>
+			<div class="border border-#ddd rounded" style="height: 380px;">지도</div>
+		</div>
+	</div>
+</main>
+<jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
 </body>
 </html>

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
-        fetch(`/com/recruitment/list`, {
+        fetch(`/com/recruitment/detail/list`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             if (data.data && Array.isArray(data.data)) {
+                console.log(data.data);
                 updateRecruitmentList(data.data);
             } else {
                 console.error('데이터 형식이 올바르지 않습니다:', data);
@@ -43,17 +44,22 @@ function updateRecruitmentList(recruitmentList) {
         recruitmentList.forEach((recruitment, index) => {
             const row = document.createElement('tr');
             row.addEventListener('click', function() {
-                window.location.href = `/company/jobpost/detail?r_index=${recruitment.recruitmentIndex}`;
+                window.location.href = `/company/jobpost/detail?index=${recruitment.index}`;
             });
+            const recruitmentType = recruitment.recruitmentType === 'IRREGULAR_WORKER' ? '비정규직' :
+                          recruitment.recruitmentType === 'REGULAR_WORKER' ? '정규직' :
+                          recruitment.recruitmentType === 'PART_TIME_WORKER' ? '파트타임' : '기타';
+
+            const type = recruitment.type === "RECRUITMENT" ? '정규 채용' : '프리랜서';
+
             row.innerHTML = `
                 <td>${index + 1}</td>
-                <td>${recruitment.recruitmentTitle || '-'}</td>
-                <td>${recruitment.managerEmail || '-'}</td>
-                <td>${recruitment.recruitmentType || '-'}</td>
-                <td>${recruitment.category || '-'}</td>
-                <td>${recruitment.skill || '-'}</td>
+                <td>${recruitment.title || '-'}</td>
+                <td>${recruitmentType || '-'}</td>
+                <td>${type || '-'}</td>
                 <td>${recruitment.period || '-'}</td>
-                <td>${recruitment.status || '-'}</td>
+                <td>${recruitment.viewCount || '0'}</td>
+                <td>${recruitment.applicantCount || '0'}</td>
             `;
             recruitmentListBody.appendChild(row);
         });

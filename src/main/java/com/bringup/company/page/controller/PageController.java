@@ -36,6 +36,11 @@ public class PageController {
         return "company/jobposting/detail";
     }
 
+    @GetMapping("/jobpost/freelancer")
+    public String freelancerDetail(){
+        return "company/jobposting/freelancer";
+    }
+
     @GetMapping("/product/management")
     public String productManagement(){
         return "company/product/management";
@@ -69,6 +74,11 @@ public class PageController {
     @GetMapping("/recommendation")
     public String recommendation(){
         return "company/recommendation/recommendation";
+    }
+
+    @GetMapping("/recommendation_saved")
+    public String recommendation_saved(){
+        return "company/recommendation/recommendation_saved";
     }
 
     @GetMapping("/auth/profile")

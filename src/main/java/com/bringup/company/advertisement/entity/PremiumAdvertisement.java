@@ -1,8 +1,11 @@
 package com.bringup.company.advertisement.entity;
 
+import com.bringup.company.advertisement.enums.Ad_Type;
+import com.bringup.company.advertisement.enums.TimeSlot;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -15,32 +18,27 @@ public class PremiumAdvertisement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "premium_index")
-    private int premiumId;
+    private int premiumIndex;
 
     @OneToOne
     @JoinColumn(name = "advertisement_index", nullable = false)
     private Advertisement advertisement;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "ad_type", nullable = false, length = 10)
-    private String adType; // 광고 타입 (GP, P1, P2, P3)
+    private Ad_Type adType; // 광고 타입 (GP, P1, P2, P3)
 
-
+    @Setter
+    @Enumerated(EnumType.STRING)
     @Column(name = "time_slot", nullable = false, length = 50)
-    private String timeSlot; // 노출 시간대 (예: 01:00 ~ 04:00)
+    private TimeSlot timeSlot; // 노출 시간대 (예: 01:00 ~ 04:00)
 
-    @Column(name = "is_sold_out", nullable = false)
-    private boolean isSoldOut; // 매진 여부
+    @Column(name = "premium_image")
+    private String image;
 
     @Column(name = "start_date", nullable = false)
-    private LocalDate startDate; // 시작 날짜 (1일 광고지만 설정 필요)
+    private LocalDate startDate; // 시작 날짜
 
     @Column(name = "end_date", nullable = false)
-    private LocalDate endDate; // 종료 날짜 (start_date와 동일)
-
-    @Column(name = "premium_image", nullable = false)
-    private String premiumImage;
-
-
-
-    // getters and setters
+    private LocalDate endDate; // 종료 날짜
 }
