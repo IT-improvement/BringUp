@@ -13,5 +13,4 @@ public class PremiumAdRequestDto {
     private TimeSlot timeSlot; // 노출 시간대 (enum 사용)
     private LocalDate startDate; // 광고 시작 날짜
     private LocalDate endDate; // 광고 종료 날짜
-    private String displayTime; // 방출 시간
 }
