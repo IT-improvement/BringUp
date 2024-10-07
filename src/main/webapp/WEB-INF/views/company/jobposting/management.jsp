@@ -65,13 +65,10 @@
                                 <label for="search-category" class="form-label">카테고리</label>
                                 <select class="form-select" id="search-category">
                                     <option value="all">전체</option>
-                                    <option value="jobPostingTitle">공고 제목</option>
-                                    <option value="managerEmail">담당자 Email</option>
-                                    <option value="recruitmentType">채용형태</option>
-                                    <option value="category">직군</option>
-                                    <option value="skill">기술스택</option>
-                                    <option value="period">기간</option>
-                                    <option value="status">상태값</option>
+                                    <option value="title">공고 제목</option>
+                                    <option value="type">공고 타입</option>
+                                    <option value="recruitmentType">채용 형태</option>
+                                    <option value="deadline">마감일</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -99,12 +96,11 @@
                                         <tr>
                                             <th>번호</th>
                                             <th>공고제목</th>
-                                            <th>담당자email</th>
+                                            <th>공고타입</th>
                                             <th>채용형태</th>
-                                            <th>직군</th>
-                                            <th>기술스택</th>
-                                            <th>기간</th>
-                                            <th>상태</th>
+                                            <th>마감일</th>
+                                            <th>조회수</th>
+                                            <th>지원자수</th>
                                         </tr>
                                     </thead>
                                     <tbody id="recruitment-list-body" class="text-center">

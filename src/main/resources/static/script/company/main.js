@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let allData = [];
 
     function fetchData() {
-        fetch('/com/recruitment/mainlist', {
+        fetch('/com/recruitment/list', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -45,18 +45,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
         pageData.forEach((recruitment, index) => {
             const row = document.createElement('tr');
-            const number = recruitment.r_index;
+            const number = recruitment.index;
+            const recruitmentType = recruitment.recruitmentType === 'IRREGULAR_WORKER' ? '비정규직' :
+                        recruitment.recruitmentType === 'REGULAR_WORKER' ? '정규직' :
+                        recruitment.recruitmentType === 'PART_TIME_WORKER' ? '파트타임' : '기타';
+
+            const type = recruitment.type === "RECRUITMENT" ? '정규 채용' : '프리랜서';
+
             row.innerHTML = `
                 <td>${start + index + 1}</td>
-                <td>${recruitment.r_title || ''}</td>
-                <td>${recruitment.r_category || ''}</td>
-                <td>${recruitment.r_skill || ''}</td>
-                <td>${recruitment.r_career || ''}</td>
-                <td>${recruitment.r_period || ''}</td>
+                <td>${recruitment.title || ''}</td>
+                <td>${type || ''}</td>
+                <td>${recruitmentType || ''}</td>
+                <td>${recruitment.period || ''}</td>
+                <td>${recruitment.viewCount || '0'}</td>
+                <td>${recruitment.applicantCount || '0'}</td>
             `;
             row.style.cursor = 'pointer';
             row.addEventListener('click', () => {
-                window.location.href = `/company/jobpost/detail?r_index=`+number;
+                window.location.href = `/company/jobpost/detail?index=`+number;
             });
             recruitmentListBody.appendChild(row);
         });

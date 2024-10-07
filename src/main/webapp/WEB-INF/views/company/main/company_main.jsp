@@ -118,30 +118,30 @@
                                     </div>
                                     <div class="col-md-3">
                                         <form>
-                                            <select id="categorySelect" class="form-select z-index-9 bg-transparent" aria-label=".form-select-sm">
+                                            <select id="categorySelect" class="form-select z-index-9 bg-transparent align-items-center" aria-label=".form-select-sm">
                                                 <option value="전체">전체</option>
                                                 <option value="공고 제목">공고 제목</option>
-                                                <option value="공고 타입">모집 분야</option>
-                                                <option value="기술">기술</option>
-                                                <option value="모집 분야">경력</option>
-                                                <option value="상태">마감일</option>
+                                                <option value="공고 타입">공고 타입</option>
+                                                <option value="모집 분야">모집 분야</option>
+                                                <option value="마감일">마감일</option>
                                             </select>
                                         </form>
                                     </div>
                                 </div>
                                 <div class="table-responsive border-0">
-                                    <table class="table align-middle p-4 mb-0 table-hover table-shrink">
+                                    <table class="table align-middle p-4 mb-0 table-hover table-shrink text-center">
                                         <thead class="table-dark">
                                         <tr>
-                                            <th scope="col">전체</th>
+                                            <th scope="col">번호</th>
                                             <th scope="col">공고 제목</th>
+                                            <th scope="col">공고 타입</th>
                                             <th scope="col">모집 분야</th>
-                                            <th scope="col">기술</th>
-                                            <th scope="col">경력</th>
                                             <th scope="col">마감일</th>
+                                            <th scope="col">조회수</th>
+                                            <th scope="col">지원자수</th>
                                         </tr>
                                         </thead>
-                                        <tbody id="recruitment-list-body" class="border-top-0">
+                                        <tbody id="recruitment-list-body" class="border-top-0 text-center">
                                         </tbody>
                                     </table>
                                 </div>
