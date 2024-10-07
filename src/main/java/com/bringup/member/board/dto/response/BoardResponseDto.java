@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class BoardResponseDto {
     private int boardIndex;
     private UserEntity user;
-    private String userEmail;
     private String title;
     private String content;
     private String boardImage;
@@ -23,7 +22,6 @@ public class BoardResponseDto {
 
     public BoardResponseDto(BoardEntity boardEntity){
         this.user = boardEntity.getUser();
-        this.userEmail = boardEntity.getUserEmail();
         this.boardIndex = boardEntity.getBoardIndex();
         this.title = boardEntity.getTitle();
         this.content = boardEntity.getContent();
