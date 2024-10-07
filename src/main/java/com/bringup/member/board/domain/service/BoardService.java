@@ -1,5 +1,6 @@
 package com.bringup.member.board.domain.service;
 
+import com.bringup.common.enums.BoardType;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.board.domain.entity.BoardEntity;
@@ -15,8 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.bringup.common.enums.BoardErrorCode.*;
 import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
 
 @Service
@@ -25,11 +28,6 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final ImageService imageService;
-/*
-    @Transactional(readOnly = true)
-    public List<BoardResponseDto> getPosts(){
-        return boardRepository.findAllByOrderByModifiedTimeDesc().stream().map(BoardResponseDto::new).toList();
-    }*/
 
     @Transactional
     public void createPost(UserDetailsImpl userDetails, BoardRequestDto boardRequestDto, MultipartFile[] boardImage){
@@ -54,24 +52,28 @@ public class BoardService {
     }
 
     @Transactional
-    public void updatePost(UserDetailsImpl userDetails, MultipartFile[] boardImage, BoardRequestDto boardRequestDto){
-        UserEntity user = userRepository.findById(userDetails.getId())
-                .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
+    public void updatePost(UserDetailsImpl userDetails, MultipartFile[] boardImage, BoardRequestDto boardRequestDto, int boardIndex){
+        BoardEntity board = boardRepository.findById(boardIndex)
+                .orElseThrow(()->new BoardException(NOT_FOUND_WRITING));
+        if (!board.getUser().getUserIndex().equals(userDetails.getId())){
+            throw new BoardException(FORBIDDEN_UPDATE_WRITING);
+        }
 
-        BoardEntity board = boardRepository.findByUser(user)
-                .orElseThrow(()->new BoardException(NOT_FOUND_MEMBER_ID));
-
+        
 
         boardRepository.save(board);
     }
 
     @Transactional
-    public void deletePost(UserDetailsImpl userDetails, BoardRequestDto boardRequestDto){
-        UserEntity user = userRepository.findById(userDetails.getId())
-                .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
-        BoardEntity board = boardRepository.findByUser(user)
-                .orElseThrow(()->new IllegalArgumentException("작성한 유저와 일치하지 않습니다."));
+    public void deletePost(UserDetailsImpl userDetails, int boardIndex){
+        BoardEntity board = boardRepository.findById(boardIndex)
+                .orElseThrow(()->new BoardException(NOT_FOUND_WRITING));
 
-        boardRepository.delete(board);
+        if (!board.getUser().getUserIndex().equals(userDetails.getId())){
+            throw new BoardException(FORBIDDEN_DELETE_WRITING);
+        }
+
+        board.setStatus(BoardType.DELETE);
+        boardRepository.save(board);
     }
 }

@@ -14,7 +14,7 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_index") // 데이터베이스의 user_index 컬럼과 매핑
-    private int userIndex;
+    private Integer userIndex;
 
     private String userEmail;
 

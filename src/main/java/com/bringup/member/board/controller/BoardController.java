@@ -45,8 +45,8 @@ public class BoardController {
     }
 
     @DeleteMapping("/deletePost")
-    public ResponseEntity<BfResponse<?>> deletePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto){
-        boardService.deletePost(userDetails, boardRequestDto);
+    public ResponseEntity<BfResponse<?>> deletePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int boardIndex){
+        boardService.deletePost(userDetails, boardIndex);
         return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.SUCCESS, "delete board successfully"));
     }
 }
