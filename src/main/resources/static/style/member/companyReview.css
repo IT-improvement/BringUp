@@ -1,0 +1,74 @@
+.m_review-container {
+    max-width: 1260px;
+    margin: 0 auto;
+}
+.m_review-header {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.m_review-header h1 {
+    font-size: 32px;
+    font-weight: bold;
+}
+.search-container {
+    position: relative;
+}
+.search-container input[type="text"] {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    width: 250px;
+}
+.search-container button {
+    position: absolute;
+    right: 0;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+}
+.search-container button:hover {
+    background-color: #0056b3;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    text-align: left;
+}
+th, td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+td {
+    vertical-align: middle;
+}
+.m_review-ratings {
+    display: flex;
+    justify-content: start;
+}
+.stars i {
+    margin-right: 5px;
+}
+.details-button, .apply-button {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+}
+.details-button:hover, .apply-button:hover {
+    background-color: #0056b3;
+}

@@ -42,13 +42,87 @@
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- 메인 스타일시트 -->
-    <!-- <link rel="stylesheet" type="text/css" href="/resources/style/member/user/파일명.css"> -->
+    <style>
+        .md_review-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+        }
 
-    <!--  JS -->
-    <!-- <script src="/resources/script/member/user/파일명.js"></script> -->
+        .md_review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
+        .md_review-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
 
+        .md_review-date {
+            color: #888;
+        }
+
+        .md_star-rating {
+            color: #ffa500;
+            font-size: 18px;
+        }
+
+        .md_progress-bar-container {
+            margin: 15px 0;
+        }
+
+        .md_progress-bar-label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .md_progress-bar {
+            display: flex;
+            gap: 2px;
+        }
+
+        .md_progress-segment {
+            width: 20%;
+            height: 10px;
+            background-color: #f1f1f1;
+            border-radius: 2px;
+        }
+
+        .md_progress-segment.active {
+            background-color: #28a745;
+        }
+
+        .md_section-title {
+            font-weight: bold;
+            margin-top: 20px;
+            color: #28a745;
+        }
+
+        .md_negative-section-title {
+            color: #dc3545;
+        }
+
+        .md_section-content {
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const accessToken = localStorage.getItem('accessToken');
+            if (!accessToken) {
+                window.location.href = '/member/Login';
+                alert("로그인을 하셔야합니다");
+
+            }
+        });
+
+    </script>
 </head>
 <body>
 
@@ -56,13 +130,98 @@
 <jsp:include page="/WEB-INF/views/member/header/member_header.jsp" flush="true" />
 
 <!-- 메인 콘텐츠 -->
-<body class="d-flex flex-column min-vh-100">
 <div class="container" style="max-width: 1260px;">
     <main class="flex-grow-1">
+        <div class="md_review-container">
+            <div class="md_review-header">
+                <div class="md_review-title">최근 투자 유치로 자금 안정화 되었음.</div>
+                <div class="md_review-date">2024/02/22</div>
+            </div>
 
+            <div class="md_star-rating">
+                ★★★★☆
+            </div>
+
+            <!-- 승진 기회 및 가능성 -->
+            <div class="md_progress-bar-container">
+                <div class="md_progress-bar-label">승진 기회 및 가능성</div>
+                <div class="md_progress-bar">
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment"></div>
+                </div>
+            </div>
+
+            <!-- 복지 및 급여 -->
+            <div class="md_progress-bar-container">
+                <div class="md_progress-bar-label">복지 및 급여</div>
+                <div class="md_progress-bar">
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment"></div>
+                    <div class="md_progress-segment"></div>
+                </div>
+            </div>
+
+            <!-- 업무와 삶의 균형 -->
+            <div class="md_progress-bar-container">
+                <div class="md_progress-bar-label">업무와 삶의 균형</div>
+                <div class="md_progress-bar">
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment"></div>
+                    <div class="md_progress-segment"></div>
+                    <div class="md_progress-segment"></div>
+                </div>
+            </div>
+
+            <!-- 사내문화 -->
+            <div class="md_progress-bar-container">
+                <div class="md_progress-bar-label">사내문화</div>
+                <div class="md_progress-bar">
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment"></div>
+                </div>
+            </div>
+
+            <!-- 경영진 -->
+            <div class="md_progress-bar-container">
+                <div class="md_progress-bar-label">경영진</div>
+                <div class="md_progress-bar">
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment active"></div>
+                    <div class="md_progress-segment"></div>
+                    <div class="md_progress-segment"></div>
+                </div>
+            </div>
+
+            <!-- 장점 섹션 -->
+            <div class="md_section-title">장점</div>
+            <div class="md_section-content">
+                10시 출근. 7시 칼퇴! 야근한다고 매우 해주는 분위기 아님.
+            </div>
+
+            <!-- 단점 섹션 -->
+            <div class="md_section-title md_negative-section-title">단점</div>
+            <div class="md_section-content">
+                개인 간막이가 없어 개인공간을 선호하는 업무자면 적응이 필요함.
+            </div>
+
+            <!-- 경영진에 바라는 점 -->
+            <div class="md_section-title">경영진에 바라는 점</div>
+            <div class="md_section-content">
+                사원들의 의견도 적극 반영해 주었으면 좋겠음. 이 기업은 1년 후 비추할 것이다.
+            </div>
+        </div>
     </main>
 </div>
-</body>
 
 <!-- 푸터 -->
 <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
