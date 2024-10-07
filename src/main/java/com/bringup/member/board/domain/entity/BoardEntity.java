@@ -1,48 +1,53 @@
 package com.bringup.member.board.domain.entity;
 
-import com.bringup.member.board.dto.request.BoardRequestDto;
 import com.bringup.member.user.domain.entity.UserEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
+@SuperBuilder
 @NoArgsConstructor
 @Table(name = "board")
-public class BoardEntity extends TimeStamped{
+public class BoardEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "boardIndex")
     private int boardIndex;
 
     @ManyToOne
-    @JoinColumn(name = "user_index")
+    @JoinColumn(name = "userIndex")
     private UserEntity user;
 
-    private String userEmail;
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "content")
     private String content;
+
+    @Column(name = "boardImage")
     private String boardImage;
 
-    // JPA가 사용할 기본 생성자 (no-arg constructor)
-    @Builder
-    public BoardEntity(int boardIndex, UserEntity user, String userEmail, String title, String content, String boardImage) {
-        this.boardIndex = boardIndex;
-        this.user = user;
-        this.userEmail = userEmail;
-        this.title = title;
-        this.content = content;
-        this.boardImage = boardImage;
+    @Column(name = "created_at")
+    private LocalDateTime createdPostTime;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatePostTime;
+
+    @PrePersist
+    public void preCreateTime(){
+        this.createdPostTime = LocalDateTime.now();
+        this.updatePostTime = this.createdPostTime;
     }
 
-    public BoardEntity(BoardRequestDto boardRequestDto){
-        this.userEmail = boardRequestDto.getUserEmail();
-        this.title = boardRequestDto.getTitle();
-        this.content = boardRequestDto.getContent();
-        this.boardImage = boardRequestDto.getBoardImage();
+    @PreUpdate
+    public void preUpdateTime(){
+        this.updatePostTime = LocalDateTime.now();
     }
 }

@@ -38,7 +38,6 @@ public class BoardService {
 
         BoardEntity board = BoardEntity.builder()
                 .user(user)
-                .userEmail(user.getUserEmail())
                 .title(boardRequestDto.getTitle())
                 .content(boardRequestDto.getContent())
                 .boardImage(imageService.uploadImages(boardImage))
@@ -62,9 +61,6 @@ public class BoardService {
         BoardEntity board = boardRepository.findByUser(user)
                 .orElseThrow(()->new BoardException(NOT_FOUND_MEMBER_ID));
 
-        board.setTitle(boardRequestDto.getTitle());
-        board.setContent(boardRequestDto.getContent());
-        board.setBoardImage(imageService.uploadImages(boardImage));
 
         boardRepository.save(board);
     }
