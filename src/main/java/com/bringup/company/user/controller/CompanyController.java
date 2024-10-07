@@ -140,6 +140,25 @@ public class CompanyController {
 
     }
 
+    // 회원 이미지 수정
+    @PutMapping("/user/image")
+    public ResponseEntity<BfResponse<?>> updateUserImage(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestPart(value = "c_logo", required = false) MultipartFile logo,  // 새로 업로드된 로고 파일
+            @RequestPart(value = "c_imgs", required = false) MultipartFile[] images, // 새로 업로드된 이미지 파일들
+            @RequestParam(value = "existing_logo_path", required = false) String existingLogoPath,  // 기존 로고 경로
+            @RequestParam(value = "existing_images_path", required = false) String existingImagesPath  // 기존 이미지 경로들
+    ) {
+        try {
+            // 서비스 호출을 통해 새로운 파일과 기존 경로 처리
+            companyService.updateUserImages(userDetails.getId(), logo, images, existingLogoPath, existingImagesPath);
+
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "업데이트 완료")));
+        } catch (CompanyException e) {
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+    }
+
     // 회원 탈퇴
     @DeleteMapping("/user")
     public ResponseEntity<BfResponse<?>> deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {

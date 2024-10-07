@@ -130,6 +130,7 @@ public class SpringSecurityConfig {
                 antMatcher(GET, "/WEB-INF/views/**"),          // 웹 리소스
                 antMatcher(GET, "/resources/**"),
                 antMatcher(GET, "/company/**"),              // 기업 페이지
+                antMatcher("/"),
 /*
                 antMatcher("/member/**"),
 */
@@ -162,9 +163,8 @@ public class SpringSecurityConfig {
 
                 antMatcher("/main/list"),
 
-                antMatcher("/member/interview/iv_list")
-
-
+                antMatcher("/member/interview/iv_list"),
+                antMatcher("/freelancer/**")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
@@ -176,9 +176,8 @@ public class SpringSecurityConfig {
     private RequestMatcher[] AuthRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
                 antMatcher(POST, "/com/companyName"),               // 기업명 헤더 삽입
-                antMatcher(PUT, "/com/user"),                       // 회원 정보 수정
-                antMatcher(DELETE, "/com/user"),                    // 회원 탈퇴
                 antMatcher(GET, "/com/companyInfo/post"),           // 회원 정보 조회
+                antMatcher("/com/user/**"),
 
                 antMatcher("/com/recruitment/**"),
 
@@ -187,6 +186,7 @@ public class SpringSecurityConfig {
 
                 antMatcher(POST, "/com/i_reviews"),                 // 면접 리뷰 열람
                 antMatcher(POST, "/com/i_review/delete"),         // 면접 리뷰 삭제
+                antMatcher("/com/freelancer/**"),
                 antMatcher("/com/headhunt/**"),
                 antMatcher("/membership/**"), // 사용자 멤버십
                 antMatcher("/member/name"),

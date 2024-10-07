@@ -12,6 +12,7 @@ public interface ResponseMessage {
     String NOT_EXISTED_BOARD = "This board does not exist";
     String NOT_EXISTED_STUDY = "This study does not exist";
     String NOT_EXISTED_REPORT = "This report does not exist";
+    String NOT_EXISTEDT_RECRUITMENTFREELANCER = "This recruitmentFreelancer does not exist";
 
     String SPARE_REPORT_ALREADY_EXIST = "Spare report already exist";
     String REPORT_ALREADY_FULL = "Report already exist";

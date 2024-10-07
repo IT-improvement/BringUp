@@ -115,7 +115,7 @@
                     <ul class="dropdown-menu dropdown-animation dropdown-menu-end shadow pt-3" aria-labelledby="profileDropdown">
                         <!-- 링크 -->
                         <li><a class="dropdown-item" href="/company/auth/profile"><i class="bi bi-person fa-fw me-2"></i>프로필</a></li>
-                        <li><a class="dropdown-item" href="/company/auth/updateAuth"><i class="bi bi-gear fa-fw me-2"></i>계정 설정</a></li>
+                        <li><a class="dropdown-item" href="/company/auth/updateAuth"><i class="bi bi-gear fa-fw me-2"></i>정보 수정</a></li>
                         <li><a class="dropdown-item" href="#" id="logoutButton"><i class="bi bi-power fa-fw me-2"></i>로그아웃</a></li>
                         <li class="dropdown-divider mb-2"></li>
                         <li>
@@ -158,6 +158,7 @@
                         <ul class="dropdown-menu" aria-labelledby="jobPostingMenu">
                             <li><a class="dropdown-item" href="/company/jobpost/management">공고 관리</a></li>
                             <li><a class="dropdown-item" href="/company/jobpost/registration">공고 등록</a></li>
+                            <li><a class="dropdown-item" href="/company/jobpost/freelancer">후리랜서 디테일 확인용</a></li>
                         </ul>
                     </li>
 
@@ -178,8 +179,12 @@
                             <li><a class="dropdown-item" href="/company/review/interview">면접 리뷰</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/company/recommendation" id="recommendMenu">인재 추천</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="headhuntMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">인재 추천</a>
+                        <ul class="dropdown-menu" aria-labelledby="recommendMenu">
+                            <li><a class="dropdown-item" href="/company/recommendation">인재 리스트</a></li>
+                            <li><a class="dropdown-item" href="/company/recommendation_saved">인재 저장 리스트</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>

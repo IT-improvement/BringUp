@@ -235,6 +235,37 @@ public class CompanyService {
         }
     }
 
+    public void updateUserImages(Integer userId, MultipartFile logo, MultipartFile[] images,
+                                 String existingLogoPath, String existingImagesPath) {
+        // 회사 정보 가져오기
+        Company company = companyRepository.findById(userId)
+                .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
+
+        // 새로운 로고 파일이 있으면 업로드하고 경로 설정, 없으면 기존 경로 유지
+        String logoPath = (logo != null && !logo.isEmpty()) ? imageService.upLoadImage(logo) : existingLogoPath;
+
+        // 기존 이미지 경로 처리
+        List<String> imagePaths = (existingImagesPath != null && !existingImagesPath.isEmpty())
+                ? new ArrayList<>(Arrays.asList(existingImagesPath.split(",")))
+                : new ArrayList<>();
+
+        // 새로운 이미지 파일들 처리
+        if (images != null && images.length > 0) {
+            String uploadedImages = imageService.uploadImages(images);
+            if (uploadedImages != null && !uploadedImages.isEmpty()) {
+                imagePaths.addAll(Arrays.asList(uploadedImages.split(",")));  // 새로운 이미지 경로 추가
+            }
+        }
+
+        // 회사 로고와 이미지 경로 업데이트
+        company.setCompanyLogo(logoPath);
+        company.setCompanyImg(String.join(",", imagePaths));
+
+        // 데이터베이스에 저장
+        companyRepository.save(company);
+    }
+
+
     // 회원 탈퇴
     @Transactional
     public void deleteUser(UserDetailsImpl userDetails) {
