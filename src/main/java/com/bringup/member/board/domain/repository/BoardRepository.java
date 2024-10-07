@@ -11,6 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface BoardRepository extends JpaRepository<BoardEntity, Integer> {
-    List<BoardEntity> findAllByOrderByModifiedTimeDesc();
     Optional<BoardEntity> findByUser(UserEntity user);
 }

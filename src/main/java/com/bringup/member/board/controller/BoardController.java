@@ -21,11 +21,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
-
+/*
     @GetMapping("/posts")
     public List<BoardResponseDto> getPosts(){
         return boardService.getPosts();
-    }
+    }*/
 
     @PostMapping("/createPost")
     public ResponseEntity<BfResponse<?>> createPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto, @RequestPart MultipartFile[] boardImage){
