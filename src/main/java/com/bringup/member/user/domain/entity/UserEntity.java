@@ -1,14 +1,17 @@
 package com.bringup.member.user.domain.entity;
 
 import com.bringup.common.enums.RolesType;
+import com.bringup.member.user.dto.JoinDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
 @Entity
 @Table(name = "user")
+@NoArgsConstructor
 public class UserEntity {
 
     @Id
@@ -35,6 +38,10 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private RolesType role = RolesType.ROLE_MEMBER;
 
-
-
+    public UserEntity(JoinDTO joinDTO){
+        this.userEmail = joinDTO.getUserEmail();
+        this.userName = joinDTO.getUserName();
+        this.userPhonenumber=joinDTO.getUserPhonenumber();
+        this.userBirthday=joinDTO.getUserBirthday();
+    }
 }
