@@ -1,5 +1,7 @@
 package com.bringup.member.kakao;
 
+import com.bringup.member.kakao.dto.KakaoResponseDto;
+import com.bringup.member.kakao.dto.KakaoUserInfoResponseDto;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
