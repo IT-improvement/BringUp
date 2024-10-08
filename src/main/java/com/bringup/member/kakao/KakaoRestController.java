@@ -1,5 +1,7 @@
 package com.bringup.member.kakao;
 
+import com.bringup.member.kakao.dto.KakaoUserInfoResponseDto;
+import com.bringup.member.kakao.dto.KakaoUserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ public class KakaoRestController {
     private String redirectUri;
 
     private final KakaoService kakaoService;
+    private final KakaoUserService kakaoUserService;
 
     @GetMapping("/login")
     public Map<String, String> kakaoLogin() {
@@ -41,9 +44,15 @@ public class KakaoRestController {
     public ResponseEntity<?> callBack(@RequestParam("code") String code){
         String accessToken = kakaoService.getAccessTokenFromKakao(code);
         KakaoUserInfoResponseDto userInfo = kakaoService.getUserInfo(accessToken);
-        System.out.println("userInfo: "+userInfo);
+        ResponseEntity<? super KakaoUserResponseDto> response = kakaoUserService.signUpByKakao(userInfo);
+
         String htmlResponse = "<html><body><script type=\"text/javascript\">window.close();</script></body></html>";
 
-        return new ResponseEntity<>(htmlResponse, HttpStatus.OK);
+        String responseCode  = response.getStatusCode().toString();
+
+        if(responseCode.equals("EE"))
+            return null;
+        else
+            return null;
     }
 }
