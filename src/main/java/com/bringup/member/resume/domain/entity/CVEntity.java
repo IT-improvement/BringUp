@@ -1,6 +1,7 @@
 package com.bringup.member.resume.domain.entity;
 
 import com.bringup.member.resume.dto.request.CVInsertRequestDto;
+import com.bringup.member.user.domain.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "cv")
 @Entity
-public class CVEntity {
+public class        CVEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cvIndex;
@@ -22,6 +23,9 @@ public class CVEntity {
     private int userIndex;
     private String status;
 
+
+
+
     public CVEntity(CVInsertRequestDto dto){
         this.cvIndex = dto.getCvIndex();
         this.cvImage = dto.getCvimage();
@@ -31,5 +35,6 @@ public class CVEntity {
         this.userIndex=dto.getUserIndex();
         this.status=dto.getStatus();
     }
+
 
 }

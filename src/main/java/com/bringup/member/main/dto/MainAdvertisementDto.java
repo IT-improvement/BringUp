@@ -11,8 +11,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MainAdvertisementDto {
-    private int mainId; // 메인 광고 고유 ID
-    private int advertisementIndex;  // 추가된 필드
     private int recruitmentIndex;  // 추가된 필드
-    private String mainImage; // 광고 메인 이미지 경로
+    private String main_Image; // 광고 메인 이미지 경로
 }

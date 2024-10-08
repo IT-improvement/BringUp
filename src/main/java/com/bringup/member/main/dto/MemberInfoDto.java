@@ -10,4 +10,6 @@ import lombok.Setter;
 public class MemberInfoDto {
     private String userName;
     private String userEmail;
+    private String cvImage;   // 이력서 이미지
+    private String skills;    // 유저 스킬
 }
