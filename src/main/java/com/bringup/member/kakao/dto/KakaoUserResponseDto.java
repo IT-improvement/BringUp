@@ -15,4 +15,9 @@ public class KakaoUserResponseDto extends ResponseDto {
         KakaoUserResponseDto response = new KakaoUserResponseDto();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    public static ResponseEntity<ResponseDto> existedEmail(){
+        ResponseDto response = new ResponseDto(ResponseCode.EXISTED_EMAIL,ResponseMessage.EXISTED_EMAIL);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
 }
