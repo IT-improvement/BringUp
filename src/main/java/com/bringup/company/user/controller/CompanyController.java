@@ -8,6 +8,7 @@ import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.user.dto.request.JoinDto;
 import com.bringup.company.user.dto.request.LoginDto;
+import com.bringup.company.user.dto.request.UpdateImageRequestDto;
 import com.bringup.company.user.dto.request.ValidationRequestDto;
 import com.bringup.company.user.dto.response.LoginTokenDto;
 import com.bringup.company.user.entity.Company;
@@ -130,7 +131,7 @@ public class CompanyController {
     @PutMapping("/user")
     public ResponseEntity<BfResponse<?>> updateUser(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestParam Map<String, String> requestBody) {
+            @RequestBody Map<String, String> requestBody) {
         try{
             companyService.updateUser(userDetails, requestBody);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "업데이트 완료")));
@@ -145,13 +146,16 @@ public class CompanyController {
     public ResponseEntity<BfResponse<?>> updateUserImage(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestPart(value = "c_logo", required = false) MultipartFile logo,  // 새로 업로드된 로고 파일
-            @RequestPart(value = "c_imgs", required = false) MultipartFile[] images, // 새로 업로드된 이미지 파일들
-            @RequestParam(value = "existing_logo_path", required = false) String existingLogoPath,  // 기존 로고 경로
-            @RequestParam(value = "existing_images_path", required = false) String existingImagesPath  // 기존 이미지 경로들
+            @RequestPart(value = "c_img0", required = false) MultipartFile image0,  // 이미지 0
+            @RequestPart(value = "c_img1", required = false) MultipartFile image1,  // 이미지 1
+            @RequestPart(value = "c_img2", required = false) MultipartFile image2,  // 이미지 2
+            @RequestPart(value = "c_img3", required = false) MultipartFile image3,  // 이미지 3
+            @RequestPart(value = "c_img4", required = false) MultipartFile image4,  // 이미지 4
+            @RequestBody UpdateImageRequestDto updateImageRequestDto
     ) {
         try {
             // 서비스 호출을 통해 새로운 파일과 기존 경로 처리
-            companyService.updateUserImages(userDetails.getId(), logo, images, existingLogoPath, existingImagesPath);
+            companyService.updateUserImages(userDetails.getId(), logo, image0, image1, image2, image3, image4, updateImageRequestDto);
 
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "업데이트 완료")));
         } catch (CompanyException e) {
