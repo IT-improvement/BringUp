@@ -1,6 +1,7 @@
 package com.bringup.member.resume.domain.repository;
 
 import com.bringup.member.resume.domain.entity.CVEntity;
+import com.bringup.member.user.domain.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,7 @@ public interface CVRepository extends JpaRepository<CVEntity, Integer> {
     Optional<CVEntity> findByUserIndex(int userIndex);
 
     Optional<CVEntity> findByUserIndexAndAndMainCvTrue(int userIndex);
+
+
+
 }

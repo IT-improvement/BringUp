@@ -14,11 +14,10 @@ import java.util.List;
 @Repository
 public interface PremiumAdvertisementRepository extends JpaRepository<PremiumAdvertisement, Integer> {
     // 매진되지 않고, 현재 날짜가 광고의 기간 내에 있는 광고를 가져오는 메서드
-    /*List<PremiumAdvertisement> findAllByIsSoldOutFalseAndStartDateLessThanEqualAndEndDateGreaterThanEqualOrderByPremiumIdAsc(
-            LocalDate startDate, LocalDate endDate);*/
-    /*List<PremiumAdvertisement> findAllByEndDateBefore(LocalDate date);  // 마감일이 지난 광고 검색
-    List<PremiumAdvertisement> findAllByIsSoldOutTrueOrderByPremiumIdAsc();  // 매진되지 않은 광고 검색
-*/
+
+
+    @Query("SELECT p FROM PremiumAdvertisement p WHERE p.startDate <= :today AND p.endDate >= :today")
+    List<PremiumAdvertisement> findAvailableAds(@Param("today") LocalDate today);
     List<PremiumAdvertisement> findAllByTimeSlotAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
             TimeSlot timeSlot, LocalDate startDate, LocalDate endDate);
 }
