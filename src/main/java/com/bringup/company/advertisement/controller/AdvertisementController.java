@@ -40,7 +40,6 @@ public class AdvertisementController {
     //-------------프리미엄 라인----------------------------------------------
     /**
      * 프리미엄 가능한 시간 파악하는 컨트롤러
-     * @param date
      * @return
      */
     @GetMapping("/premium/available-times")
@@ -77,7 +76,7 @@ public class AdvertisementController {
     public ResponseEntity<BfResponse<String>> updatePremiumAd(
             @PathVariable int premiumAdId,
             @RequestBody PremiumAdRequestDto premiumAdDto,
-            @RequestParam("image") MultipartFile img,
+            @RequestPart("image") MultipartFile img,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         premiumAdService.updatePremiumAd(premiumAdId, premiumAdDto, img, userDetails);
@@ -188,8 +187,9 @@ public class AdvertisementController {
     @PostMapping("/banner")
     public ResponseEntity<BfResponse<String>> createBannerAd(
             @RequestBody BannerAdRequestDto bannerAdDto,
+            @RequestPart("image") MultipartFile img,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        bannerAdService.createBannerAd(bannerAdDto, userDetails);
+        bannerAdService.createBannerAd(bannerAdDto, img, userDetails);
         return ResponseEntity.ok(new BfResponse<>("배너 광고가 성공적으로 생성되었습니다."));
     }
 
@@ -197,8 +197,9 @@ public class AdvertisementController {
     public ResponseEntity<BfResponse<String>> updateBannerAd(
             @PathVariable int bannerId,
             @RequestBody BannerAdRequestDto bannerAdDto,
+            @RequestPart("image") MultipartFile img,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        bannerAdService.updateBannerAd(bannerId, bannerAdDto, userDetails);
+        bannerAdService.updateBannerAd(bannerId, bannerAdDto, img, userDetails);
         return ResponseEntity.ok(new BfResponse<>("배너 광고가 성공적으로 수정되었습니다."));
     }
 
