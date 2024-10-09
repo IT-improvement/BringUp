@@ -45,27 +45,27 @@ document.addEventListener('DOMContentLoaded', function() {
             
         
         
-        fetch('/main/premium', {
-            method: 'GET',
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("프리미엄 광고 이미지 요청 결과:", data);
-            const premiumImage = document.getElementById('premium-image');
+        // fetch('/main/premium', {
+        //     method: 'GET',
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     console.log("프리미엄 광고 이미지 요청 결과:", data);
+        //     const premiumImage = document.getElementById('premium-image');
             
-            premiumImage.src = data[0].premiumImage;
+        //     // premiumImage.src = data[0].premiumImage;
             
-            const premiumLink = document.createElement('a');
-            premiumLink.href = `/member/recruitment/details/${data.recruitmentIndex}`;
-            premiumLink.appendChild(premiumImage);
+        //     const premiumLink = document.createElement('a');
+        //     premiumLink.href = `/member/recruitment/details/${data.recruitmentIndex}`;
+        //     premiumLink.appendChild(premiumImage);
             
-            const premiumContainer = document.querySelector('.user-premium-container');
-            premiumContainer.innerHTML = '';
-            premiumContainer.appendChild(premiumLink);
-        })
-        .catch((error) => {
-            console.error("광고 이미지를 가져오는 중 오류가 발생했습니다:", error);
-        });
+        //     const premiumContainer = document.querySelector('.user-premium-container');
+        //     premiumContainer.innerHTML = '';
+        //     premiumContainer.appendChild(premiumLink);
+        // })
+        // .catch((error) => {
+        //     console.error("광고 이미지를 가져오는 중 오류가 발생했습니다:", error);
+        // });
 
 
         // 메인 이미지 슬라이더
@@ -90,8 +90,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             console.log("배너 광고 이미지 요청 : ", data);
-            const bannerImage = document.getElementById('banner-image');
-            bannerImage.src = data[0].bannerImage;
+            const bannerContainer = document.querySelector('.user-banner-container');
+            bannerContainer.innerHTML = `
+                <a href="/member/recruitment/details/${data.recruitmentIndex}" class="w-100 h-100 d-block rounded-3">
+                    <img id="banner-image" src="${data.banner_Image}" class="w-100 h-100 object-fit-cover" alt="배너 광고 이미지">
+                </a>
+            `;
         })
         .catch((error) => {
             console.error("배너 광고 이미지를 가져오는 중 오류가 발생했습니다:", error);
@@ -108,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 carouselItem.className = "carousel-item" + (index === 0 ? " active" : "");
                 
                 const img = document.createElement('img');
-                img.src = image.mainImage || image.bannerImage; // mainImage 또는 bannerImage 사용
+                img.src = image.main_Image;
                 img.className = 'd-block w-100';
                 img.alt = `${altText} ${index + 1}`;
                 if (targetId === '#main-image-slider') {
