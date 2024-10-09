@@ -135,9 +135,6 @@
                     </div>
                 </div>
                 <div class="user-banner-container d-flex border mb-4" style="height: 82px;">
-                    <a href="/member/recruitment/details/${data.recruitmentIndex}" class="image-container w-100 h-100">
-                        <img id="banner-image" class="w-100 h-100 object-fit-cover" alt="배너 광고 이미지">
-                    </a>
                 </div>
                 <div class="user-recruit-container mb-4">
                     <h2 class="text-left mb-3 fw-bold">추천 공고</h2>
