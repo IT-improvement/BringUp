@@ -37,6 +37,9 @@ public class Payment {
     @Column(name = "order_roles")
     private RolesType roles;
 
+    @Column(name = "receipt_id")
+    private String receiptId;
+
     private LocalDateTime createdAt;
 
     @PrePersist
