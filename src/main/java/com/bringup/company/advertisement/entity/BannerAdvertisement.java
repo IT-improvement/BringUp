@@ -30,5 +30,9 @@ public class BannerAdvertisement {
 
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate; // 종료 날짜
+
+    @Column(name = "banner_image")
+    private String banner_Image;
+
 }
 
