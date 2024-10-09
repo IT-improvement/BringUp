@@ -26,9 +26,9 @@ public class BoardController {
     private final ErrorResponseHandler errorResponseHandler;
 
     @GetMapping("/list")
-    public ResponseEntity<BfResponse<?>> getAllPost(@RequestPart int boardIndex){
+    public ResponseEntity<BfResponse<?>> getAllPosts(){
         try {
-            List<BoardResponseDto> allBoards = boardService.getAllPost(boardIndex);
+            List<BoardResponseDto> allBoards = boardService.getAllPosts();
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, allBoards));
         }catch (BoardException e){
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
@@ -50,7 +50,7 @@ public class BoardController {
     }
 
     @PostMapping("/createPost")
-    public ResponseEntity<BfResponse<?>> createPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto, @RequestPart MultipartFile[] boardImage){
+    public ResponseEntity<BfResponse<?>> createPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto, @RequestParam MultipartFile[] boardImage){
         try {
             boardService.createPost(userDetails, boardRequestDto, boardImage);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, "create post successfully"));
@@ -74,7 +74,7 @@ public class BoardController {
     }
 
     @PostMapping("/updatePost/{boardIndex}")
-    public ResponseEntity<BfResponse<?>> updatePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto, @RequestPart MultipartFile[] boardImage, @PathVariable("boardIndex") int boardIndex){
+    public ResponseEntity<BfResponse<?>> updatePost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto, @RequestParam MultipartFile[] boardImage, @PathVariable("boardIndex") int boardIndex){
         try {
             boardService.updatePost(userDetails, boardRequestDto, boardImage, boardIndex);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS,"update post successfully"));
