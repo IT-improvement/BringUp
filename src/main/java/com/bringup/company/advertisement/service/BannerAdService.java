@@ -1,6 +1,7 @@
 package com.bringup.company.advertisement.service;
 
 import com.bringup.common.enums.StatusType;
+import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.dto.request.BannerAdRequestDto;
 import com.bringup.company.advertisement.dto.response.BannerAdResponseDto;
@@ -15,6 +16,7 @@ import com.bringup.company.user.exception.CompanyException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.bringup.common.enums.AdvertisementErrorCode.NOT_FOUND_ADVERTISEMENT;
 import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
@@ -26,9 +28,10 @@ public class BannerAdService {
     private final BannerAdvertisementRepository bannerAdRepository;
     private final AdvertisementRepository advertisementRepository;
     private final RecruitmentRepository recruitmentRepository;
+    private final ImageService imageService;
 
     @Transactional
-    public void createBannerAd(BannerAdRequestDto bannerAdDto, UserDetailsImpl userDetails) {
+    public void createBannerAd(BannerAdRequestDto bannerAdDto, MultipartFile img, UserDetailsImpl userDetails) {
 
         Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(bannerAdDto.getRecruitmentIndex())
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_RECRUITMENT));
@@ -47,6 +50,7 @@ public class BannerAdService {
 
         BannerAdvertisement bannerAd = new BannerAdvertisement();
         bannerAd.setAdvertisement(advertisement);
+        bannerAd.setBanner_Image(imageService.saveImage(img));
         bannerAd.setExposureDays(bannerAdDto.getExposureDays());
         bannerAd.setStartDate(bannerAdDto.getStartDate());
         bannerAd.setEndDate(bannerAdDto.getStartDate().plusDays(bannerAdDto.getExposureDays() - 1));
@@ -68,7 +72,7 @@ public class BannerAdService {
     }
 
     @Transactional
-    public void updateBannerAd(int bannerId, BannerAdRequestDto bannerAdDto, UserDetailsImpl userDetails) {
+    public void updateBannerAd(int bannerId, BannerAdRequestDto bannerAdDto, MultipartFile img, UserDetailsImpl userDetails) {
         BannerAdvertisement bannerAd = bannerAdRepository.findById(bannerId)
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
@@ -78,6 +82,7 @@ public class BannerAdService {
 
         bannerAd.getAdvertisement().setStatus(StatusType.CRT_WAIT);
         bannerAd.setExposureDays(bannerAdDto.getExposureDays());
+        bannerAd.setBanner_Image(imageService.saveImage(img));
         bannerAd.setStartDate(bannerAdDto.getStartDate());
         bannerAd.setEndDate(bannerAdDto.getStartDate().plusDays(bannerAdDto.getExposureDays() - 1));
 
