@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.bringup.common.enums.BoardErrorCode.*;
 import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
@@ -30,25 +31,26 @@ public class BoardService {
     private final UserRepository userRepository;
     private final ImageService imageService;
 
-    public List<BoardResponseDto> getAllPost(int boardIndex){
-        List<BoardResponseDto> allBoards = new ArrayList<>();
-        List<BoardEntity> boards = boardRepository.findByBoardIndex(boardIndex);
-        if (boards == null || boards.isEmpty()){
+    public List<BoardResponseDto> getAllPosts(){
+        List<BoardEntity> boards = boardRepository.findAll();
+
+        if (boards.isEmpty()){
             throw new BoardException(NOT_FOUND_WRITING);
         }
-        for (BoardEntity board : boards){
-            BoardResponseDto dto = BoardResponseDto.builder()
-                    .boardIndex(board.getBoardIndex())
-                    .user(board.getUser())
-                    .title(board.getTitle())
-                    .content(board.getContent())
-                    .boardImage(board.getBoardImage())
-                    .createPostTime(board.getCreatedPostTime())
-                    .updatePostTime(board.getUpdatePostTime())
-                    .build();
-            allBoards.add(dto);
-        }
-        return allBoards;
+
+        return boards.stream()
+                .map(board -> {
+                    return BoardResponseDto.builder()
+                            .boardIndex(board.getBoardIndex())
+                            .user(board.getUser())
+                            .title(board.getTitle())
+                            .content(board.getContent())
+                            .boardImage(board.getBoardImage())
+                            .createPostTime(board.getCreatedPostTime())
+                            .updatePostTime(board.getUpdatePostTime())
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 
     @Transactional
