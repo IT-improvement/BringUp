@@ -131,7 +131,6 @@ public class SpringSecurityConfig {
                 antMatcher(GET, "/resources/**"),
                 antMatcher(GET, "/company/**"),              // 기업 페이지
                 antMatcher("/"),
-                antMatcher("/admin/**"),
 /*
                 antMatcher("/member/**"),
 */
@@ -161,6 +160,7 @@ public class SpringSecurityConfig {
                 antMatcher("/main/main"),
                 antMatcher("/main/banner"),
                 antMatcher("/member/m_reviews"),
+                antMatcher("/page/admin/**"),
 
                 antMatcher("/main/list"),
                 antMatcher("/member/memberProfile"),
@@ -199,6 +199,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/{reviewId}"),
                 antMatcher("/member/delete/{reviewId}"),
                 antMatcher("/member/m_create"),
+                antMatcher("/admin/**"),
 
                 antMatcher("/member/interview/{reviewId}"),
                 antMatcher("/member/interview/delete/{reviewId}"),

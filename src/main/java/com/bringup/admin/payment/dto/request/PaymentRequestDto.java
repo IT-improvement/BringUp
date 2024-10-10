@@ -2,11 +2,11 @@ package com.bringup.admin.payment.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class PaymentRequestDto {
-    private String itemName;
-    private Integer price;
     private Integer itemIdx;
 }
