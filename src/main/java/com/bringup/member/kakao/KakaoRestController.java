@@ -51,8 +51,10 @@ public class KakaoRestController {
         String responseCode  = response.getStatusCode().toString();
 
         if(responseCode.equals("EE"))
-            return null;
+            return new ResponseEntity<>(htmlResponse, HttpStatus.OK);
         else
             return null;
+
+
     }
 }
