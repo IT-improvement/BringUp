@@ -32,13 +32,11 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false)
-    private OrderStatus orderStatus;
+    private OrderStatus orderStatus = OrderStatus.ORDER;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "order_roles")
     private RolesType roles;
-
-    @Column(name = "receipt_id")
-    private String receiptId;
 
     private LocalDateTime createdAt;
 
