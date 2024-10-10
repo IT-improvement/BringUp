@@ -55,7 +55,7 @@ public class MemberService implements UserDetailsService{
     public void deleteMember(UserDetailsImpl userDetails){
         UserEntity user = userRepository.findById(userDetails.getId())
                 .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
-        userRepository.delete(user);
+        user.setStatus("INACTIVE");
     }
 
     @Override

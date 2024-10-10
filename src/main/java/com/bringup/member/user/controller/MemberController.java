@@ -58,8 +58,14 @@ public class MemberController {
 
     @DeleteMapping("/mem")
     public ResponseEntity<BfResponse<?>> deleteMember(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        memberService.deleteMember(userDetails);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "Member update successful")));
+        try {
+            memberService.deleteMember(userDetails);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "탈퇴완료")));
+        }catch (MemberException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }catch (Exception e){
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/memberInfo/post")
