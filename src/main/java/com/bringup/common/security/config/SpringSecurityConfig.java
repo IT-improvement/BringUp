@@ -131,6 +131,7 @@ public class SpringSecurityConfig {
                 antMatcher(GET, "/resources/**"),
                 antMatcher(GET, "/company/**"),              // 기업 페이지
                 antMatcher("/"),
+                antMatcher("/admin/**"),
 /*
                 antMatcher("/member/**"),
 */
@@ -201,8 +202,7 @@ public class SpringSecurityConfig {
 
                 antMatcher("/member/interview/{reviewId}"),
                 antMatcher("/member/interview/delete/{reviewId}"),
-                antMatcher("/member/interview/iv_create"),
-                antMatcher("/admin/**")
+                antMatcher("/member/interview/iv_create")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);

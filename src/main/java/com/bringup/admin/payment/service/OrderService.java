@@ -28,23 +28,24 @@ public class OrderService {
     private final PaymentRepository paymentRepository;
     private final ItemRepository itemRepository;
 
-    public PaymentResponseDto createOrder(PaymentRequestDto paymentRequestDto, UserDetailsImpl userDetails) {
+    public PaymentResponseDto createOrder(PaymentRequestDto paymentRequestDto, Integer userDetails) {
         Item item = itemRepository.findById(paymentRequestDto.getItemIdx())
                 .orElseThrow(() -> new RuntimeException("해당 제품을 찾을 수 없습니다."));
 
         RolesType role = null;
 
-        if(userDetails.getUserType().equals("COMPANY")){
+        /*if(userDetails.getUserType().equals("COMPANY")){
             role = RolesType.ROLE_COMPANY;
         } else{
             role = RolesType.ROLE_MEMBER;
-        }
+        }*/
 
         Payment payment = new Payment();
         payment.setItemIdx(item);
-        payment.setUserIdx(userDetails.getId());
+        payment.setUserIdx(userDetails);
         payment.setOrderStatus(OrderStatus.ORDER); // 초기 상태는 결제 대기
-        payment.setRoles(role);
+//        payment.setRoles(role);
+        payment.setRoles(RolesType.ROLE_COMPANY);
         payment.setCreatedAt(LocalDateTime.now());
 
         Payment savedOrder = paymentRepository.save(payment);

@@ -21,8 +21,10 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/create")
-    public ResponseEntity<PaymentResponseDto> createOrder(@RequestBody PaymentRequestDto paymentRequestDto,
-                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<PaymentResponseDto> createOrder(@RequestBody PaymentRequestDto paymentRequestDto
+                                                          //@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                          ) {
+        Integer userDetails = 19;
         PaymentResponseDto paymentResponseDto = orderService.createOrder(paymentRequestDto, userDetails);
         return ResponseEntity.ok(paymentResponseDto);
     }
