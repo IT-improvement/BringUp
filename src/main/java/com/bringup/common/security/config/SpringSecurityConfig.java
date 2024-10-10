@@ -201,7 +201,8 @@ public class SpringSecurityConfig {
 
                 antMatcher("/member/interview/{reviewId}"),
                 antMatcher("/member/interview/delete/{reviewId}"),
-                antMatcher("/member/interview/iv_create")
+                antMatcher("/member/interview/iv_create"),
+                antMatcher("/admin/**")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
