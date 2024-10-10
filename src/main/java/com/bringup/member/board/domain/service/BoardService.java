@@ -48,6 +48,7 @@ public class BoardService {
                             .boardImage(board.getBoardImage())
                             .createPostTime(board.getCreatedPostTime())
                             .updatePostTime(board.getUpdatePostTime())
+                            .status(board.getStatus())
                             .build();
                 })
                 .collect(Collectors.toList());

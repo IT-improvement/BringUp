@@ -9,6 +9,9 @@ import com.bringup.member.user.dto.JoinDTO;
 import com.bringup.member.user.dto.MemberUpdateDto;
 import lombok.RequiredArgsConstructor;
 //import lombok.extern.log4j.Log4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,6 +33,7 @@ public class MemberService implements UserDetailsService{
     private final UserRepository userRepository;
     private final JoinService joinService;
     private final UserLoginService userLoginService;
+
 
     @Transactional
     public void updateMember(UserDetailsImpl userDetails, Map<String, String> requestBody){
@@ -61,7 +65,7 @@ public class MemberService implements UserDetailsService{
 
     public UserEntity getMemberInfo(UserDetailsImpl userDetails){
         return userRepository.findById(userDetails.getId())
-                .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
+                .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_EMAIL));
     }
 
     public String getUserName(UserDetailsImpl userDetails) {

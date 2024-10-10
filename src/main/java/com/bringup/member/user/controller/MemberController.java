@@ -1,11 +1,14 @@
 package com.bringup.member.user.controller;
 
+import com.bringup.common.enums.GlobalErrorCode;
+import com.bringup.common.event.exception.ErrorResponseHandler;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.response.ResponseCode;
 import com.bringup.common.response.ResponseDto;
 import com.bringup.common.response.ResponseMessage;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.user.domain.entity.UserEntity;
+import com.bringup.member.user.domain.exception.MemberException;
 import com.bringup.member.user.domain.repository.UserRepository;
 import com.bringup.member.user.domain.service.JoinService;
 import com.bringup.member.user.domain.service.MemberService;
@@ -39,6 +42,7 @@ public class MemberController {
     private final UserLoginService userLoginService;
     private final UserRepository userRepository;
     private final MemberService memberService;
+    private final ErrorResponseHandler errorResponseHandler;
 
     @PostMapping("/name")
     public ResponseEntity<BfResponse<?>> getMemberName(@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -60,8 +64,14 @@ public class MemberController {
 
     @GetMapping("/memberInfo/post")
     public ResponseEntity<BfResponse<?>> getMemberInfo(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        UserEntity user = memberService.getMemberInfo(userDetails);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, user));
+        try {
+            UserEntity user = memberService.getMemberInfo(userDetails);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, user));
+        }catch (MemberException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }catch (Exception e){
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
