@@ -26,12 +26,20 @@ $(document).ready(function() {
         if (Date) {
             console.log(Date);
             var startDate = Date.split(' ~ ')[0];
+            var endDate = Date.split(' ~ ')[1];
             console.log(startDate);
-            fetch('/com/advertisement/premium/available-times/' + startDate, {
-                method: 'GET',
+            console.log(endDate);
+            
+            fetch('/com/advertisement/premium/available-times', {
+                method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-                }
+                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    startDate: startDate,
+                    endDate: endDate
+                })
             })
             .then(response => response.json())
             .then(result => {

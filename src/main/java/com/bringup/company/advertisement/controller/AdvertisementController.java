@@ -42,7 +42,7 @@ public class AdvertisementController {
      * 프리미엄 가능한 시간 파악하는 컨트롤러
      * @return
      */
-    @GetMapping("/premium/available-times")
+    @PostMapping("/premium/available-times")
     public ResponseEntity<BfResponse<?>> getAvailableTimes(
             @RequestBody PremiumAdRequestDto premiumAdDto) {
         try{
