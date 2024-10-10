@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/admin/page")
-public class PageController {
+public class AdminPageController {
 
     @GetMapping("/payment/test")
     public String payTest(){
