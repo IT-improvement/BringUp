@@ -166,8 +166,13 @@ public class SpringSecurityConfig {
 
                 antMatcher("/member/interview/iv_list"),
                 antMatcher("/member/m_reviewDetail"),
+                antMatcher("/member/createReview"),
+                antMatcher("/member/editReview"),
+
 
                 antMatcher("/freelancer/**")
+
+
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);

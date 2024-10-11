@@ -52,16 +52,54 @@
 	<script>
 		document.addEventListener("DOMContentLoaded", function() {
 			fetchReviews(); // 페이지 로드 시 회사 리뷰 데이터를 가져옴
+
+			// 검색 기능 이벤트 리스너 추가
+			const searchButton = document.querySelector(".search-container button");
+			const searchInput = document.querySelector(".search-container input");
+			searchButton.addEventListener("click", () => {
+				const query = searchInput.value.trim();
+				fetchReviews(query); // 검색어가 입력된 경우 그에 맞는 리뷰만 가져옴
+			});
+
+			// 엔터 키를 눌러서 검색 가능하도록 추가
+			searchInput.addEventListener("keypress", (e) => {
+				if (e.key === "Enter") {
+					const query = searchInput.value.trim();
+					fetchReviews(query); // 검색어에 맞는 리뷰를 가져옴
+				}
+			});
 		});
 
-		function fetchReviews() {
+		function fetchReviews(query = "") {
+			// 로딩 메시지 표시
+			showLoading();
+
 			fetch("/member/m_reviews") // 리뷰를 가져오는 API 엔드포인트
 					.then(response => response.json())
 					.then(data => {
 						const reviews = data.data; // 데이터에서 리뷰 목록 추출
 						const reviewTableBody = document.querySelector("tbody");
+						reviewTableBody.innerHTML = ""; // 테이블 초기화
 
-						reviews.forEach(review => {
+						// 검색어에 맞는 리뷰 필터링
+						const filteredReviews = reviews.filter(review => {
+							const companyName = review.companyName.toLowerCase();
+							const title = review.companyReviewTitle.toLowerCase();
+							const lowerQuery = query.toLowerCase();
+							return companyName.includes(lowerQuery) || title.includes(lowerQuery);
+						});
+
+						// 로딩 메시지 숨기기
+						hideLoading();
+
+						if (filteredReviews.length === 0) {
+							// 검색 결과가 없으면 알림 메시지
+							alert("검색 결과가 없습니다.");
+							return;
+						}
+
+						// 검색 결과를 테이블에 추가
+						filteredReviews.forEach(review => {
 							const row = document.createElement("tr");
 
 							// 회사 이름
@@ -112,10 +150,28 @@
 						});
 					})
 					.catch(error => {
+						hideLoading(); // 로딩 창 숨기기
 						console.error("리뷰를 가져오는 중 오류 발생:", error);
 					});
 		}
+
+		// 로딩 창 표시 함수
+		function showLoading() {
+			const loadingElement = document.createElement("div");
+			loadingElement.classList.add("loading-overlay");
+			loadingElement.innerHTML = `<div class="spinner"></div><p>검색 중...</p>`;
+			document.body.appendChild(loadingElement);
+		}
+
+		// 로딩 창 숨기기 함수
+		function hideLoading() {
+			const loadingElement = document.querySelector(".loading-overlay");
+			if (loadingElement) {
+				loadingElement.remove();
+			}
+		}
 	</script>
+
 </head>
 <body>
 
@@ -129,10 +185,16 @@
 		<div class="m_review-container">
 			<div class="m_review-header">
 				<h1>전체 기업 리뷰</h1>
+				<!-- 리뷰 작성 버튼 -->
+
 				<div class="search-container">
 					<input type="text" placeholder="검색어 입력..." />
 					<button><i class="fas fa-search"></i></button>
 				</div>
+
+			</div>
+			<div class="review-buttons">
+				<a href="/member/createReview" class="btn btn-primary">리뷰 작성</a>
 			</div>
 
 			<table>

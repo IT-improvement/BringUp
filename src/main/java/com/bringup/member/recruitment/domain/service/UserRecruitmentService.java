@@ -1,7 +1,11 @@
 package com.bringup.member.recruitment.domain.service;
 
+import com.bringup.common.enums.RecruitmentErrorCode;
 import com.bringup.company.recruitment.entity.Recruitment;
+import com.bringup.company.recruitment.exception.RecruitmentException;
+import com.bringup.company.user.entity.Company;
 import com.bringup.member.recruitment.domain.repository.ScrapRecruitmentRepository;
+import com.bringup.member.recruitment.dto.response.UserRecruitmentDetailDto;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import com.bringup.member.recruitment.dto.response.UserRecruitmentDto;
@@ -38,6 +42,20 @@ public class UserRecruitmentService {
         return dtoList;  // DTO 리스트 반환
     }
 
+    // Top 100 게시글을 viewCount 기준으로 정렬하여 조회하는 메서드
+    public List<UserRecruitmentDto> getTopRecruitments() {
+        List<Recruitment> recruitments = userRecruitmentRepository.findTop100ByOrderByViewCountDesc(); // 상위 100개 게시글 조회
+        List<UserRecruitmentDto> dtoList = new ArrayList<>();
+
+        for (Recruitment recruitment : recruitments) {
+            UserRecruitmentDto dto = convertToDto(recruitment);
+            dtoList.add(dto);
+        }
+
+        return dtoList; // DTO 리스트 반환
+    }
+
+
     public List<UserRecruitmentDto> getBookmarkedRecruitments() {
         // 현재 인증된 사용자 정보(Principal)를 가져옵니다.
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -71,16 +89,48 @@ public class UserRecruitmentService {
 
         return dtoList;
     }
+
+
+
+    public UserRecruitmentDetailDto getRecruitmentDetail(int recruitmentId) {
+        // 채용 공고 정보 가져오기
+        Recruitment recruitment = userRecruitmentRepository.findById(recruitmentId)
+                .orElseThrow(() -> new RecruitmentException(RecruitmentErrorCode.NOT_FOUND_RECRUITMENT));
+
+        // 회사 정보 가져오기
+        Company company = recruitment.getCompany();
+        String[] images = company.getCompanyImg().replaceAll(" ", "").replaceAll("\n", "").split(",");
+
+
+        // 회사 이미지 및 다른 정보들을 함께 DTO에 담기
+        return UserRecruitmentDetailDto.builder()
+                .companyName(company.getCompanyName())
+                .companyImg(images)  // 회사 이미지 가져오기
+                .companyContent(company.getCompanyContent())
+                .companyWelfare(company.getCompanyWelfare())
+                .companyAddress(company.getCompanyAddress())
+                .recruitmentTitle(recruitment.getRecruitmentTitle())
+                .career(recruitment.getCareer())
+                .salary(recruitment.getSalary())
+                .recruitmentPeriod(recruitment.getPeriod())
+                .requirements(recruitment.getRequirement())
+                .hospitality(recruitment.getHospitality())
+                .workDetail(recruitment.getWorkDetail())
+                .applicantCount(recruitment.getViewCount())  // 지원자 수
+                .minimumSalary(Integer.parseInt(recruitment.getSalary()))  // 최소 연봉
+                .deadline(recruitment.getPeriod())  // 마감일
+                .build();
+    }
+
+
     private UserRecruitmentDto convertToDto(Recruitment recruitment) {
         UserRecruitmentDto dto = new UserRecruitmentDto();
         dto.setRecruitmentIndex(recruitment.getRecruitmentIndex());
-        dto.setCompanyId(BigInteger.valueOf(recruitment.getCompany().getCompanyId()));
         dto.setRecruitmentTitle(recruitment.getRecruitmentTitle());
         dto.setRecruitmentType(recruitment.getRecruitmentType().name());
         dto.setCategory(recruitment.getCategory());
         dto.setSkill(recruitment.getSkill());
         dto.setPeriod(recruitment.getPeriod());
-        dto.setViewCount(recruitment.getViewCount());
         return dto;
     }
 }
