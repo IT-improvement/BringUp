@@ -42,88 +42,132 @@
 
     <!-- 메인 JS -->
     <script src="/resources/script/member/recruitmentDetail.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 현재 URL 경로에서 recruitmentId 추출
+            const path = window.location.pathname;
+            const recruitmentId = path.split('/').pop(); // URL에서 마지막 부분 (recruitmentId) 추출
+            const fetchUrl = `/member/detail/` + recruitmentId;
+
+            // 데이터 가져오기
+            fetch(fetchUrl, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data || !data.data) {
+                        console.error('데이터를 불러오지 못했습니다.');
+                        return;
+                    }
+
+                    const recruitmentData = data.data;
+
+                    // 화면에 데이터 표시
+                    document.getElementById('c_name').textContent = recruitmentData.companyName;
+                    document.getElementById('recruitmentTitle').textContent = recruitmentData.recruitmentTitle;
+                    document.getElementById('c_intro').textContent = recruitmentData.companyContent;
+                    document.getElementById('r_workdetail').textContent = recruitmentData.workDetail;
+                    document.getElementById('r_career').textContent = recruitmentData.career;
+                    document.getElementById('r_salary').textContent = recruitmentData.salary;
+                    document.getElementById('r_period').textContent = recruitmentData.recruitmentPeriod;
+                    document.getElementById('r_requirement').textContent = recruitmentData.requirements;
+                    document.getElementById('r_hospitality').textContent = recruitmentData.hospitality;
+                    document.getElementById('c_welfare').textContent = recruitmentData.companyWelfare;
+                    document.getElementById('c_address').textContent = recruitmentData.companyAddress;
+                    document.getElementById('c_logo').src = recruitmentData.companyImg;
+
+                    // 슬라이드 이미지 처리
+                    const carouselInner = document.querySelector('.carousel-inner');
+                    const carouselIndicators = document.querySelector('.carousel-indicators');
+                    recruitmentData.companyImgs.forEach((imgSrc, index) => {
+                        const item = document.createElement('div');
+                        item.classList.add('carousel-item', index === 0 ? 'active' : '');
+
+                        const img = document.createElement('img');
+                        img.src = imgSrc;
+                        img.classList.add('d-block', 'w-100');
+                        img.alt = `Slide ${index + 1}`;
+                        img.style.height = '280px';
+
+                        item.appendChild(img);
+                        carouselInner.appendChild(item);
+
+                        // 인디케이터
+                        const indicator = document.createElement('button');
+                        indicator.type = 'button';
+                        indicator.setAttribute('data-bs-target', '#carouselExampleIndicators');
+                        indicator.setAttribute('data-bs-slide-to', index.toString());
+                        if (index === 0) indicator.classList.add('active');
+                        carouselIndicators.appendChild(indicator);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+
+    </script>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 
     <jsp:include page="/WEB-INF/views/member/header/member_header.jsp" flush="true" />
 
-    <main class="flex-grow-1">
-        <div class="container mt-5 w-75">
-            <div class="d-flex align-items-center mb-3">
-                <img id="c_logo" class="card-img-top w-30 m-1 rounded-circle border border-1 border-#C2C2C2">
-                <span id="c_name" class="fs-6 fw-bold"></span>
-            </div>
-            <div class="d-flex align-items-center mb-2">
-                <h2 id="recruitmentTitle" class="fs-1 fw-bold">채용 공고 제목</h2>
-            </div>
-            <div class="row">
-                <div class="col-md-8">
-                    <div id="carouselExampleIndicators" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="2000">
-                        <div class="carousel-indicators">
-                        </div>
-                        <div class="carousel-inner rounded-3 border border-1 border-#C2C2C2">
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <h3>기업 소개</h3>
-                        <p id="c_intro"></p>
-                    </div>
-                    <div class="mb-4">
-                        <h3>업무 소개</h3>
-                        <p id="r_workdetail"></p>
-                    </div>
-                    <div class="mb-4">
-                        <h3>자격 요건</h3>
-                        <ul id="r_requirement">
-                        </ul>
-                    </div>
-                    <div class="mb-4">
-                        <h3>우대 사항</h3>
-                        <p id="r_hospitality"></p>
-                    </div>
-                    <div class="mb-4">
-                        <h3>복지 혜택</h3>
-                        <p id="c_welfare"></p>
-                    </div>
-                    <div class="mb-4">
-                        <h3>근무 지역</h3>
-                        <p id="c_address">주소</p>
-                        <div id="map" style="width:100%;height:350px;"></div>
-                    </div>
+    <main class="flex-grow-1 container mt-5 w-75">
+        <div class="d-flex align-items-center mb-3">
+            <img id="c_logo" class="card-img-top w-30 m-1 rounded-circle border border-1 border-#C2C2C2" alt="회사 로고">
+            <span id="c_name" class="fs-6 fw-bold">회사 이름</span>
+        </div>
+        <div class="d-flex align-items-center mb-2">
+            <h2 id="recruitmentTitle" class="fs-1 fw-bold">채용 공고 제목</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <!-- 캐러셀 영역 -->
+                <div id="carouselExampleIndicators" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="false">
+                    <div class="carousel-indicators"></div>
+                    <div class="carousel-inner rounded-3 border border-1 border-#C2C2C2"></div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card border border-1 border-dark align-items-center" style="position: sticky; top: 140px; height: 280px; border-radius: 15px;">
-                        <div class="card-body d-flex flex-column justify-content-center w-75" style="height: 100%; position: relative;">
-                            <div class="d-flex justify-content-end" style="position: absolute; top: 10px; right: -30px;">
-                                <button class="btn btn-link p-0 me-2" style="color: #000; font-size: 1.5em;">
-                                    <i class="bi bi-bookmark"></i>
-                                </button>
-                                <button class="btn btn-link p-0" style="color: #000; font-size: 1.5em;">
-                                    <i class="bi bi-share"></i>
-                                </button>
+
+                <!-- 기업 소개, 업무 소개, 자격 요건, 우대 사항, 복지 혜택, 근무 지역 -->
+                <div class="mb-4"><h3>기업 소개</h3><p id="c_intro"></p></div>
+                <div class="mb-4"><h3>업무 소개</h3><p id="r_workdetail"></p></div>
+                <div class="mb-4"><h3>자격 요건</h3><ul id="r_requirement"></ul></div>
+                <div class="mb-4"><h3>우대 사항</h3><p id="r_hospitality"></p></div>
+                <div class="mb-4"><h3>복지 혜택</h3><p id="c_welfare"></p></div>
+                <div class="mb-4"><h3>근무 지역</h3><p id="c_address">주소</p></div>
+            </div>
+
+            <!-- 오른쪽 카드 (경력, 연봉, 마감일 등) -->
+            <div class="col-md-4">
+                <div class="card border border-1 border-dark align-items-center" style="position: sticky; top: 140px; height: 280px; border-radius: 15px;">
+                    <div class="card-body d-flex flex-column justify-content-center w-75">
+                        <div class="d-flex flex-column align-items-center text-center mt-4">
+                            <div class="d-flex justify-content-between w-100 border-bottom pb-2 mb-2">
+                                <h5 class="card-title mb-0">경력</h5><p id="r_career" class="card-text mb-0"></p>
                             </div>
-                            <div class="d-flex flex-column align-items-center text-center mt-4">
-                                <div class="d-flex justify-content-between w-100 border-bottom pb-2 mb-2">
-                                    <h5 class="card-title mb-0">경력</h5>
-                                    <p id="r_career" class="card-text mb-0"></p>
-                                </div>
-                                <div class="d-flex justify-content-between w-100 border-bottom pb-2 mb-2">
-                                    <h5 class="card-title mb-0">최소 연봉</h5>
-                                    <p id="r_salary" class="card-text mb-0"></p>
-                                </div>
-                                <div class="d-flex justify-content-between w-100 border-bottom pb-2 mb-2">
-                                    <h5 class="card-title mb-0">마감일</h5>
-                                    <p class="card-text mb-0" id="r_period"></p>
-                                </div>
+                            <div class="d-flex justify-content-between w-100 border-bottom pb-2 mb-2">
+                                <h5 class="card-title mb-0">최소 연봉</h5><p id="r_salary" class="card-text mb-0"></p>
                             </div>
-                            <a href="#" class="btn btn-primary mt-2 rounded-pill" style="background-color: #8BA5FF; border-color: #8BA5FF;">지원하기</a>
+                            <div class="d-flex justify-content-between w-100 border-bottom pb-2 mb-2">
+                                <h5 class="card-title mb-0">마감일</h5><p class="card-text mb-0" id="r_period"></p>
+                            </div>
                         </div>
-                    </div>  
+                        <a href="#" class="btn btn-primary mt-2 rounded-pill">지원하기</a>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
+
 
     <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
 

@@ -217,13 +217,6 @@
 							</div>
 						</section>
 
-						<!-- 상단 섹션: 강조된 공고 -->
-						<section class="container mt-5">
-							<h2 class="section-title">이 공고 놓치지 마세요! 요즘 가장 핫한 공고 ⭐⭐⭐</h2>
-							<div id="highlighted-recruitments" class="list-group recruitment-list">
-								<!-- 강조된 공고가 여기에 추가됩니다 -->
-							</div>
-						</section>
 
 						<!-- 전체 채용 정보 섹션 -->
 						<section class="container mt-5">
@@ -276,12 +269,10 @@
 
 							recruitments.forEach(function(recruitment) {
 								let recruitmentTitle = recruitment.recruitmentTitle || '제목 없음';
-								let companyId = recruitment.companyId || '정보 없음';
 								let category = recruitment.category || '정보 없음';
 								let skill = recruitment.skill || '정보 없음';
 								let recruitmentType = recruitment.recruitmentType || '정보 없음';
 								let period = recruitment.period || '정보 없음';
-								let status = recruitment.status || '정보 없음';
 
 								const recruitmentItem = document.createElement('div');
 								recruitmentItem.className = 'list-group-item recruitment-item';
@@ -290,9 +281,7 @@
 								titleElement.className = 'mb-1';
 								titleElement.textContent = recruitmentTitle;
 
-								const companyIdElement = document.createElement('p');
-								companyIdElement.className = 'mb-1';
-								companyIdElement.textContent = '회사 ID: ' + companyId;
+
 
 								const categoryElement = document.createElement('p');
 								categoryElement.className = 'mb-1';
@@ -310,13 +299,10 @@
 								periodElement.className = 'mb-1';
 								periodElement.textContent = '기간: ' + period;
 
-								const statusElement = document.createElement('small');
-								statusElement.className = 'text-muted';
-								statusElement.textContent = '상태: ' + status;
 
 								// 상세보기 링크 생성
 								const linkElement = document.createElement('a');
-								linkElement.href = `/member/recruitment/details/${"${recruitment.recruitmentIndex}"}`;
+								linkElement.href = `/recruitment/detail`;
 								linkElement.className = 'btn btn-outline-primary';
 								linkElement.textContent = '상세 내용';
 
@@ -328,12 +314,11 @@
 								rightDiv.className = 'align-self-center';
 
 								leftDiv.appendChild(titleElement);
-								leftDiv.appendChild(companyIdElement);
+
 								leftDiv.appendChild(categoryElement);
 								leftDiv.appendChild(skillElement);
 								leftDiv.appendChild(recruitmentTypeElement);
 								leftDiv.appendChild(periodElement);
-								leftDiv.appendChild(statusElement);
 
 								rightDiv.appendChild(linkElement);
 								contentDiv.appendChild(leftDiv);

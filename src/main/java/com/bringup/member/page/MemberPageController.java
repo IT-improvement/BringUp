@@ -97,8 +97,8 @@ public class MemberPageController {
         return "member/user/profile/memberProfile";
     }
 
-    @GetMapping("/recruitment/details/{r_index}")
-    public String recruitmentDetails(@PathVariable("r_index") Long r_index) {
+    @GetMapping("/recruitment/details/{recruitmentId}")
+    public String recruitmentDetails(@PathVariable("recruitmentId") int recruitmentId) {
         return "member/user/recruitment/detail";
     }
 
@@ -108,9 +108,19 @@ public class MemberPageController {
     }
 
     @GetMapping("/m_reviewDetail")
-    public String c_reviewDetail()
+    public String m_reviewDetail()
     {
         return "member/user/review/companyReviewDetail";
+    }
+    @GetMapping("/createReview")
+    public String createReview()
+    {
+        return "member/user/review/createReview";
+    }
+    @GetMapping("/editReview")
+    public String editReview()
+    {
+        return "member/user/review/editReview.jsp";
     }
 
 }
