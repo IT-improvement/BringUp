@@ -10,7 +10,7 @@ import com.bringup.company.advertisement.dto.response.AvailableDatesResponseDto;
 import com.bringup.company.advertisement.dto.response.PremiumAdResponseDto;
 import com.bringup.company.advertisement.entity.Advertisement;
 import com.bringup.company.advertisement.entity.PremiumAdvertisement;
-import com.bringup.company.advertisement.enums.TimeSlot;
+import com.bringup.company.advertisement.enums.Ad_Type;
 import com.bringup.company.advertisement.exception.AdvertisementException;
 import com.bringup.company.advertisement.repository.AdvertisementRepository;
 import com.bringup.company.advertisement.repository.PremiumAdvertisementRepository;
@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 
 import static com.bringup.common.enums.AdvertisementErrorCode.NOT_FOUND_ADVERTISEMENT;
 import static com.bringup.common.enums.MemberErrorCode.*;
-import static com.bringup.company.advertisement.enums.TimeSlot.*;
 
 @Service
 @RequiredArgsConstructor
@@ -71,8 +70,8 @@ public class PremiumAdService {
         BigDecimal discountRate = calculateDiscountRate(totalDays, availableDays);
 
         // 기본 가격 계산 (타임슬롯에 따라)
-        BigDecimal basePrice = getBasePrice(premiumAdDto.getTimeSlot());
-        BigDecimal finalPrice = calculateFinalPrice(basePrice, totalDays, availableDays, discountRate);
+        BigDecimal basePrice = getBasePrice(premiumAdDto.getAdType());
+        BigDecimal finalPrice = calculateFinalPrice(basePrice, availableDays, discountRate);
 
         // 매진된 날짜와 예약 가능한 날짜 반환
         return AvailableDatesResponseDto.builder()
@@ -91,27 +90,23 @@ public class PremiumAdService {
         }
     }
 
-    private BigDecimal calculateFinalPrice(BigDecimal basePrice, int totalDays, int availableDays, BigDecimal discountRate) {
+    private BigDecimal calculateFinalPrice(BigDecimal basePrice, int availableDays, BigDecimal discountRate) {
         return basePrice.multiply(BigDecimal.valueOf(availableDays))
                 .multiply(BigDecimal.ONE.subtract(discountRate.divide(BigDecimal.valueOf(100))));
     }
 
-    private BigDecimal getBasePrice(TimeSlot timeSlot) {
-        switch (timeSlot) {
-            case GP_07_10:
-            case GP_16_19:
+    private BigDecimal getBasePrice(Ad_Type adType) {
+        switch (adType) {
+            case GP:
                 return BigDecimal.valueOf(240); // GP 기본 가격
-            case P1_04_07:
-            case P1_13_16:
-            case P1_19_22:
+            case P1:
                 return BigDecimal.valueOf(210); // P1 기본 가격
-            case P2_10_13:
+            case P2:
                 return BigDecimal.valueOf(180); // P2 기본 가격
-            case P3_01_04:
-            case P3_22_01:
+            case P3:
                 return BigDecimal.valueOf(150); // P3 기본 가격
             default:
-                throw new IllegalArgumentException("Unknown time slot: " + timeSlot);
+                throw new IllegalArgumentException("광고 타입을 잘못기입했습니다: " + adType);
         }
     }
 

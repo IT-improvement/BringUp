@@ -7,7 +7,6 @@ import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.dto.request.*;
 import com.bringup.company.advertisement.dto.response.*;
 import com.bringup.company.advertisement.entity.PremiumAdvertisement;
-import com.bringup.company.advertisement.enums.TimeSlot;
 import com.bringup.company.advertisement.exception.AdvertisementException;
 import com.bringup.company.advertisement.service.*;
 import com.bringup.company.recruitment.dto.response.RecruitmentDetailResponseDto;

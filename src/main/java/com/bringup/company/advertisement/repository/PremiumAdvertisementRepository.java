@@ -2,7 +2,6 @@ package com.bringup.company.advertisement.repository;
 
 import com.bringup.company.advertisement.entity.Advertisement;
 import com.bringup.company.advertisement.entity.PremiumAdvertisement;
-import com.bringup.company.advertisement.enums.TimeSlot;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,5 +19,5 @@ public interface PremiumAdvertisementRepository extends JpaRepository<PremiumAdv
     List<PremiumAdvertisement> findAllByIsSoldOutTrueOrderByPremiumIdAsc();  // 매진되지 않은 광고 검색
 */
     List<PremiumAdvertisement> findAllByTimeSlotAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
-            TimeSlot timeSlot, LocalDate startDate, LocalDate endDate);
+            String timeSlot, LocalDate startDate, LocalDate endDate);
 }
