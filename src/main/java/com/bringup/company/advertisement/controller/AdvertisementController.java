@@ -42,11 +42,12 @@ public class AdvertisementController {
      * @return
      */
     @PostMapping("/premium/available-times")
-    public ResponseEntity<BfResponse<?>> getAvailableTimes(
-            @RequestBody PremiumAdRequestDto premiumAdDto) {
+    public ResponseEntity<BfResponse<?>> getUnavailableTimes(
+            @RequestBody ChoicedateRequestDto dto) {
         try{
-            AvailableDatesResponseDto availableDates = premiumAdService.getAvailableTimeSlotsAndDiscount(premiumAdDto);
-            return ResponseEntity.ok(new BfResponse<>(availableDates));
+            System.out.println(dto);
+            List<String> unavailableDates = premiumAdService.getUnavailableDates(dto);
+            return ResponseEntity.ok(new BfResponse<>(unavailableDates));
         } catch (AdvertisementException e){
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         }
@@ -115,16 +116,12 @@ public class AdvertisementController {
 
     //-------------메인 라인----------------------------------------------
 
-    /*@GetMapping("/main/available-times/{date}")
-    public ResponseEntity<BfResponse<?>> getMainAvailableTimes(@PathVariable LocalDate date) {
-        try{
-            List<TimeSlot> availableTimes = mainAdService.getAvailableTimes(date);
-            return ResponseEntity.ok(new BfResponse<>(availableTimes));
-        } catch (AdvertisementException e){
-            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
-        }
+    @GetMapping("/main/available-dates")
+    public ResponseEntity<BfResponse<?>> getAvailableDates(
+            @RequestBody ChoicedateRequestDto dto){
+        List<String> availableDates = mainAdService.getUnavailableDates(dto);
+        return ResponseEntity.ok(new BfResponse<>(availableDates));
     }
-*/
     /**
      *
      * @param mainAdDto
@@ -173,12 +170,7 @@ public class AdvertisementController {
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, mad));
     }
 
-    @GetMapping("/main/available-dates")
-    public ResponseEntity<BfResponse<?>> getAvailableDates(
-            @RequestBody MainAdRequestDto mainAdDto){
-        AvailableDatesResponseDto availableDates = mainAdService.getAvailableDates(mainAdDto);
-        return ResponseEntity.ok(new BfResponse<>(availableDates));
-    }
+
 
 
     //-------------배너 라인----------------------------------------------\

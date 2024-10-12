@@ -21,6 +21,9 @@ public class Advertisement {
     @JoinColumn(name = "recruitment_index", nullable = false)
     private Recruitment recruitment;
 
+    @Column(name = "display_time")
+    private String display;
+
     @Column(name = "view_count")
     private Integer v_count = 0;
 
