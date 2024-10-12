@@ -60,4 +60,7 @@
     <div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
 
 </body>
+<script src="https://js.bootpay.co.kr/bootpay-5.0.1.min.js" type="application/javascript"></script>
+<script src="/resource/static/script/common/payment.js"></script>
+
 </html>
