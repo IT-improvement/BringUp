@@ -18,6 +18,10 @@ public interface PremiumAdvertisementRepository extends JpaRepository<PremiumAdv
     /*List<PremiumAdvertisement> findAllByEndDateBefore(LocalDate date);  // 마감일이 지난 광고 검색
     List<PremiumAdvertisement> findAllByIsSoldOutTrueOrderByPremiumIdAsc();  // 매진되지 않은 광고 검색
 */
+
+    @Query("SELECT pa FROM PremiumAdvertisement pa WHERE pa.advertisement.startDate <= :endDate AND pa.advertisement.endDate >= :startDate")
     List<PremiumAdvertisement> findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(
-            LocalDate startDate, LocalDate endDate);
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate);
+
 }
