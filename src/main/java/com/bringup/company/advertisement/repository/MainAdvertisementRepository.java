@@ -14,7 +14,6 @@ public interface MainAdvertisementRepository extends JpaRepository<MainAdvertise
     // 선착순으로 5개의 광고를 가져오는 메서드
     List<MainAdvertisement> findTop6ByOrderByMainIdAsc();
 
-    @Query("SELECT DISTINCT a FROM MainAdvertisement a WHERE a.startDate <= :endDate AND a.endDate >= :startDate")
-    List<MainAdvertisement> findReservedAds(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
-
+    @Query("SELECT COUNT(a) FROM MainAdvertisement a WHERE a.startDate <= :targetDate AND a.endDate >= :targetDate")
+    int countAdsByDate(@Param("targetDate") LocalDate targetDate);
 }
