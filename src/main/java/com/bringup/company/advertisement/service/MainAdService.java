@@ -26,6 +26,7 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.bringup.common.enums.AdvertisementErrorCode.ALREADY_ACTIVE;
 import static com.bringup.common.enums.AdvertisementErrorCode.NOT_FOUND_ADVERTISEMENT;
 import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
 import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_RECRUITMENT;
@@ -60,15 +61,15 @@ public class MainAdService {
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
         advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
+        advertisement.setStartDate(mainAdDto.getStartDate());
+        advertisement.setEndDate(mainAdDto.getEndDate());
+
         advertisementRepository.save(advertisement);
 
         // 메인 광고 등록
         MainAdvertisement mainAd = new MainAdvertisement();
         mainAd.setAdvertisement(advertisement);
         mainAd.setMain_Image(imageService.saveImage(img));
-        mainAd.setExposureDays(mainAdDto.getExposureDays());
-        mainAd.setStartDate(mainAdDto.getStartDate());
-        mainAd.setEndDate(mainAdDto.getStartDate().plusDays(mainAdDto.getExposureDays()));
 
         mainAdvertisementRepository.save(mainAd);
     }
@@ -84,10 +85,10 @@ public class MainAdService {
 
         // 광고 정보 업데이트
         Advertisement ad = mainAd.getAdvertisement();
+        ad.setStringListFromList(mainAdDto.getUseDate());
         ad.setStatus(StatusType.CRT_WAIT); // 수정 시에도 초기 상태로 변경
-        mainAd.setExposureDays(mainAdDto.getExposureDays());
-        mainAd.setStartDate(mainAdDto.getStartDate());
-        mainAd.setEndDate(mainAdDto.getStartDate().plusDays(mainAdDto.getExposureDays()));
+        mainAd.getAdvertisement().setStartDate(mainAdDto.getStartDate());
+        mainAd.getAdvertisement().setEndDate(mainAdDto.getEndDate());
 
         mainAdvertisementRepository.save(mainAd);
     }
@@ -98,8 +99,11 @@ public class MainAdService {
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         Advertisement ad = mainAd.getAdvertisement();
-        ad.setStatus(StatusType.DEL_WAIT); // 상태를 삭제 대기로 변경
 
+        ad.setStatus(StatusType.DEL_WAIT); // 상태를 삭제 대기로 변경
+        if(ad.getStatus().equals(StatusType.ACTIVE)){
+            throw new AdvertisementException(ALREADY_ACTIVE);
+        }
         mainAdvertisementRepository.save(mainAd);
     }
 
@@ -123,8 +127,8 @@ public class MainAdService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // String으로 받은 날짜를 LocalDate로 변환
-        LocalDate startDate = LocalDate.parse(dto.getStartdate(), formatter);
-        LocalDate endDate = LocalDate.parse(dto.getEnddate(), formatter);
+        LocalDate startDate = LocalDate.parse(dto.getStartDate(), formatter);
+        LocalDate endDate = LocalDate.parse(dto.getEndDate(), formatter);
 
         List<String> unavailableDates = new ArrayList<>();
 
@@ -164,9 +168,8 @@ public class MainAdService {
         return MainAdResponseDto.builder()
                 .mainId(mainAd.getMainId())
                 .recruitmentIndex(ad.getRecruitment().getRecruitmentIndex())
-                .startDate(mainAd.getStartDate())
-                .endDate(mainAd.getEndDate())
-                .exposureDays(mainAd.getExposureDays())
+                .startDate(mainAd.getAdvertisement().getStartDate())
+                .endDate(mainAd.getAdvertisement().getEndDate())
                 .discountRate(mainAd.getDiscountRate())
                 .viewCount(ad.getV_count())
                 .clickCount(ad.getC_count())

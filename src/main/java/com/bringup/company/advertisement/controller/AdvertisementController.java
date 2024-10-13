@@ -152,9 +152,14 @@ public class AdvertisementController {
     }
 
     @DeleteMapping("/main/{mainAdId}")
-    public ResponseEntity<BfResponse<String>> deleteMainAd(@PathVariable int mainAdId) {
-        mainAdService.deleteMainAd(mainAdId);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "메인광고 삭제완료"));
+    public ResponseEntity<BfResponse<?>> deleteMainAd(@PathVariable int mainAdId) {
+        try{
+            mainAdService.deleteMainAd(mainAdId);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, "메인광고 삭제완료"));
+        } catch (AdvertisementException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+
     }
 
     /**

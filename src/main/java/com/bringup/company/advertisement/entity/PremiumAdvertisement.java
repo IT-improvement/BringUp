@@ -33,9 +33,4 @@ public class PremiumAdvertisement {
     @Column(name = "premium_image")
     private String image;
 
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate; // 시작 날짜
-
-    @Column(name = "end_date", nullable = false)
-    private LocalDate endDate; // 종료 날짜
 }

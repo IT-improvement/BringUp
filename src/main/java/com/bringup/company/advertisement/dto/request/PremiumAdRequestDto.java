@@ -4,6 +4,7 @@ import com.bringup.company.advertisement.enums.Ad_Type;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class PremiumAdRequestDto {
@@ -12,6 +13,5 @@ public class PremiumAdRequestDto {
     private String timeSlot; // 노출 시간대
     private LocalDate startDate; // 사용자가 지정한 광고 시작 날짜
     private LocalDate endDate; // 사용자가 지정한 광고 종료 날짜
-    private String display_startDate; // 광고 표출 시작 날짜
-    private String display_endDate; // 광고 표출 종료 날짜
+    private List<String> displayDate;
 }
