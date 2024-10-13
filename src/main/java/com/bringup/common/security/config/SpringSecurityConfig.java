@@ -160,6 +160,7 @@ public class SpringSecurityConfig {
                 antMatcher("/main/main"),
                 antMatcher("/main/banner"),
                 antMatcher("/member/m_reviews"),
+                antMatcher("/member/company"),
 
                 antMatcher("/main/list"),
                 antMatcher("/member/memberProfile"),
