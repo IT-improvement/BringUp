@@ -92,6 +92,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="reviewMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">기업</a>
                         <ul class="dropdown-menu" aria-labelledby="postMenu">
+                            <li><a class="dropdown-item" href="/member/company/list">기업</a></li>
                             <li><a class="dropdown-item" href="/member/companyReview">기업 리뷰</a></li>
                             <li><a class="dropdown-item" href="/member/interviewReview">면접 후기</a></li>
                         </ul>
