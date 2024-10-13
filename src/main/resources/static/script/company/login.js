@@ -1,10 +1,61 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const useridInput = document.getElementById('userid');
+    const passwordInput = document.getElementById('password');
+
+    // userid 툴팁 초기화
+    const useridTooltip = new bootstrap.Tooltip(useridInput, {
+        trigger: 'manual',
+        placement: 'bottom',
+        title: '아이디를 확인해주세요.',
+        template: '<div class="tooltip" role="tooltip"><div class="arrow" style="color: #dc3545;"></div><div class="tooltip-inner bg-danger text-white"></div></div>'
+    });
+
+    // password 툴팁 초기화
+    const passwordTooltip = new bootstrap.Tooltip(passwordInput, {
+        trigger: 'manual',
+        placement: 'bottom',
+        title: '비밀번호를 확인해주세요.',
+        template: '<div class="tooltip" role="tooltip"><div class="arrow" style="color: #dc3545;"></div><div class="tooltip-inner bg-danger text-white"></div></div>'
+    });
+
+    useridInput.addEventListener('mouseover', function() {
+        useridTooltip.hide();
+    });
+
+    useridInput.addEventListener('focus', function() {
+        this.classList.remove('is-invalid');
+        useridTooltip.hide();
+    });
+
+
+    passwordInput.addEventListener('mouseover', function() {
+        passwordTooltip.hide();
+        document.getElementById('password').classList.remove('mb-4');
+    });
+
+    passwordInput.addEventListener('focus', function() {
+        this.classList.remove('is-invalid');
+        passwordTooltip.hide();
+    });
+
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
-        const userid = document.getElementById('userid').value;
-        const password = document.getElementById('password').value;
-        
+        const userid = useridInput.value;
+        const password = passwordInput.value;
+
+        if (!userid) {
+            useridInput.classList.add('is-invalid');
+            useridTooltip.show();
+            return;
+        }
+        if (!password) {
+            passwordInput.classList.add('is-invalid');
+            passwordTooltip.show();
+            document.getElementById('password').classList.add('mb-4');
+            return;
+        }
+
         fetch('/com/login', {
             method: 'POST',
             headers: {
