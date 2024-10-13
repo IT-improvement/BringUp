@@ -54,7 +54,7 @@ function updateRecruitmentList(recruitmentList) {
 
             row.innerHTML = `
                 <td>${index + 1}</td>
-                <td>${recruitment.title || '-'}</td>
+                <td>${recruitment.recruitmentTitle || '-'}</td>
                 <td>${recruitmentType || '-'}</td>
                 <td>${type || '-'}</td>
                 <td>${recruitment.period || '-'}</td>

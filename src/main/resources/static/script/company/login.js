@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         useridTooltip.hide();
     });
 
-    useridInput.addEventListener('focus', function() {
+    useridInput.addEventListener('focusout', function() {
         this.classList.remove('is-invalid');
         useridTooltip.hide();
     });
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('password').classList.remove('mb-4');
     });
 
-    passwordInput.addEventListener('focus', function() {
+    passwordInput.addEventListener('focusout', function() {
         this.classList.remove('is-invalid');
         passwordTooltip.hide();
     });
@@ -47,12 +47,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!userid) {
             useridInput.classList.add('is-invalid');
             useridTooltip.show();
+            useridInput.focus();
             return;
         }
+
         if (!password) {
             passwordInput.classList.add('is-invalid');
             passwordTooltip.show();
             document.getElementById('password').classList.add('mb-4');
+            passwordInput.focus();
             return;
         }
 

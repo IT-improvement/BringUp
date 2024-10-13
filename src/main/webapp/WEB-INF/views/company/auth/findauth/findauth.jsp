@@ -50,7 +50,7 @@
 <div class="find-container" style="height: 83.5vh;">
     <div class="find-wrapper">
         <div class="find-box">
-            <h2 class="text-center mb-4" id="find-id-title">기업 회원 아이디 찾기</h2>
+            <h2 class="text-center mb-4" id="find-title">기업 회원 아이디 찾기</h2>
             <ul class="nav nav-tabs mb-4" id="findTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="find-id-tab" data-bs-toggle="tab" data-bs-target="#find-id" type="button" role="tab" aria-controls="find-id" aria-selected="true">아이디 찾기</button>
@@ -61,56 +61,20 @@
             </ul>
             <div class="tab-content mb-0 p-0" id="findTabContent">
                 <div class="tab-pane fade show active" id="find-id" role="tabpanel" aria-labelledby="find-id-tab">
-                    <form id="findIdForm">
-                        <div class="mb-3">
-                            <label for="businessNumber" class="form-label">사업자등록번호</label>
-                            <input type="text" class="form-control" id="businessNumber" name="businessNumber" required placeholder="사업자등록번호를 입력하세요">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="pwEmail" class="form-label">이메일</label>
-                            <div class="input-group">
-                                <input type="email" class="form-control me-2" id="idEmail" name="email" required placeholder="등록된 이메일 주소를 입력하세요">
-                                <button type="button" id="idSendVerification" class="btn btn-primary rounded w-60">인증</button>
-                            </div>
-                        </div>
-                        <div id="idVerificationSection" class="verification-section mb-3">
-                            <div class="input-group">
-                                <input type="text" class="form-control me-2" id="idVerificationCode" name="verificationCode" placeholder="인증번호를 입력하세요">
-                                <button type="button" id="idVerifyCode" class="btn btn-secondary rounded w-60">확인</button>
-                            </div>
-                        </div>
-
-                        <button type="submit" id="findIdButton" class="btn btn-primary w-100 mt-2">아이디 찾기</button>
-                    </form>
+                    <div id="findIdForm">
+                        <!-- 공통 필드가 여기에 동적으로 추가됩니다 -->
+                        <button id="findIdButton" class="btn btn-primary w-100 mt-2">아이디 찾기</button>
+                    </div>
                 </div>
                 <div class="tab-pane fade" id="find-pw" role="tabpanel" aria-labelledby="find-pw-tab">
-                    <form id="findPwForm">
-                        <div class="mb-3">
-                            <label for="pwBusinessNumber" class="form-label">사업자등록번호</label>
-                            <input type="text" class="form-control" id="pwBusinessNumber" name="businessNumber" required placeholder="사업자등록번호를 입력하세요">
-                        </div>
+                    <div id="findPwForm">
                         <div class="mb-3">
                             <label for="pwUserId" class="form-label">아이디</label>
-                            <input type="text" class="form-control" id="pwUserId" name="userId" required placeholder="아이디를 입력하세요">
+                            <input type="text" class="form-control" id="pwUserId" name="userId" placeholder="아이디를 입력하세요">
                         </div>
-                        
-                        <div class="mb-3">
-                            <label for="pwEmail" class="form-label">이메일</label>
-                            <div class="input-group">
-                                <input type="email" class="form-control me-2" id="pwEmail" name="email" required placeholder="등록된 이메일 주소를 입력하세요">
-                                <button type="button" id="pwSendVerification" class="btn btn-primary rounded w-60">인증</button>
-                            </div>
-                        </div>
-                        <div id="pwVerificationSection" class="verification-section mb-3">
-                            <div class="input-group">
-                                <input type="text" class="form-control me-2" id="pwVerificationCode" name="verificationCode" placeholder="인증번호를 입력하세요">
-                                <button type="button" id="pwVerifyCode" class="btn btn-secondary rounded w-60">확인</button>
-                            </div>
-                        </div>
-
+                        <!-- 공통 필드가 여기에 동적으로 추가됩니다 -->
                         <button type="submit" id="findPwButton" class="btn btn-primary w-100 mt-2">비밀번호 찾기</button>
-                    </form>
+                    </div>
                 </div>
             </div>
             <div class="additional-links">
@@ -120,6 +84,32 @@
         </div>
     </div>
 </div>
+
+<!-- 공통 필드 템플릿 -->
+<template id="commonFieldsTemplate">
+    <div class="mb-3">
+        <label for="businessNumber" class="form-label">사업자등록번호</label>
+        <input type="text" class="form-control businessNumber" name="businessNumber" placeholder="사업자등록번호를 입력하세요" maxlength="12">
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">이메일</label>
+        <div class="input-group">
+            <input type="email" class="form-control me-2 email rounded" name="email" placeholder="등록된 이메일 주소를 입력하세요">
+            <button type="button" class="btn btn-primary rounded w-60 sendVerification">인증</button>
+        </div>
+    </div>
+    <div class="verification-section mb-3" style="display: none;">
+        <label for="verificationCode" class="form-label">인증번호</label>
+        <div class="input-group">
+            <input type="text" class="form-control me-2 verificationCode" name="verificationCode" placeholder="인증번호를 입력하세요" maxlength="6">
+            <button type="button" class="btn btn-secondary rounded w-60 verifyCode">확인</button>
+        </div>
+    </div>
+</template>
+
+<script>
+
+</script>
 
 <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" />
 
