@@ -124,6 +124,8 @@
                                                 <option value="공고 타입">공고 타입</option>
                                                 <option value="모집 분야">모집 분야</option>
                                                 <option value="마감일">마감일</option>
+                                                <option value="조회수">조회수</option>
+                                                <option value="지원자수">지원자수</option>
                                             </select>
                                         </form>
                                     </div>

@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const itemsPerPage = 5;
     let totalItems = 0;
     let allData = [];
+    let filteredData = [];
 
     function fetchData() {
         fetch('/com/recruitment/list', {
@@ -22,9 +23,11 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             console.log("받은 데이터:", data);
             allData = data.data;
+            filteredData = allData;
             totalItems = allData.length;
             renderPage(currentPage);
             updatePagination();
+            updateJobCountAndTotal(totalItems);
         })
         .catch(error => {
             console.error('채용 목록을 가져오는 중 오류 발생:', error);
@@ -41,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const start = (page - 1) * itemsPerPage;
         const end = start + itemsPerPage;
-        const pageData = allData.slice(start, end);
+        const pageData = filteredData.slice(start, end);
 
         pageData.forEach((recruitment, index) => {
             const row = document.createElement('tr');
@@ -68,11 +71,11 @@ document.addEventListener('DOMContentLoaded', function() {
             recruitmentListBody.appendChild(row);
         });
 
-        updateJobCountAndTotal(totalItems);
+        updateJobCountAndTotal(filteredData.length);
     }
 
     function updatePagination() {
-        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage);
         const paginationContainer = document.getElementById('paginationContainer');
         paginationContainer.innerHTML = '';
 
@@ -152,6 +155,56 @@ document.addEventListener('DOMContentLoaded', function() {
             totalEntriesElement.textContent = `총 ${count} 개`;
         }
     }
+
+    function searchJobPostings(event) {
+        event.preventDefault();
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const categorySelect = document.getElementById('categorySelect').value;
+
+        filteredData = allData.filter(recruitment => {
+            const recruitmentType = recruitment.recruitmentType === 'IRREGULAR_WORKER' ? '비정규직' :
+                                    recruitment.recruitmentType === 'REGULAR_WORKER' ? '정규직' :
+                                    recruitment.recruitmentType === 'PART_TIME_WORKER' ? '파트타임' : '기타';
+            const type = recruitment.type === "RECRUITMENT" ? '정규 채용' : '프리랜서';
+
+            switch(categorySelect) {
+                case '공고 제목':
+                    return recruitment.title.toLowerCase().includes(searchInput);
+                case '공고 타입':
+                    return type.toLowerCase().includes(searchInput);
+                case '모집 분야':
+                    return recruitmentType.toLowerCase().includes(searchInput);
+                case '마감일':
+                    return recruitment.period.toLowerCase().includes(searchInput);
+                case '조회수':
+                    return recruitment.viewCount.toString().includes(searchInput);
+                case '지원자수':
+                    return recruitment.applicantCount.toString().includes(searchInput);
+                default:
+                    return recruitment.title.toLowerCase().includes(searchInput) ||
+                           type.toLowerCase().includes(searchInput) ||
+                           recruitmentType.toLowerCase().includes(searchInput) ||
+                           recruitment.period.toLowerCase().includes(searchInput) ||
+                           recruitment.viewCount.toString().includes(searchInput) ||
+                           recruitment.applicantCount.toString().includes(searchInput);
+            }
+        });
+
+        currentPage = 1;
+        renderPage(currentPage);
+        updatePagination();
+        updateJobCountAndTotal(filteredData.length);
+    }
+
+    // 검색 폼에 이벤트 리스너 추가
+    const searchForm = document.querySelector('form');
+    searchForm.addEventListener('submit', searchJobPostings);
+
+    // 카테고리 선택 변경 시 이벤트 리스너 추가
+    const categorySelect = document.getElementById('categorySelect');
+    categorySelect.addEventListener('change', function() {
+        searchJobPostings(new Event('submit'));
+    });
 
     fetchData();
 });
