@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.bringup.common.enums.BoardErrorCode.*;
-import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
+import static com.bringup.common.enums.BoardErrorCode.IMAGE_UPLOAD_FAIL;
+import static com.bringup.common.enums.MemberErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
