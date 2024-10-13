@@ -29,7 +29,7 @@ public class MemberPageController {
     @GetMapping("/join")
     public String joinProcess() {return "member/user/userJoin";} // 회원가입 완료 후 리다이렉트할 페이지}
 
-    @GetMapping("/companyList")
+    @GetMapping("/company/list")
     public String companyPage(){
         return "member/user/company/companyList";
     }

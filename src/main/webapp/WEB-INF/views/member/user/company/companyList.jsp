@@ -57,181 +57,183 @@
 <!-- 메인 콘텐츠 -->
 <body class="d-flex flex-column min-vh-100">
 <div class="container" style="max-width: 1260px;">
-    <main class="flex-grow-1">
-        <div>
-            <div class="card border mb-4">
-                <div class="card-header bg-light border-bottom">
-                    <h5 class="card-title mb-0">공고 검색</h5>
+    <main class="flex-grow-1 py-4">
+        <div class="row g-4">
+            <div>
+                <div class="card border mb-4">
+                    <div class="card-header bg-light border-bottom">
+                        <h5 class="card-title mb-0">공고 검색</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="search-form" class="row g-3">
+                            <div class="col-md-4">
+                                <label for="search-category" class="form-label">카테고리</label>
+                                <select class="form-select" id="search-category">
+                                    <option value="all">전체</option>
+                                    <option value="title">공고 제목</option>
+                                    <option value="type">공고 타입</option>
+                                    <option value="recruitmentType">채용 형태</option>
+                                    <option value="deadline">마감일</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="search-keyword" class="form-label">검색어</label>
+                                <input type="text" class="form-control" id="search-keyword">
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100">검색</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <form id="search-form" class="row g-3">
-                        <div class="col-md-4">
-                            <label for="search-category" class="form-label">카테고리</label>
-                            <select class="form-select" id="search-category">
-                                <option value="all">전체</option>
-                                <option value="title">공고 제목</option>
-                                <option value="type">공고 타입</option>
-                                <option value="recruitmentType">채용 형태</option>
-                                <option value="deadline">마감일</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="search-keyword" class="form-label">검색어</label>
-                            <input type="text" class="form-control" id="search-keyword">
-                        </div>
-                        <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary w-100">검색</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="container">
-                    <div class="row g-4 p-3 flex-fill">
-                        <!-- Card item START -->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card bg-transparent">
-                                <!-- Card img -->
-                                <img class="card-img rounded" src="./assets/image/kakao_logo.jpg" alt="Card image">
-                                <div class="card-body px-0 pt-3">
-                                    <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
-                                    <!-- Card info -->
-                                    <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                        <li class="nav-item">
-                                            <a href="#" class="text-reset btn-link">(주)카카오</a>
-                                        </li>
-                                        <li class="nav-item">2024/05/02</li>
-                                    </ul>
-                                </div>
+            </div>
+            <div class="container">
+                <div class="row g-4 p-3 flex-fill">
+                    <!-- Card item START -->
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card bg-transparent">
+                            <!-- Card img -->
+                            <img class="card-img rounded" src="./assets/image/kakao_logo.jpg" alt="Card image">
+                            <div class="card-body px-0 pt-3">
+                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
+                                <!-- Card info -->
+                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
+                                    <li class="nav-item">
+                                        <a href="#" class="text-reset btn-link">(주)카카오</a>
+                                    </li>
+                                    <li class="nav-item">2024/05/02</li>
+                                </ul>
                             </div>
                         </div>
-                        <!-- Card item END -->
-                        <!-- Card item START -->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card bg-transparent">
-                                <!-- Card img -->
-                                <img class="card-img rounded" src="./assets/image/naver_logo.png" alt="Card image">
-                                <div class="card-body px-0 pt-3">
-                                    <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">검색광고 공식대행사 채용관</a></h6>
-                                    <!-- Card info -->
-                                    <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                        <li class="nav-item">
-                                            <a href="#" class="text-reset btn-link">네이버</a>
-                                        </li>
-                                        <li class="nav-item">2024/05/02</li>
-                                    </ul>
-                                </div>
+                    </div>
+                    <!-- Card item END -->
+                    <!-- Card item START -->
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card bg-transparent">
+                            <!-- Card img -->
+                            <img class="card-img rounded" src="./assets/image/naver_logo.png" alt="Card image">
+                            <div class="card-body px-0 pt-3">
+                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">검색광고 공식대행사 채용관</a></h6>
+                                <!-- Card info -->
+                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
+                                    <li class="nav-item">
+                                        <a href="#" class="text-reset btn-link">네이버</a>
+                                    </li>
+                                    <li class="nav-item">2024/05/02</li>
+                                </ul>
                             </div>
                         </div>
-                        <!-- Card item END -->
-                        <!-- Card item START -->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card bg-transparent">
-                                <!-- Card img -->
-                                <img class="card-img rounded" src="./assets/image/baemin_logo.jpg" alt="Card image">
-                                <div class="card-body px-0 pt-3">
-                                    <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
-                                    <!-- Card info -->
-                                    <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                        <li class="nav-item">
-                                            <a href="#" class="text-reset btn-link">(주)우아한형제들</a>
-                                        </li>
-                                        <li class="nav-item">2024/05/02</li>
-                                    </ul>
-                                </div>
+                    </div>
+                    <!-- Card item END -->
+                    <!-- Card item START -->
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card bg-transparent">
+                            <!-- Card img -->
+                            <img class="card-img rounded" src="./assets/image/baemin_logo.jpg" alt="Card image">
+                            <div class="card-body px-0 pt-3">
+                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
+                                <!-- Card info -->
+                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
+                                    <li class="nav-item">
+                                        <a href="#" class="text-reset btn-link">(주)우아한형제들</a>
+                                    </li>
+                                    <li class="nav-item">2024/05/02</li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card bg-transparent">
-                                <!-- Card img -->
-                                <img class="card-img rounded" src="./assets/image/rsupport_logo.png" alt="Card image">
-                                <div class="card-body px-0 pt-3">
-                                    <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
-                                    <!-- Card info -->
-                                    <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                        <li class="nav-item">
-                                            <a href="#" class="text-reset btn-link">(주)알서포트</a>
-                                        </li>
-                                        <li class="nav-item">2024/05/02</li>
-                                    </ul>
-                                </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card bg-transparent">
+                            <!-- Card img -->
+                            <img class="card-img rounded" src="./assets/image/rsupport_logo.png" alt="Card image">
+                            <div class="card-body px-0 pt-3">
+                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
+                                <!-- Card info -->
+                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
+                                    <li class="nav-item">
+                                        <a href="#" class="text-reset btn-link">(주)알서포트</a>
+                                    </li>
+                                    <li class="nav-item">2024/05/02</li>
+                                </ul>
                             </div>
                         </div>
-                        <!-- Card item END -->
-                    </div> <!-- Row END -->
-                </div>
-                <div class="container">
-                    <div class="row g-4 p-3 flex-fill">
-                        <!-- Card item START -->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card bg-transparent">
-                                <!-- Card img -->
-                                <img class="card-img rounded" src="./assets/image/evidnet_logo.jpeg" alt="Card image">
-                                <div class="card-body px-0 pt-3">
-                                    <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
-                                    <!-- Card info -->
-                                    <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                        <li class="nav-item">
-                                            <a href="#" class="text-reset btn-link">(주)에비드넷</a>
-                                        </li>
-                                        <li class="nav-item">2024/05/02</li>
-                                    </ul>
-                                </div>
+                    </div>
+                    <!-- Card item END -->
+                </div> <!-- Row END -->
+            </div>
+            <div class="container">
+                <div class="row g-4 p-3 flex-fill">
+                    <!-- Card item START -->
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card bg-transparent">
+                            <!-- Card img -->
+                            <img class="card-img rounded" src="./assets/image/evidnet_logo.jpeg" alt="Card image">
+                            <div class="card-body px-0 pt-3">
+                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
+                                <!-- Card info -->
+                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
+                                    <li class="nav-item">
+                                        <a href="#" class="text-reset btn-link">(주)에비드넷</a>
+                                    </li>
+                                    <li class="nav-item">2024/05/02</li>
+                                </ul>
                             </div>
                         </div>
-                        <!-- Card item END -->
-                        <!-- Card item START -->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card bg-transparent">
-                                <!-- Card img -->
-                                <img class="card-img rounded" src="./assets/image/nexon_logo.jpg" alt="Card image">
-                                <div class="card-body px-0 pt-3">
-                                    <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
-                                    <!-- Card info -->
-                                    <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                        <li class="nav-item">
-                                            <a href="#" class="text-reset btn-link">(주)넥슨코리아</a>
-                                        </li>
-                                        <li class="nav-item">2024/05/02</li>
-                                    </ul>
-                                </div>
+                    </div>
+                    <!-- Card item END -->
+                    <!-- Card item START -->
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card bg-transparent">
+                            <!-- Card img -->
+                            <img class="card-img rounded" src="./assets/image/nexon_logo.jpg" alt="Card image">
+                            <div class="card-body px-0 pt-3">
+                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
+                                <!-- Card info -->
+                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
+                                    <li class="nav-item">
+                                        <a href="#" class="text-reset btn-link">(주)넥슨코리아</a>
+                                    </li>
+                                    <li class="nav-item">2024/05/02</li>
+                                </ul>
                             </div>
                         </div>
-                        <!-- Card item END -->
-                        <!-- Card item START -->
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card bg-transparent">
-                                <!-- Card img -->
-                                <img class="card-img rounded" src="./assets/image/unioncommunity_logo.jpg" alt="Card image">
-                                <div class="card-body px-0 pt-3">
-                                    <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
-                                    <!-- Card info -->
-                                    <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                        <li class="nav-item">
-                                            <a href="#" class="text-reset btn-link">(주)유니온커뮤니티</a>
-                                        </li>
-                                        <li class="nav-item">2024/05/02</li>
-                                    </ul>
-                                </div>
+                    </div>
+                    <!-- Card item END -->
+                    <!-- Card item START -->
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card bg-transparent">
+                            <!-- Card img -->
+                            <img class="card-img rounded" src="./assets/image/unioncommunity_logo.jpg" alt="Card image">
+                            <div class="card-body px-0 pt-3">
+                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
+                                <!-- Card info -->
+                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
+                                    <li class="nav-item">
+                                        <a href="#" class="text-reset btn-link">(주)유니온커뮤니티</a>
+                                    </li>
+                                    <li class="nav-item">2024/05/02</li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="card bg-transparent">
-                                <!-- Card img -->
-                                <img class="card-img rounded" src="./assets/image/coresecurity_logo.jpg" alt="Card image">
-                                <div class="card-body px-0 pt-3">
-                                    <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
-                                    <!-- Card info -->
-                                    <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                        <li class="nav-item">
-                                            <a href="#" class="text-reset btn-link">(주)코어시큐리티</a>
-                                        </li>
-                                        <li class="nav-item">2024/05/02</li>
-                                    </ul>
-                                </div>
+                    </div>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card bg-transparent">
+                            <!-- Card img -->
+                            <img class="card-img rounded" src="./assets/image/coresecurity_logo.jpg" alt="Card image">
+                            <div class="card-body px-0 pt-3">
+                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
+                                <!-- Card info -->
+                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
+                                    <li class="nav-item">
+                                        <a href="#" class="text-reset btn-link">(주)코어시큐리티</a>
+                                    </li>
+                                    <li class="nav-item">2024/05/02</li>
+                                </ul>
                             </div>
                         </div>
-                        <!-- Card item END -->
-                    </div> <!-- Row END -->
-                </div>
+                    </div>
+                    <!-- Card item END -->
+                </div> <!-- Row END -->
             </div>
         </div>
     </main>
