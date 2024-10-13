@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -15,6 +16,7 @@ public class MainAdResponseDto {
     private int exposureDays; // 광고 일수
     private LocalDate startDate; // 시작날짜
     private LocalDate endDate; // 끝날짜
+    private List<String> avaliableDate; // 진행중인 날짜
     private BigDecimal discountRate; // 할인율
     private StatusType status; // 광고 상태
     private String imageUrl; // 광고 이미지 URL

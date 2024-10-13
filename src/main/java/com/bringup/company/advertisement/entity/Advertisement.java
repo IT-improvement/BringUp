@@ -7,6 +7,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -20,6 +24,12 @@ public class Advertisement {
     @OneToOne
     @JoinColumn(name = "recruitment_index", nullable = false)
     private Recruitment recruitment;
+
+    @Column(name = "start_date")
+    private LocalDate startDate;
+
+    @Column(name = "end_date")
+    private LocalDate endDate;
 
     @Column(name = "display_time")
     private String display;
@@ -47,4 +57,14 @@ public class Advertisement {
 
     @OneToOne(mappedBy = "advertisement")
     private AnnouncementAdvertisement announcementAdvertisement;
+
+    // String을 List로 변환
+    public List<String> getStringListAsList() {
+        return Arrays.asList(display.split(","));
+    }
+
+    // List를 String으로 변환
+    public void setStringListFromList(List<String> list) {
+        this.display = String.join(",", list);
+    }
 }

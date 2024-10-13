@@ -16,6 +16,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
+
+import static com.bringup.common.enums.AdvertisementErrorCode.ALREADY_ACTIVE;
 import static com.bringup.common.enums.AdvertisementErrorCode.NOT_FOUND_ADVERTISEMENT;
 import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
 import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_RECRUITMENT;
@@ -27,6 +30,7 @@ public class AnnouncementAdService {
     private final AnnouncementAdvertisementRepository announcementAdvertisementRepository;
     private final AdvertisementRepository advertisementRepository;
     private final RecruitmentRepository recruitmentRepository;
+
 
     @Transactional
     public void createAnnouncementAd(AnnouncementAdRequestDto announcementAdDto, UserDetailsImpl userDetails) {
@@ -42,15 +46,14 @@ public class AnnouncementAdService {
         advertisement.getRecruitment().setRecruitmentIndex(announcementAdDto.getRecruitmentIndex());
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
+        advertisement.setDisplay(String.valueOf(announcementAdDto.getDurationDays()));
+        advertisement.setStartDate(announcementAdDto.getStartDate());
+        advertisement.setEndDate(announcementAdDto.getEndDate());
         advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
         advertisementRepository.save(advertisement);
 
         AnnouncementAdvertisement announcementAd = new AnnouncementAdvertisement();
         announcementAd.setAdvertisement(advertisement);
-        announcementAd.setDurationMonths(announcementAdDto.getDurationMonths());
-        announcementAd.setStartDate(announcementAdDto.getStartDate());
-        announcementAd.setEndDate(announcementAdDto.getStartDate().plusMonths(announcementAdDto.getDurationMonths()));
-
         announcementAdvertisementRepository.save(announcementAd);
     }
 
@@ -64,9 +67,8 @@ public class AnnouncementAdService {
         }
 
         announcementAd.getAdvertisement().setStatus(StatusType.CRT_WAIT);
-        announcementAd.setDurationMonths(announcementAdDto.getDurationMonths());
-        announcementAd.setStartDate(announcementAdDto.getStartDate());
-        announcementAd.setEndDate(announcementAdDto.getStartDate().plusMonths(announcementAdDto.getDurationMonths()));
+        announcementAd.getAdvertisement().setStartDate(announcementAdDto.getStartDate());
+        announcementAd.getAdvertisement().setEndDate(announcementAdDto.getEndDate());
 
         announcementAdvertisementRepository.save(announcementAd);
     }
@@ -77,6 +79,9 @@ public class AnnouncementAdService {
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         announcementAd.getAdvertisement().setStatus(StatusType.DEL_WAIT);
+        if(announcementAd.getAdvertisement().getStatus().equals(StatusType.ACTIVE)){
+            throw new AdvertisementException(ALREADY_ACTIVE);
+        }
         announcementAdvertisementRepository.save(announcementAd);
     }
 
@@ -95,10 +100,8 @@ public class AnnouncementAdService {
         return AnnouncementAdResponseDto.builder()
                 .announcementId(announcementAd.getAnnouncementId())
                 .recruitmentIndex(announcementAd.getAdvertisement().getRecruitment().getRecruitmentIndex())
-                .announcementId(announcementAd.getAnnouncementId())
-                .durationMonths(announcementAd.getDurationMonths())
-                .startDate(announcementAd.getStartDate())
-                .endDate(announcementAd.getEndDate())
+                .startDate(announcementAd.getAdvertisement().getStartDate())
+                .endDate(announcementAd.getAdvertisement().getEndDate())
                 .status(announcementAd.getAdvertisement().getStatus())
                 .build();
     }

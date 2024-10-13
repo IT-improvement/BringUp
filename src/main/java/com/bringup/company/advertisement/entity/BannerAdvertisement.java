@@ -21,15 +21,6 @@ public class BannerAdvertisement {
     @JoinColumn(name = "advertisement_index", nullable = false)
     private Advertisement advertisement;
 
-    @Column(name = "exposure_days", nullable = false)
-    private int exposureDays;
-
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate; // 시작 날짜
-
-    @Column(name = "end_date", nullable = false)
-    private LocalDate endDate; // 종료 날짜
-
     @Column(name = "banner_image")
     private String banner_Image;
 

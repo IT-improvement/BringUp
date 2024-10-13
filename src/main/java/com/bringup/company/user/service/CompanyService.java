@@ -9,6 +9,7 @@ import com.bringup.common.event.exception.CertificateException;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.security.jwt.JwtProvider;
 import com.bringup.common.security.service.UserDetailsImpl;
+import com.bringup.company.advertisement.exception.AdvertisementException;
 import com.bringup.company.user.dto.request.JoinDto;
 import com.bringup.company.user.dto.request.LoginDto;
 import com.bringup.company.user.dto.request.SalaryDto;
@@ -172,7 +173,7 @@ public class CompanyService {
             return LoginTokenDto.builder()
                     .accessToken(accessToken)
                     .build();
-        } catch (Exception e){
+        } catch (AdvertisementException e){
             throw new CompanyException(CHECK_ID_OR_PASSWORD);
         }
 

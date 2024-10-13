@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.bringup.common.enums.AdvertisementErrorCode.ALREADY_ACTIVE;
 import static com.bringup.common.enums.AdvertisementErrorCode.NOT_FOUND_ADVERTISEMENT;
 import static com.bringup.common.enums.MemberErrorCode.*;
 
@@ -54,8 +55,8 @@ public class PremiumAdService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // String으로 받은 날짜를 LocalDate로 변환
-        LocalDate startDate = LocalDate.parse(choicedatedto.getStartdate(), formatter);
-        LocalDate endDate = LocalDate.parse(choicedatedto.getEnddate(), formatter);
+        LocalDate startDate = LocalDate.parse(choicedatedto.getStartDate(), formatter);
+        LocalDate endDate = LocalDate.parse(choicedatedto.getEndDate(), formatter);
 
         // 해당 기간에 예약된 프리미엄 광고들을 가져옴
         List<PremiumAdvertisement> reservedAds = premiumAdvertisementRepository
@@ -81,8 +82,8 @@ public class PremiumAdService {
             for (String timeSlot : timeSlots) {
                 boolean isTimeSlotUnavailable = false;
 
-                for (PremiumAdvertisement ad : reservedAds) {
-                    if (ad.getStartDate().equals(date) && ad.getTimeSlot().equals(timeSlot)) {
+                for (PremiumAdvertisement pad : reservedAds) {
+                    if (pad.getAdvertisement().getStartDate().equals(date) && pad.getTimeSlot().equals(timeSlot)) {
                         isTimeSlotUnavailable = true;
                         break;  // 예약된 시간대를 찾으면 더 이상 확인하지 않음
                     }
@@ -107,18 +108,15 @@ public class PremiumAdService {
             throw new CompanyException(NOT_FOUND_MEMBER_ID);
         }
 
-        // display_startDate와 display_endDate 범위 내의 날짜를 문자열로 변환하여 저장
-        LocalDate displayStartDate = LocalDate.parse(premiumAdDto.getDisplay_startDate());
-        LocalDate displayEndDate = LocalDate.parse(premiumAdDto.getDisplay_endDate());
-        String displayDates = convertDatesToString(displayStartDate, displayEndDate);
-
         // 광고 등록
         Advertisement advertisement = new Advertisement();
         advertisement.setRecruitment(recruitment);
-        advertisement.setDisplay(displayDates);
+        advertisement.setStringListFromList(premiumAdDto.getDisplayDate());
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
         advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
+        advertisement.setStartDate(premiumAdDto.getStartDate());
+        advertisement.setEndDate(premiumAdDto.getEndDate());
         advertisementRepository.save(advertisement);
 
         // 프리미엄 광고 정보 등록
@@ -127,8 +125,6 @@ public class PremiumAdService {
         premiumAd.setAdType(premiumAdDto.getAdType()); // enum 사용
         premiumAd.setTimeSlot(premiumAdDto.getTimeSlot());
         premiumAd.setImage(imageService.saveImage(img));
-        premiumAd.setStartDate(premiumAdDto.getStartDate());
-        premiumAd.setEndDate(premiumAdDto.getEndDate());
 
         premiumAdvertisementRepository.save(premiumAd);
         // TODO: 웹소켓으로 어드민소통 & 결제를 구성해야함 일단 그냥 CRT_WAIT으로 생성
@@ -148,19 +144,14 @@ public class PremiumAdService {
         Advertisement ad = advertisementRepository.findById(premiumAd.getAdvertisement().getAdvertisementIndex())
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
-        // display_startDate와 display_endDate 범위 내의 날짜를 문자열로 변환하여 저장
-        LocalDate displayStartDate = LocalDate.parse(premiumAdDto.getDisplay_startDate());
-        LocalDate displayEndDate = LocalDate.parse(premiumAdDto.getDisplay_endDate());
-        String displayDates = convertDatesToString(displayStartDate, displayEndDate);
-
         // 광고 정보 업데이트
         ad.setStatus(StatusType.CRT_WAIT);
-        ad.setDisplay(displayDates);
+        ad.setStringListFromList(premiumAdDto.getDisplayDate());
         premiumAd.setAdType(premiumAdDto.getAdType());
         premiumAd.setTimeSlot(premiumAdDto.getTimeSlot());
         premiumAd.setImage(imageService.saveImage(img)); // 이미지를 새로 저장
-        premiumAd.setStartDate(premiumAdDto.getStartDate());
-        premiumAd.setEndDate(premiumAdDto.getEndDate());
+        premiumAd.getAdvertisement().setStartDate(premiumAdDto.getStartDate());
+        premiumAd.getAdvertisement().setEndDate(premiumAdDto.getEndDate());
 
         premiumAdvertisementRepository.save(premiumAd);
         // TODO: 웹소켓으로 어드민소통해야함 일단 그냥 CRT_WAIT으로 생성
@@ -170,10 +161,12 @@ public class PremiumAdService {
         PremiumAdvertisement premiumAd = premiumAdvertisementRepository.findById(premiumAdId)
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
-        Advertisement ad = advertisementRepository.findById(premiumAd.getAdvertisement().getAdvertisementIndex())
-                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
-        ad.setStatus(StatusType.DEL_WAIT);
+        premiumAd.getAdvertisement().setStatus(StatusType.DEL_WAIT);
+        if(premiumAd.getAdvertisement().getStatus().equals(StatusType.ACTIVE)){
+            throw new AdvertisementException(ALREADY_ACTIVE);
+        }
         // TODO: 웹소켓으로 어드민소통해야함 일단 그냥 삭제대기로 변경
+        premiumAdvertisementRepository.save(premiumAd);
     }
 
     public PremiumAdResponseDto getPremiumAdDetail(UserDetailsImpl userDetails, Integer ad_index) {
@@ -196,8 +189,8 @@ public class PremiumAdService {
                 .status(ad.getStatus())
                 .adType(pad.getAdType())
                 .timeSlot(pad.getTimeSlot())
-                .startDate(pad.getStartDate())
-                .endDate(pad.getEndDate())
+                .startDate(pad.getAdvertisement().getStartDate())
+                .endDate(pad.getAdvertisement().getEndDate())
                 .ad_img(pad.getImage())
                 .view_count(ad.getV_count())
                 .click_count(ad.getC_count())

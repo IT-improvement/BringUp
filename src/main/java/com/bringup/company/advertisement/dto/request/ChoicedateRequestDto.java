@@ -6,6 +6,6 @@ import java.util.List;
 
 @Data
 public class ChoicedateRequestDto {
-    private String startdate;
-    private String enddate;
+    private String startDate;
+    private String endDate;
 }

@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.bringup.common.enums.AdvertisementErrorCode.ALREADY_ACTIVE;
 import static com.bringup.common.enums.AdvertisementErrorCode.NOT_FOUND_ADVERTISEMENT;
 import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
 import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_RECRUITMENT;
@@ -44,6 +45,9 @@ public class BannerAdService {
         advertisement.getRecruitment().setRecruitmentIndex(bannerAdDto.getRecruitmentIndex());
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
+        advertisement.setDisplay(String.valueOf(bannerAdDto.getExposureDays()));
+        advertisement.setStartDate(bannerAdDto.getStartDate());
+        advertisement.setEndDate(bannerAdDto.getEndDate());
         advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
         advertisementRepository.save(advertisement);
 
@@ -51,9 +55,6 @@ public class BannerAdService {
         BannerAdvertisement bannerAd = new BannerAdvertisement();
         bannerAd.setAdvertisement(advertisement);
         bannerAd.setBanner_Image(imageService.saveImage(img));
-        bannerAd.setExposureDays(bannerAdDto.getExposureDays());
-        bannerAd.setStartDate(bannerAdDto.getStartDate());
-        bannerAd.setEndDate(bannerAdDto.getStartDate().plusDays(bannerAdDto.getExposureDays() - 1));
 
         bannerAdRepository.save(bannerAd);
     }
@@ -81,10 +82,9 @@ public class BannerAdService {
         }
 
         bannerAd.getAdvertisement().setStatus(StatusType.CRT_WAIT);
-        bannerAd.setExposureDays(bannerAdDto.getExposureDays());
         bannerAd.setBanner_Image(imageService.saveImage(img));
-        bannerAd.setStartDate(bannerAdDto.getStartDate());
-        bannerAd.setEndDate(bannerAdDto.getStartDate().plusDays(bannerAdDto.getExposureDays() - 1));
+        bannerAd.getAdvertisement().setStartDate(bannerAdDto.getStartDate());
+        bannerAd.getAdvertisement().setEndDate(bannerAdDto.getEndDate());
 
         bannerAdRepository.save(bannerAd);
     }
@@ -95,6 +95,9 @@ public class BannerAdService {
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         bannerAd.getAdvertisement().setStatus(StatusType.DEL_WAIT);
+        if(bannerAd.getAdvertisement().getStatus().equals(StatusType.ACTIVE)){
+            throw new AdvertisementException(ALREADY_ACTIVE);
+        }
         bannerAdRepository.save(bannerAd);
     }
 
@@ -102,9 +105,8 @@ public class BannerAdService {
         return BannerAdResponseDto.builder()
                 .bannerAdIndex(bannerAd.getBannerId())
                 .recruitmentIndex(bannerAd.getAdvertisement().getRecruitment().getRecruitmentIndex())
-                .startDate(bannerAd.getStartDate())
-                .endDate(bannerAd.getEndDate())
-                .exposureDays(bannerAd.getExposureDays())
+                .startDate(bannerAd.getAdvertisement().getStartDate())
+                .endDate(bannerAd.getAdvertisement().getEndDate())
                 .viewCount(bannerAd.getAdvertisement().getV_count())
                 .clickCount(bannerAd.getAdvertisement().getC_count())
                 .status(bannerAd.getAdvertisement().getStatus())
