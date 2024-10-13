@@ -126,48 +126,21 @@ public class MainAdService {
         LocalDate startDate = LocalDate.parse(dto.getStartdate(), formatter);
         LocalDate endDate = LocalDate.parse(dto.getEnddate(), formatter);
 
-        System.out.println("startdate : " + startDate);
-        System.out.println("enddate : " + endDate);
-
-        // 해당 기간에 예약된 광고들을 가져옴
-        List<MainAdvertisement> reservedAds = mainAdvertisementRepository
-                .findReservedAds(startDate, endDate);
-
-        System.out.println("reservedAds : " + reservedAds);
-        // 로그 추가 - 조회된 광고 리스트 확인
-        System.out.println("조회된 광고 개수: " + reservedAds.size());
-        for (MainAdvertisement ad : reservedAds) {
-            System.out.println("광고 ID: " + ad.getMainId() + ", 시작 날짜: " + ad.getStartDate() + ", 종료 날짜: " + ad.getEndDate());
-        }
-
-        // 광고 수를 카운트할 맵 (날짜별로 광고 개수 저장)
-        Map<LocalDate, Integer> adCountMap = new HashMap<>();
-
-        // 예약된 광고에서 각 날짜에 해당하는 광고 수를 카운트
-        for (MainAdvertisement ad : reservedAds) {
-            LocalDate adStartDate = ad.getStartDate();
-            LocalDate adEndDate = ad.getEndDate();
-
-            // 광고의 날짜 범위가 요청된 날짜 범위와 겹치는지 확인
-            for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-                if (!date.isBefore(adStartDate) && !date.isAfter(adEndDate)) {
-                    adCountMap.put(date, adCountMap.getOrDefault(date, 0) + 1);
-                    System.out.println("광고 카운트 맵 업데이트: " + date + " -> " + adCountMap.get(date));
-                }
-            }
-        }
-
-        // 요청한 날짜 범위를 돌면서 광고가 6개 이상인 날짜를 찾음
         List<String> unavailableDates = new ArrayList<>();
-        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-            System.out.println("날짜 확인: " + date + " -> 광고 수: " + adCountMap.getOrDefault(date, 0));
-            if (adCountMap.getOrDefault(date, 0) >= 6) {
-                unavailableDates.add(date.format(formatter));  // 날짜를 문자열로 변환하여 리스트에 추가
-                System.out.println("겹치는 날짜 추가됨: " + date);
+
+        // 날짜 범위를 순회하면서 각 날짜에 예약된 광고 수를 확인
+        while (!startDate.isAfter(endDate)) {
+            int adCount = mainAdvertisementRepository.countAdsByDate(startDate);
+
+            // 예약된 광고 수가 6개 이상이면 해당 날짜를 반환할 목록에 추가
+            if (adCount >= 6) {
+                unavailableDates.add(startDate.format(formatter));
             }
+
+            // 다음 날짜로 이동
+            startDate = startDate.plusDays(1);
         }
 
-        // 불가능한 날짜들을 반환
         return unavailableDates;
     }
 
