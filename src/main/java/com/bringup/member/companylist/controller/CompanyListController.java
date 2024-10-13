@@ -20,7 +20,7 @@ import static com.bringup.common.enums.GlobalSuccessCode.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/member/company")
+@RequestMapping("/company")
 public class CompanyListController {
     private final CompanyListService companyListService;
     private final ErrorResponseHandler errorResponseHandler;
