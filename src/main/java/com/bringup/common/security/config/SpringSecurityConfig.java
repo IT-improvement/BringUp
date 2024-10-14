@@ -168,6 +168,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/m_reviewDetail"),
                 antMatcher("/member/createReview"),
                 antMatcher("/member/editReview"),
+                antMatcher("/member/reviewDetail/{reviewId}"),
 
 
                 antMatcher("/freelancer/**")
