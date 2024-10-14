@@ -24,9 +24,9 @@ public class CompanyBookMarkContoller {
     @Autowired
     private CompanyBookMarkService companyBookMarkService;
 
-    @GetMapping("/mem/addCompany")
-    public ResponseEntity<BfResponse<?>> addCompany(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        companyBookMarkService.addCompany(userDetails);
+    @PostMapping("/mem/addCompany/{company_index}")
+    public ResponseEntity<BfResponse<?>> addCompany(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable("company_index") int companyIndex){
+        companyBookMarkService.addCompany(userDetails, companyIndex);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "기업 저장 완료"));
     }
 
@@ -36,7 +36,7 @@ public class CompanyBookMarkContoller {
         return ResponseEntity.ok(companyBookMarkResponseDtoList);
     }
 
-    @GetMapping("/mem/delCompany/{company_index}")
+    @GetMapping("/mem/delCompany/{companyIndex}")
     public ResponseEntity<BfResponse<?>> delCompany(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int companyIndex){
         companyBookMarkService.delCompany(userDetails, companyIndex);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, "기업 삭제 완료"));

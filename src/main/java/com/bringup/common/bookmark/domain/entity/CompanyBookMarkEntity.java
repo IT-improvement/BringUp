@@ -7,11 +7,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
+@SuperBuilder
 @Table(name = "company_bookmark")
 public class CompanyBookMarkEntity {
     @Id

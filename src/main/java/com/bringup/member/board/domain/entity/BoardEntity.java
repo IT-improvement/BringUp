@@ -1,5 +1,6 @@
 package com.bringup.member.board.domain.entity;
 
+import com.bringup.common.enums.BoardType;
 import com.bringup.member.user.domain.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,11 +19,11 @@ import java.time.LocalDateTime;
 public class BoardEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "boardIndex")
+    @Column(name = "board_index")
     private int boardIndex;
 
     @ManyToOne
-    @JoinColumn(name = "userIndex")
+    @JoinColumn(name = "user_index")
     private UserEntity user;
 
     @Column(name = "title")
@@ -31,7 +32,7 @@ public class BoardEntity{
     @Column(name = "content")
     private String content;
 
-    @Column(name = "boardImage")
+    @Column(name = "board_image")
     private String boardImage;
 
     @Column(name = "created_at")
@@ -39,6 +40,10 @@ public class BoardEntity{
 
     @Column(name = "updated_at")
     private LocalDateTime updatePostTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private BoardType status;
 
     @PrePersist
     public void preCreateTime(){
