@@ -3,6 +3,7 @@ package com.bringup.common.bookmark.domain.service;
 import com.bringup.common.bookmark.dto.response.CandidateResponseDto;
 import com.bringup.common.bookmark.dto.response.CompanyBookMarkResponseDto;
 import com.bringup.common.bookmark.exception.BookmarkException;
+import com.bringup.common.enums.BoardType;
 import com.bringup.common.enums.BookmarkType;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.user.entity.Company;
@@ -37,17 +38,19 @@ public class CompanyBookMarkService {
     private final CompanyRepository companyRepository;
     private final CVRepository cvRepository;
 
-    public void addCompany(UserDetailsImpl userDetails){
+    public void addCompany(UserDetailsImpl userDetails, int companyId){
         UserEntity user = userRepository.findById(userDetails.getId())
                 .orElseThrow(()->new BookmarkException(NOT_FOUND_MEMBER_ID));
 
-        Company company = companyRepository.findById(userDetails.getId())
+        Company company = companyRepository.findById(companyId)
                 .orElseThrow(()->new BookmarkException(NOT_FOUND_MEMBER_ID));
 
-        CompanyBookMarkEntity companyBookMarkEntity = new CompanyBookMarkEntity();
-        companyBookMarkEntity.setUser(user);
-        companyBookMarkEntity.setCompany(company);
-        companyBookMarkEntity.setStatus(BookmarkType.BOOKMARK);
+        CompanyBookMarkEntity companyBookMarkEntity = CompanyBookMarkEntity.builder()
+                .company(company)
+                .user(user)
+                .status(BookmarkType.BOOKMARK)
+                .build();
+
         companyBookMarkRepository.save(companyBookMarkEntity);
     }
 

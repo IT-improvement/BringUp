@@ -1,5 +1,6 @@
 package com.bringup.member.user.dto;
 
+import com.bringup.common.enums.StatusType;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -12,4 +12,7 @@ import java.util.Optional;
 @Repository
 public interface BoardRepository extends JpaRepository<BoardEntity, Integer> {
     Optional<BoardEntity> findByUser(UserEntity user);
+    List<BoardEntity> findByUserUserIndex(int userIndex);
+    List<BoardEntity> findByBoardIndex(int boardIndex);
+
 }
