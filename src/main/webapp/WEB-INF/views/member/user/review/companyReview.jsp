@@ -141,7 +141,7 @@
 							const detailButton = document.createElement("a");
 							detailButton.className = "details-button";
 							detailButton.textContent = "자세히 보기";
-							detailButton.href = "/member/m_reviewDetail?reviewId=" + review.companyReviewIndex; // 각 리뷰에 맞는 상세보기 링크
+							detailButton.href = `/member/m_reviewDetail/` + review.companyReviewIndex; // 각 리뷰에 맞는 상세보기 링크
 							detailButtonCell.appendChild(detailButton);
 							row.appendChild(detailButtonCell);
 

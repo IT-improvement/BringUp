@@ -15,4 +15,5 @@ public class MemberCompanyReviewDto {
     private String companyReviewTitle; // 기업 리뷰 제목
     private String companyReviewDate;
     private double AverageRating;
+
 }

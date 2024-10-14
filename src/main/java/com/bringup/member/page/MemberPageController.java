@@ -107,8 +107,8 @@ public class MemberPageController {
         return "member/user/career/freelancer";
     }
 
-    @GetMapping("/m_reviewDetail")
-    public String m_reviewDetail()
+    @GetMapping("/m_reviewDetail/{reviewId}")
+    public String m_reviewDetail(@PathVariable("reviewId") int reviewId)
     {
         return "member/user/review/companyReviewDetail";
     }
