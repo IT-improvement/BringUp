@@ -207,7 +207,13 @@
 
 			const linkElement = document.createElement('a');
 			// 공고 인덱스를 포함한 상세 페이지로의 링크 설정
-			linkElement.href = `/member/recruitment/details/` + recruitment.recruitmentIndex;
+			if (recruitment.recruitmentIndex) {
+				linkElement.href = `/member/recruitment/details/` + recruitment.recruitmentIndex;
+			} else {
+				console.error("recruitmentIndex is null for recruitment:", recruitment);
+				return; // 인덱스가 없는 경우 렌더링을 중단
+			}
+
 			linkElement.className = 'btn btn-outline-primary';
 			linkElement.textContent = '상세 내용';
 

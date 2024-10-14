@@ -47,7 +47,13 @@
             // 현재 URL 경로에서 recruitmentId 추출
             const path = window.location.pathname;
             const recruitmentId = path.split('/').pop(); // URL에서 마지막 부분 (recruitmentId) 추출
-            const fetchUrl = `/member/detail/` + recruitmentId;
+
+            if (!recruitmentId) {
+                console.error('recruitmentId is null or undefined');
+                return;
+            }
+
+            const fetchUrl = `/recruitment/detail/` + recruitmentId;
 
             // 데이터 가져오기
             fetch(fetchUrl, {
@@ -111,8 +117,6 @@
                 })
                 .catch(error => console.error('Error:', error));
         });
-
-
     </script>
 </head>
 

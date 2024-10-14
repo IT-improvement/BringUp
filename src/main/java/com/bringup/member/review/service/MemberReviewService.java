@@ -7,6 +7,7 @@ import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.repository.CompanyRepository;
 import com.bringup.member.review.dto.request.RequestCompanyReviewDto;
 import com.bringup.member.review.dto.response.MemberCompanyReviewDto;
+import com.bringup.member.review.dto.response.MemberDetailReviewDto;
 import com.bringup.member.review.exception.MemberReviewException;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
@@ -76,6 +77,17 @@ public class MemberReviewService {
         companyReviewRepository.save(review);
     }
 
+    public MemberDetailReviewDto getReviewDetail(int reviewId) {
+        // 리뷰 ID로 리뷰를 조회, 없을 시 예외 처리
+        CompanyReview review = companyReviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰를 찾을수 없습니다. " + reviewId));
+
+        // CompanyReview 엔티티를 MemberCompanyReviewDto로 변환
+        return convertDetailToDto(review);
+    }
+
+
+
     // 리뷰 수정
     @Transactional
     public void updateCompanyReview(UserDetailsImpl userDetails,  int reviewId, RequestCompanyReviewDto reviewDto) {
@@ -114,6 +126,34 @@ public class MemberReviewService {
         }
 
         companyReviewRepository.delete(review);
+    }
+
+    // CompanyReview 엔티티를 MemberCompanyReviewDto로 변환하는 메서드
+    private MemberDetailReviewDto convertDetailToDto(CompanyReview review) {
+        MemberDetailReviewDto dto = new MemberDetailReviewDto();
+
+        dto.setCompanyReviewIndex(review.getCompanyReviewIndex());
+        dto.setCompanyName(review.getCompany().getCompanyName()); // 회사 이름 설정
+        dto.setUserEmail(review.getUser().getUserEmail()); // 사용자 이메일 설정
+        dto.setAdvancement(review.getAdvancement());
+        dto.setBenefit(review.getBenefit());
+        dto.setManagement(review.getManagement());
+        dto.setContent(review.getContent());
+        dto.setWorkLife(review.getWorkLife());
+        dto.setCompanyCulture(review.getCompanyCulture());
+        dto.setContent(review.getContent());
+        dto.setCompanyReviewTitle(review.getCompanyReviewTitle());
+        dto.setCompanyReviewDate(review.getCompanyReviewDate());
+
+        // 각 항목의 점수로 평균을 계산
+        double averageRating = (review.getAdvancement()
+                + review.getBenefit()
+                + review.getWorkLife()
+                + review.getCompanyCulture()
+                + review.getManagement()) / 5.0;
+        dto.setAverageRating(averageRating); // 평균 점수를 DTO에 설정
+
+        return dto;
     }
 
 
