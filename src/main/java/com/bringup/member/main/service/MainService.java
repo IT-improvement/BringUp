@@ -7,7 +7,6 @@ import com.bringup.company.advertisement.entity.Advertisement;
 import com.bringup.company.advertisement.entity.BannerAdvertisement;
 import com.bringup.company.advertisement.entity.MainAdvertisement;
 import com.bringup.company.advertisement.entity.PremiumAdvertisement;
-import com.bringup.company.advertisement.enums.TimeSlot;
 import com.bringup.company.advertisement.repository.AdvertisementRepository;
 import com.bringup.company.advertisement.repository.BannerAdvertisementRepository;
 import com.bringup.company.advertisement.repository.MainAdvertisementRepository;
@@ -177,7 +176,7 @@ public class MainService {
         // 오늘 날짜에 맞는 광고만 필터링
         List<MainAdvertisementDto> activeAds = new ArrayList<>();
 
-        for (MainAdvertisement ad : allAds) {
+        /*for (MainAdvertisement ad : allAds) {
             // 시작 날짜와 종료 날짜 조건을 확인
             if (!ad.getStartDate().isAfter(today) && !ad.getEndDate().isBefore(today)) {
                 // 광고가 활성화된 기간 내에 있으면 리스트에 추가
@@ -186,7 +185,7 @@ public class MainService {
                         ad.getMain_Image()
                 ));
             }
-        }
+        }*/
 
         // 필터링된 광고가 없으면 빈 리스트 반환
         if (activeAds.isEmpty()) {
@@ -215,7 +214,7 @@ public class MainService {
     public BannerAdvertisementDto getBannerAdvertisement() {
         LocalDate today = LocalDate.now();
 
-        // 모든 배너 광고 가져옴
+        /*// 모든 배너 광고 가져옴
         List<BannerAdvertisement> allBanners = bannerAdvertisementRepository.findAll();
 
         // 오늘 날짜에 맞는 배너만 필터링
@@ -262,9 +261,10 @@ public class MainService {
         BannerAdvertisementDto bannerDto = new BannerAdvertisementDto(
                 selectedAd.getRecruitment().getRecruitmentIndex(), // 공고 인덱스 반환
                 selectedBanner.getBanner_Image() // 배너 이미지 반환
-        );
+        );*/
 
-        return bannerDto;
+        //return bannerDto;
+        return null;
     }
 
 

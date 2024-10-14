@@ -1,6 +1,7 @@
 package com.bringup.member.recruitment.domain.service;
 
 import com.bringup.common.enums.RecruitmentErrorCode;
+import com.bringup.common.enums.RecruitmentType;
 import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.company.user.entity.Company;
@@ -84,6 +85,9 @@ public class UserRecruitmentService {
         List<UserRecruitmentDto> dtoList = new ArrayList<>();
         for (Recruitment recruitment : recruitments) {
             UserRecruitmentDto dto = convertToDto(recruitment);
+            if(recruitment.getRecruitmentType().equals(RecruitmentType.REGULAR_WORKER)){
+                dto.setRecruitmentType("정규직");
+            }
             dtoList.add(dto);
         }
 
