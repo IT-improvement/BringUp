@@ -217,13 +217,6 @@
 							</div>
 						</section>
 
-						<!-- 상단 섹션: 강조된 공고 -->
-						<section class="container mt-5">
-							<h2 class="section-title">이 공고 놓치지 마세요! 요즘 가장 핫한 공고 ⭐⭐⭐</h2>
-							<div id="highlighted-recruitments" class="list-group recruitment-list">
-								<!-- 강조된 공고가 여기에 추가됩니다 -->
-							</div>
-						</section>
 
 						<!-- 전체 채용 정보 섹션 -->
 						<section class="container mt-5">
@@ -249,14 +242,9 @@
 									'Content-Type': 'application/json' // JSON 형식으로 요청
 								}
 							})
-									.then(response => {
-										if (!response.ok) {
-											throw new Error('Network response was not ok');
-										}
-										return response.json();
-									})
+									.then(response => response.json())
 									.then(data => {
-										console.log("Received recruitment data:", data);
+										console.log("Received data: ", data);  // 응답 데이터를 콘솔에 출력하여 확인
 										if (Array.isArray(data)) {
 											renderRecruitmentList(data);
 										} else if (Array.isArray(data.data)) {
@@ -271,81 +259,75 @@
 						});
 
 						function renderRecruitmentList(recruitments) {
-							let highlightedContainer = document.getElementById('highlighted-recruitments');
-							let allContainer = document.getElementById('all-recruitments');
+							const allContainer = document.getElementById('all-recruitments');
 
 							recruitments.forEach(function(recruitment) {
-								let recruitmentTitle = recruitment.recruitmentTitle || '제목 없음';
-								let companyId = recruitment.companyId || '정보 없음';
-								let category = recruitment.category || '정보 없음';
-								let skill = recruitment.skill || '정보 없음';
-								let recruitmentType = recruitment.recruitmentType || '정보 없음';
-								let period = recruitment.period || '정보 없음';
-								let status = recruitment.status || '정보 없음';
+								const recruitmentTitle = recruitment.recruitmentTitle || '제목 없음';
+								const category = recruitment.category || '정보 없음';
+								const skill = recruitment.skill || '정보 없음';
+								const recruitmentType = recruitment.recruitmentType || '정보 없음';
+								const period = recruitment.period || '정보 없음';
 
+								// 모집 공고 아이템 생성
 								const recruitmentItem = document.createElement('div');
-								recruitmentItem.className = 'list-group-item recruitment-item';
+								recruitmentItem.className = 'recruitment-item';
+
+								// 제목, 카테고리, 기술 스택 등 정보를 포함하는 content div 생성
+								const contentDiv = document.createElement('div');
+								contentDiv.className = 'recruitment-content';
 
 								const titleElement = document.createElement('h5');
-								titleElement.className = 'mb-1';
+								titleElement.className = 'recruitment-title mb-2';
 								titleElement.textContent = recruitmentTitle;
 
-								const companyIdElement = document.createElement('p');
-								companyIdElement.className = 'mb-1';
-								companyIdElement.textContent = '회사 ID: ' + companyId;
-
 								const categoryElement = document.createElement('p');
-								categoryElement.className = 'mb-1';
+								categoryElement.className = 'recruitment-info mb-1';
 								categoryElement.textContent = '카테고리: ' + category;
 
 								const skillElement = document.createElement('p');
-								skillElement.className = 'mb-1';
+								skillElement.className = 'recruitment-info mb-1';
 								skillElement.textContent = '기술 스택: ' + skill;
 
 								const recruitmentTypeElement = document.createElement('p');
-								recruitmentTypeElement.className = 'mb-1';
+								recruitmentTypeElement.className = 'recruitment-info mb-1';
 								recruitmentTypeElement.textContent = '고용 형태: ' + recruitmentType;
 
 								const periodElement = document.createElement('p');
-								periodElement.className = 'mb-1';
+								periodElement.className = 'recruitment-info mb-1';
 								periodElement.textContent = '기간: ' + period;
 
-								const statusElement = document.createElement('small');
-								statusElement.className = 'text-muted';
-								statusElement.textContent = '상태: ' + status;
+								// 내용을 contentDiv에 추가
+								contentDiv.appendChild(titleElement);
+								contentDiv.appendChild(categoryElement);
+								contentDiv.appendChild(skillElement);
+								contentDiv.appendChild(recruitmentTypeElement);
+								contentDiv.appendChild(periodElement);
 
-								// 상세보기 링크 생성
+								// 상세보기 버튼을 포함하는 div 생성
+								const buttonDiv = document.createElement('div');
+								buttonDiv.className = 'recruitment-button';
+
 								const linkElement = document.createElement('a');
-								linkElement.href = `/member/recruitment/details/${"${recruitment.recruitmentIndex}"}`;
+								// 공고 인덱스를 포함한 상세 페이지로의 링크 설정
+								if (recruitment.recruitmentIndex) {
+									linkElement.href = `/member/recruitment/details/` + recruitment.recruitmentIndex;
+								} else {
+									console.error("recruitmentIndex is null for recruitment:", recruitment);
+									return; // 인덱스가 없는 경우 렌더링을 중단
+								}
+
 								linkElement.className = 'btn btn-outline-primary';
 								linkElement.textContent = '상세 내용';
 
-								// 요소를 조립하여 recruitmentItem에 추가
-								const contentDiv = document.createElement('div');
-								contentDiv.className = 'd-flex justify-content-between';
-								const leftDiv = document.createElement('div');
-								const rightDiv = document.createElement('div');
-								rightDiv.className = 'align-self-center';
+								// 버튼을 buttonDiv에 추가
+								buttonDiv.appendChild(linkElement);
 
-								leftDiv.appendChild(titleElement);
-								leftDiv.appendChild(companyIdElement);
-								leftDiv.appendChild(categoryElement);
-								leftDiv.appendChild(skillElement);
-								leftDiv.appendChild(recruitmentTypeElement);
-								leftDiv.appendChild(periodElement);
-								leftDiv.appendChild(statusElement);
-
-								rightDiv.appendChild(linkElement);
-								contentDiv.appendChild(leftDiv);
-								contentDiv.appendChild(rightDiv);
-
+								// recruitmentItem에 contentDiv와 buttonDiv 추가
 								recruitmentItem.appendChild(contentDiv);
+								recruitmentItem.appendChild(buttonDiv);
 
-								if (status === '진행중') {
-									highlightedContainer.appendChild(recruitmentItem);
-								} else {
-									allContainer.appendChild(recruitmentItem);
-								}
+								// 전체 컨테이너에 모집 공고 아이템 추가
+								allContainer.appendChild(recruitmentItem);
 							});
 						}
 

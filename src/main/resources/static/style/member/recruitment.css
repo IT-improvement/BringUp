@@ -204,7 +204,6 @@
     background-color: #007bff;
     color: white;
 }
-
 /* 모집공고 아이템 스타일 */
 .recruitment-item {
     display: flex;
@@ -214,6 +213,13 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: white;
+}
+
+.recruitment-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .recruitment-content {
@@ -222,75 +228,41 @@
     flex-grow: 1;
 }
 
-.company-name {
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 5px;
-    align-self: flex-start;
-}
-
-.recruitment-details {
-    text-align: center;
-    margin-top: 5px;
-}
-
 .recruitment-title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     color: #000;
-    margin: 0;
+    margin-bottom: 10px;
 }
 
-.recruitment-subdetails {
+.recruitment-info {
     font-size: 14px;
-    color: #777;
-    margin-top: 5px;
+    color: #555;
+    margin: 0;
 }
 
 .recruitment-action {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    text-align: right;
+    justify-content: center;
+    align-items: center;
 }
 
-.apply-button {
-    padding: 10px 20px;
-    border: 1px solid #f00;
-    background-color: white;
-    color: #f00;
+.btn-outline-primary {
+    border: 1px solid #007bff;
+    color: #007bff;
+    padding: 5px 10px;
     border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 14px;
+    transition: all 0.3s ease;
 }
 
-.apply-button:hover {
-    background-color: #f00;
+.btn-outline-primary:hover {
+    background-color: #007bff;
     color: white;
-}
-
-.deadline {
-    font-size: 12px;
-    color: #f00;
-    margin-top: 10px;
 }
 
 /* 반응형 레이아웃 */
 @media (max-width: 768px) {
-    .ur_search-bar {
-        padding: 15px;
-    }
-
-    .ur_filter-group {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .ur_filter-item {
-        width: 100%;
-    }
-
     .recruitment-item {
         flex-direction: column;
         align-items: flex-start;
@@ -301,76 +273,4 @@
         text-align: left;
         margin-top: 10px;
     }
-}
-
-.tech-results {
-    display: none;
-    border: 1px solid #ccc;
-    background-color: white;
-    position: absolute;
-    z-index: 1000;
-    max-height: 150px;
-    overflow-y: auto;
-    width: 100%;
-}
-
-.tech-results span {
-    display: block;
-    padding: 5px;
-    cursor: pointer;
-}
-
-.tech-results span:hover {
-    background-color: #f0f0f0;
-}
-/* li 안에서 label이 li 크기를 모두 차지하도록 */
-li {
-    position: relative;
-}
-
-li label {
-    display: block;
-    width: 100%;
-    height: 100%;
-    cursor: pointer; /* 커서를 포인터로 변경 */
-    padding: 10px; /* li 크기만큼 label이 확장되도록 */
-}
-
-/* 기술 스택 검색 결과 스타일 */
-.tech-result-item {
-    display: inline-block;
-    background-color: #f1f3f5;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin: 5px;
-}
-
-.tech-result-item:hover {
-    background-color: #007bff;
-    color: white;
-}
-
-/* 선택된 기술 스택 태그 스타일 */
-.selected-tech-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.tech-tag {
-    background-color: #007bff;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.tech-tag:hover {
-    background-color: #0056b3;
 }

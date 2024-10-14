@@ -49,67 +49,66 @@
             background-color: #fff;
             padding: 20px;
             border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
         }
-
         .md_review-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
-
         .md_review-title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
+            color: #333;
         }
-
         .md_review-date {
+            font-size: 14px;
             color: #888;
         }
-
         .md_star-rating {
-            color: #ffa500;
-            font-size: 18px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 28px; /* 별 크기를 키우기 */
         }
-
+        .md_star-rating i {
+            color: #ffa500; /* 노란색 */
+            margin-right: 5px;
+        }
         .md_progress-bar-container {
-            margin: 15px 0;
+            margin: 10px 0;
+            width: 20%;
         }
-
         .md_progress-bar-label {
             font-size: 14px;
-            font-weight: bold;
+            color: #555;
             margin-bottom: 5px;
         }
-
         .md_progress-bar {
             display: flex;
             gap: 2px;
         }
-
         .md_progress-segment {
             width: 20%;
-            height: 10px;
+            height: 8px;
             background-color: #f1f1f1;
             border-radius: 2px;
         }
-
         .md_progress-segment.active {
             background-color: #28a745;
         }
-
         .md_section-title {
             font-weight: bold;
             margin-top: 20px;
-            color: #28a745;
+            color: #333;
         }
-
-        .md_negative-section-title {
-            color: #dc3545;
-        }
-
         .md_section-content {
-            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 10px;
         }
     </style>
     <script>
@@ -118,10 +117,8 @@
             if (!accessToken) {
                 window.location.href = '/member/Login';
                 alert("로그인을 하셔야합니다");
-
             }
         });
-
     </script>
 </head>
 <body>
@@ -130,99 +127,109 @@
 <jsp:include page="/WEB-INF/views/member/header/member_header.jsp" flush="true" />
 
 <!-- 메인 콘텐츠 -->
+<body class="d-flex flex-column min-vh-100">
+
+<!-- 메인 콘텐츠 -->
 <div class="container" style="max-width: 1260px;">
     <main class="flex-grow-1">
-        <div class="md_review-container">
+        <div class="md_review-container" id="review-container">
             <div class="md_review-header">
-                <div class="md_review-title">최근 투자 유치로 자금 안정화 되었음.</div>
-                <div class="md_review-date">2024/02/22</div>
+                <div class="md_review-title" id="review-title">리뷰 제목</div>
+                <div class="md_review-date" id="review-date">리뷰 날짜</div>
             </div>
 
-            <div class="md_star-rating">
-                ★★★★☆
-            </div>
+            <!-- 수정하기 버튼 (로그인한 유저가 작성자인 경우에만 보이게 함) -->
+            <button id="edit-btn" class="btn btn-primary" style="display: none;">수정하기</button>
+
+            <div class="md_progress-bar-label">평균 별점</div>
+            <div class="md_star-rating" id="star-rating"></div>
 
             <!-- 승진 기회 및 가능성 -->
             <div class="md_progress-bar-container">
                 <div class="md_progress-bar-label">승진 기회 및 가능성</div>
-                <div class="md_progress-bar">
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment"></div>
-                </div>
+                <div class="md_progress-bar" id="advancement-bar"></div>
             </div>
 
             <!-- 복지 및 급여 -->
             <div class="md_progress-bar-container">
                 <div class="md_progress-bar-label">복지 및 급여</div>
-                <div class="md_progress-bar">
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment"></div>
-                    <div class="md_progress-segment"></div>
-                </div>
+                <div class="md_progress-bar" id="benefit-bar"></div>
             </div>
 
             <!-- 업무와 삶의 균형 -->
             <div class="md_progress-bar-container">
                 <div class="md_progress-bar-label">업무와 삶의 균형</div>
-                <div class="md_progress-bar">
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment"></div>
-                    <div class="md_progress-segment"></div>
-                    <div class="md_progress-segment"></div>
-                </div>
+                <div class="md_progress-bar" id="work-life-bar"></div>
             </div>
 
             <!-- 사내문화 -->
             <div class="md_progress-bar-container">
                 <div class="md_progress-bar-label">사내문화</div>
-                <div class="md_progress-bar">
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment"></div>
-                </div>
+                <div class="md_progress-bar" id="company-culture-bar"></div>
             </div>
 
             <!-- 경영진 -->
             <div class="md_progress-bar-container">
                 <div class="md_progress-bar-label">경영진</div>
-                <div class="md_progress-bar">
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment active"></div>
-                    <div class="md_progress-segment"></div>
-                    <div class="md_progress-segment"></div>
-                </div>
+                <div class="md_progress-bar" id="management-bar"></div>
             </div>
 
-            <!-- 장점 섹션 -->
-            <div class="md_section-title">장점</div>
-            <div class="md_section-content">
-                10시 출근. 7시 칼퇴! 야근한다고 매우 해주는 분위기 아님.
-            </div>
-
-            <!-- 단점 섹션 -->
-            <div class="md_section-title md_negative-section-title">단점</div>
-            <div class="md_section-content">
-                개인 간막이가 없어 개인공간을 선호하는 업무자면 적응이 필요함.
-            </div>
-
-            <!-- 경영진에 바라는 점 -->
-            <div class="md_section-title">경영진에 바라는 점</div>
-            <div class="md_section-content">
-                사원들의 의견도 적극 반영해 주었으면 좋겠음. 이 기업은 1년 후 비추할 것이다.
-            </div>
+            <!-- 리뷰 내용 -->
+            <div class="md_section-title">리뷰 내용</div>
+            <div class="md_section-content" id="content"></div>
         </div>
     </main>
 </div>
 
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const path = window.location.pathname;
+        const reviewId = path.split('/').pop(); // URL에서 마지막 부분 (recruitmentId) 추출
+        const reviewUrl = `/member/reviewDetail/`  + reviewId;
+
+        fetch(reviewUrl)
+            .then(response => response.json())
+            .then(data => {
+                const review = data.data;
+
+                // 별점 표시
+                const averageRating = Math.round(review.averageRating);
+                let starHtml = '';
+                for (let i = 0; i < 5; i++) {
+                    starHtml += i < averageRating ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
+                }
+                document.getElementById('star-rating').innerHTML = starHtml;
+
+                // 나머지 데이터 표시
+                document.getElementById('review-title').textContent = review.companyReviewTitle;
+                document.getElementById('review-date').textContent = review.companyReviewDate;
+
+                updateProgressBar('advancement-bar', review.advancement);
+                updateProgressBar('benefit-bar', review.benefit);
+                updateProgressBar('work-life-bar', review.workLife);
+                updateProgressBar('company-culture-bar', review.companyCulture);
+                updateProgressBar('management-bar', review.management);
+
+                document.getElementById('content').textContent = review.content;
+            })
+            .catch(error => console.error('Error fetching review:', error));
+
+        function updateProgressBar(barId, value) {
+            const progressBar = document.getElementById(barId);
+            progressBar.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const segment = document.createElement('div');
+                segment.classList.add('md_progress-segment');
+                if (i < value) {
+                    segment.classList.add('active');
+                }
+                progressBar.appendChild(segment);
+            }
+        }
+    });
+</script>
 <!-- 푸터 -->
 <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
 

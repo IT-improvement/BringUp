@@ -5,6 +5,7 @@ import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.review.dto.request.RequestCompanyReviewDto;
 import com.bringup.member.review.dto.response.MemberCompanyReviewDto;
+import com.bringup.member.review.dto.response.MemberDetailReviewDto;
 import com.bringup.member.review.exception.MemberReviewException;
 import com.bringup.member.review.service.MemberReviewService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,20 @@ public class MemberReviewController {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         }
     }
+    //상세보기
+    @GetMapping("/reviewDetail/{reviewId}")
+    public ResponseEntity<BfResponse<?>> getReviewDetail(@PathVariable("reviewId")  int reviewId) {
+        try {
+            MemberDetailReviewDto review = memberReviewService.getReviewDetail(reviewId);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, review));
+        } catch (MemberReviewException e) {
+            // ReviewException 발생 시 처리
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+
+    }
+
+
     // 리뷰 작성
     @PostMapping("/m_create")
     public ResponseEntity<BfResponse<?>> createReview(@AuthenticationPrincipal UserDetailsImpl userDetails,
