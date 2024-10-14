@@ -54,7 +54,7 @@ public class BannerAdService {
 
         BannerAdvertisement bannerAd = new BannerAdvertisement();
         bannerAd.setAdvertisement(advertisement);
-        bannerAd.setBanner_Image(imageService.saveImage(img));
+        bannerAd.setBannerImage(imageService.saveImage(img));
 
         bannerAdRepository.save(bannerAd);
     }
@@ -82,7 +82,7 @@ public class BannerAdService {
         }
 
         bannerAd.getAdvertisement().setStatus(StatusType.CRT_WAIT);
-        bannerAd.setBanner_Image(imageService.saveImage(img));
+        bannerAd.setBannerImage(imageService.saveImage(img));
         bannerAd.getAdvertisement().setStartDate(bannerAdDto.getStartDate());
         bannerAd.getAdvertisement().setEndDate(bannerAdDto.getEndDate());
 

@@ -1,7 +1,6 @@
 package com.bringup.member.main.dto;
 
 import com.bringup.common.enums.StatusType;
-import com.bringup.company.advertisement.enums.TimeSlot;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -14,7 +13,7 @@ public class PremiumAdvertisementDto {
     private int premiumIndex;
     private int advertisement;
     private int recruitmentIndex;  // 추가된 필드
-    private TimeSlot timeSlot;
+    private String timeSlot;
     private LocalDate startDate;
     private LocalDate endDate;
     private String premiumImage;
