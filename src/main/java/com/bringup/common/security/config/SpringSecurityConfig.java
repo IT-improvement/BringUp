@@ -160,6 +160,7 @@ public class SpringSecurityConfig {
                 antMatcher("/main/main"),
                 antMatcher("/main/banner"),
                 antMatcher("/member/m_reviews"),
+                antMatcher("/member/m_reviews"),
 
                 antMatcher("/main/list"),
                 antMatcher("/member/memberProfile"),
@@ -207,7 +208,9 @@ public class SpringSecurityConfig {
 
                 antMatcher("/member/interview/{reviewId}"),
                 antMatcher("/member/interview/delete/{reviewId}"),
-                antMatcher("/member/interview/iv_create")
+                antMatcher("/member/interview/iv_create"),
+
+                antMatcher("/member/reviewDetail/{reviewId}")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
