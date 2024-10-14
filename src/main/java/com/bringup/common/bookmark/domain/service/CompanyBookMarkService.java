@@ -42,12 +42,10 @@ public class CompanyBookMarkService {
         UserEntity user = userRepository.findById(userDetails.getId())
                 .orElseThrow(()->new BookmarkException(NOT_FOUND_MEMBER_ID));
 
-        Company company = companyRepository.findBycompanyId(companyId)
+        Company company = companyRepository.findById(companyId)
                 .orElseThrow(()->new BookmarkException(NOT_FOUND_MEMBER_ID));
 
-        CompanyBookMarkEntity companyBookMarkEntity = new CompanyBookMarkEntity();
-
-        CompanyBookMarkEntity.builder()
+        CompanyBookMarkEntity companyBookMarkEntity = CompanyBookMarkEntity.builder()
                 .company(company)
                 .user(user)
                 .status(BookmarkType.BOOKMARK)
