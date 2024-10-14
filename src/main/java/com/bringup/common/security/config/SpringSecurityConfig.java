@@ -200,7 +200,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/delete/{reviewId}"),
                 antMatcher("/member/memberInfo/post"),
                 antMatcher("/member/m_create"),
-
+                antMatcher(POST,"/mem/addCompany/{company_index}"),
                 antMatcher("/member/interview/{reviewId}"),
                 antMatcher("/member/interview/delete/{reviewId}"),
                 antMatcher("/member/interview/iv_create")
