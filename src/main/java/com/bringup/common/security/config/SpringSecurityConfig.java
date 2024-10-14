@@ -167,8 +167,14 @@ public class SpringSecurityConfig {
 
                 antMatcher("/member/interview/iv_list"),
                 antMatcher("/member/m_reviewDetail"),
+                antMatcher("/member/createReview"),
+                antMatcher("/member/editReview"),
+                antMatcher("/member/reviewDetail/{reviewId}"),
+
 
                 antMatcher("/freelancer/**")
+
+
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
@@ -203,7 +209,9 @@ public class SpringSecurityConfig {
                 antMatcher(POST,"/mem/addCompany/{company_index}"),
                 antMatcher("/member/interview/{reviewId}"),
                 antMatcher("/member/interview/delete/{reviewId}"),
-                antMatcher("/member/interview/iv_create")
+                antMatcher("/member/interview/iv_create"),
+
+                antMatcher("/member/reviewDetail/{reviewId}")
         );
 
         return requestMatchers.toArray(RequestMatcher[]::new);
