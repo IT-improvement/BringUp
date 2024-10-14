@@ -13,6 +13,7 @@ public interface ResponseCode {
     String NOT_EXISTED_STUDY = "NS";
     String NOT_EXISTED_REPORT = "NR";
     String NOT_EXISTEDT_RECRUITMENTFREELANCER = "NERF";
+    String EXISTED_EMAIL="EE";
 
     String SPARE_REPORT_ALREADY_EXIST = "SR";
     String REPORT_ALREADY_FULL = "RF";
