@@ -27,45 +27,44 @@
 	<link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
 
 	<link rel="stylesheet" type="text/css" href="/resources/style/company/login/login.css">
+
+    <!-- Bootstrap JS -->
+	<script src="/resources/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+	<!-- 벤더 -->
+	<script src="/resources/style/common/vendor/apexcharts/js/apexcharts.min.js"></script>
+	<script src="/resources/style/common/vendor/overlay-scrollbar/js/OverlayScrollbars.min.js"></script>
+
+	<!-- 테마 JS -->
+	<script src="/resources/script/common/function/functions.js"></script>
+
+	<!-- 로그인 JS -->
+	<script src="/resources/script/company/login.js"></script>
 </head>
 <body>
-
-<div class="login-container">
-    <div class="login-wrapper">
-        <a href="/" class="main-link">메인으로</a>
-        <div class="login-box">
-            <h2 class="text-center mb-4">기업 회원 로그인</h2>
-            <form id="loginForm">
+    <jsp:include page="/WEB-INF/views/member/header/member_header.jsp" />
+    <div class="login-container" style="height: 83.5vh;">
+        <div class="login-wrapper">
+            <div class="login-box">
+                <h2 class="text-center mb-4">기업 회원 로그인</h2>
+                <form id="loginForm">
                 <div class="mb-3">
                     <label for="userid" class="form-label">아이디</label>
-                    <input type="text" class="form-control" id="userid" name="userid" required>
+                    <input type="text" class="form-control" id="userid" name="userid" autocomplete="off">
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">비밀번호</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
+                    <input type="password" class="form-control" id="password" name="password" autocomplete="off">
                 </div>
-                <button type="submit" class="btn btn-primary w-100">로그인</button>
-            </form>
-            <div class="additional-links">
-                <a href="/company/auth/findauth">아이디/비밀번호 찾기</a>
-                <a href="/company/auth/signup">회원가입</a>
+                    <button type="submit" class="btn btn-primary w-100">로그인</button>
+                </form>
+                <div class="additional-links">
+                    <a href="/company/auth/findauth">아이디/비밀번호 찾기</a>
+                    <a href="/company/auth/signup">회원가입</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<!-- Bootstrap JS -->
-<script src="/resources/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- 벤더 -->
-<script src="/resources/style/common/vendor/apexcharts/js/apexcharts.min.js"></script>
-<script src="/resources/style/common/vendor/overlay-scrollbar/js/OverlayScrollbars.min.js"></script>
-
-<!-- 테마 JS -->
-<script src="/resources/script/common/function/functions.js"></script>
-
-<!-- 로그인 JS -->
-<script src="/resources/script/company/login.js"></script>
-
+    <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" />
 </body>
 </html>

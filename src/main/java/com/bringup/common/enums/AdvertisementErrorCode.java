@@ -16,6 +16,7 @@ public enum AdvertisementErrorCode implements BaseErrorCode {
 
     // 400 BAD_REQUEST
     INVALID_ADVERTISEMENT_DATA(400, "잘못된 광고 데이터입니다.", HttpStatus.BAD_REQUEST),
+    ALREADY_ACTIVE(400, "이미 진행중인 광고입니다.", HttpStatus.BAD_REQUEST),
 
     // 500 INTERNAL_SERVER_ERROR
     INTERNAL_SERVER_ERROR(500, "서버에 문제가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);

@@ -4,13 +4,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "banner_advertisement")
+@Table(name = "advertisement_banner")
 public class BannerAdvertisement {
 
     @Id
@@ -22,8 +21,8 @@ public class BannerAdvertisement {
     @JoinColumn(name = "advertisement_index", nullable = false)
     private Advertisement advertisement;
 
-    @Column(name = "exposure_days", nullable = false)
-    private int exposureDays;
+    @Column(name = "banner_image")
+    private String banner_Image;
 
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate; // 시작 날짜
@@ -33,6 +32,5 @@ public class BannerAdvertisement {
 
     @Column(name = "banner_image")
     private String banner_Image;
-
 }
 

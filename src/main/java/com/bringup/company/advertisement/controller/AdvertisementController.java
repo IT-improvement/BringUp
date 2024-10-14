@@ -7,7 +7,6 @@ import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.dto.request.*;
 import com.bringup.company.advertisement.dto.response.*;
 import com.bringup.company.advertisement.entity.PremiumAdvertisement;
-import com.bringup.company.advertisement.enums.TimeSlot;
 import com.bringup.company.advertisement.exception.AdvertisementException;
 import com.bringup.company.advertisement.service.*;
 import com.bringup.company.recruitment.dto.response.RecruitmentDetailResponseDto;
@@ -40,15 +39,15 @@ public class AdvertisementController {
     //-------------프리미엄 라인----------------------------------------------
     /**
      * 프리미엄 가능한 시간 파악하는 컨트롤러
-     * @param date
      * @return
      */
-    @GetMapping("/premium/available-times")
-    public ResponseEntity<BfResponse<?>> getAvailableTimes(
-            @RequestBody PremiumAdRequestDto premiumAdDto) {
+    @PostMapping("/premium/available-times")
+    public ResponseEntity<BfResponse<?>> getUnavailableTimes(
+            @RequestBody ChoicedateRequestDto dto) {
         try{
-            AvailableDatesResponseDto availableDates = premiumAdService.getAvailableTimeSlotsAndDiscount(premiumAdDto);
-            return ResponseEntity.ok(new BfResponse<>(availableDates));
+            System.out.println(dto);
+            List<String> unavailableDates = premiumAdService.getUnavailableDates(dto);
+            return ResponseEntity.ok(new BfResponse<>(unavailableDates));
         } catch (AdvertisementException e){
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         }
@@ -77,7 +76,7 @@ public class AdvertisementController {
     public ResponseEntity<BfResponse<String>> updatePremiumAd(
             @PathVariable int premiumAdId,
             @RequestBody PremiumAdRequestDto premiumAdDto,
-            @RequestParam("image") MultipartFile img,
+            @RequestPart("image") MultipartFile img,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         premiumAdService.updatePremiumAd(premiumAdId, premiumAdDto, img, userDetails);
@@ -117,16 +116,12 @@ public class AdvertisementController {
 
     //-------------메인 라인----------------------------------------------
 
-    /*@GetMapping("/main/available-times/{date}")
-    public ResponseEntity<BfResponse<?>> getMainAvailableTimes(@PathVariable LocalDate date) {
-        try{
-            List<TimeSlot> availableTimes = mainAdService.getAvailableTimes(date);
-            return ResponseEntity.ok(new BfResponse<>(availableTimes));
-        } catch (AdvertisementException e){
-            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
-        }
+    @GetMapping("/main/available-dates")
+    public ResponseEntity<BfResponse<?>> getAvailableDates(
+            @RequestBody ChoicedateRequestDto dto){
+        List<String> availableDates = mainAdService.getUnavailableDates(dto);
+        return ResponseEntity.ok(new BfResponse<>(availableDates));
     }
-*/
     /**
      *
      * @param mainAdDto
@@ -157,9 +152,14 @@ public class AdvertisementController {
     }
 
     @DeleteMapping("/main/{mainAdId}")
-    public ResponseEntity<BfResponse<String>> deleteMainAd(@PathVariable int mainAdId) {
-        mainAdService.deleteMainAd(mainAdId);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, "메인광고 삭제완료"));
+    public ResponseEntity<BfResponse<?>> deleteMainAd(@PathVariable int mainAdId) {
+        try{
+            mainAdService.deleteMainAd(mainAdId);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, "메인광고 삭제완료"));
+        } catch (AdvertisementException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+
     }
 
     /**
@@ -175,12 +175,7 @@ public class AdvertisementController {
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, mad));
     }
 
-    @GetMapping("/main/available-dates")
-    public ResponseEntity<BfResponse<?>> getAvailableDates(
-            @RequestBody MainAdRequestDto mainAdDto){
-        AvailableDatesResponseDto availableDates = mainAdService.getAvailableDates(mainAdDto);
-        return ResponseEntity.ok(new BfResponse<>(availableDates));
-    }
+
 
 
     //-------------배너 라인----------------------------------------------\
@@ -188,8 +183,9 @@ public class AdvertisementController {
     @PostMapping("/banner")
     public ResponseEntity<BfResponse<String>> createBannerAd(
             @RequestBody BannerAdRequestDto bannerAdDto,
+            @RequestPart("image") MultipartFile img,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        bannerAdService.createBannerAd(bannerAdDto, userDetails);
+        bannerAdService.createBannerAd(bannerAdDto, img, userDetails);
         return ResponseEntity.ok(new BfResponse<>("배너 광고가 성공적으로 생성되었습니다."));
     }
 
@@ -197,8 +193,9 @@ public class AdvertisementController {
     public ResponseEntity<BfResponse<String>> updateBannerAd(
             @PathVariable int bannerId,
             @RequestBody BannerAdRequestDto bannerAdDto,
+            @RequestPart("image") MultipartFile img,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        bannerAdService.updateBannerAd(bannerId, bannerAdDto, userDetails);
+        bannerAdService.updateBannerAd(bannerId, bannerAdDto, img, userDetails);
         return ResponseEntity.ok(new BfResponse<>("배너 광고가 성공적으로 수정되었습니다."));
     }
 

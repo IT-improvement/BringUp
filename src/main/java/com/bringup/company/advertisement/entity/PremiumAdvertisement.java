@@ -1,18 +1,16 @@
 package com.bringup.company.advertisement.entity;
 
 import com.bringup.company.advertisement.enums.Ad_Type;
-import com.bringup.company.advertisement.enums.TimeSlot;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "premium_advertisement")
+@Table(name = "advertisement_premium")
 public class PremiumAdvertisement {
 
     @Id
@@ -29,16 +27,10 @@ public class PremiumAdvertisement {
     private Ad_Type adType; // 광고 타입 (GP, P1, P2, P3)
 
     @Setter
-    @Enumerated(EnumType.STRING)
     @Column(name = "time_slot", nullable = false, length = 50)
-    private TimeSlot timeSlot; // 노출 시간대 (예: 01:00 ~ 04:00)
+    private String timeSlot; // 노출 시간대 (예: 01:00 ~ 04:00)
 
     @Column(name = "premium_image")
     private String image;
 
-    @Column(name = "start_date", nullable = false)
-    private LocalDate startDate; // 시작 날짜
-
-    @Column(name = "end_date", nullable = false)
-    private LocalDate endDate; // 종료 날짜
 }
