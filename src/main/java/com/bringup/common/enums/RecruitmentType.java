@@ -6,5 +6,3 @@ public enum RecruitmentType {
     PART_TIME_WORKER, // 아르바이트
     FREE             // 프리랜서
 }
-
-if(reStatus == RecuritmentType.REGULAR_WORKER)
