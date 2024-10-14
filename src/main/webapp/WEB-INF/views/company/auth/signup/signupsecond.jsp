@@ -47,10 +47,9 @@
 
 </head>
 <body>
-
-<div class="signupsecond-container">
-    <div class="signupsecond-wrapper">
-        <a href="/" class="main-link">메인으로</a>
+<jsp:include page="/WEB-INF/views/member/header/member_header.jsp"/>
+<div class="signupsecond-container bg-light d-flex align-items-center justify-content-center" style="min-height:83.5vh;">
+    <div class="signupsecond-wrapper bg-white mx-auto my-5 border rounded-3 p-4 shadow" style="width: 700px;">
         <div class="signupsecond-box">
             <h2 class="text-center mb-4">기업 회원 가입 - 2단계</h2>
             <form id="companySignupsecondForm" name="companySignupsecondForm" enctype="multipart/form-data" autocomplete="off">
@@ -195,15 +194,19 @@
                     <label class="form-label"><i class="fas fa-money-bill-wave"></i> 직급별 연봉 정보</label>
                     <div id="salaryList">
                     </div>
-                    <button type="button" class="btn btn-secondary mt-2" id="addSalaryBtn">
+                    <button type="button" class="btn btn-secondary mt-2 w-100" id="addSalaryBtn">
                         <i class="fas fa-plus"></i> 연봉 정보 추가
                     </button>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">회원가입 완료</button>
             </form>
+            <div class="text-center mt-3 d-flex justify-content-between">
+                <a href="/company/auth/findauth" class="findauth-link">아이디/비밀번호 찾기</a>
+                <a href="/company/auth/login" class="login-link">로그인</a>
+            </div>
         </div>
     </div>
 </div>
-
+<jsp:include page="/WEB-INF/views/common/footer/footer.jsp" />
 </body>
 </html>

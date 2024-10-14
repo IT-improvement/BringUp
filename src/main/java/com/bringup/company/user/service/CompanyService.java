@@ -9,9 +9,11 @@ import com.bringup.common.event.exception.CertificateException;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.security.jwt.JwtProvider;
 import com.bringup.common.security.service.UserDetailsImpl;
+import com.bringup.company.advertisement.exception.AdvertisementException;
 import com.bringup.company.user.dto.request.JoinDto;
 import com.bringup.company.user.dto.request.LoginDto;
 import com.bringup.company.user.dto.request.SalaryDto;
+import com.bringup.company.user.dto.request.UpdateImageRequestDto;
 import com.bringup.company.user.dto.response.LoginTokenDto;
 import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.entity.Salary;
@@ -171,7 +173,7 @@ public class CompanyService {
             return LoginTokenDto.builder()
                     .accessToken(accessToken)
                     .build();
-        } catch (Exception e){
+        } catch (AdvertisementException e){
             throw new CompanyException(CHECK_ID_OR_PASSWORD);
         }
 
@@ -235,35 +237,78 @@ public class CompanyService {
         }
     }
 
-    public void updateUserImages(Integer userId, MultipartFile logo, MultipartFile[] images,
-                                 String existingLogoPath, String existingImagesPath) {
+    public void updateUserImages(int userId, MultipartFile logo, MultipartFile image0, MultipartFile image1,
+                                 MultipartFile image2, MultipartFile image3, MultipartFile image4,
+                                 UpdateImageRequestDto updateImageRequestDto) {
         // 회사 정보 가져오기
-        Company company = companyRepository.findById(userId)
+        Company company = companyRepository.findBycompanyId(userId)
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
 
-        // 새로운 로고 파일이 있으면 업로드하고 경로 설정, 없으면 기존 경로 유지
-        String logoPath = (logo != null && !logo.isEmpty()) ? imageService.upLoadImage(logo) : existingLogoPath;
+        // 로고 처리
+        if (logo != null && !logo.isEmpty()) {
+            String logoPath = imageService.saveImage(logo);
+            company.setCompanyLogo(logoPath);  // 로고 경로 업데이트
+        }
 
-        // 기존 이미지 경로 처리
-        List<String> imagePaths = (existingImagesPath != null && !existingImagesPath.isEmpty())
-                ? new ArrayList<>(Arrays.asList(existingImagesPath.split(",")))
-                : new ArrayList<>();
+        // 기존 이미지 경로 리스트로 변환
+        List<String> existingImages = new ArrayList<>(Arrays.asList(company.getCompanyImg().split(",")));
 
-        // 새로운 이미지 파일들 처리
-        if (images != null && images.length > 0) {
-            String uploadedImages = imageService.uploadImages(images);
-            if (uploadedImages != null && !uploadedImages.isEmpty()) {
-                imagePaths.addAll(Arrays.asList(uploadedImages.split(",")));  // 새로운 이미지 경로 추가
+        // 새로운 이미지를 처리하고, 이미지를 앞으로 당기는 로직 적용
+        processAndRearrangeImages(updateImageRequestDto, Arrays.asList(image0, image1, image2, image3, image4), existingImages);
+
+        // 수정된 이미지 경로 업데이트
+        company.setCompanyImg(String.join(",", existingImages));
+
+        // 회사 정보 업데이트
+        companyRepository.save(company);
+    }
+
+    private void processAndRearrangeImages(UpdateImageRequestDto updateImageRequestDto, List<MultipartFile> newImages, List<String> existingImages) {
+        List<String> updatedImages = new ArrayList<>();
+
+        // 각 이미지 상태에 맞게 처리
+        for (int i = 0; i < newImages.size(); i++) {
+            String imageStatus = getImageStatus(updateImageRequestDto, i);  // 이미지 상태를 가져옴
+            MultipartFile imageFile = newImages.get(i);
+            String currentImagePath = existingImages.size() > i ? existingImages.get(i) : "";
+
+            switch (imageStatus) {
+                case "EXISTING":
+                    if (!currentImagePath.isEmpty()) {
+                        updatedImages.add(currentImagePath);  // 기존 경로 유지
+                    }
+                    break;
+                case "NEW":
+                    if (imageFile != null && !imageFile.isEmpty()) {
+                        String newImagePath = imageService.saveImage(imageFile);  // 새 이미지 저장
+                        updatedImages.add(newImagePath);  // 새 경로 추가
+                    }
+                    break;
+                case "REMOVE":
+                    // 이미지 제거 (아무 작업도 안 함)
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid image status: " + imageStatus);
             }
         }
 
-        // 회사 로고와 이미지 경로 업데이트
-        company.setCompanyLogo(logoPath);
-        company.setCompanyImg(String.join(",", imagePaths));
-
-        // 데이터베이스에 저장
-        companyRepository.save(company);
+        // 기존 이미지 리스트를 업데이트된 이미지로 변경
+        existingImages.clear();
+        existingImages.addAll(updatedImages);  // 삭제 후 당겨진 이미지들로 덮어쓰기
     }
+
+    // 이미지 상태를 가져오는 헬퍼 메서드
+    private String getImageStatus(UpdateImageRequestDto dto, int index) {
+        switch (index) {
+            case 0: return dto.getImg0_status();
+            case 1: return dto.getImg1_status();
+            case 2: return dto.getImg2_status();
+            case 3: return dto.getImg3_status();
+            case 4: return dto.getImg4_status();
+            default: throw new IllegalArgumentException("Invalid index: " + index);
+        }
+    }
+
 
 
     // 회원 탈퇴
