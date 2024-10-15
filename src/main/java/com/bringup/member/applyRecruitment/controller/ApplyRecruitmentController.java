@@ -1,25 +1,25 @@
 package com.bringup.member.applyRecruitment.controller;
 
+import com.bringup.common.enums.GlobalErrorCode;
 import com.bringup.common.enums.GlobalSuccessCode;
 import com.bringup.common.event.exception.ErrorResponseHandler;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.applyRecruitment.domain.entity.ApplyRecruitmentEntity;
 import com.bringup.member.applyRecruitment.domain.service.ApplyRecruitmentService;
+import com.bringup.member.applyRecruitment.dto.request.ApplyRecruitmentRequestDto;
 import com.bringup.member.applyRecruitment.dto.response.ApplyRecruitmentResponseDto;
 import com.bringup.member.applyRecruitment.exception.ApplyRecruitmentException;
 import com.sun.net.httpserver.Authenticator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.bringup.common.response.ResponseCode.SUCCESS;
+import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,25 +27,24 @@ public class ApplyRecruitmentController {
     private final ApplyRecruitmentService applyRecruitmentService;
     private final ErrorResponseHandler errorResponseHandler;
 
-    public ResponseEntity<BfResponse<?>> getApplyRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int recruitmentIndex){
+    @PostMapping("/mem/applyRecruitment/{recruitment_index}")
+    public ResponseEntity<BfResponse<?>> addRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable(name = "recruitment_index") int recruitmentIndex, @Valid @RequestBody ApplyRecruitmentRequestDto dto){
         try {
-            ApplyRecruitmentEntity applyRecruitment = applyRecruitmentService.getApplyRecruitment(userDetails, recruitmentIndex);
-            return ResponseEntity.ok(new BfResponse<>(GlobalSuccessCode.valueOf(SUCCESS), applyRecruitment));
+            applyRecruitmentService.addRecruitment(userDetails, recruitmentIndex, dto);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, "add recruitment successfully"));
         }catch (ApplyRecruitmentException e){
-            //return errorResponseHandler.handleErrorResponse(e.getErrorCode);
-            return null;
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/mem/applyRecruitment/{recruitment_index}")
-    public ResponseEntity<BfResponse<?>> addApplyRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int recruitmentIndex){
-        applyRecruitmentService.addApplyRecruitment(userDetails, recruitmentIndex);
-        return ResponseEntity.ok(new BfResponse<>("이력서 지원 완료"));
+    @DeleteMapping("/mem/applyRecruitment")
+    public ResponseEntity<BfResponse<?>> delRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam int cvIndex, @RequestParam int recruitmentIndex){
+        try {
+            applyRecruitmentService.delRecruitment(userDetails, cvIndex, recruitmentIndex);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, "delete apply recruitment successfully"));
+        }catch (Exception e){
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @GetMapping("/mem/applyRecruitment/list")
-    public ResponseEntity<List<ApplyRecruitmentResponseDto>> getApplyRecruitmentList(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        List<ApplyRecruitmentResponseDto> applyRecruitmentList = applyRecruitmentService.getApplyRecruitmentList(userDetails);
-        return ResponseEntity.ok(applyRecruitmentList);
-    }
 }
