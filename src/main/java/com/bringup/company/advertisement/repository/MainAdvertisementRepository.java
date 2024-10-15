@@ -17,4 +17,14 @@ public interface MainAdvertisementRepository extends JpaRepository<MainAdvertise
     @Query("SELECT COUNT(ma) FROM MainAdvertisement ma WHERE :date BETWEEN ma.advertisement.startDate AND ma.advertisement.endDate")
     int countAdsByDate(@Param("date") LocalDate date);
 
+    @Query("SELECT ma FROM MainAdvertisement ma " +
+            "JOIN ma.advertisement a " +
+            "WHERE a.status = 'ACTIVE' " +
+            "AND a.startDate <= :currentDate " +
+            "AND a.endDate >= :currentDate " +
+            "AND a.display LIKE %:currentDateStr%")
+    List<MainAdvertisement> findActiveMainAdvertisementsByDateRangeAndDisplayDate(
+            @Param("currentDate") LocalDate currentDate,
+            @Param("currentDateStr") String currentDateStr);
+
 }
