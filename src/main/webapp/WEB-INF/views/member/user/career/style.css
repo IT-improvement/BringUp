@@ -1,0 +1,179 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.resume-container {
+    max-width: 900px;
+    margin: 50px auto;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.header {
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(33, 99, 232, 0.8);
+    color: white;
+}
+
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.info-table th, .info-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.info-table th {
+    background-color: #f0f4f8;
+}
+
+.photo-cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    margin: 10px 0;
+}
+
+.content {
+    padding: 20px;
+}
+
+.title-with-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.title-with-maincv{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+button {
+    background-color: #2163E8FF;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #174bb8;
+}
+
+.skills-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#selectedSkills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.skill-box {
+    border: 2px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+    color: #333;
+    background-color: transparent; /* 배경 제거 */
+}
+
+/* Toggle switch styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px; /* 너비를 줄임 */
+    height: 20px; /* 높이를 줄임 */
+    margin-right: 10px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 20px; /* 높이에 맞게 둥글게 */
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px; /* 높이를 줄임 */
+    width: 16px; /* 너비를 줄임 */
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2163E8FF;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px); /* 토글 움직임을 줄임 */
+}
+
+/* Popup Styles */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.skills-checkbox {
+    text-align: left;
+}
