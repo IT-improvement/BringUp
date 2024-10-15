@@ -61,16 +61,16 @@ public class CompanyService {
     @Transactional
     public Company joinCompany(JoinDto joinDto, MultipartFile logo, MultipartFile[] imgs) {
 
-        String email = joinDto.getId();
+        String email = joinDto.getM_phone(); // 원래 이메일이였어서 일단 이메일로 두는데 확실시되면 폰으로 바꿈
 
         try {
             // 이메일 인증 여부 확인
-            if (!certificateService.isEmailVerified(email)) {
+            if (!certificateService.isVerified(email)) {
                 throw new CertificateException(INVALID_CERTIFCATE_NUMBER);
             }
 
             // 이메일 중복 체크
-            if (companyRepository.existsByManagerEmail(email)) {
+            if (companyRepository.existsByManagerPhonenumber(email)) {
                 throw new CompanyException(DUPLICATED_MEMBER_EMAIL);
             }
         } catch (Exception e) {
@@ -82,7 +82,7 @@ public class CompanyService {
 
         String encodedPassword = passwordEncoder.encode(joinDto.getPassword());
 
-        company.setManagerEmail(email);
+        company.setManagerEmail(joinDto.getC_email());
         company.setCompanyPassword(encodedPassword);
         company.setCompanyPhonenumber(joinDto.getC_phone());
         company.setCompanyName(joinDto.getC_name());
@@ -117,7 +117,7 @@ public class CompanyService {
             }
         }
 
-        certificateService.deleteVerificationTokenByEmail(email);
+        certificateService.deleteVerificationTokenByIdentifier(email);
 
         return savedCompany;
     }
