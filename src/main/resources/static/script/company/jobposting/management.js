@@ -1,67 +1,100 @@
 document.addEventListener('DOMContentLoaded', function() {
     const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
-        fetch(`/com/recruitment/detail/list`, {
-            method: 'GET',
+
+    let recruitmentData = [];
+
+    if (!accessToken) {
+        window.location.href = '/company/login';
+    }
+
+    // 데이터 가져오기 및 테이블 생성 함수
+    function fetchAndDisplayData() {
+        fetch("/com/recruitment/list", {
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
+                'Authorization': `Bearer ${accessToken}`
             }
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('네트워크 응답이 올바르지 않습니다');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            if (data.data && Array.isArray(data.data)) {
-                console.log(data.data);
-                updateRecruitmentList(data.data);
-            } else {
-                console.error('데이터 형식이 올바르지 않습니다:', data);
-                updateRecruitmentList([]);
-            }
+            recruitmentData = data.data;
+            displayRecruitmentList(recruitmentData);
+            console.log(data);
         })
-        .catch(error => {
-            console.error('채용 목록을 가져오는 중 오류 발생:', error);
-            updateRecruitmentList([]);
-        });
-    } else {
-        console.error('액세스 토큰이 없습니다');
-        updateRecruitmentList([]);
+        .catch(error => console.error('Error:', error));
     }
-});
 
-function updateRecruitmentList(recruitmentList) {
-    const recruitmentListBody = document.getElementById('recruitment-list-body');
-    recruitmentListBody.innerHTML = '';
-    if (recruitmentList.length === 0) {
+    // 테이블 생성 함수
+    function displayRecruitmentList(data) {
+        const tableBody = document.querySelector('#recruitment-list-body');
+        tableBody.innerHTML = '';
+        data.forEach((item, index) => {
+            const row = createTableRow(item, index);
+            tableBody.appendChild(row);
+        });
+    }
+
+    // 테이블 행 생성 함수
+    function createTableRow(item, index) {
         const row = document.createElement('tr');
-        row.innerHTML = '<td colspan="8" class="text-center">등록된 공고가 없습니다.</td>';
-        recruitmentListBody.appendChild(row);
-    } else {
-        recruitmentList.forEach((recruitment, index) => {
-            const row = document.createElement('tr');
-            row.addEventListener('click', function() {
-                window.location.href = `/company/jobpost/detail?index=${recruitment.index}`;
-            });
-            const recruitmentType = recruitment.recruitmentType === 'IRREGULAR_WORKER' ? '비정규직' :
-                          recruitment.recruitmentType === 'REGULAR_WORKER' ? '정규직' :
-                          recruitment.recruitmentType === 'PART_TIME_WORKER' ? '파트타임' : '기타';
-
-            const type = recruitment.type === "RECRUITMENT" ? '정규 채용' : '프리랜서';
-
-            row.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${recruitment.recruitmentTitle || '-'}</td>
-                <td>${recruitmentType || '-'}</td>
-                <td>${type || '-'}</td>
-                <td>${recruitment.period || '-'}</td>
-                <td>${recruitment.viewCount || '0'}</td>
-                <td>${recruitment.applicantCount || '0'}</td>
-            `;
-            recruitmentListBody.appendChild(row);
+        row.style.cursor = 'pointer';
+        row.addEventListener('click', () => {
+            window.location.href = `/company/jobpost/detail?index=${item.index}`;
         });
+        
+        const type = item.type == "RECRUITMENT" ? "정규채용" : "프리랜서";
+        const recruitmentType = item.recruitmentType === "REGULAR_WORKER" ? "정규직" :
+                                item.recruitmentType === "INREGULAR_WORKER" ? "계약직" : "아르바이트";
+        
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${item.title}</td>
+            <td>${type}</td>
+            <td>${recruitmentType}</td>
+            <td>${item.period}</td>
+            <td>${item.viewCount}</td>
+            <td>${item.applicantCount}</td>
+        `;
+        return row;
     }
-}
+
+    // 검색 함수
+    function searchRecruitments() {
+        const searchCategory = document.getElementById('search-category').value;
+        const searchKeyword = document.getElementById('search-keyword').value.toLowerCase();
+
+        const filteredData = recruitmentData.filter(item => {
+            if (searchCategory === 'all') {
+                return Object.values(item).some(value => 
+                    String(value).toLowerCase().includes(searchKeyword)
+                );
+            } else if (searchCategory === 'type') {
+                const displayType = item.type == "RECRUITMENT" ? "정규채용" : "프리랜서";
+                return displayType.toLowerCase().includes(searchKeyword);
+            } else if (searchCategory === 'recruitmentType') {
+                const displayRecruitmentType = item.recruitmentType === "REGULAR_WORKER" ? "정규직" :
+                                               item.recruitmentType === "INREGULAR_WORKER" ? "계약직" : "아르바이트";
+                return displayRecruitmentType.toLowerCase().includes(searchKeyword);
+            } else {
+                const itemValue = String(item[searchCategory]).toLowerCase();
+                return itemValue.includes(searchKeyword);
+            }
+        });
+
+        displayRecruitmentList(filteredData);
+    }
+
+    // 검색 버튼 이벤트 리스너
+    document.getElementById('search-button').addEventListener('click', searchRecruitments);
+
+    const searchKeyword = document.getElementById('search-keyword');
+    searchKeyword.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            searchRecruitments();
+            console.log('검색 엔터');
+        }
+    });
+
+    // 초기 데이터 로드
+    fetchAndDisplayData();
+});
