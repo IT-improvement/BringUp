@@ -5,5 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class ApplyRecruitmentRequestDto {
+    private int cvIndex;
+    private int recruitmentIndex;
     private ApplicationType applicationType;
 }

@@ -27,24 +27,13 @@ public class ApplyRecruitmentController {
     private final ApplyRecruitmentService applyRecruitmentService;
     private final ErrorResponseHandler errorResponseHandler;
 
-    @PostMapping("/mem/applyRecruitment/{recruitment_index}")
-    public ResponseEntity<BfResponse<?>> addRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable(name = "recruitment_index") int recruitmentIndex, @Valid @RequestBody ApplyRecruitmentRequestDto dto){
+    @PostMapping("/mem/applyRecruitment")
+    public ResponseEntity<BfResponse<?>> setApplyRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails, @Valid @RequestBody ApplyRecruitmentRequestDto dto){
         try {
-            applyRecruitmentService.addRecruitment(userDetails, recruitmentIndex, dto);
+            applyRecruitmentService.setApplyRecruitment(userDetails, dto);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, "add recruitment successfully"));
         }catch (ApplyRecruitmentException e){
             return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @DeleteMapping("/mem/applyRecruitment")
-    public ResponseEntity<BfResponse<?>> delRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam int cvIndex, @RequestParam int recruitmentIndex){
-        try {
-            applyRecruitmentService.delRecruitment(userDetails, cvIndex, recruitmentIndex);
-            return ResponseEntity.ok(new BfResponse<>(SUCCESS, "delete apply recruitment successfully"));
-        }catch (Exception e){
-            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
-        }
-    }
-
 }

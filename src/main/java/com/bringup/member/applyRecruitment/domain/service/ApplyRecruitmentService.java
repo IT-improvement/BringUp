@@ -26,51 +26,40 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.bringup.common.enums.ApplyRecruitmentErrorCode.*;
+import static com.bringup.common.enums.ApplyRecruitmentErrorCode.NOT_FOUND_MEMBER_ID;
 import static com.bringup.common.enums.MemberErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
 public class ApplyRecruitmentService {
     private final ApplyRecruitmentRepository applyRecruitmentRepository;
-    private final UserRepository userRepository;
     private final CVRepository cvRepository;
     private final RecruitmentRepository recruitmentRepository;
 
     @Transactional
-    public void addRecruitment(UserDetailsImpl userDetails, int recruitmentIndex, ApplyRecruitmentRequestDto dto){
-        CVEntity cv = cvRepository.findByUserIndex(userDetails.getId())
-                .orElseThrow(()->new MemberException(NOT_FOUND_CV));
+    public void setApplyRecruitment(UserDetailsImpl userDetails, ApplyRecruitmentRequestDto dto){
+        CVEntity cv = cvRepository.findById(dto.getCvIndex())
+                .orElseThrow(()->new ApplyRecruitmentException(NOT_FOUND_MEMBER_CV));
 
-        Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(recruitmentIndex)
-                .orElseThrow(()->new RecruitmentException(RecruitmentErrorCode.NOT_FOUND_RECRUITMENT));
-
-        // 이미 지원한 공고가 있는지 검사
-        if (applyRecruitmentRepository.existsByCvIndexAndRecruitmentIndex(cv.getCvIndex(), recruitment.getRecruitmentIndex())){
-            throw new ApplyRecruitmentException(ALREADY_APPLY_RECRUITMENT);
+        if (!userDetails.getId().equals(cv.getUserIndex())){
+            throw new ApplyRecruitmentException(NOT_FOUND_MEMBER_ID);
         }
 
-        ApplyRecruitmentEntity applyRecruitment = ApplyRecruitmentEntity.builder()
-                .cvIndex(cv)
-                .recruitmentIndex(recruitment)
-                .applicationType(dto.getApplicationType())
-                .build();
+        Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(dto.getRecruitmentIndex())
+                .orElseThrow(()->new ApplyRecruitmentException(NOT_FOUND_APPLY_RECRUITMENT));
+
+        ApplyRecruitmentEntity applyRecruitment = new ApplyRecruitmentEntity();
+        applyRecruitment.setCvIndex(cv.getCvIndex());
+        applyRecruitment.setRecruitmentIndex(recruitment.getRecruitmentIndex());
+        applyRecruitment.setApplicationType(dto.getApplicationType());
+        applyRecruitment.setStatus(ApplyCVType.IN_PROGRESS);
 
         applyRecruitmentRepository.save(applyRecruitment);
     }
 
-    @Transactional
-    public void delRecruitment(UserDetailsImpl userDetails, int cvIndex, int recruitmentIndex){
-        ApplyRecruitmentEntity applyRecruitment = applyRecruitmentRepository.findByCvIndexAndRecruitmentIndex(cvIndex ,recruitmentIndex)
-                .orElseThrow(()->new ApplyRecruitmentException(NOT_FOUND_APPLY_RECRUITMENT));
-
-        if (applyRecruitment.getCvIndex().getUserIndex() != userDetails.getId()){
-            throw new ApplyRecruitmentException(NOT_FOUND_MEMBER_CV);
-        }
-
-        applyRecruitmentRepository.delete(applyRecruitment);
-    }
 }
