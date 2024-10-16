@@ -117,10 +117,14 @@ public class MemberPageController {
     {
         return "member/user/review/createReview";
     }
+
     @GetMapping("/editReview")
     public String editReview()
     {
-        return "member/user/review/editReview.jsp";
+        return "member/user/review/editReview";
     }
+
+    @GetMapping("/myCareer")
+    public String myCareer() {return "member/user/career/myCareer";}
 
 }
