@@ -45,27 +45,27 @@ document.addEventListener('DOMContentLoaded', function() {
             
         
         
-        // fetch('/main/premium', {
-        //     method: 'GET',
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //     console.log("프리미엄 광고 이미지 요청 결과:", data);
-        //     const premiumImage = document.getElementById('premium-image');
+        fetch('/main/premium', {
+            method: 'GET',
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("프리미엄 광고 이미지 요청 결과:", data);
+            const premiumImage = document.getElementById('premium-image');
             
-        //     // premiumImage.src = data[0].premiumImage;
+            premiumImage.src = data.premiumImage;
             
-        //     const premiumLink = document.createElement('a');
-        //     premiumLink.href = `/member/recruitment/details/${data.recruitmentIndex}`;
-        //     premiumLink.appendChild(premiumImage);
+            const premiumLink = document.createElement('a');
+            premiumLink.href = `/member/recruitment/details/${data.recruitmentIndex}`;
+            premiumLink.appendChild(premiumImage);
             
-        //     const premiumContainer = document.querySelector('.user-premium-container');
-        //     premiumContainer.innerHTML = '';
-        //     premiumContainer.appendChild(premiumLink);
-        // })
-        // .catch((error) => {
-        //     console.error("광고 이미지를 가져오는 중 오류가 발생했습니다:", error);
-        // });
+            const premiumContainer = document.querySelector('.user-premium-container');
+            premiumContainer.innerHTML = '';
+            premiumContainer.appendChild(premiumLink);
+        })
+        .catch((error) => {
+            console.error("광고 이미지를 가져오는 중 오류가 발생했습니다:", error);
+        });
 
 
         // 메인 이미지 슬라이더
