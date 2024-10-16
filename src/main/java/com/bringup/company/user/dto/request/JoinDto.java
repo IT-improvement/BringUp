@@ -24,7 +24,7 @@ public class JoinDto {
     private String company_licence; // 사업자 등록 번호
     private String master_name; // CEO 이름
     // ㅡㅡㅡㅡㅡㅡㅡ1차 회원가입시 필요함ㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-    private String id; // entity에서 이메일
+    private String c_email; // 회사 이메일
     private String password;
     private String c_phone;
     private String c_name; // 회사명
