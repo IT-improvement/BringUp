@@ -48,8 +48,6 @@ public class MainController {
         return ResponseEntity.ok(ad3Advertisements);
     }
 
-
-
     @GetMapping("/list")
     public ResponseEntity<List<AnnouncementDto>> getAnnouncementAdvertisements() {
         List<AnnouncementDto> getMainRecruitment = mainService.getAnnouncementAdvertisement();
