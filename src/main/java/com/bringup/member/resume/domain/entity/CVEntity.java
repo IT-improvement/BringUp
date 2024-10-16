@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class        CVEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int cvIndex;
+    private Integer cvIndex;
     private String cvImage;
     private boolean mainCv;
     private String education;

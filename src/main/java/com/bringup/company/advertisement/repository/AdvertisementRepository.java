@@ -12,7 +12,6 @@ import java.util.Optional;
 @Repository
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Integer> {
     Optional<Advertisement> findByAdvertisementIndex(int advertisementIndex);
-    List<Advertisement> findAllByStatus(StatusType status);
 
     List<Advertisement> findAllByStatusAndStartDate(StatusType status, LocalDate startDate);
 
