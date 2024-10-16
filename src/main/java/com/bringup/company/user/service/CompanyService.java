@@ -237,8 +237,8 @@ public class CompanyService {
         }
     }
 
-    public void updateUserImages(int userId, MultipartFile logo, MultipartFile image0, MultipartFile image1,
-                                 MultipartFile image2, MultipartFile image3, MultipartFile image4,
+    public void updateUserImages(int userId,
+                                 MultipartFile logo,
                                  UpdateImageRequestDto updateImageRequestDto) {
         // 회사 정보 가져오기
         Company company = companyRepository.findBycompanyId(userId)
@@ -254,7 +254,7 @@ public class CompanyService {
         List<String> existingImages = new ArrayList<>(Arrays.asList(company.getCompanyImg().split(",")));
 
         // 새로운 이미지를 처리하고, 이미지를 앞으로 당기는 로직 적용
-        processAndRearrangeImages(updateImageRequestDto, Arrays.asList(image0, image1, image2, image3, image4), existingImages);
+//        processAndRearrangeImages(updateImageRequestDto, Arrays.asList(image0, image1, image2, image3, image4), existingImages);
 
         // 수정된 이미지 경로 업데이트
         company.setCompanyImg(String.join(",", existingImages));
