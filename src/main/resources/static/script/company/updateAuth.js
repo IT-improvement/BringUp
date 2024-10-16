@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const accessToken = localStorage.getItem("accessToken");
     const url = "/com/companyInfo/post"
-    const multipart = new FormData();
+
     if (accessToken) {
         fetch(url, {
             method: 'GET',
@@ -14,288 +14,279 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(data);
             console.log(data.data);
 
-            // 폼 필드 채우기
-            document.getElementById('companyName').value = data.data.companyName;
-            document.getElementById('representativeName').value = data.data.masterName;
-            document.getElementById('address').value = data.data.companyAddress;
-            document.getElementById('homepage').value = data.data.companyHomepage;
-            document.getElementById('industry').value = data.data.companyCategory;
-            document.getElementById('employeeCount').value = data.data.companySize;
-            document.getElementById('representativeEmail').value = data.data.managerEmail;
-            document.getElementById('phoneNumber').value = data.data.companyPhonenumber;
-
-            document.getElementById('companyContent').value = data.data.companyContent;
-            const content_rows = data.data.companyContent ? data.data.companyContent.split('\n').length : 1;
-            document.getElementById('companyContent').rows = content_rows;
-
-            document.getElementById('companyWelfare').value = data.data.companyWelfare;
-            const welfare_rows = data.data.companyWelfare ? data.data.companyWelfare.split('\n').length : 1;
-            document.getElementById('companyWelfare').rows = welfare_rows;
-
-            document.getElementById('companyHistory').value = data.data.companyHistory;
-            const history_rows = data.data.companyHistory ? data.data.companyHistory.split('\n').length : 1;
-            document.getElementById('companyHistory').rows = history_rows;
-            
-            document.getElementById('companyVision').value = data.data.companyVision;
-            const vision_rows = data.data.companyVision ? data.data.companyVision.split('\n').length : 1;
-            document.getElementById('companyVision').rows = vision_rows;
-
-            document.getElementById('companyFinancialStatements').value = data.data.companyFinancialStatements || '';
-            const financial_rows = data.data.companyFinancialStatements ? data.data.companyFinancialStatements.split('\n').length : 1;
-            document.getElementById('companyFinancialStatements').rows = financial_rows;
-
-            document.getElementById('companySubsidiary').value = data.data.companySubsidiary || '';
-            const subsidiary_rows = data.data.companySubsidiary ? data.data.companySubsidiary.split('\n').length : 1;
-            document.getElementById('companySubsidiary').rows = subsidiary_rows;
-            
-            console.log(data.data.companyLogo);
-            console.log(data.data.companyImg);
-            // 이미지 파일 이름 표시 (실제 파일 업로드는 아님)
+            // 회사 로고 처리
             if (data.data.companyLogo) {
-                document.querySelector('#companyLogo-file-chosen').textContent = data.data.companyLogo;
+                document.getElementById('companyLogo-file-chosen').textContent = data.data.companyLogo;
                 document.getElementById('companyLogoHidden').value = data.data.companyLogo;
-                multipart.set('c_logo', data.data.companyLogo);
-                console.log("multipart 로고: "+multipart.get('c_logo'));
+                document.getElementById('companyLogo_img').src = data.data.companyLogo;
+                // 최초 렌더링에서는 이미지를 숨깁니다.
+                document.getElementById('companyLogo_img').style.display = 'none';
             }
-            if (data.data.companyImg) {
-                const img_names = data.data.companyImg.split(',');
-                const imgArray = [];
-                img_names.forEach((name, index) => {
-                    console.log("name : "+name);
-                    imgArray.push(name);
-                    if (index === 0) {
-                        document.querySelector('#companyImage0-file-chosen').textContent = name;
-                        document.getElementById('companyImage0Hidden').value = name;
-                    } else {
-                        const newContainer = document.createElement('div');
-                        newContainer.className = 'companyImage-container';
-                        newContainer.innerHTML = `
-                        <div class="d-flex mb-2">
-                            <label for="companyImage${index}" class="form-control d-flex align-items-center cursor-pointer rounded-2 me-2" style="height: 40px;">
-                                <i class="bi bi-image me-2"></i>
-                                <span id="companyImage${index}-file-chosen">${name}</span>
-                            </label>
-                            <input type="file" class="d-none" id="companyImage${index}" name="companyImage[]" accept="image/*">
-                            <input type="hidden" id="companyImage${index}Hidden" name="companyImageHidden[]" value="${name}">
-                            <button type="button" class="btn btn-secondary rounded-2 d-flex justify-content-center align-items-center me-2" id="companyImage${index}-viewImage" style="height: 40px; width: 40px;">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                            <button type="button" id="${index}-removeImage" class="btn btn-danger rounded-2 remove-image" style="height: 40px; width: 40px;">-</button>
-                        </div>
-                        <img id="companyImage${index}_img" src="" alt="Company Image ${index}" style="display: none;">
-                        `;
-                        document.getElementById('companyImage-container').appendChild(newContainer);
-                    }
-                });
 
-                
-                console.log("imgArray : "+imgArray);
-                // FormData에 배열로 이미지 추가
-                imgArray.forEach((name, index) => {
-                    multipart.append('c_imgs['+index+']', name);
-                });
-                    
-                for (let [key, value] of multipart.entries()) {
-                    if (key.startsWith('c_imgs')) {
-                        console.log("multipart 이미지 " + key + " : " + value);
-                    }
-                }
+            // 회사 로고 이벤트 리스너 추가
+            const companyLogoInput = document.getElementById('companyLogo');
+            companyLogoInput.addEventListener('change', handleCompanyLogoChange);
 
-                imageCount = img_names.length;
-            }
-            {
-                console.log("멀티파트로고 : "+multipart.get('c_logo'));
-                for (let [key, value] of multipart.entries()) {
-                    if (key.startsWith('c_imgs')) {
-                        console.log("multipart 이미지 " + key + " : " + value);
-                    }
-                }
-            }
-            // 이미지 추가 버튼 이벤트 리스너
-            document.querySelector('#addImage').addEventListener('click', function() {
-                if (imageCount < 5) {
-                    const newContainer = document.createElement('div');
-                    newContainer.className = 'd-flex mb-2';
-                    newContainer.innerHTML = `
-                        <label for="companyImage${imageCount}" class="form-control d-flex align-items-center cursor-pointer rounded-2 me-2" style="height: 40px;">
-                            <i class="bi bi-image me-2"></i>
-                            <span id="companyImage${imageCount}-file-chosen">파일을 선택하세요</span>
-                        </label>
-                        <input type="file" class="d-none" id="companyImage${imageCount}" name="companyImage[]" accept="image/*">
-                        <input type="hidden" id="companyImage${imageCount}Hidden" name="companyImageHidden[]">
-                        <button type="button" class="btn btn-secondary rounded-2 d-flex justify-content-center align-items-center me-2" id="companyImage${imageCount}-viewImage" style="height: 40px; width: 40px;">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                        <button type="button" id="${imageCount}-removeImage" class="btn btn-danger rounded-2 remove-image" style="height: 40px; width: 40px;">-</button>
-                    `;
-                    document.getElementById('companyImage-container').appendChild(newContainer);
-                    imageCount++;
-                } else {
-                    alert('회사 대표 이미지는 최대 5개까지 등록할 수 있습니다.');
-                }
-            });
+            const companyLogoViewButton = document.getElementById('companyLogo-viewImage');
+            companyLogoViewButton.addEventListener('click', toggleCompanyLogoVisibility);
+
+            const companyLogoRemoveButton = document.getElementById('companyLogo-removeImage');
+            companyLogoRemoveButton.addEventListener('click', removeCompanyLogo);
+
+            // 회사 대표 이미지 처리
+            const companyImg = data.data.companyImg;
+            const companyImgArray = companyImg ? companyImg.split(",") : [];
             
+            companyImgArray.forEach((imgSrc, index) => {
+                if (index < 5) {  // 최대 5개까지만 처리
+                    const fileNameSpan = document.getElementById(`companyImg${index}-file-chosen`);
+                    const hiddenInput = document.getElementById(`companyImg${index}Hidden`);
+                    const img = document.getElementById(`companyImg${index}_img`);
 
-            // 이미지 제거 버튼 이벤트 리스너
-            document.getElementById('companyImage-container').addEventListener('click', function(e) {
-                if (e.target.classList.contains('remove-image')) {
-                    const imgIndex = e.target.id.replace('-removeImage', '');
-                    console.log("타겟 아이디 : "+imgIndex);
-                    e.target.closest('.d-flex').remove();
-                    imageCount--;
+                    fileNameSpan.textContent = imgSrc.trim() || '파일을 선택하세요';
+                    hiddenInput.value = imgSrc.trim();
+                    img.src = imgSrc.trim();
+                    img.style.display = 'none';  // 초기에는 이미지를 숨깁니다.
                 }
             });
 
-            // companyLogo 파일 입력 변경 이벤트 리스너
-            document.getElementById('companyLogo').addEventListener('change', function(e) {
-                const fileInput = e.target;
-                const hiddenInput = document.getElementById('companyLogoHidden');
-                const fileNameSpan = document.getElementById('companyLogo-file-chosen');
+            // 나머지 폼 필드 채우기
+            document.getElementById('companyName').value = data.data.companyName || '';
+            document.getElementById('representativeName').value = data.data.masterName || '';
+            document.getElementById('address').value = data.data.companyAddress || '';
+            document.getElementById('homepage').value = data.data.companyHomepage || '';
+            document.getElementById('industry').value = data.data.companyCategory || '';
+            document.getElementById('employeeCount').value = data.data.companySize || '';
+            document.getElementById('representativeEmail').value = data.data.managerEmail || '';
+            document.getElementById('phoneNumber').value = data.data.companyPhonenumber || '';
+            document.getElementById('companyContent').value = data.data.companyContent || '';
+            document.getElementById('companyWelfare').value = data.data.companyWelfare || '';
+            document.getElementById('companyHistory').value = data.data.companyHistory || '';
+            document.getElementById('companyVision').value = data.data.companyVision || '';
+            document.getElementById('companyFinancialStatements').value = data.data.companyFinancialStatements || '';
+            document.getElementById('companySubsidiary').value = data.data.companySubsidiary || '';
 
-                if (fileInput.files && fileInput.files[0]) {
-                    const fileName = fileInput.files[0].name;
-                    fileNameSpan.textContent = fileName;
-                    hiddenInput.value = fileName;
+            // textarea의 rows 조정
+            adjustTextareaRows('companyContent');
+            adjustTextareaRows('companyWelfare');
+            adjustTextareaRows('companyHistory');
+            adjustTextareaRows('companyVision');
+            adjustTextareaRows('companyFinancialStatements');
+            adjustTextareaRows('companySubsidiary');
 
-                    // 파일을 세션스토리지에 저장하는 로직
-                    const fileReader = new FileReader();
-                    fileReader.onload = function(e) {
-                        const fileContent = e.target.result;
-                        sessionStorage.setItem('companyLogo', fileContent);
-                    };
-                    fileReader.readAsDataURL(fileInput.files[0]);
+            // 드래그 앤 드롭 기능 초기화
+            initDragAndDrop();
 
-                    multipart.set('c_logo', fileInput.files[0]);
-                    console.log("multipart 로고: "+multipart.get('c_logo'));
-                } else {
-                    fileNameSpan.textContent = '파일을 선택하세요';
-                    hiddenInput.value = '';
-                    // 세션스토리지에 저장된 파일을 삭제하는 로직
-                    sessionStorage.removeItem('companyLogo');
-                }
-            });
+            // 이미지 컨테이너에 이벤트 위임 설정
+            const companyImgContainer = document.getElementById('companyImgContainer');
+            companyImgContainer.addEventListener('click', handleCompanyImgContainerClick);
+            companyImgContainer.addEventListener('change', handleCompanyImgContainerChange);
 
-            
-
-            // 이미지 보기 버튼 이벤트 리스너
-            document.addEventListener('click', function(e) {
-                const viewImageButton = e.target.closest('[id$="-viewImage"]');
-                if (viewImageButton) {
-                    console.log("뷰 이미지 버튼 클릭됨:", viewImageButton.id);
-                    
-                    const inputId = viewImageButton.id.replace('-viewImage', '');
-                    const input = document.getElementById(inputId);
-                    const hidden = document.getElementById(inputId + 'Hidden');
-                    const img = document.getElementById(inputId + '_img');
-                    
-                    console.log("입력 요소:", inputId);
-                    console.log("입력 요소 값:", input.value);
-                    console.log("히든:", hidden);
-                    console.log("입력 요소 값:", hidden.value);
-                    console.log("이미지 요소:", inputId + '_img');
-
-                    if (hidden.value && hidden.value.startsWith('/image')) {
-                        if (img.style.display === 'block') {
-                            img.style.display = 'none';
-                        } else {
-                            img.src = hidden.value;
-                            img.style.display = 'block';
-                        }
-                    }
-                    else {
-                        const storedImage = sessionStorage.getItem(inputId);
-                        if (storedImage && img.style.display === 'none') {
-                            img.src = storedImage;
-                            img.style.display = 'block';
-                        } else {
-                            img.src = '';
-                            img.style.display = 'none';
-                        }
-                    }
-                }
-            });
-
-            
-            document.getElementById('companyImage-container').addEventListener('change', function(e) {
-                if (e.target && e.target.id.startsWith('companyImage')) {
-                    const fileInput = e.target;
-                    const index = fileInput.id.replace('companyImage', '');
-                    const hiddenInput = document.getElementById(`companyImage${index}Hidden`);
-                    const fileNameSpan = document.getElementById(`companyImage${index}-file-chosen`);
-
-                    if (fileInput.files && fileInput.files[0]) {
-                        const fileName = fileInput.files[0].name;
-                        fileNameSpan.textContent = fileName;
-                        hiddenInput.value = fileName;
-
-                        // 파일을 세션스토리지에 저장하는 로직
-                        const fileReader = new FileReader();
-                        fileReader.onload = function(e) {
-                            const fileContent = e.target.result;
-                            sessionStorage.setItem(`companyImage${index}`, fileContent);
-                        };
-                        fileReader.readAsDataURL(fileInput.files[0]);
-
-                        multipart.set('c_imgs['+index+']', fileInput.files[0]);
-                        console.log("multipart 이미지 " + index + " : " + multipart.get('c_imgs['+index+']'));
-                    } else {
-                        fileNameSpan.textContent = '파일을 선택하세요';
-                        hiddenInput.value = '';
-                        // 세션스토리지에 저장된 파일을 삭제하는 로직
-                        sessionStorage.removeItem(`companyImage${index}`);
-                    }
-                }
-            });
-
-            document.getElementById('Image-update').addEventListener('click', function() {
-                const url = "/com/user/image"
-                console.log("전송 직전 multipart 내용:");
-                for (let [key, value] of multipart.entries()) {
-                    console.log(key + ": " + value);
-                }
-                fetch(url, {
-                    method: 'put',
-                    headers: {
-                        'Authorization': `Bearer ` + accessToken
-                    },
-                    body: multipart
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('수정 중 오류가 발생했습니다. : '+error.message);
-                });
-            });
-
-            document.getElementById('updateForm').addEventListener('submit', function(e) {
-                e.preventDefault();
+            // 이미지 수정 버튼에 이벤트 리스너 추가
+            const imageUpdateButton = document.getElementById('image-update');
+            imageUpdateButton.addEventListener('click', function() {
+                console.log('이미지 수정 버튼 클릭');
                 
-                var formData = new FormData(this);
+                // 모든 회사 대표 이미지 hidden 입력 필드를 선택합니다.
+                const companyImgInputs = document.querySelectorAll('[id^="companyImg"][id$="Hidden"]');
                 
-                fetch('/com/user', {
-                    method: 'PUT',
-                    body: formData,
-                    headers: {
-                        'Authorization': `Bearer ` + accessToken
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        alert('수정이 완료되었습니다. : '+response.data);
-                        // 성공 후 처리 (예: 페이지 리다이렉트)
-                    } else {
-                        alert('수정 중 오류가 발생했습니다. : '+response.data);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('수정 중 오류가 발생했습니다. : '+error.message);
+                // 선택된 입력 필드들의 값을 순서대로 콘솔에 출력합니다.
+                companyImgInputs.forEach((input, index) => {
+                    console.log(`이미지 ${index}: ${input.value}`);
                 });
             });
         });
     }
 });
 
+function handleCompanyImgContainerClick(event) {
+    const target = event.target;
+    const button = target.closest('.btn-secondary, .btn-danger');
+    if (button) {
+        const index = button.closest('.companyImg-group').dataset.index;
+        if (button.classList.contains('btn-secondary')) {
+            toggleImageVisibility(index);
+        } else if (button.classList.contains('btn-danger')) {
+            removeImage(index);
+        }
+    }
+}
+
+function handleCompanyImgContainerChange(event) {
+    const target = event.target;
+    if (target.type === 'file') {
+        const index = target.closest('.companyImg-group').dataset.index;
+        handleFileInputChange(event, index);
+    }
+}
+
+function createImageGroup(index, imgSrc) {
+    const div = document.createElement('div');
+    div.className = 'companyImg-group mb-3';
+    div.draggable = true;
+    div.dataset.index = index;
+    div.innerHTML = `
+        <div class="input-group mb-2">
+            <div class="drag-handle me-2">&#9776;</div>
+            <label for="companyImg${index}" class="form-control d-flex align-items-center cursor-pointer rounded-2 me-2">
+                <i class="bi bi-image me-2"></i>
+                <span id="companyImg${index}-file-chosen">${imgSrc || '파일을 선하세요'}</span>
+            </label>
+            <input type="file" class="d-none" id="companyImg${index}" name="companyImg${index}">
+            <input type="hidden" id="companyImg${index}Hidden" name="companyImg${index}Hidden" value="${imgSrc}">
+            <button type="button" class="btn btn-secondary rounded-2 d-flex justify-content-center align-items-center me-2" id="companyImg${index}-viewImage" style="height: 40px; width: 40px;">
+                <i class="bi bi-eye"></i>
+            </button>
+            <button type="button" class="btn btn-danger rounded-2 d-flex justify-content-center align-items-center" id="companyImg${index}-removeImage" style="height: 40px; width: 40px;">X</button>
+        </div>
+        <img id="companyImg${index}_img" src="${imgSrc}" alt="Company Img ${index}" style="display: none; max-width: 100%; height: auto; margin-top: 10px;">
+    `;
+
+    return div;
+}
+
+function initDragAndDrop() {
+    const container = document.getElementById('companyImgContainer');
+    new Sortable(container, {
+        animation: 150,
+        handle: '.drag-handle',
+        onEnd: function(evt) {
+            updateImageIndexes();
+        }
+    });
+}
+
+function updateImageIndexes() {
+    const container = document.getElementById('companyImgContainer');
+    const groups = container.querySelectorAll('.companyImg-group');
+    groups.forEach((group, index) => {
+        group.dataset.index = index;
+        group.querySelector('label').setAttribute('for', `companyImg${index}`);
+        group.querySelector('input[type="file"]').id = `companyImg${index}`;
+        group.querySelector('input[type="file"]').name = `companyImg${index}`;
+        group.querySelector('input[type="hidden"]').id = `companyImg${index}Hidden`;
+        group.querySelector('input[type="hidden"]').name = `companyImg${index}Hidden`;
+        group.querySelector('span').id = `companyImg${index}-file-chosen`;
+        group.querySelector('button:nth-of-type(1)').id = `companyImg${index}-viewImage`;
+        group.querySelector('button:nth-of-type(2)').id = `companyImg${index}-removeImage`;
+        group.querySelector('img').id = `companyImg${index}_img`;
+    });
+}
+
+function handleFileInputChange(e, index) {
+    const fileInput = e.target;
+    const hiddenInput = document.getElementById(`companyImg${index}Hidden`);
+    const fileNameSpan = document.getElementById(`companyImg${index}-file-chosen`);
+    const img = document.getElementById(`companyImg${index}_img`);
+
+    if (fileInput.files && fileInput.files[0]) {
+        const fileName = fileInput.files[0].name;
+        fileNameSpan.textContent = fileName;
+        hiddenInput.value = fileName;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            img.src = e.target.result;
+            img.style.display = 'none'; // 파일을 선택해도 이미지는 숨겨둡니다.
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        fileNameSpan.textContent = '파일을 선택하세요';
+        hiddenInput.value = '';
+        img.src = '';
+        img.style.display = 'none';
+    }
+}
+
+function toggleImageVisibility(index) {
+    const allImages = document.querySelectorAll('[id^="companyImg"][id$="_img"]');
+    const targetImg = document.getElementById(`companyImg${index}_img`);
+    const hiddenInput = document.getElementById(`companyImg${index}Hidden`);
+    
+    // 타겟 이미지가 현재 보이는 상태인지 확인
+    const isTargetVisible = targetImg.style.display === 'block';
+    
+    // 모든 이미지를 숨깁니다
+    allImages.forEach(img => img.style.display = 'none');
+    
+    // 이미지 src가 비어있지 않고, 타겟 이미지가 숨겨져 있었을 때만 표시
+    if (hiddenInput.value && !isTargetVisible) {
+        targetImg.style.display = 'block';
+    }
+}
+
+function removeImage(index) {
+    const fileInput = document.getElementById(`companyImg${index}`);
+    const hiddenInput = document.getElementById(`companyImg${index}Hidden`);
+    const fileNameSpan = document.getElementById(`companyImg${index}-file-chosen`);
+    const img = document.getElementById(`companyImg${index}_img`);
+
+    fileInput.value = '';
+    hiddenInput.value = '';
+    fileNameSpan.textContent = '파일을 선택하세요';
+    img.src = '';
+    img.style.display = 'none';
+}
+
+function adjustTextareaRows(elementId) {
+    const textarea = document.getElementById(elementId);
+    const lines = textarea.value.split('\n').length;
+    textarea.rows = Math.max(3, lines); // 최소 3줄, 내용에 따라 증가
+}
+
+function handleCompanyLogoChange(e) {
+    const fileInput = e.target;
+    const hiddenInput = document.getElementById('companyLogoHidden');
+    const fileNameSpan = document.getElementById('companyLogo-file-chosen');
+    const img = document.getElementById('companyLogo_img');
+
+    if (fileInput.files && fileInput.files[0]) {
+        const fileName = fileInput.files[0].name;
+        fileNameSpan.textContent = fileName;
+        hiddenInput.value = fileName;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            img.src = e.target.result;
+            img.style.display = 'none'; // 파일을 선택해도 이미지는 숨겨둡니다.
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        fileNameSpan.textContent = '파일을 선택하세요';
+        hiddenInput.value = '';
+        img.src = '';
+        img.style.display = 'none';
+    }
+}
+
+function toggleCompanyLogoVisibility() {
+    const img = document.getElementById('companyLogo_img');
+    const hiddenInput = document.getElementById('companyLogoHidden');
+    
+    // 회사 로고가 현재 보이는 상태인지 확인
+    const isLogoVisible = img.style.display === 'block';
+    
+    // 모든 회사 이미지를 숨깁니다
+    const allCompanyImages = document.querySelectorAll('[id^="companyImg"][id$="_img"]');
+    allCompanyImages.forEach(img => img.style.display = 'none');
+    
+    // 이미지 src가 비어있지 않고, 로고가 숨겨져 있었을 때만 표시
+    if (hiddenInput.value && !isLogoVisible) {
+        img.style.display = 'block';
+    } else {
+        img.style.display = 'none';
+    }
+}
+
+function removeCompanyLogo() {
+    const fileInput = document.getElementById('companyLogo');
+    const hiddenInput = document.getElementById('companyLogoHidden');
+    const fileNameSpan = document.getElementById('companyLogo-file-chosen');
+    const img = document.getElementById('companyLogo_img');
+
+    fileInput.value = '';
+    hiddenInput.value = '';
+    fileNameSpan.textContent = '파일을 선택하���요';
+    img.src = '';
+    img.style.display = 'none';
+}

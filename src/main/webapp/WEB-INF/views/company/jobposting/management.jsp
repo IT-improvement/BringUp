@@ -56,30 +56,30 @@
                 <!-- 검색 섹션 수정 -->
                 <div>
                     <div class="card border mb-4">
-                    <div class="card-header bg-light border-bottom">
-                        <h5 class="card-title mb-0">공고 검색</h5>
-                    </div>
-                    <div class="card-body">
-                        <form id="search-form" class="row g-3">
-                            <div class="col-md-4">
-                                <label for="search-category" class="form-label">카테고리</label>
-                                <select class="form-select" id="search-category">
-                                    <option value="all">전체</option>
-                                    <option value="title">공고 제목</option>
-                                    <option value="type">공고 타입</option>
-                                    <option value="recruitmentType">채용 형태</option>
-                                    <option value="deadline">마감일</option>
-                                </select>
+                        <div class="card-header bg-light border-bottom">
+                            <h5 class="card-title mb-0">공고 검색</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="search-form" class="row g-3 align-items-end">
+                                <div class="col-3">
+                                    <label for="search-category" class="form-label">카테고리</label>
+                                    <select class="form-select" id="search-category">
+                                        <option value="all">전체</option>
+                                        <option value="title">공고 제목</option>
+                                        <option value="type">공고 타입</option>
+                                        <option value="recruitmentType">채용 형태</option>
+                                        <option value="period">마감일</option>
+                                    </select>
+                                </div>
+                                <div class="col-9">
+                                    <label for="search-keyword" class="form-label">검색어</label>
+                                    <div id="search-keyword-group" class="input-group">
+                                        <input type="text" class="form-control me-2 rounded" id="search-keyword" placeholder="검색어를 입력하세요" autocomplete="off">
+                                        <button class="btn btn-primary rounded" id="search-button">검색</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="search-keyword" class="form-label">검색어</label>
-                                <input type="text" class="form-control" id="search-keyword">
-                            </div>
-                            <div class="col-md-2 d-flex align-items-end">
-                                <button type="submit" class="btn btn-primary w-100">검색</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
                     </div>
                 </div>
                 <!-- 기존 공고 목록 -->

@@ -44,6 +44,23 @@
     <script src="/resources/script/company/updateAuth.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .drag-handle {
+            cursor: move;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+        }
+        .companyImg-group {
+            transition: background-color 0.2s ease;
+        }
+        .companyImg-group.sortable-ghost {
+            opacity: 0.5;
+            background-color: #e9ecef;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -63,35 +80,39 @@
                         </label>
                         <input type="file" class="d-none" id="companyLogo" name="companyLogo">
 						<input type="hidden" id="companyLogoHidden" name="companyLogoHidden">
-                        <button type="button" class="btn btn-secondary rounded-2 d-flex justify-content-center align-items-center" id="companyLogo-viewImage" style="height: 40px; width: 40px;">
+                        <button type="button" class="btn btn-secondary rounded-2 d-flex justify-content-center align-items-center me-2" id="companyLogo-viewImage" style="height: 40px; width: 40px;">
 							<i class="bi bi-eye"></i>
 						</button>
+                        <button type="button" class="btn btn-danger rounded-2 d-flex justify-content-center align-items-center" id="companyLogo-removeImage" style="height: 40px; width: 40px;">X</button>
                     </div>
 					<img id="companyLogo_img" alt="Company Logo" style="display: none;">
                 </div>
-                <div class="mb-3">
-					<h5 for="companyImage" class="form-label mb-2">회사 대표 이미지</h5>
-					<div id="companyImage-container">
-						<div class="d-flex mb-2">
-							<label for="companyImage0" class="form-control d-flex align-items-center cursor-pointer rounded-2 me-2" style="height: 40px;">
-								<i class="bi bi-image me-2"></i>
-								<span id="companyImage0-file-chosen">파일을 선택하세요</span>
-							</label>
-							<input type="file" class="d-none" id="companyImage0" name="companyImage[]">
-							<input type="hidden" id="companyImage0Hidden" name="companyImageHidden[]" value="">
-							<button type="button" class="btn btn-secondary rounded-2 d-flex justify-content-center align-items-center me-2" id="companyImage0-viewImage" style="height: 40px; width: 40px;">
-								<i class="bi bi-eye"></i>
-							</button>
-							<button id="addImage" type="button" class="btn btn-primary rounded-2" style="height: 40px; width: 40px;">+</button>
-						</div>
-						<img id="companyImage0_img" src="" alt="Company Image 0" style="display: none;">
-					</div>
-				</div> 
 
+                <!-- 회사 대표 이미지 섹션 -->
                 <div class="mb-3">
-                    <button type="button" class="btn btn-primary" id="Image-update">이미지 수정</button>
+                    <h5 for="companyImg" class="form-label mb-2">회사 대표 이미지</h5>
+                    <div id="companyImgContainer">
+                        <% for(int i = 0; i < 5; i++) { %>
+                            <div class="companyImg-group mb-3" data-index="<%= i %>">
+                                <div class="input-group mb-2">
+                                    <div class="drag-handle me-2">&#9776;</div>
+                                    <label for="companyImg<%= i %>" class="form-control d-flex align-items-center cursor-pointer rounded-2 me-2">
+                                        <i class="bi bi-image me-2"></i>
+                                        <span id="companyImg<%= i %>-file-chosen">파일을 선택하세요</span>
+                                    </label>
+                                    <input type="file" class="d-none" id="companyImg<%= i %>" name="companyImg<%= i %>">
+                                    <input type="hidden" id="companyImg<%= i %>Hidden" name="companyImg<%= i %>Hidden">
+                                    <button type="button" class="btn btn-secondary rounded-2 d-flex justify-content-center align-items-center me-2" id="companyImg<%= i %>-viewImage" style="height: 40px; width: 40px;">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger rounded-2 d-flex justify-content-center align-items-center" id="companyImg<%= i %>-removeImage" style="height: 40px; width: 40px;">X</button>
+                                </div>
+                                <img id="companyImg<%= i %>_img" alt="Company Img <%= i %>" style="display: none; max-width: 100%; height: auto; margin-top: 10px;">
+                            </div>
+                        <% } %>
+                    </div>
                 </div>
-
+                <button type="button" class="btn btn-primary w-100 mb-3" id="image-update">이미지 수정</button>
                 <div class="mb-3">
                     <h5 for="companyName" class="form-label mb-2">회사 이름</h5>
                     <input type="text" id="companyName" name="companyName" class="form-control" required>
