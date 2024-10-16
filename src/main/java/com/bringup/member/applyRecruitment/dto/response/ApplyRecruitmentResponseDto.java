@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ApplyRecruitmentResponseDto {
     private CVEntity cvEntity;
-    private Recruitment recruitment;
+    private int recruitment;
     private ApplicationType applicationType;
     private ApplyCVType status;
     private String applyCVDate;
