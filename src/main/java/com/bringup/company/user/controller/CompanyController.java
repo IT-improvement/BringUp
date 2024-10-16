@@ -24,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 
 import static com.bringup.common.enums.GlobalSuccessCode.CREATE;
@@ -152,9 +153,12 @@ public class CompanyController {
             // 서비스 호출을 통해 새로운 파일과 기존 경로 처리
             companyService.updateUserImages(userDetails.getId(), logo, updateImageRequestDto);
 
-            return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "업데이트 완료")));
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, "업데이트 완료"));
         } catch (CompanyException e) {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (IOException e){
+            System.out.println("이미지 저장 에러");
+            throw new RuntimeException(e);
         }
     }
 
