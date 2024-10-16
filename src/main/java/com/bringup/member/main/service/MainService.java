@@ -21,14 +21,11 @@ import com.bringup.member.resume.domain.repository.CVRepository;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -45,6 +42,10 @@ public class MainService {
     private final MainAdvertisementRepository mainAdvertisementRepository;
     private final CVRepository  cvRepository;
     private final AdvertisementRepository advertisementRepository;
+
+    private static final LocalDate today = LocalDate.now();
+    private static final String todayStr = today.format(DateTimeFormatter.ISO_LOCAL_DATE);
+    private static final LocalTime now = LocalTime.now();
 
     @Transactional
     public MemberInfoDto getMemberInfo(UserDetailsImpl userDetails) {
@@ -77,25 +78,22 @@ public class MainService {
                 .skills(mainCv.getSkill())  // "java, c, c++" 형식으로 가져옴
                 .build();
     }
- /*   @Transactional
+    @Transactional
     public PremiumAdvertisementDto getPremiumAdvertisement() {
-        LocalDate today = LocalDate.now();
-        LocalTime now = LocalTime.now();
 
-        // 오늘 날짜에 해당하는 광고들을 가져옴
-        List<PremiumAdvertisement> availableAds = premiumAdvertisementRepository.findAvailableAds(today);
-
-        if (availableAds.isEmpty()) {
+        List<PremiumAdvertisement> pad = premiumAdvertisementRepository.findActivePremiumAdvertisementsByDateRangeAndDisplayDate(today, todayStr);
+        if (pad.isEmpty()) {
+            System.out.println("사용가능 광고가 없다리");
             return null; // 사용 가능한 광고가 없을 경우
         }
 
         // 현재 시간에 맞는 광고 필터링
-        for (PremiumAdvertisement ad : availableAds) {
+        for (PremiumAdvertisement ad : pad) {
             // DB에서 저장된 문자열을 TimeSlot으로 변환
-            TimeSlot timeSlot = mapStringToTimeSlot(ad.getTimeSlot().name());
+            String time = ad.getTimeSlot();
 
             // 해당 광고의 타임슬롯과 현재 시간이 맞는지 확인
-            if (timeSlot != null && isTimeWithinSlot(timeSlot, now)) {
+            if (time != null && isTimeWithinSlot(time, now)) {
                 // 광고 정보를 DTO로 변환하여 반환
                 return convertToDto(ad);
             }
@@ -104,7 +102,7 @@ public class MainService {
         return null; // 현재 시간에 맞는 광고가 없을 경우
     }
 
-    // DB에서 가져온 문자열을 TimeSlot Enum으로 매핑
+    /*// DB에서 가져온 문자열을 TimeSlot Enum으로 매핑
     private TimeSlot mapStringToTimeSlot(String timeSlotStr) {
         switch (timeSlotStr) {
             case "01:00 ~ 04:00":
@@ -126,26 +124,26 @@ public class MainService {
             default:
                 throw new IllegalArgumentException("Unknown time slot: " + timeSlotStr);
         }
-    }
+    }*/
 
     // TimeSlot에 따라 현재 시간이 해당 시간 범위에 속하는지 확인
-    private boolean isTimeWithinSlot(TimeSlot timeSlot, LocalTime now) {
+    private boolean isTimeWithinSlot(String timeSlot, LocalTime now) {
         switch (timeSlot) {
-            case P3_01_04:
+            case "01:00 ~ 04:00":
                 return now.isAfter(LocalTime.of(1, 0)) && now.isBefore(LocalTime.of(4, 0));
-            case P1_04_07:
+            case "04:00 ~ 07:00":
                 return now.isAfter(LocalTime.of(4, 0)) && now.isBefore(LocalTime.of(7, 0));
-            case GP_07_10:
+            case "07:00 ~ 10:00":
                 return now.isAfter(LocalTime.of(7, 0)) && now.isBefore(LocalTime.of(10, 0));
-            case P2_10_13:
+            case "10:00 ~ 13:00":
                 return now.isAfter(LocalTime.of(10, 0)) && now.isBefore(LocalTime.of(13, 0));
-            case P1_13_16:
+            case "13:00 ~ 16:00":
                 return now.isAfter(LocalTime.of(13, 0)) && now.isBefore(LocalTime.of(16, 0));
-            case GP_16_19:
+            case "16:00 ~ 19:00":
                 return now.isAfter(LocalTime.of(16, 0)) && now.isBefore(LocalTime.of(19, 0));
-            case P1_19_22:
+            case "19:00 ~ 22:00":
                 return now.isAfter(LocalTime.of(19, 0)) && now.isBefore(LocalTime.of(22, 0));
-            case P3_22_01:
+            case "22:00 ~ 01:00":
                 return (now.isAfter(LocalTime.of(22, 0)) || now.isBefore(LocalTime.of(1, 0)));
             default:
                 throw new IllegalArgumentException("Unknown TimeSlot: " + timeSlot);
@@ -159,22 +157,19 @@ public class MainService {
         dto.setAdvertisement(ad.getAdvertisement().getAdvertisementIndex());
         dto.setRecruitmentIndex(ad.getAdvertisement().getRecruitment().getRecruitmentIndex());
         dto.setTimeSlot(ad.getTimeSlot());
-        dto.setStartDate(ad.getStartDate());
-        dto.setEndDate(ad.getEndDate());
+        dto.setStartDate(ad.getAdvertisement().getStartDate());
+        dto.setEndDate(ad.getAdvertisement().getEndDate());
         dto.setPremiumImage(ad.getImage());
 
         return dto;
-    }*/
+    }
 
     @Transactional
     public List<MainAdvertisementDto> getMainAdvertisement() {
-        LocalDate today = LocalDate.now();
 
         // 모든 광고 가져옴
-        List<MainAdvertisement> allAds = mainAdvertisementRepository.findAll();
+        List<MainAdvertisement> allAds = mainAdvertisementRepository.findActiveMainAdvertisementsByDateRangeAndDisplayDate(today, todayStr);
 
-        // 오늘 날짜에 맞는 광고만 필터링
-        List<MainAdvertisementDto> activeAds = new ArrayList<>();
 
         /*for (MainAdvertisement ad : allAds) {
             // 시작 날짜와 종료 날짜 조건을 확인
@@ -188,18 +183,21 @@ public class MainService {
         }*/
 
         // 필터링된 광고가 없으면 빈 리스트 반환
-        if (activeAds.isEmpty()) {
+        if (allAds.isEmpty()) {
             return Collections.emptyList();
         }
 
-
-        Collections.shuffle(activeAds);// 광고 리스트를 랜덤으로 섞음
+        Collections.shuffle(allAds);// 광고 리스트를 랜덤으로 섞음
 
         // 최대 5개의 랜덤 광고를 반환
         List<MainAdvertisementDto> randomAds = new ArrayList<>();
+
         int count = 0;
-        for (MainAdvertisementDto ad : activeAds) {
-            randomAds.add(ad);
+        for (MainAdvertisement ad : allAds) {
+            randomAds.add(new MainAdvertisementDto(
+                    ad.getAdvertisement().getRecruitment().getRecruitmentIndex(),
+                    ad.getMain_Image()
+            ));
             count++;
             if (count == 5) { // 최대 5개까지만 추가
                 break;
@@ -212,27 +210,18 @@ public class MainService {
 
     @Transactional
     public BannerAdvertisementDto getBannerAdvertisement() {
-        LocalDate today = LocalDate.now();
 
-        /*// 모든 배너 광고 가져옴
-        List<BannerAdvertisement> allBanners = bannerAdvertisementRepository.findAll();
-
-        // 오늘 날짜에 맞는 배너만 필터링
-        List<BannerAdvertisement> activeBanners = new ArrayList<>();
-        for (BannerAdvertisement banner : allBanners) {
-            if (!banner.getStartDate().isAfter(today) && !banner.getEndDate().isBefore(today)) {
-                activeBanners.add(banner);
-            }
-        }
+        // 필터링된 배너 광고 가져옴
+        List<BannerAdvertisement> allBanners = bannerAdvertisementRepository.findActiveBannerAdvertisementsByDateRange(today);
 
         // 필터링된 배너가 없으면 null 반환
-        if (activeBanners.isEmpty()) {
+        if (allBanners.isEmpty()) {
             return null;
         }
 
-        // view_count가 가장 적은 배너를 찾음
+        // view_count가 가장 적은 값을 찾기
         int minViewCount = Integer.MAX_VALUE;
-        for (BannerAdvertisement banner : activeBanners) {
+        for (BannerAdvertisement banner : allBanners) {
             int currentViewCount = banner.getAdvertisement().getV_count();
             if (currentViewCount < minViewCount) {
                 minViewCount = currentViewCount;
@@ -241,42 +230,38 @@ public class MainService {
 
         // view_count가 가장 적은 배너들을 리스트에 추가
         List<BannerAdvertisement> minViewBanners = new ArrayList<>();
-        for (BannerAdvertisement banner : activeBanners) {
+        for (BannerAdvertisement banner : allBanners) {
             if (banner.getAdvertisement().getV_count() == minViewCount) {
                 minViewBanners.add(banner);
             }
         }
 
-        // 랜덤으로 배너 하나 선택
+        // 무작위로 하나의 배너 선택
         Random random = new Random();
-        int randomIndex = random.nextInt(minViewBanners.size());
-        BannerAdvertisement selectedBanner = minViewBanners.get(randomIndex);
+        BannerAdvertisement selectedBanner = minViewBanners.get(random.nextInt(minViewBanners.size()));
 
         // 선택된 배너의 view_count 증가
         Advertisement selectedAd = selectedBanner.getAdvertisement();
         selectedAd.setV_count(selectedAd.getV_count() + 1);
         advertisementRepository.save(selectedAd);
 
-        // DTO로 변환하여 반환 (공고 인덱스를 반환하도록 수정)
-        BannerAdvertisementDto bannerDto = new BannerAdvertisementDto(
-                selectedAd.getRecruitment().getRecruitmentIndex(), // 공고 인덱스 반환
-                selectedBanner.getBanner_Image() // 배너 이미지 반환
-        );*/
-
-        //return bannerDto;
-        return null;
+        // DTO로 변환하여 반환 (공고 인덱스와 배너 이미지 반환)
+        return new BannerAdvertisementDto(
+                selectedAd.getRecruitment().getRecruitmentIndex(), // 공고 인덱스
+                selectedBanner.getBannerImage() // 배너 이미지
+        );
     }
 
 
 
-    public List<MainRecruitmentDto> getMainRecruitment() {
+    public List<AnnouncementDto> getAnnouncementAdvertisement() {
         List<Recruitment> activeRecruitments = recruitmentRepository.findAllByStatus(StatusType.ACTIVE);
 
         if (activeRecruitments.isEmpty()) {
             return new ArrayList<>();
         }
 
-        List<MainRecruitmentDto> mainRecruitmentDtos = new ArrayList<>();
+        List<AnnouncementDto> announcementDtos = new ArrayList<>();
 
         for (Recruitment recruitment : activeRecruitments) {
             Optional<Company> companyOpt = companyRepository.findBycompanyId(recruitment.getCompany().getCompanyId());
@@ -291,25 +276,19 @@ public class MainService {
                 }
 
                 // MainRecruitmentDto에 필요한 모든 정보를 설정
-                MainRecruitmentDto dto = new MainRecruitmentDto();
+                AnnouncementDto dto = new AnnouncementDto();
                 dto.setRecruitmentIndex(recruitment.getRecruitmentIndex());
-                dto.setCompanyId(BigInteger.valueOf(company.getCompanyId()));
                 dto.setCompanyName(company.getCompanyName()); // 기업명 설정
                 dto.setRecruitmentTitle(recruitment.getRecruitmentTitle());
-                dto.setRecruitmentType(recruitment.getRecruitmentType().name()); // 공고 형태 설정
-                dto.setCategory(recruitment.getCategory());
                 dto.setSkill(recruitment.getSkill());
-                dto.setStartDate(recruitment.getStartDate());
                 dto.setPeriod(recruitment.getPeriod());
-                dto.setViewCount(recruitment.getViewCount());
-                dto.setStatus(recruitment.getStatus());
                 dto.setCompanyImg(companyImg); // 회사 이미지 설정
 
-                mainRecruitmentDtos.add(dto);
+                announcementDtos.add(dto);
             }
         }
 
-        return mainRecruitmentDtos;
+        return announcementDtos;
     }
 
 }

@@ -19,6 +19,17 @@ public interface PremiumAdvertisementRepository extends JpaRepository<PremiumAdv
     List<PremiumAdvertisement> findAllByIsSoldOutTrueOrderByPremiumIdAsc();  // 매진되지 않은 광고 검색
 */
 
+    @Query("SELECT pa FROM PremiumAdvertisement pa " +
+            "JOIN pa.advertisement a " +
+            "WHERE a.status = 'ACTIVE' " +
+            "AND a.startDate <= :currentDate " +
+            "AND a.endDate >= :currentDate " +
+            "AND a.display LIKE %:currentDateStr%")
+    List<PremiumAdvertisement> findActivePremiumAdvertisementsByDateRangeAndDisplayDate(
+            @Param("currentDate") LocalDate currentDate,
+            @Param("currentDateStr") String currentDateStr);
+
+
     @Query("SELECT pa FROM PremiumAdvertisement pa WHERE pa.advertisement.startDate <= :endDate AND pa.advertisement.endDate >= :startDate")
     List<PremiumAdvertisement> findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(
             @Param("startDate") LocalDate startDate,

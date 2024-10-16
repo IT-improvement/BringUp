@@ -1,6 +1,5 @@
 package com.bringup.member.main.controller;
 
-import com.bringup.common.image.ImageService;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.main.dto.*;
@@ -21,7 +20,6 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 public class MainController {
 
     private final MainService mainService;
-    private final ImageService imageService;
 
     @PostMapping("/memberInfo")
     public ResponseEntity<BfResponse<?>> getMemberInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -31,21 +29,21 @@ public class MainController {
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, memberInfoDto));
     }
 
-/*    @GetMapping("/premium")
-    public ResponseEntity<PremiumAdvertisementDto> getAdvertisements() {
+    @GetMapping("/premium")
+    public ResponseEntity<PremiumAdvertisementDto> getPremiumAdvertisements() {
         PremiumAdvertisementDto advertisements = mainService.getPremiumAdvertisement();
         return ResponseEntity.ok(advertisements);
-    }*/
+    }
 
 
     @GetMapping("/main")
-    public ResponseEntity<List<MainAdvertisementDto>> getActiveCompanyImages() {
+    public ResponseEntity<List<MainAdvertisementDto>> getMainAdvertisements() {
         List<MainAdvertisementDto>MainAdvertisementImage= mainService.getMainAdvertisement();
         return ResponseEntity.ok(MainAdvertisementImage);
     }
 
     @GetMapping("/banner")
-    public ResponseEntity<BannerAdvertisementDto> getAd3Advertisements() {
+    public ResponseEntity<BannerAdvertisementDto> getBannerAdvertisements() {
        BannerAdvertisementDto ad3Advertisements = mainService.getBannerAdvertisement();
         return ResponseEntity.ok(ad3Advertisements);
     }
@@ -53,8 +51,8 @@ public class MainController {
 
 
     @GetMapping("/list")
-    public ResponseEntity<List<MainRecruitmentDto>> getMainRecruitment() {
-        List<MainRecruitmentDto> getMainRecruitment = mainService.getMainRecruitment();
+    public ResponseEntity<List<AnnouncementDto>> getAnnouncementAdvertisements() {
+        List<AnnouncementDto> getMainRecruitment = mainService.getAnnouncementAdvertisement();
         return ResponseEntity.ok(getMainRecruitment);
     }
 

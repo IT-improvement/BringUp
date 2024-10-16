@@ -1,0 +1,60 @@
+/* Sidebar Styling */
+.ms-sidebar {
+    background-color: #f7f8f9 !important;
+    padding: 10px;
+    height: calc(100vh - 150px);
+    position: fixed;
+    width: 220px;
+}
+
+.ms-main-content {
+    margin-left: 240px;
+    padding-top: 20px;
+}
+
+.ms-nav-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    color: #6c757d;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.ms-nav-link.active {
+    background-color: #eaf3ff;
+    color: #007bff;
+    border-radius: 5px;
+}
+
+.ms-nav-link i {
+    margin-right: 10px;
+    font-size: 24px; /* 아이콘 크기 조정 */
+}
+
+.ms-collapse-icon {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+}
+
+.ms-collapse-icon[aria-expanded="true"] {
+    transform: rotate(180deg);
+}
+
+.ms-collapse {
+    transition: height 0.3s ease;
+}
+
+.ms-nav-link:hover {
+    background-color: #d8e8ff;
+    color: #007bff;
+}
+
+.ms-small-link {
+    font-size: 14px;
+    padding: 5px 15px;
+}
+
+.ms-small-link i {
+    font-size: 18px;
+    margin-right: 5px;
+}

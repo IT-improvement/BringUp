@@ -80,13 +80,13 @@
 
                     <!-- 네비 아이템 3 상품 -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="pagesMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">마이 커리어</a>
-                        <ul class="dropdown-menu" aria-labelledby="pagesMenu">
+                        <a class="nav-link dropdown-toggle" id="pagesMenu" href="/member/myCareer">마이 커리어</a>
+               <%--         <ul class="dropdown-menu" aria-labelledby="pagesMenu">
                             <li><a class="dropdown-item" href="/member/potofolio">내 포토폴리오</a></li>
                             <li><a class="dropdown-item" href="/member/letter">내 이력서</a></li>
                             <li><a class="dropdown-item" href="/member/resume">내 자소서</a></li>
                             <li><a class="dropdown-item" href="/member/freelancer">프리랜서</a></li>
-                        </ul>
+                        </ul>--%>
                     </li>
 
                     <li class="nav-item dropdown">

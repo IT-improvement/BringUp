@@ -1,26 +1,24 @@
 package com.bringup.member.applyRecruitment.dto.response;
 
 import com.bringup.common.enums.ApplyCVType;
+import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.member.applyRecruitment.domain.entity.ApplyRecruitmentEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.bringup.member.applyRecruitment.domain.enums.ApplicationType;
+import com.bringup.member.resume.domain.entity.CVEntity;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Data
-@Builder
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApplyRecruitmentResponseDto {
-    private int cvIndex;
-    private int recruitmentIndex;
+    private CVEntity cvEntity;
+    private int recruitment;
+    private ApplicationType applicationType;
     private ApplyCVType status;
     private String applyCVDate;
-
-    public ApplyRecruitmentResponseDto(ApplyRecruitmentEntity applyRecruitmentEntity){
-        this.cvIndex = applyRecruitmentEntity.getCvIndex();
-        this.recruitmentIndex = applyRecruitmentEntity.getRecruitmentIndex();
-        this.status = applyRecruitmentEntity.getStatus();
-        this.applyCVDate = applyRecruitmentEntity.getApplyCVDate();
-    }
 }
