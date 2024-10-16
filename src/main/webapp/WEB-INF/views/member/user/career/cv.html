@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="resume-container">
+    <div class="header">
+        <h1>Resume Title</h1>
+    </div>
+    <div class="content">
+        <div class="title-with-toggle">
+            <h2>기본인적사항</h2>
+            <div class="title-with-maincv">
+            <span>main</span> <!-- 메인 이력서 안내문 -->
+            <label class="switch">
+                <input type="checkbox" id="mainCvToggle">
+                <span class="slider round"></span>
+            </label>
+            </div>
+        </div>
+        <table class="info-table">
+            <tr>
+                <th>성명</th>
+                <td>주승재</td>
+                <td>JooSeungjae</td>
+                <td>朱勝濟</td>
+                <td rowspan="5" class="photo-cell">
+                    <img src="your_photo.jpg" alt="Profile Picture" class="profile-img">
+                </td>
+            </tr>
+            <tr>
+                <th>이메일</th>
+                <td colspan="3">0719impovement@naver.com</td>
+            </tr>
+            <tr>
+                <th>휴대전화</th>
+                <td colspan="3">010-4648-1927</td>
+            </tr>
+            <tr>
+                <th>비상연락처</th>
+                <td colspan="3">010-2641-1927</td>
+            </tr>
+            <tr>
+                <th>생년월일</th>
+                <td>2000-07-19</td>
+                <th>성별</th>
+                <td>남</td>
+            </tr>
+            <tr>
+                <th>국적</th>
+                <td colspan="4">대한민국</td>
+            </tr>
+            <tr>
+                <th>주소</th>
+                <td colspan="4">01601 서울 노원구 누원로 18 상계동 수락리버시티4단지 402-1304</td>
+            </tr>
+            <tr>
+                <th>보훈여부</th>
+                <td colspan="4">
+                    <label class="switch">
+                    <input type="checkbox" id="">
+                    <span class="slider round"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <th>장애여부</th>
+                <td colspan="4">
+                    <label class="switch">
+                        <input type="checkbox" id="">
+                        <span class="slider round"></span>
+                    </label>
+                </td>
+            </tr>
+        </table>
+
+        <h2>Education</h2>
+        <p>Bachelor's degree in Computer Science</p>
+
+        <div class="skills-header">
+            <h2>Skills</h2>
+            <button id="openSkillPopup">Select Skills</button>
+        </div>
+            <div id="selectedSkills">
+                <!-- Selected skills will appear here -->
+            </div>
+    </div>
+</div>
+
+<!-- Skill Selection Popup -->
+<div id="skillPopup" class="popup">
+    <div class="popup-content">
+        <h3>Select Your Skills</h3>
+        <div class="skills-checkbox">
+            <input type="checkbox" id="java" value="Java">
+            <label for="java">Java</label><br>
+            <input type="checkbox" id="spring" value="Spring Boot">
+            <label for="spring">Spring Boot</label><br>
+            <input type="checkbox" id="geoserver" value="GeoServer">
+            <label for="geoserver">GeoServer</label><br>
+            <input type="checkbox" id="gdal" value="GDAL">
+            <label for="gdal">GDAL</label><br>
+        </div>
+        <button id="saveSkills">Save Skills</button>
+        <button id="closePopup">Close</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
