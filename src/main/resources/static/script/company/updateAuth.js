@@ -87,13 +87,33 @@ document.addEventListener('DOMContentLoaded', function() {
             imageUpdateButton.addEventListener('click', function() {
                 console.log('이미지 수정 버튼 클릭');
                 
-                // 모든 회사 대표 이미지 hidden 입력 필드를 선택합니다.
                 const companyImgInputs = document.querySelectorAll('[id^="companyImg"][id$="Hidden"]');
+                const companyImgValues = Array.from(companyImgInputs).map(input => input.value);
                 
-                // 선택된 입력 필드들의 값을 순서대로 콘솔에 출력합니다.
-                companyImgInputs.forEach((input, index) => {
-                    console.log(`이미지 ${index}: ${input.value}`);
+                const result = {};
+
+                companyImgArray.forEach((imgSrc, index) => {
+                    const imgSrcValue = imgSrc.trim();
+                    let status;
+                    let currentValue = index < companyImgValues.length ? companyImgValues[index] : null;
+                    
+                    if (index < companyImgValues.length) {
+                        if (currentValue === imgSrcValue) {
+                            status = '유지';
+                        } else if (currentValue === null || currentValue === '') {
+                            status = '제거';
+                            currentValue = ''; // 제거된 경우 빈 문자열로 설정
+                        } else {
+                            status = '수정';
+                        }
+                    } else {
+                        status = '새로운 이미지';
+                    }
+
+                    result[`c_img${index}`] = `${currentValue}, ${status}`;
                 });
+
+                console.log(JSON.stringify(result, null, 2));
             });
         });
     }
@@ -182,12 +202,12 @@ function handleFileInputChange(e, index) {
     if (fileInput.files && fileInput.files[0]) {
         const fileName = fileInput.files[0].name;
         fileNameSpan.textContent = fileName;
-        hiddenInput.value = fileName;
 
         const reader = new FileReader();
         reader.onload = function(e) {
             img.src = e.target.result;
             img.style.display = 'none'; // 파일을 선택해도 이미지는 숨겨둡니다.
+            hiddenInput.value = e.target.result; // 바이너리 데이터를 저장합니다.
         };
         reader.readAsDataURL(fileInput.files[0]);
     } else {
@@ -222,7 +242,7 @@ function removeImage(index) {
     const img = document.getElementById(`companyImg${index}_img`);
 
     fileInput.value = '';
-    hiddenInput.value = '';
+    hiddenInput.value = null;  // 여기를 빈 문자열 대신 null로 변경
     fileNameSpan.textContent = '파일을 선택하세요';
     img.src = '';
     img.style.display = 'none';
@@ -286,7 +306,7 @@ function removeCompanyLogo() {
 
     fileInput.value = '';
     hiddenInput.value = '';
-    fileNameSpan.textContent = '파일을 선택하���요';
+    fileNameSpan.textContent = '파일을 선택하세요';
     img.src = '';
     img.style.display = 'none';
 }
