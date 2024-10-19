@@ -127,4 +127,17 @@ public class MemberPageController {
     @GetMapping("/myCareer")
     public String myCareer() {return "member/user/career/myCareer";}
 
+    @GetMapping("/git")
+    public String myGit() {return "member/user/career/git";}
+
+    @GetMapping("/notion")
+    public String myNotion() {return "member/user/career/notion";}
+
+    @GetMapping("/blog")
+    public String myBlog() {return "member/user/career/blog";}
+
+    @GetMapping("/file")
+    public String myFile() {return "member/user/career/file";}
+
+
 }

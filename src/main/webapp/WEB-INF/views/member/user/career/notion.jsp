@@ -73,6 +73,13 @@
         .ms-sidebar {
             height: calc(100vh - 60px); /* 헤더와 푸터 사이 공간 */
         }
+        .notion {
+            border: 2px solid #000; /* 검은색 실선 테두리 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            padding: 20px; /* 내용과 테두리 사이 여백 */
+            height: 80%;
+        }
+
     </style>
 
 </head>
@@ -86,8 +93,10 @@
 
     <div class="container ms-main-content" style="max-width: 1000px; margin-left: 100px;">
         <main class="flex-grow-1">
-            <h1>이력서</h1>
+            <h1>나의 노션</h1>
+            <div class="notion">
 
+            </div>
         </main>
     </div>
 </div>
