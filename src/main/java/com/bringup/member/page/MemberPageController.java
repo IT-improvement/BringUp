@@ -65,7 +65,7 @@ public class MemberPageController {
         return "member/user/career/potofolio";
     }
 
-    @GetMapping("/letter")
+        @GetMapping("/letter")
     public String letter()
     {
         return "member/user/career/letter";
