@@ -17,7 +17,7 @@ public interface ResponseMessage {
     String SPARE_REPORT_ALREADY_EXIST = "Spare report already exist";
     String REPORT_ALREADY_FULL = "Report already exist";
     String REPORT_ALREADY_WROTE  = "Report already wrote";
-
+    String NOT_EXISTED_BLOG="NOT_EXISTED_BLOG";
     // HTTP Status 401
     String SIGN_IN_FAIL = "Login Inforam.";
     String AUTHORIZATION_FAILED = "Authorization Failed.";
