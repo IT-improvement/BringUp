@@ -4,11 +4,13 @@ import com.bringup.common.response.ResponseCode;
 import com.bringup.common.response.ResponseDto;
 import com.bringup.common.response.ResponseMessage;
 import com.bringup.member.portfolio.blog.domain.BlogEntity;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
+@Getter
 public class BlogResponseEntity extends ResponseDto {
 
     List<BlogEntity> list = null;
