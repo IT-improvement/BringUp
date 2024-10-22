@@ -16,4 +16,6 @@ public class BlogEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int blogIndex;
+    private int userIndex;
+    private String url;
 }
