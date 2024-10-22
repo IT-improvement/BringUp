@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RecruitmentFreelancerRepository extends JpaRepository<RecruitmentFreelancer, Integer> {
@@ -20,4 +21,5 @@ public interface RecruitmentFreelancerRepository extends JpaRepository<Recruitme
 
     //프로젝트 상세 정보
     RecruitmentFreelancer findByprojectIndex(int projectIndex);
+
 }
