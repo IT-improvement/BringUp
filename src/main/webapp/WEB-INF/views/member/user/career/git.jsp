@@ -47,7 +47,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 마우스 오버 시 그림자 효과 */
         }
 
-        .delete-btn {
+        .delete-btn, .details-btn {
             margin-left: 10px;
             display: inline-block;
         }
@@ -62,7 +62,7 @@
             flex-grow: 1;
         }
 
-        .badge, .delete-btn {
+        .badge, .delete-btn, .details-btn {
             margin-left: 10px;
         }
 
@@ -86,8 +86,61 @@
 
     <div class="container ms-main-content" style="max-width: 1000px; margin-left: 100px;">
         <main class="flex-grow-1">
-            <h1>이력서</h1>
+            <h1>내 레파지토리</h1>
+            <div class="repository-list">
+                <!-- 레파지토리 1 -->
+                <div class="card mb-4 repository-card" style="border-radius: 10px;">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="card-title"><a href="#">capston2023</a></h5>
+                            <p class="card-text"><span class="badge bg-warning text-dark">JavaScript</span></p>
+                        </div>
+                        <span class="badge bg-secondary">Public</span>
+                        <button class="btn btn-primary btn-sm details-btn">상세보기</button>
+                        <button class="btn btn-danger btn-sm delete-btn">삭제</button>
 
+                    </div>
+                </div>
+                <!-- 레파지토리 2 -->
+                <div class="card mb-4 repository-card" style="border-radius: 10px;">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="card-title"><a href="#">shop</a></h5>
+                            <p class="card-text"><span class="badge bg-warning text-dark">Java</span></p>
+                        </div>
+                        <span class="badge bg-secondary">Public</span>
+                        <button class="btn btn-primary btn-sm details-btn">상세보기</button>
+                        <button class="btn btn-danger btn-sm delete-btn">삭제</button>
+
+                    </div>
+                </div>
+                <!-- 레파지토리 3 -->
+                <div class="card mb-4 repository-card" style="border-radius: 10px;">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="card-title"><a href="#">ZombieGame</a></h5>
+                            <p class="card-text"><span class="badge bg-warning text-dark">Java</span></p>
+                        </div>
+                        <span class="badge bg-secondary">Public</span>
+                        <button class="btn btn-primary btn-sm details-btn">상세보기</button>
+                        <button class="btn btn-danger btn-sm delete-btn">삭제</button>
+
+                    </div>
+                </div>
+                <!-- 레파지토리 4 -->
+                <div class="card mb-4 repository-card" style="border-radius: 10px;">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="card-title"><a href="#">capston2023</a></h5>
+                            <p class="card-text"><span class="badge bg-warning text-dark">JavaScript</span></p>
+                        </div>
+                        <span class="badge bg-secondary">Public</span>
+                        <button class="btn btn-primary btn-sm details-btn">상세보기</button>
+                        <button class="btn btn-danger btn-sm delete-btn">삭제</button>
+
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </div>
