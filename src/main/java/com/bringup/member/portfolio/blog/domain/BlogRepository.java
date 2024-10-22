@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface BlogRepository extends JpaRepository<BlogEntity,Integer> {
-    List<BlogEntity> findByUserCode(int userCode);
+    List<BlogEntity> findByUserIndex(int userIndex);
 }
