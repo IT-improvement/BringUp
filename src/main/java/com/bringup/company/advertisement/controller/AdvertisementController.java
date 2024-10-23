@@ -35,6 +35,9 @@ public class AdvertisementController {
     private final MainAdService mainAdService;
     private final ErrorResponseHandler errorResponseHandler;
 
+    //--------------광고 조회 관련-----------------------------------------
+
+
 
     //-------------프리미엄 라인----------------------------------------------
     /**
@@ -47,6 +50,9 @@ public class AdvertisementController {
         try{
             System.out.println(dto);
             List<String> unavailableDates = premiumAdService.getUnavailableDates(dto);
+            if(unavailableDates.isEmpty()){
+                return ResponseEntity.ok(new BfResponse<>("AllDay"));
+            }
             return ResponseEntity.ok(new BfResponse<>(unavailableDates));
         } catch (AdvertisementException e){
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
