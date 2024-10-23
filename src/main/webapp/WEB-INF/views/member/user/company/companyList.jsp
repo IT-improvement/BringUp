@@ -1,3 +1,4 @@
+
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -42,12 +43,75 @@
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- 메인 스타일시트 -->
-    <!-- <link rel="stylesheet" type="text/css" href="/resources/style/member/user/파일명.css"> -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            document.body.addEventListener('click', function(event) {
+                if (event.target.id === 'logoutButton' || event.target.closest('#logoutButton')) {
+                    console.log("로그아웃 버튼 클릭");
+                    event.preventDefault();
+                    localStorage.removeItem('accessToken');
+                    window.location.href = '/';
+                }
+            });
 
-    <!--  JS -->
-    <!-- <script src="/resources/script/member/user/파일명.js"></script> -->
+            const fetchCompanyLists = async () => {
+                try {
+                    const companyResponse = await fetch('/company/list', {
+                        method : 'GET'
+                    });
+                    const companyData = await companyResponse.json();
+                    if (companyData.data && companyData.data.length > 0) {
+                        renderCompanies(companyData.data);
+                    } else {
+                        displayNoCompaniesMessage();
+                    }
+                }catch (error){
+                    console.error("Error fetching companies : ", error);
+                    displayErrorMessage();
+                }
+            };
 
+            const renderCompanies = (allCompanies) => {
+                let html = '';
+                allCompanies.forEach(company => {
+                    console.log(company);
+                    html += `
+                        <div class="col-sm-6 col-lg-3 company-card">
+                        <div class="card bg-transparent">
+                            <!-- Card img -->
+                            <img class="card-img rounded" src=${"${company.companyLogo}"} alt="Card image" style="width: 200px; height: 200px;">
+                            <div class="card-body px-0 pt-3">
+                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">${"${company.companyName}"}</a></h6>
+                                <!-- Card info -->
+                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
+                                    <li class="nav-item">
+                                        <a href="#" class="text-reset btn-link">${"${company.companyCategory}"}</a>
+                                    </li>
+                                    <li class="nav-item">${"${company.companyScale}"}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                });
+                const companyListContainer = document.getElementById('company-list');
+                companyListContainer.innerHTML = html;
+            };
+
+            const displayErrorMessage = () => {
+                const companyListContainer = document.getElementById('company-list');
+                companyListContainer.innerHTML = "<p>기업 리스트를 불러오는 중 오류가 발생했습니다.</p>";
+            };
+
+            // 데이터가 없는 경우 표시할 함수
+            const displayNoCompaniesMessage = () => {
+                const companyListContainer = document.getElementById('company-list');
+                companyListContainer.innerHTML = "<p>등록된 기업 정보가 없습니다.</p>";
+            };
+
+            fetchCompanyLists();
+        });
+    </script>
 </head>
 <body>
 
@@ -62,7 +126,7 @@
             <div>
                 <div class="card border mb-4">
                     <div class="card-header bg-light border-bottom">
-                        <h5 class="card-title mb-0">공고 검색</h5>
+                        <h5 class="card-title mb-0">기업 검색</h5>
                     </div>
                     <div class="card-body">
                         <form id="search-form" class="row g-3">
@@ -88,152 +152,9 @@
                 </div>
             </div>
             <div class="container">
-                <div class="row g-4 p-3 flex-fill">
-                    <!-- Card item START -->
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="card bg-transparent">
-                            <!-- Card img -->
-                            <img class="card-img rounded" src="./assets/image/kakao_logo.jpg" alt="Card image">
-                            <div class="card-body px-0 pt-3">
-                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
-                                <!-- Card info -->
-                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                    <li class="nav-item">
-                                        <a href="#" class="text-reset btn-link">(주)카카오</a>
-                                    </li>
-                                    <li class="nav-item">2024/05/02</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card item END -->
-                    <!-- Card item START -->
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="card bg-transparent">
-                            <!-- Card img -->
-                            <img class="card-img rounded" src="./assets/image/naver_logo.png" alt="Card image">
-                            <div class="card-body px-0 pt-3">
-                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">검색광고 공식대행사 채용관</a></h6>
-                                <!-- Card info -->
-                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                    <li class="nav-item">
-                                        <a href="#" class="text-reset btn-link">네이버</a>
-                                    </li>
-                                    <li class="nav-item">2024/05/02</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card item END -->
-                    <!-- Card item START -->
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="card bg-transparent">
-                            <!-- Card img -->
-                            <img class="card-img rounded" src="./assets/image/baemin_logo.jpg" alt="Card image">
-                            <div class="card-body px-0 pt-3">
-                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
-                                <!-- Card info -->
-                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                    <li class="nav-item">
-                                        <a href="#" class="text-reset btn-link">(주)우아한형제들</a>
-                                    </li>
-                                    <li class="nav-item">2024/05/02</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="card bg-transparent">
-                            <!-- Card img -->
-                            <img class="card-img rounded" src="./assets/image/rsupport_logo.png" alt="Card image">
-                            <div class="card-body px-0 pt-3">
-                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
-                                <!-- Card info -->
-                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                    <li class="nav-item">
-                                        <a href="#" class="text-reset btn-link">(주)알서포트</a>
-                                    </li>
-                                    <li class="nav-item">2024/05/02</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card item END -->
-                </div> <!-- Row END -->
-            </div>
-            <div class="container">
-                <div class="row g-4 p-3 flex-fill">
-                    <!-- Card item START -->
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="card bg-transparent">
-                            <!-- Card img -->
-                            <img class="card-img rounded" src="./assets/image/evidnet_logo.jpeg" alt="Card image">
-                            <div class="card-body px-0 pt-3">
-                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
-                                <!-- Card info -->
-                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                    <li class="nav-item">
-                                        <a href="#" class="text-reset btn-link">(주)에비드넷</a>
-                                    </li>
-                                    <li class="nav-item">2024/05/02</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card item END -->
-                    <!-- Card item START -->
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="card bg-transparent">
-                            <!-- Card img -->
-                            <img class="card-img rounded" src="./assets/image/nexon_logo.jpg" alt="Card image">
-                            <div class="card-body px-0 pt-3">
-                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
-                                <!-- Card info -->
-                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                    <li class="nav-item">
-                                        <a href="#" class="text-reset btn-link">(주)넥슨코리아</a>
-                                    </li>
-                                    <li class="nav-item">2024/05/02</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card item END -->
-                    <!-- Card item START -->
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="card bg-transparent">
-                            <!-- Card img -->
-                            <img class="card-img rounded" src="./assets/image/unioncommunity_logo.jpg" alt="Card image">
-                            <div class="card-body px-0 pt-3">
-                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
-                                <!-- Card info -->
-                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                    <li class="nav-item">
-                                        <a href="#" class="text-reset btn-link">(주)유니온커뮤니티</a>
-                                    </li>
-                                    <li class="nav-item">2024/05/02</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3">
-                        <div class="card bg-transparent">
-                            <!-- Card img -->
-                            <img class="card-img rounded" src="./assets/image/coresecurity_logo.jpg" alt="Card image">
-                            <div class="card-body px-0 pt-3">
-                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">2024년 신규직원 공개채용 공고</a></h6>
-                                <!-- Card info -->
-                                <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
-                                    <li class="nav-item">
-                                        <a href="#" class="text-reset btn-link">(주)코어시큐리티</a>
-                                    </li>
-                                    <li class="nav-item">2024/05/02</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card item END -->
-                </div> <!-- Row END -->
+                <div class="row g-4 p-3 flex-fill company-list-card" id="company-list">
+
+                </div>
             </div>
         </div>
     </main>
