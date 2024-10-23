@@ -87,33 +87,40 @@ document.addEventListener('DOMContentLoaded', function() {
             imageUpdateButton.addEventListener('click', function() {
                 console.log('이미지 수정 버튼 클릭');
                 
+                const companyLogoHiddenInput = document.getElementById('companyLogoHidden').value;
                 const companyImgInputs = document.querySelectorAll('[id^="companyImg"][id$="Hidden"]');
                 const companyImgValues = Array.from(companyImgInputs).map(input => input.value);
                 
-                const result = {};
+                const result = {
+                    companyLogo: companyLogoHiddenInput
+                };
 
                 companyImgArray.forEach((imgSrc, index) => {
                     const imgSrcValue = imgSrc.trim();
-                    let status;
                     let currentValue = index < companyImgValues.length ? companyImgValues[index] : null;
                     
-                    if (index < companyImgValues.length) {
-                        if (currentValue === imgSrcValue) {
-                            status = '유지';
-                        } else if (currentValue === null || currentValue === '') {
-                            status = '제거';
-                            currentValue = ''; // 제거된 경우 빈 문자열로 설정
-                        } else {
-                            status = '수정';
-                        }
-                    } else {
-                        status = '새로운 이미지';
-                    }
-
-                    result[`c_img${index}`] = `${currentValue}, ${status}`;
+                    result[`c_img${index}`] = currentValue;
+                    result[`img${index}_status`] = '유지'; // 회사 대표 이미지는 현상 유지
                 });
 
                 console.log(JSON.stringify(result, null, 2));
+
+                // /com/user/image로 요청 보내기
+                fetch('/com/user/image', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ` + localStorage.getItem("accessToken")
+                    },
+                    body: JSON.stringify(result)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('서버 응답:', data);
+                })
+                .catch(error => {
+                    console.error('요청 중 오류 발생:', error);
+                });
             });
         });
     }
