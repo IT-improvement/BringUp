@@ -52,18 +52,22 @@
 		<main class="flex-grow-1">
 			<div class="container py-4">
 				<h2>자소서 관리</h2>
+				<div class="d-flex justify-content-end mb-3">
+					<input type="text" class="form-control me-2" style="max-width: 300px;" placeholder="자기소개서 제목, 문항, 내용으로 검색해보세요">
+					<button class="btn btn-outline-secondary">검색</button>
+				</div>
 				<div class="alert alert-info mt-4" role="alert">
-					📝 초안 자동생성, 맞춤법 및 표검검사, 마무리 코칭까지 해주는
+					📝 자소서 AI 작성을 해준다고?
 				</div>
 
 				<!-- 자소서 등록하기 Section -->
 				<div class="d-flex justify-content-end mb-3">
 					<button class="btn btn-primary me-2">파일로 등록</button>
-					<button class="btn btn-primary">자소서 등록하기</button>
+					<button class="btn btn-primary" onclick="window.location.href='/member/letterWrite'">자소서 등록하기</button>
 				</div>
 
-				<!-- 자소서 List Section -->
-				<div class="card mb-4">
+				<!-- 자소서 리스트 -->
+				<div class="card mb-4" style="border-left: 1px solid #ddd; border-right: 1px solid #ddd;">
 					<div class="card-body">
 						<h6 class="card-title">박주혁님의 자소서_240314 11:17</h6>
 						<p class="card-text">
@@ -79,13 +83,62 @@
 					</div>
 				</div>
 
-				<!-- Search Section -->
-				<div class="d-flex justify-content-end mb-3">
-					<input type="text" class="form-control me-2" style="max-width: 300px;" placeholder="자기소개서 제목, 문항, 내용으로 검색해보세요">
-					<button class="btn btn-outline-secondary">검색</button>
+				<!-- 자소서 리스트 -->
+				<div class="card mb-4" style="border-left: 1px solid #ddd; border-right: 1px solid #ddd;">
+					<div class="card-body">
+						<h6 class="card-title">박주혁님의 자소서 두번째</h6>
+						<p class="card-text">
+							고등학생때부터 개발에 흥미가 있었서 시작삼아 가벼운 게임을 만들어 보았습니다...
+						</p>
+						<small class="text-muted">2024.03.14 11:18:32 수정</small>
+						<!-- Action Buttons -->
+						<div class="d-flex justify-content-end">
+							<button class="btn btn-outline-secondary me-2">수정하기</button>
+							<button class="btn btn-outline-secondary">AI 자소서 코칭받기</button>
+						</div>
+					</div>
 				</div>
+
+
+				<!-- 자소서 리스트 -->
+				<div class="card mb-4" style="border-left: 1px solid #ddd; border-right: 1px solid #ddd;">
+					<div class="card-body">
+						<h6 class="card-title">박주혁님의 자소서 두번째</h6>
+						<p class="card-text">
+							고등학생때부터 개발에 흥미가 있었서 시작삼아 가벼운 게임을 만들어 보았습니다...
+						</p>
+						<small class="text-muted">2024.03.14 11:18:32 수정</small>
+						<!-- Action Buttons -->
+						<div class="d-flex justify-content-end">
+							<button class="btn btn-outline-secondary me-2">수정하기</button>
+							<button class="btn btn-outline-secondary">AI 자소서 코칭받기</button>
+						</div>
+					</div>
+				</div>
+
+
+
+				<!-- 자소서 리스트 -->
+				<div class="card mb-4" style="border-left: 1px solid #ddd; border-right: 1px solid #ddd;">
+					<div class="card-body">
+						<h6 class="card-title">박주혁님의 자소서 두번째</h6>
+						<p class="card-text">
+							고등학생때부터 개발에 흥미가 있었서 시작삼아 가벼운 게임을 만들어 보았습니다...
+						</p>
+						<small class="text-muted">2024.03.14 11:18:32 수정</small>
+						<!-- Action Buttons -->
+						<div class="d-flex justify-content-end">
+							<button class="btn btn-outline-secondary me-2">수정하기</button>
+							<button class="btn btn-outline-secondary">AI 자소서 코칭받기</button>
+						</div>
+					</div>
+				</div>
+
+
+
 			</div>
 		</main>
+
 
 	</div>
 </div>

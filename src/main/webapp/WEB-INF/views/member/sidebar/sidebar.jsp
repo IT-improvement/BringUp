@@ -40,10 +40,10 @@
                     <a class="ms-nav-link" href="/member/record"><i class="bi bi-briefcase"></i> 이력</a>
                 </li>
                 <li class="ms-nav-item">
-                    <a class="ms-nav-link" href="/member/letter"><i class="bi bi-bar-chart"></i> 경력</a>
+                    <a class="ms-nav-link" href="/member/impl"><i class="bi bi-bar-chart"></i> 경력</a>
                 </li>
                 <li class="ms-nav-item">
-                    <a class="ms-nav-link" href="/member/letter"><i class="bi bi-award"></i> 어학 / 자격증</a>
+                    <a class="ms-nav-link" href="/member/qualifications "><i class="bi bi-award"></i> 어학 / 자격증</a>
                 </li>
             </ul>
         </nav>
