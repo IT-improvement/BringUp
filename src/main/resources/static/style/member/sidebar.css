@@ -1,11 +1,12 @@
 /* Sidebar Styling */
 .ms-sidebar {
-    background-color: #f7f8f9 !important;
+    background-color: #ffffff !important;
     padding: 10px;
-    height: 700px; /* 헤더의 높이 60px을 제외한 전체 높이 */
     width: 220px;
     display: flex;
     flex-direction: column;
+    border-right: 1px solid #8e8e8e;
+
 }
 
 .ms-sidebar-content {

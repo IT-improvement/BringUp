@@ -139,5 +139,8 @@ public class MemberPageController {
     @GetMapping("/file")
     public String myFile() {return "member/user/career/file";}
 
+    @GetMapping("/letterWrite")
+    public String letterWrite() {return "member/user/career/letterWrite";}
+
 
 }
