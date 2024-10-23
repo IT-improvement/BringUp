@@ -1,6 +1,7 @@
 package com.bringup.company.advertisement.service;
 
 import com.bringup.common.enums.StatusType;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.entity.Advertisement;
 import com.bringup.company.advertisement.exception.AdvertisementException;
 import com.bringup.company.advertisement.repository.AdvertisementRepository;
@@ -52,4 +53,9 @@ public class AdService {
         adsToDeactivate.forEach(ad -> ad.setStatus(StatusType.INACTIVE));
         adrepo.saveAll(adsToDeactivate);
     }
+
+    /*public List<String> getUserAdvertisement(UserDetailsImpl userDetails){
+
+    }*/
+
 }
