@@ -37,7 +37,7 @@
 
     <style>
         .repository-card {
-            background-color: #f9f9f9; /* 카드 배경색 */
+
             transition: transform 0.2s, box-shadow 0.2s;
             padding: 20px;
         }
@@ -89,59 +89,65 @@
             <h1>내 레파지토리</h1>
             <div class="repository-list">
                 <!-- 레파지토리 1 -->
-                <div class="card mb-4 repository-card" style="border-radius: 10px;">
+                <div class="card mb-4 repository-card" style="border: 1px solid #ddd; border-radius: 10px;">
                     <div class="card-body">
                         <div>
-                            <h5 class="card-title"><a href="#">capston2023</a></h5>
+                            <h5 class="card-title">capston2023</h5>
                             <p class="card-text"><span class="badge bg-warning text-dark">JavaScript</span></p>
                         </div>
-                        <span class="badge bg-secondary">Public</span>
-                        <button class="btn btn-primary btn-sm details-btn">상세보기</button>
-                        <button class="btn btn-danger btn-sm delete-btn">삭제</button>
-
+                        <small class="text-muted">Public</small>
+                        <!-- Buttons aligned to the right -->
+                        <div class="d-flex justify-content-end mt-2">
+                            <button class="btn btn-outline-secondary me-2 btn-sm">상세보기</button>
+                            <button class="btn btn-outline-danger btn-sm">삭제</button>
+                        </div>
                     </div>
                 </div>
                 <!-- 레파지토리 2 -->
-                <div class="card mb-4 repository-card" style="border-radius: 10px;">
+                <div class="card mb-4 repository-card" style="border: 1px solid #ddd; border-radius: 10px;">
                     <div class="card-body">
                         <div>
-                            <h5 class="card-title"><a href="#">shop</a></h5>
+                            <h5 class="card-title">shop</h5>
                             <p class="card-text"><span class="badge bg-warning text-dark">Java</span></p>
                         </div>
-                        <span class="badge bg-secondary">Public</span>
-                        <button class="btn btn-primary btn-sm details-btn">상세보기</button>
-                        <button class="btn btn-danger btn-sm delete-btn">삭제</button>
-
+                        <small class="text-muted">Public</small>
+                        <div class="d-flex justify-content-end mt-2">
+                            <button class="btn btn-outline-secondary me-2 btn-sm">상세보기</button>
+                            <button class="btn btn-outline-danger btn-sm">삭제</button>
+                        </div>
                     </div>
                 </div>
                 <!-- 레파지토리 3 -->
-                <div class="card mb-4 repository-card" style="border-radius: 10px;">
+                <div class="card mb-4 repository-card" style="border: 1px solid #ddd; border-radius: 10px;">
                     <div class="card-body">
                         <div>
-                            <h5 class="card-title"><a href="#">ZombieGame</a></h5>
+                            <h5 class="card-title">ZombieGame</h5>
                             <p class="card-text"><span class="badge bg-warning text-dark">Java</span></p>
                         </div>
-                        <span class="badge bg-secondary">Public</span>
-                        <button class="btn btn-primary btn-sm details-btn">상세보기</button>
-                        <button class="btn btn-danger btn-sm delete-btn">삭제</button>
-
+                        <small class="text-muted">Public</small>
+                        <div class="d-flex justify-content-end mt-2">
+                            <button class="btn btn-outline-secondary me-2 btn-sm">상세보기</button>
+                            <button class="btn btn-outline-danger btn-sm">삭제</button>
+                        </div>
                     </div>
                 </div>
                 <!-- 레파지토리 4 -->
-                <div class="card mb-4 repository-card" style="border-radius: 10px;">
+                <div class="card mb-4 repository-card" style="border: 1px solid #ddd; border-radius: 10px;">
                     <div class="card-body">
                         <div>
-                            <h5 class="card-title"><a href="#">capston2023</a></h5>
+                            <h5 class="card-title">capston2023</h5>
                             <p class="card-text"><span class="badge bg-warning text-dark">JavaScript</span></p>
                         </div>
-                        <span class="badge bg-secondary">Public</span>
-                        <button class="btn btn-primary btn-sm details-btn">상세보기</button>
-                        <button class="btn btn-danger btn-sm delete-btn">삭제</button>
-
+                        <small class="text-muted">Public</small>
+                        <div class="d-flex justify-content-end mt-2">
+                            <button class="btn btn-outline-secondary me-2 btn-sm">상세보기</button>
+                            <button class="btn btn-outline-danger btn-sm">삭제</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </main>
+
     </div>
 </div>
 
