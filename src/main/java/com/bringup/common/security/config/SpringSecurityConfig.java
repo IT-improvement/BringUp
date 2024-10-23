@@ -178,6 +178,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/blog"),
                 antMatcher("/member/file"),
                 antMatcher("/member/letterWrite"),
+                antMatcher("/portfolio/**"),
 
 
 
