@@ -51,53 +51,64 @@ public class PremiumAdService {
 
     public List<String> getUnavailableDates(ChoicedateRequestDto choicedatedto) {
 
-        // DateTimeFormatter를 사용하여 String을 LocalDate로 변환
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // String으로 받은 날짜를 LocalDate로 변환
         LocalDate startDate = LocalDate.parse(choicedatedto.getStartDate(), formatter);
         LocalDate endDate = LocalDate.parse(choicedatedto.getEndDate(), formatter);
 
-        // 해당 기간에 예약된 프리미엄 광고들을 가져옴
-        List<PremiumAdvertisement> reservedAds = premiumAdvertisementRepository
-                .findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(startDate, endDate);
-
-        // 예약 불가능한 날짜 및 시간을 저장할 리스트
+        // 예약 불가능한 날짜 및 시간대를 저장할 리스트
         List<String> unavailableDates = new ArrayList<>();
 
         // 각 날짜별로 확인
-        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-            String[] timeSlots = {
-                    "01:00 ~ 04:00",
-                    "04:00 ~ 07:00",
-                    "07:00 ~ 10:00",
-                    "10:00 ~ 13:00",
-                    "13:00 ~ 16:00",
-                    "16:00 ~ 19:00",
-                    "19:00 ~ 22:00",
-                    "22:00 ~ 01:00"
-            };
+        for (LocalDate currentDate = startDate; !currentDate.isAfter(endDate); currentDate = currentDate.plusDays(1)) {
+            String formattedDate = currentDate.format(formatter);
 
-            // 각 시간대별로 예약 여부를 확인
-            for (String timeSlot : timeSlots) {
-                boolean isTimeSlotUnavailable = false;
+            // 해당 날짜의 프리미엄 광고를 확인 (advertisement의 display_time에 해당 날짜가 포함되는지 확인)
+            List<Advertisement> adsForDate = advertisementRepository.findAllByDisplayContaining(formattedDate);
 
-                for (PremiumAdvertisement pad : reservedAds) {
-                    if (pad.getAdvertisement().getStartDate().equals(date) && pad.getTimeSlot().equals(timeSlot)) {
-                        isTimeSlotUnavailable = true;
-                        break;  // 예약된 시간대를 찾으면 더 이상 확인하지 않음
+            if (!adsForDate.isEmpty()) {
+                for (Advertisement ad : adsForDate) {
+                    // 각 광고의 프리미엄 타임슬롯 확인 (advertisement_premium 테이블에서 확인)
+                    List<PremiumAdvertisement> premiumAds = premiumAdvertisementRepository.findByAdvertisement(ad);
+
+                    String[] timeSlots = {
+                            "01:00 ~ 04:00",
+                            "04:00 ~ 07:00",
+                            "07:00 ~ 10:00",
+                            "10:00 ~ 13:00",
+                            "13:00 ~ 16:00",
+                            "16:00 ~ 19:00",
+                            "19:00 ~ 22:00",
+                            "22:00 ~ 01:00"
+                    };
+
+                    // 예약된 타임슬롯을 저장
+                    List<String> reservedTimeSlots = new ArrayList<>();
+
+                    for (String timeSlot : timeSlots) {
+                        boolean isTimeSlotUnavailable = premiumAds.stream()
+                                .anyMatch(premiumAd -> premiumAd.getTimeSlot().equals(timeSlot));
+
+                        // 예약된 시간대에 추가
+                        if (isTimeSlotUnavailable) {
+                            reservedTimeSlots.add(timeSlot);
+                        }
                     }
-                }
 
-                // 예약 불가능한 시간대를 리스트에 추가
-                if (isTimeSlotUnavailable) {
-                    unavailableDates.add(date + " (" + timeSlot + ")");
+                    // 예약된 타임슬롯을 모두 표시
+                    if (!reservedTimeSlots.isEmpty()) {
+                        for (String reservedSlot : reservedTimeSlots) {
+                            unavailableDates.add(formattedDate + " (" + reservedSlot + ")");
+                        }
+                    }
                 }
             }
         }
 
         return unavailableDates;  // 예약 불가능한 날짜 및 시간대 반환
     }
+
 
     public void createPremiumAd(PremiumAdRequestDto premiumAdDto, MultipartFile img, UserDetailsImpl userDetails) {
 
