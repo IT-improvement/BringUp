@@ -43,6 +43,12 @@
     <!-- 메인 JS -->
     <!-- <script src="/resources/script/company/main.js"></script> -->
 
+	<script>
+
+
+
+	</script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
@@ -50,8 +56,58 @@
 
 	<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
-    <main class="flex-grow-1">
-		<p>상품관리</p>
+    <main class="flex-grow-1 mt-5">
+		<div class="container">
+			<h2>상품관리</h2>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>번호</th>
+						<th>상품제목</th>
+						<th>등록일</th>
+						<th>표시수</th>
+						<th>조회수</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>상품 1</td>
+						<td>2022-01-01</td>
+						<td>100</td>
+						<td>1000</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>상품 2</td>
+						<td>2022-01-02</td>
+						<td>200</td>
+						<td>2000</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>상품 3</td>
+						<td>2022-01-03</td>
+						<td>300</td>
+						<td>3000</td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td>상품 4</td>
+						<td>2022-01-04</td>
+						<td>400</td>
+						<td>4000</td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td>상품 5</td>
+						<td>2022-01-05</td>
+						<td>500</td>
+						<td>5000</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
     </main>
 
 	<jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
