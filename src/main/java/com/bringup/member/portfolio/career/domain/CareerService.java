@@ -52,4 +52,13 @@ public class CareerService {
         }
         return CareerResponseDto.success();
     }
+
+    public ResponseEntity<? super CareerResponseDto> deleteCareer(int careerIndex){
+        try{
+            careerRepository.deleteById(careerIndex);
+        }catch (Exception e){
+            return ResponseDto.databaseError();
+        }
+        return CareerResponseDto.success();
+    }
 }

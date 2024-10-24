@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,5 +28,11 @@ public class CareerController {
     public ResponseEntity<? super CareerResponseDto> insertCareer(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody CareerInsertRequestDto careerInsertRequestDto){
         int userIndex = userDetails.getId();
         return careerService.insertCareer(userIndex, careerInsertRequestDto);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<? super CareerResponseDto> deleteCareer(@RequestParam String index){
+        int careerIndex = Integer.parseInt(index);
+        return careerService.deleteCareer(careerIndex);
     }
 }
