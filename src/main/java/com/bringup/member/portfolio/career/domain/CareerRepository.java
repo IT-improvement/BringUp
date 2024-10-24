@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface CareerRepository extends JpaRepository<CareerEntity,Integer> {
     List<CareerEntity> findByUserIndex(int userIndex);
+    Boolean existsByUserIndexAndCompanyNameAndCareerDepartmentAndCareerPositionAndCareerStartAndCareerEnd(int userIndex, String companyName,String careerDepartment, String careerPosition, String careerStart, String careerEnd);
 }
