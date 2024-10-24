@@ -47,4 +47,18 @@ public class BlogService {
         return BlogResponseDto.success();
 
     }
+
+    public ResponseEntity<? super BlogResponseDto> deleteBlog(int blogIndex){
+        boolean existBlog = blogRepository.existsById(blogIndex);
+
+        if(!existBlog){
+            return BlogResponseDto.noExistUrl();
+        }
+        try{
+            blogRepository.deleteById(blogIndex);
+        }catch (Exception e){
+            return ResponseDto.databaseError();
+        }
+        return BlogResponseDto.success();
+    }
 }
