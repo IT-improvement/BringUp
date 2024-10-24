@@ -12,6 +12,7 @@ import com.bringup.company.advertisement.service.*;
 import com.bringup.company.recruitment.dto.response.RecruitmentDetailResponseDto;
 import com.bringup.company.recruitment.dto.response.RecruitmentResponseDto;
 import com.bringup.company.recruitment.exception.RecruitmentException;
+import com.bringup.company.user.exception.CompanyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
@@ -34,10 +36,20 @@ public class AdvertisementController {
     private final AnnouncementAdService announcementAdService;
     private final MainAdService mainAdService;
     private final ErrorResponseHandler errorResponseHandler;
+    private final AdService adService;
 
     //--------------광고 조회 관련-----------------------------------------
 
-
+    @GetMapping("/list")
+    public ResponseEntity<BfResponse<?>> getList(
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        try{
+            List<UserAdvertisementResponseDto> list = adService.getUserAdvertisement(userDetails);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, list));
+        } catch (CompanyException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+    }
 
     //-------------프리미엄 라인----------------------------------------------
     /**
@@ -181,7 +193,11 @@ public class AdvertisementController {
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, mad));
     }
 
-
+    @GetMapping("/main/price")
+    public ResponseEntity<BfResponse<?>> getPrice(@RequestParam Map<String, Integer> requestBody){
+        int price = mainAdService.getItemPrice(requestBody.get("day"));
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, price));
+    }
 
 
     //-------------배너 라인----------------------------------------------\

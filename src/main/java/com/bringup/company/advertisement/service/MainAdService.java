@@ -1,5 +1,7 @@
 package com.bringup.company.advertisement.service;
 
+import com.bringup.admin.payment.entity.Item;
+import com.bringup.admin.payment.repository.ItemRepository;
 import com.bringup.common.enums.StatusType;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
@@ -28,8 +30,7 @@ import java.util.stream.Collectors;
 
 import static com.bringup.common.enums.AdvertisementErrorCode.ALREADY_ACTIVE;
 import static com.bringup.common.enums.AdvertisementErrorCode.NOT_FOUND_ADVERTISEMENT;
-import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
-import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_RECRUITMENT;
+import static com.bringup.common.enums.MemberErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,12 +40,7 @@ public class MainAdService {
     private final RecruitmentRepository recruitmentRepository;
     private final AdvertisementRepository advertisementRepository;
     private final ImageService imageService;
-
-    private static final Map<Integer, BigDecimal> BASE_PRICES = Map.of(
-            1, new BigDecimal(300),
-            3, new BigDecimal(800),
-            7, new BigDecimal(1100)
-    );
+    private final ItemRepository itemRepository;
 
     // 메인 광고 생성
     public void createMainAd(MainAdRequestDto mainAdDto, MultipartFile img, UserDetailsImpl userDetails) {
@@ -122,45 +118,31 @@ public class MainAdService {
         return convertToDto(mainAd, ad);
     }
 
-    public List<String> getUnavailableDates(ChoicedateRequestDto dto) {
-        // DateTimeFormatter를 사용하여 String을 LocalDate로 변환
+    public List<String> getUnavailableDates(ChoicedateRequestDto choicedatedto) {
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // String으로 받은 날짜를 LocalDate로 변환
-        LocalDate startDate = LocalDate.parse(dto.getStartDate(), formatter);
-        LocalDate endDate = LocalDate.parse(dto.getEndDate(), formatter);
+        LocalDate startDate = LocalDate.parse(choicedatedto.getStartDate(), formatter);
+        LocalDate endDate = LocalDate.parse(choicedatedto.getEndDate(), formatter);
 
+        // 예약 불가능한 날짜를 저장할 리스트
         List<String> unavailableDates = new ArrayList<>();
 
-        // 날짜 범위를 순회하면서 각 날짜에 예약된 광고 수를 확인
-        while (!startDate.isAfter(endDate)) {
-            int adCount = mainAdvertisementRepository.countAdsByDate(startDate);
+        // 각 날짜별로 확인
+        for (LocalDate currentDate = startDate; !currentDate.isAfter(endDate); currentDate = currentDate.plusDays(1)) {
+            String formattedDate = currentDate.format(formatter);
 
-            // 예약된 광고 수가 6개 이상이면 해당 날짜를 반환할 목록에 추가
-            if (adCount >= 6) {
-                unavailableDates.add(startDate.format(formatter));
+            // 해당 날짜의 메인 광고를 확인 (advertisement의 display_time에 해당 날짜가 포함되는지 확인)
+            List<Advertisement> adsForDate = advertisementRepository.findAllByDisplayContaining(formattedDate);
+
+            // 해당 날짜에 예약된 광고가 6개 이상일 경우 예약 불가능한 날짜로 추가
+            if (adsForDate.size() >= 6) {
+                unavailableDates.add(formattedDate);
             }
-
-            // 다음 날짜로 이동
-            startDate = startDate.plusDays(1);
         }
 
-        return unavailableDates;
-    }
-
-
-    /**
-     * 할인율 계산 (사용 가능한 날짜 수에 따라)
-     *
-     * @param requestedDays 요청한 일수
-     * @param availableDays 예약 가능한 일수
-     * @return 할인율
-     */
-    private BigDecimal calculateDiscount(int requestedDays, int availableDays) {
-        if (requestedDays == availableDays) {
-            return BigDecimal.ZERO; // 할인 없음
-        }
-        return BigDecimal.valueOf((double) (requestedDays - availableDays) / requestedDays);
+        return unavailableDates;  // 예약 불가능한 날짜 반환
     }
 
 
@@ -175,5 +157,21 @@ public class MainAdService {
                 .clickCount(ad.getC_count())
                 .status(ad.getStatus())
                 .build();
+    }
+
+    public int getItemPrice(int day){
+        int itemIdx = 0;
+        if(day == 1){
+            itemIdx = 9;
+        } else if (day == 3) {
+            itemIdx = 10;
+        } else {
+            itemIdx = 11;
+        }
+
+        Item item = itemRepository.findByItemIndex(itemIdx)
+                .orElseThrow(() -> new CompanyException(NOT_FOUND_ITEM));
+
+        return item.getPrice();
     }
 }

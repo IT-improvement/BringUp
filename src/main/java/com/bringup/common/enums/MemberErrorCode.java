@@ -17,6 +17,7 @@ public enum MemberErrorCode implements BaseErrorCode {
     INVALID_REQUEST_FORMAT(400,"잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
     NOT_FOUND_1st(400, "진위여부 파악이 완료되지 않았습니다.", HttpStatus.BAD_REQUEST),
     NOT_FOUND_RECRUITMENT(400, "공고가 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
+    NOT_FOUND_ITEM(400, "알맞은 아이템이 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
     NOT_FOUND_CV(400,"이력서가 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
     NOT_FOUND_BOOKMARK(400, "해당 유저는 북마크한 기업이 없습니다.", HttpStatus.BAD_REQUEST),
     
