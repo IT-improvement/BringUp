@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LetterRepository extends JpaRepository<LetterEntity,Integer> {
+    LetterEntity findByUserIndex(int userIndex);
 }
