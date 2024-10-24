@@ -35,4 +35,10 @@ public class CareerController {
         int careerIndex = Integer.parseInt(index);
         return careerService.deleteCareer(careerIndex);
     }
+
+    @PutMapping("/edit")
+    public ResponseEntity<? super CareerResponseDto> editCareer(@RequestParam String index , @RequestBody CareerInsertRequestDto careerInsertRequestDto){
+        int careerIndex = Integer.parseInt(index);
+        return careerService.editCareer(careerIndex, careerInsertRequestDto);
+    }
 }
