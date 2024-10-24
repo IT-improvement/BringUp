@@ -16,6 +16,7 @@ public interface ResponseCode {
     String EXISTED_EMAIL="EE";
     String NOT_EXISTED_BLOG="NXB";
     String EXISTED_URL ="EU";
+    String NOT_EXISTED_LETTER="NEL";
 
     String SPARE_REPORT_ALREADY_EXIST = "SR";
     String REPORT_ALREADY_FULL = "RF";
