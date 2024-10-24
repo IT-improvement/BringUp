@@ -1,5 +1,6 @@
 package com.bringup.member.portfolio.blog.domain;
 
+import com.bringup.member.portfolio.blog.dto.request.BlogInsertRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,4 +19,9 @@ public class BlogEntity {
     private int blogIndex;
     private int userIndex;
     private String url;
+
+    public BlogEntity(BlogInsertRequestDto dto, int userIndex) {
+        this.userIndex = userIndex;
+        this.url = dto.getUrl();
+    }
 }
