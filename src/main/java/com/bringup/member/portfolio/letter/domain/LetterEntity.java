@@ -1,5 +1,6 @@
 package com.bringup.member.portfolio.letter.domain;
 
+import com.bringup.common.enums.StatusType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -21,4 +22,9 @@ public class LetterEntity {
     private String answser2;
     private String answser3;
     private String status;
+
+    public LetterEntity(int userIndex){
+        this.userIndex = userIndex;
+        this.status = "생성";
+    }
 }
