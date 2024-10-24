@@ -21,7 +21,7 @@ public interface ResponseMessage {
     // HTTP Status 401
     String SIGN_IN_FAIL = "Login Inforam.";
     String AUTHORIZATION_FAILED = "Authorization Failed.";
-
+    String EXISTED_URL = "Existed URL";
     // HTTP Status 403
     String NO_PERMISSION = "Do not have Permission.";
 
