@@ -1,4 +1,4 @@
-package com.bringup.member.portfolio.blog.dto;
+package com.bringup.member.portfolio.blog.dto.response;
 
 import com.bringup.common.response.ResponseCode;
 import com.bringup.common.response.ResponseDto;
@@ -11,17 +11,17 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @Getter
-public class BlogResponseEntity extends ResponseDto {
+public class BlogReadResponseDto extends ResponseDto {
 
     List<BlogEntity> list = null;
 
-    private BlogResponseEntity(List<BlogEntity> list) {
+    private BlogReadResponseDto(List<BlogEntity> list) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCES);
         this.list = list;
     }
 
-    public static ResponseEntity<BlogResponseEntity> success(List<BlogEntity> list) {
-        BlogResponseEntity response = new BlogResponseEntity(list);
+    public static ResponseEntity<BlogReadResponseDto> success(List<BlogEntity> list) {
+        BlogReadResponseDto response = new BlogReadResponseDto(list);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
