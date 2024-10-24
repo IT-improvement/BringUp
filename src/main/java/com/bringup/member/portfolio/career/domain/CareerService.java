@@ -61,4 +61,21 @@ public class CareerService {
         }
         return CareerResponseDto.success();
     }
+    public ResponseEntity<? super CareerResponseDto> editCareer(int careerIndex, CareerInsertRequestDto careerInsertRequestDto){
+        CareerEntity careerEntity = careerRepository.findByCareerIndex(careerIndex);
+
+        careerEntity.setCareerDepartment(careerInsertRequestDto.getCareerDepartment());
+        careerEntity.setCareerPosition(careerInsertRequestDto.getCareerPosition());
+        careerEntity.setCareerStart(careerInsertRequestDto.getCareerStart());
+        careerEntity.setCareerEnd(careerInsertRequestDto.getCareerEnd());
+        careerEntity.setCompanyName(careerInsertRequestDto.getCompanyName());
+        careerEntity.setCareerWork(careerInsertRequestDto.getCareerWork());
+
+        try {
+            careerRepository.save(careerEntity);
+        }catch (Exception e){
+            return ResponseDto.databaseError();
+        }
+        return CareerResponseDto.success();
+    }
 }
