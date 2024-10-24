@@ -23,12 +23,13 @@ public class CareerEntity {
     private String careerDepartment;
     private String careerWork;
 
-    public CareerEntity(CareerInsertRequestDto requestDto) {
+    public CareerEntity(int userIndex, CareerInsertRequestDto requestDto) {
         this.careerStart = requestDto.getCareerStart();
         this.careerEnd = requestDto.getCareerEnd();
         this.companyName = requestDto.getCompanyName();
         this.careerPosition = requestDto.getCareerPosition();
         this.careerDepartment = requestDto.getCareerDepartment();
         this.careerWork = requestDto.getCareerWork();
+        this.userIndex = userIndex;
     }
 }
