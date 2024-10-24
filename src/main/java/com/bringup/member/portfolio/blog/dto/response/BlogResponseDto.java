@@ -20,4 +20,8 @@ public class BlogResponseDto extends ResponseDto {
         ResponseDto response = new ResponseDto(ResponseCode.EXISTED_URL,ResponseMessage.EXISTED_URL);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+    public static ResponseEntity<ResponseDto> noExistUrl(){
+        ResponseDto response = new ResponseDto(ResponseCode.NOT_EXISTED_BLOG,ResponseMessage.NOT_EXISTED_BLOG);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
 }
