@@ -19,6 +19,7 @@ public interface ResponseMessage {
     String REPORT_ALREADY_WROTE  = "Report already wrote";
     String NOT_EXISTED_BLOG="NOT_EXISTED_BLOG";
     String NOT_EXISTED_LETTER="NOT_EXISTED_LETTER";
+    String NOT_EXISTED_CAREER="NOT_EXISTED_CAREER";
 
     // HTTP Status 401
     String SIGN_IN_FAIL = "Login Inforam.";
