@@ -18,6 +18,8 @@ public interface ResponseMessage {
     String REPORT_ALREADY_FULL = "Report already exist";
     String REPORT_ALREADY_WROTE  = "Report already wrote";
     String NOT_EXISTED_BLOG="NOT_EXISTED_BLOG";
+    String NOT_EXISTED_LETTER="NOT_EXISTED_LETTER";
+
     // HTTP Status 401
     String SIGN_IN_FAIL = "Login Inforam.";
     String AUTHORIZATION_FAILED = "Authorization Failed.";
