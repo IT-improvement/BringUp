@@ -6,14 +6,14 @@ import com.bringup.common.response.ResponseMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class BlogInsertResponseDto extends ResponseDto {
+public class BlogResponseDto extends ResponseDto {
 
-    private BlogInsertResponseDto() {
+    private BlogResponseDto() {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCES);
     }
 
-    public static ResponseEntity<BlogInsertResponseDto> success() {
-        BlogInsertResponseDto response = new BlogInsertResponseDto();
+    public static ResponseEntity<BlogResponseDto> success() {
+        BlogResponseDto response = new BlogResponseDto();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     public static ResponseEntity<ResponseDto> existUrl(){
