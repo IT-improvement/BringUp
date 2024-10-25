@@ -1,19 +1,23 @@
 package com.bringup.company.recruitment.service;
 
-import com.bringup.common.enums.*;
+import com.bringup.common.enums.NotificationType;
+import com.bringup.common.enums.RecruitmentType;
+import com.bringup.common.enums.RolesType;
+import com.bringup.common.enums.StatusType;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.recruitment.dto.request.RecruitmentRequestDto;
-import com.bringup.company.recruitment.dto.response.*;
+import com.bringup.company.recruitment.dto.response.RecruitmentDetailResponseDto;
+import com.bringup.company.recruitment.dto.response.RecruitmentMainResponseDto;
+import com.bringup.company.recruitment.dto.response.RecruitmentResponseDto;
+import com.bringup.company.recruitment.dto.response.UnifiedRecruitmentDto;
 import com.bringup.company.recruitment.entity.RecruitmentFreelancer;
 import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.company.recruitment.repository.RecruitmentFreelancerRepository;
 import com.bringup.company.user.entity.Company;
-import com.bringup.company.user.exception.CompanyException;
 import com.bringup.company.user.repository.CompanyRepository;
 import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
-import com.bringup.member.applyRecruitment.domain.entity.ApplyRecruitmentEntity;
 import com.bringup.member.applyRecruitment.domain.enums.ApplicationType;
 import com.bringup.member.applyRecruitment.domain.repository.ApplyRecruitmentRepository;
 import jakarta.transaction.Transactional;
@@ -240,38 +244,5 @@ public class RecruitmentService {
                 .build();
     }
 
-
-    public List<ApplyCvListResponseDto> getApplyCvs(UserDetailsImpl userDetails) {
-        // 회사 정보 가져오기
-        Company company = companyRepository.findBycompanyId(userDetails.getId())
-                .orElseThrow(() -> new CompanyException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
-
-        // 회사의 모든 공고 목록 조회
-        List<Recruitment> recruitmentList = recruitmentRepository.findAllByCompanyCompanyId(company.getCompanyId());
-
-        // 결과 리스트
-        List<ApplyCvListResponseDto> applyCvList = new ArrayList<>();
-
-        // 각 공고에 대해 지원 이력 조회 및 매핑
-        for (Recruitment recruitment : recruitmentList) {
-            // 지원 이력 조회
-            List<ApplyRecruitmentEntity> applyEntities = applyCvRepository.findByRecruitmentIndex(recruitment.getRecruitmentIndex());
-
-            // ApplyRecruitmentEntity를 ApplyCvListResponseDto로 매핑하여 결과 리스트에 추가
-            for (ApplyRecruitmentEntity applyEntity : applyEntities) {
-                ApplyCvListResponseDto dto = ApplyCvListResponseDto.builder()
-                        .applyCvIdx(applyEntity.getApplyCVIndex())
-                        .cvIdx(applyEntity.getCvIndex())
-                        .type(applyEntity.getApplicationType().name())
-                        .status(applyEntity.getStatus().name())
-                        .applyDate(applyEntity.getApplyCVDate().toString())
-                        .build();
-
-                applyCvList.add(dto);
-            }
-        }
-
-        return applyCvList;
-    }
 
 }
