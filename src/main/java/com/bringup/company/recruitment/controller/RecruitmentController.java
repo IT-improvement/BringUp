@@ -5,12 +5,10 @@ import com.bringup.common.event.exception.ErrorResponseHandler;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.recruitment.dto.request.RecruitmentRequestDto;
-import com.bringup.company.recruitment.dto.response.RecruitmentDetailResponseDto;
-import com.bringup.company.recruitment.dto.response.RecruitmentMainResponseDto;
-import com.bringup.company.recruitment.dto.response.RecruitmentResponseDto;
-import com.bringup.company.recruitment.dto.response.UnifiedRecruitmentDto;
+import com.bringup.company.recruitment.dto.response.*;
 import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.company.recruitment.service.RecruitmentService;
+import com.bringup.company.user.exception.CompanyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -96,7 +94,7 @@ public class RecruitmentController {
 
     @GetMapping("/detail/{recruitmentId}")
     public ResponseEntity<BfResponse<?>> getRecruitmentDetail(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                                                   @PathVariable("recruitmentId") int recruitmentId) {
+                                                              @PathVariable("recruitmentId") int recruitmentId) {
         try {
             RecruitmentDetailResponseDto recruitmentDetail = recruitmentService.getRecruitmentDetail(userDetails, recruitmentId);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, recruitmentDetail));
@@ -104,6 +102,18 @@ public class RecruitmentController {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         } catch (Exception e) {
             return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/applyCvs")
+    public ResponseEntity<BfResponse<?>> getRecruitmentApplyList(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        try{
+            List<ApplyCvListResponseDto> applyCvList = recruitmentService.getApplyCvs(userDetails);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, applyCvList));
+        } catch (RecruitmentException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (CompanyException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         }
     }
 }
