@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     let currentPage = 1;
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
     let totalItems = 0;
     let allData = [];
     let filteredData = [];
