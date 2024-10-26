@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Integer> {
     Optional<Item> findByItemIndex(int itemIdx);
+
+    Optional<Item> findByItemName(String s);
 }
