@@ -1,10 +1,14 @@
 package com.bringup.company.advertisement.service;
 
+import com.bringup.admin.payment.entity.Item;
+import com.bringup.admin.payment.repository.ItemRepository;
 import com.bringup.common.enums.StatusType;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.dto.request.BannerAdRequestDto;
+import com.bringup.company.advertisement.dto.request.DateRequestDto;
 import com.bringup.company.advertisement.dto.response.BannerAdResponseDto;
+import com.bringup.company.advertisement.dto.response.ItemInfoResponseDto;
 import com.bringup.company.advertisement.entity.Advertisement;
 import com.bringup.company.advertisement.entity.BannerAdvertisement;
 import com.bringup.company.advertisement.exception.AdvertisementException;
@@ -30,6 +34,20 @@ public class BannerAdService {
     private final AdvertisementRepository advertisementRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final ImageService imageService;
+    private final ItemRepository itemRepository;
+
+    public ItemInfoResponseDto getBannerInfo(DateRequestDto dto){
+        String itemName = "배너 광고 - " + dto.getDisplayTime() + "일";
+
+        Item item = itemRepository.findByItemName(itemName)
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
+        return ItemInfoResponseDto.builder()
+                .itemIdx(item.getItemIndex())
+                .itemPrice(item.getPrice())
+                .itemName(item.getItemName())
+                .build();
+    }
 
     @Transactional
     public void createBannerAd(BannerAdRequestDto bannerAdDto, MultipartFile img, UserDetailsImpl userDetails) {
