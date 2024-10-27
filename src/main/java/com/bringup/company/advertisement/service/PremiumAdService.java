@@ -1,39 +1,31 @@
 package com.bringup.company.advertisement.service;
 
+import com.bringup.admin.payment.entity.Item;
+import com.bringup.admin.payment.repository.ItemRepository;
 import com.bringup.common.enums.MemberErrorCode;
-import com.bringup.common.enums.RolesType;
 import com.bringup.common.enums.StatusType;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.dto.request.ChoicedateRequestDto;
 import com.bringup.company.advertisement.dto.request.PremiumAdRequestDto;
-import com.bringup.company.advertisement.dto.response.AvailableDatesResponseDto;
 import com.bringup.company.advertisement.dto.response.PremiumAdResponseDto;
+import com.bringup.company.advertisement.dto.response.UsableDisplayResponseDto;
 import com.bringup.company.advertisement.entity.Advertisement;
 import com.bringup.company.advertisement.entity.PremiumAdvertisement;
-import com.bringup.company.advertisement.enums.Ad_Type;
 import com.bringup.company.advertisement.exception.AdvertisementException;
 import com.bringup.company.advertisement.repository.AdvertisementRepository;
 import com.bringup.company.advertisement.repository.PremiumAdvertisementRepository;
 import com.bringup.company.recruitment.entity.Recruitment;
-import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
-import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.exception.CompanyException;
 import com.bringup.company.user.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static com.bringup.common.enums.AdvertisementErrorCode.ALREADY_ACTIVE;
 import static com.bringup.common.enums.AdvertisementErrorCode.NOT_FOUND_ADVERTISEMENT;
@@ -48,8 +40,9 @@ public class PremiumAdService {
     private final AdvertisementRepository advertisementRepository;
     private final CompanyRepository companyRepository;
     private final RecruitmentRepository recruitmentRepository;
+    private final ItemRepository itemRepository;
 
-    public List<String> getUnavailableDates(ChoicedateRequestDto choicedatedto) {
+    /*public List<String> getUnavailableDates(ChoicedateRequestDto choicedatedto) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -107,8 +100,73 @@ public class PremiumAdService {
         }
 
         return unavailableDates;  // 예약 불가능한 날짜 및 시간대 반환
+    }*/
+
+    public UsableDisplayResponseDto getAdvertisementData(ChoicedateRequestDto choicedatedto) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // String으로 받은 날짜를 LocalDate로 변환
+        LocalDate startDate = LocalDate.parse(choicedatedto.getStartDate(), formatter);
+        LocalDate endDate = LocalDate.parse(choicedatedto.getEndDate(), formatter);
+        String requestedTimeSlot = choicedatedto.getTimeSlot(); // 요청된 시간대
+
+        String AdType = findAdTypeByTimeSlot(requestedTimeSlot);
+
+        // 예약 불가능한 날짜를 저장할 Set
+        Set<LocalDate> unavailableDates = new HashSet<>();
+
+        for (LocalDate currentDate = startDate; !currentDate.isAfter(endDate); currentDate = currentDate.plusDays(1)) {
+            String formattedDate = currentDate.format(formatter);
+
+            // 해당 날짜와 시간대에 대한 광고가 있는지 확인
+            List<Advertisement> adsForDate = advertisementRepository.findAllByDisplayContaining(formattedDate);
+            boolean isUnavailable = adsForDate.stream()
+                    .anyMatch(ad -> premiumAdvertisementRepository.findByAdvertisement(ad).stream()
+                            .anyMatch(premiumAd -> premiumAd.getTimeSlot().equals(requestedTimeSlot)));
+
+            // 해당 시간대에 예약이 이미 되어 있다면 날짜를 예약 불가능 목록에 추가
+            if (isUnavailable) {
+                unavailableDates.add(currentDate);
+            }
+        }
+
+        int nonDisplayCount = unavailableDates.size();
+        int availableDays = 3 - nonDisplayCount;
+
+        Optional<Item> item;
+        if (availableDays == 1) {
+            item = itemRepository.findByItemName(AdType + " - 1day");
+        } else if (availableDays == 2) {
+            item = itemRepository.findByItemName(AdType + " - 2day");
+        } else if (availableDays == 0) {
+            throw new CompanyException(NOT_FOUND_ITEM); // 가능한 날짜가 없을 때 예외 발생
+        } else {
+            item = itemRepository.findByItemName(AdType); // 기본 가격을 사용할 경우
+        }
+        return UsableDisplayResponseDto.builder()
+                .nonDisplay(unavailableDates) // 예약 불가능한 날짜의 수
+                .itemIdx(item.get().getItemIndex())
+                .itemName(item.get().getItemName())
+                .itemPrice(item.get().getPrice())
+                .build();
     }
 
+    private String findAdTypeByTimeSlot(String requestedTimeSlot) {
+        // 시간대와 광고 타입을 매핑한 Map 생성
+        Map<String, String> timeSlotToAdType = Map.of(
+                "01:00 ~ 04:00", "P3",
+                "04:00 ~ 07:00", "P1",
+                "07:00 ~ 10:00", "GP",
+                "10:00 ~ 13:00", "P2",
+                "13:00 ~ 16:00", "P1",
+                "16:00 ~ 19:00", "GP",
+                "19:00 ~ 22:00", "P1",
+                "22:00 ~ 01:00", "P3"
+        );
+
+        // 요청된 시간대에 맞는 광고 타입 반환, 없을 경우 null 반환
+        return timeSlotToAdType.getOrDefault(requestedTimeSlot, null);
+    }
 
     public void createPremiumAd(PremiumAdRequestDto premiumAdDto, MultipartFile img, UserDetailsImpl userDetails) {
 
@@ -213,6 +271,7 @@ public class PremiumAdService {
     }*/
 
     // 날짜 리스트를 콤마로 구분된 문자열로 변환
+/*
     private String convertDatesToString(LocalDate startDate, LocalDate endDate) {
         List<LocalDate> dateList = startDate.datesUntil(endDate.plusDays(1))
                 .collect(Collectors.toList());
@@ -222,5 +281,6 @@ public class PremiumAdService {
                 .map(LocalDate::toString)
                 .collect(Collectors.joining(", "));
     }
+*/
 
 }

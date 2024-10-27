@@ -278,32 +278,34 @@ public class CompanyService {
             if (newImage == null && "deleted".equals(status) && i < existingImages.size()) {
                 existingImages.set(i, null);  // 삭제된 이미지를 null로 설정
             }
-
-            // status가 modified일 때, 기존 이미지 경로와 비교하여 기존 이미지라면 그대로 유지
-            else if ("modified".equals(status) && newImage != null) {
-                if (isBase64Image(newImage)) {
+            // status가 "수정"일 때, 이미지 순서가 바뀌거나 새 이미지가 추가된 경우 처리
+            else if ("modify".equals(status)) {
+                if (newImage != null && isBase64Image(newImage)) {
                     // 새 이미지가 Base64로 인코딩된 경우 처리
                     String imagePath = saveBase64Image(newImage, i);
-                    finalImageList.add(imagePath);
-                } else if (existingImages.size() > i && existingImages.get(i) != null && existingImages.get(i).equals(newImage)) {
-                    // 기존 경로와 같다면 새로 저장하지 않고 경로만 유지
-                    finalImageList.add(existingImages.get(i));
+                    finalImageList.add(imagePath);  // 새 이미지로 교체
+                } else if (existingImages.size() > i && newImage != null && existingImages.get(i).equals(newImage)) {
+                    // 이미지 순서가 변경된 경우, 기존 이미지를 새 순서대로 재배치
+                    finalImageList.add(existingImages.get(i));  // 기존 이미지 유지
+                } else if (newImage != null && i < existingImages.size() && !existingImages.get(i).equals(newImage)) {
+                    // 순서가 변경된 기존 이미지를 새 순서대로 배치
+                    finalImageList.add(newImage);
                 }
             }
-
-            // 삭제 요청이 아닌 기존 이미지가 있으면 그대로 유지
+            // 새 이미지가 없고 삭제된 이미지가 아닌 경우 기존 이미지를 유지
             else if (newImage == null && i < existingImages.size() && existingImages.get(i) != null) {
                 finalImageList.add(existingImages.get(i));
             }
         }
 
-        // 이미지 리스트에서 빈 값(null)을 제거하고 순서를 앞으로 당긴다
+        // 이미지 리스트에서 빈 값(null)을 제거하고 순서를 앞으로 당김
         finalImageList.removeIf(img -> img == null || img.isEmpty());
 
         // 기존 이미지 리스트를 업데이트된 리스트로 대체
         existingImages.clear();
         existingImages.addAll(finalImageList);
     }
+
 
     // Base64 이미지인지 확인하는 메소드
     private boolean isBase64Image(String imageString) {
@@ -312,12 +314,14 @@ public class CompanyService {
 
     // Base64 이미지를 디코딩하고 저장하는 메소드
     private String saveBase64Image(String base64ImageString, int index) throws IOException {
-        String[] parts = base64ImageString.split(",");
-        String mimeType = parts[0];  // "image/jpeg"
-        String base64Data = parts[1];  // Base64 인코딩된 이미지 데이터
+        // "data:image/png;base64," 부분을 제거하고 Base64 데이터만 남김
+        String base64Data = base64ImageString.substring(base64ImageString.indexOf(",") + 1);
+
+        // MIME 타입 추출
+        String mimeType = base64ImageString.substring(base64ImageString.indexOf(":") + 1, base64ImageString.indexOf(";"));
 
         // 저장할 파일 이름 설정
-        String fileExtension = mimeType.split("/")[1];  // "jpeg" 같은 확장자 추출
+        String fileExtension = mimeType.split("/")[1];  // "png", "jpeg" 등 확장자 추출
         String fileName = "company_img" + index + "." + fileExtension;
 
         // Base64 데이터를 파일로 저장
