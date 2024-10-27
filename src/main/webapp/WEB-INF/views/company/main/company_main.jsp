@@ -66,7 +66,7 @@
                                             <i class="bi bi-people-fill"></i>
                                         </div>
                                         <div class="ms-3">
-                                            <h3>10명</h3>
+                                            <h3 id="applicantCount"></h3>
                                             <h6 class="mb-0">지원자</h6>
                                         </div>
                                     </div>
@@ -92,7 +92,7 @@
                                             <i class="bi bi-suit-heart-fill"></i>
                                         </div>
                                         <div class="ms-3">
-                                            <h3>100명</h3>
+                                            <h3 id="scrapCount"></h3>
                                             <h6 class="mb-0">관심/스크랩</h6>
                                         </div>
                                     </div>
