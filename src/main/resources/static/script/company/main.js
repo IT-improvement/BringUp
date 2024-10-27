@@ -36,6 +36,40 @@ document.addEventListener('DOMContentLoaded', function() {
                 recruitmentListBody.innerHTML = '<tr><td colspan="6" class="text-center">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>';
             }
         });
+
+        fetch("/com/bookmarkCount", {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("북마크 개수:", data);
+            bookmarkCount = data.data;
+            document.getElementById('scrapCount').textContent = bookmarkCount;
+        })
+        .catch(error => {
+            console.error('북마크 개수를 가져오는 중 오류 발생:', error);
+        });
+
+        fetch("/com/recruitment/countApplyCv", {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("지원자 수:", data);
+            applicantCount = data.data;
+            document.getElementById('applicantCount').textContent = applicantCount;
+        })
+        .catch(error => {
+            console.error('지원자 수를 가져오는 중 오류 발생:', error);
+        });
     }
 
     function renderPage(page) {
