@@ -194,6 +194,7 @@ public class SpringSecurityConfig {
                 antMatcher("/com/user/**"),
 
                 antMatcher("/com/recruitment/**"),
+                antMatcher("/com/bookmarkCount"),
 
                 antMatcher(POST, "/com/c_reviews"),                 // 기업 리뷰 열람
                 antMatcher(POST, "/com/c_review/delete"),           // 기업 리뷰 삭제
