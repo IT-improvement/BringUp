@@ -2,6 +2,7 @@ package com.bringup.company.advertisement.repository;
 
 import com.bringup.common.enums.StatusType;
 import com.bringup.company.advertisement.entity.Advertisement;
+import com.bringup.company.user.entity.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,4 +30,5 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, In
     List<Advertisement> findAllByDisplayContaining(String date);
 
 
+    List<Advertisement> findAllByRecruitmentCompany(Company company);
 }
