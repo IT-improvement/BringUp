@@ -284,7 +284,7 @@ public class AdvertisementController {
         return ResponseEntity.ok(new BfResponse<>("기본 광고 삭제완료"));
     }
 
-    @GetMapping("/announce/price")
+    @PostMapping("/announce/price")
     public ResponseEntity<BfResponse<?>> getAnnounceAdPrice(@RequestBody DateRequestDto dto){
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, announcementAdService.getAnnounceAdPrice(dto)));
     }

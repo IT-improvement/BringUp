@@ -31,7 +31,10 @@
 	<!-- 날짜 선택 플러그인 -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-    <!-- Bootstrap JS -->
+	<!-- daterangepicker CSS -->
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+	<!-- Bootstrap JS -->
     <script src="/resources/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- 벤더 -->
@@ -41,15 +44,42 @@
     <!-- 테마 JS -->
     <script src="/resources/script/common/function/functions.js"></script>
 
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- jQuery -->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 	<!-- 날짜 선택 플러그인 -->
 	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
 
-    <!-- 메인 JS -->
     <script src="/resources/script/company/product/registration.js"></script>
 
+    <style>
+        .list-group-item:hover {
+            background-color: #f0f0f0; /* 마우스 오버 시 배경색 변경 */
+            cursor: pointer; /* 마우스 포인터 변경 */
+        }
+        
+        .flatpickr-day.startRange,
+        .flatpickr-day.endRange {
+            background: #007bff;
+            color: white;
+        }
+
+        .flatpickr-day.inRange {
+            background: #cce5ff; /* 범위 내 날짜의 배경색 */
+            color: black; /* 범위 내 날짜의 글자색 */
+        }
+
+        .flatpickr-day.startRange {
+            border-top-left-radius: 50%;
+            border-bottom-left-radius: 50%;
+        }
+
+        .flatpickr-day.endRange {
+            border-top-right-radius: 50%;
+            border-bottom-right-radius: 50%;
+        }
+    </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -65,15 +95,21 @@
         <div class="d-flex flex-row justify-content-between gap-4">
             <div class="flex-grow-1" style="flex-basis: 70%;">
                 <form id="advertisementForm" enctype="multipart/form-data">
-                    <div class="mb-3">
+                    <div id="advertisementInput" class="mb-3">
                         <label for="selectedAdvertisement" class="form-label">공고 선택</label>
                         <input type="text" class="form-control" placeholder="내 공고 선택" id="selectedAdvertisement" readonly>
                         <input type="hidden" id="selectedRecruitmentIndex" name="recruitmentIndex">
                     </div>
-                    <% if (productName == null || !productName.equals("어나운스")) { %>
+                    <% if (productName != null && !productName.equals("어나운스")) { %>
                     <div class="mb-2 d-flex align-items-center justify-content-between">
                         <label for="imageUpload" class="form-label mb-0 me-2">이미지 업로드</label>
-                        <span class="text-muted" style="font-size: 0.9em; white-space: nowrap;">(프리미엄: 875x500, 메인: 1228x320, 배너: 1228x80)</span>
+                        <% if (productName.equals("프리미엄")) { %>
+                        <span class="text-muted" style="font-size: 0.9em; white-space: nowrap;">(프리미엄 : 875x500px)</span>
+                        <% } else if (productName.equals("메인")) { %>
+                        <span class="text-muted" style="font-size: 0.9em; white-space: nowrap;">(메인 : 1228x320px)</span>
+                        <% } else if (productName.equals("배너")) { %>
+                        <span class="text-muted" style="font-size: 0.9em; white-space: nowrap;">(배너 : 1228x80px)</span>
+                        <% } %>
                     </div>
                     <input type="file" class="form-control mb-3" id="imageUpload" name="image" accept="image/*">
                     <% } %>
@@ -85,9 +121,9 @@
                         <input type="text" class="form-control" id="premiumDateRange" name="premiumDateRange" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="productSelect" class="form-label">프리미엄 광고 노출 시간대 선택</label>
+                        <label for="productSelect" class="form-label">프리미엄 광고 시간 선택</label>
                         <select class="form-select" id="productSelect" name="displayTime">
-                            <option value="">프리미엄 광고 노출 시간대 선택</option>
+                            <option value="">시간 선택</option>
                             <option value="22:00~01:00">22:00~01:00</option>
                             <option value="01:00~04:00">01:00~04:00</option>
                             <option value="04:00~07:00">04:00~07:00</option>
@@ -139,7 +175,7 @@
                         <input type="date" class="form-control" id="announceStartDate" name="announceStartDate">
                     </div>
                     <div class="mb-3">
-                        <label for="productSelect" class="form-label">일반 광고 간 선택</label>
+                        <label for="productSelect" class="form-label">일반 광고 기간 선택</label>
                         <select class="form-select" id="productSelect" name="durationMonths">
                             <option value="">일반 광고 기간 선택</option>
                             <option value="1">1개월</option>
@@ -165,7 +201,7 @@
                         <% if (productName.equals("프리미엄")) { %>
                             <p id="adDate" class="card-text">광고 날짜: </p>
                             <p id="adType" class="card-text">광고 유형: </p>
-                            <p id="displayTime" class="card-text">노출 시간대: </p>
+                            <p id="displayTime" class="card-text">시간: </p>
                         <% } else if (productName.equals("메인")) { %>
                             <p id="duration" class="card-text">광고 기간: </p>
                             <p id="adDate" class="card-text">광고 날짜: </p>
@@ -200,7 +236,7 @@
                 <div class="modal-body">
                     <input type="text" class="form-control mb-3" id="searchAdvertisement" placeholder="검색어를 입력하세요">
                     <ul class="list-group" id="advertisementList">
-                        <!-- 공고 리스트가 여기에 추가됩니다 -->
+                        <!-- 공 트가 여기에 추됩니다 -->
                     </ul>
                 </div>
             </div>
