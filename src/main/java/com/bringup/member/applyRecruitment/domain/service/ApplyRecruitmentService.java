@@ -40,6 +40,7 @@ public class ApplyRecruitmentService {
     private final ApplyRecruitmentRepository applyRecruitmentRepository;
     private final CVRepository cvRepository;
     private final RecruitmentRepository recruitmentRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public void setApplyRecruitment(UserDetailsImpl userDetails, ApplyRecruitmentRequestDto dto){
@@ -61,5 +62,5 @@ public class ApplyRecruitmentService {
 
         applyRecruitmentRepository.save(applyRecruitment);
     }
-
+    
 }
