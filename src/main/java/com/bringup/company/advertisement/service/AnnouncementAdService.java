@@ -36,8 +36,8 @@ public class AnnouncementAdService {
     private final RecruitmentRepository recruitmentRepository;
     private final ItemRepository itemRepository;
 
-    public ItemInfoResponseDto getAnnounceAdPrice(DateRequestDto dto){
-        String itemName = "공고 광고 - " + dto.getDisplayTime() + "달";
+    public ItemInfoResponseDto getAnnounceAdPrice(int displayTime){
+        String itemName = "공고 광고 - " + displayTime + "달";
 
         Item item = itemRepository.findByItemName(itemName)
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));

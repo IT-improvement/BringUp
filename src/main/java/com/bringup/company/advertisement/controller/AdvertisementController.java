@@ -9,6 +9,7 @@ import com.bringup.company.advertisement.exception.AdvertisementException;
 import com.bringup.company.advertisement.service.*;
 import com.bringup.company.user.exception.CompanyException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/com/advertisement")
 public class AdvertisementController {
 
@@ -284,9 +286,15 @@ public class AdvertisementController {
         return ResponseEntity.ok(new BfResponse<>("기본 광고 삭제완료"));
     }
 
-    @PostMapping("/announce/price")
-    public ResponseEntity<BfResponse<?>> getAnnounceAdPrice(@RequestBody DateRequestDto dto){
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, announcementAdService.getAnnounceAdPrice(dto)));
+    @GetMapping("/announce/price")
+    public ResponseEntity<BfResponse<?>> getAnnounceAdPrice(@RequestParam(name = "displayTime") int displayTime){
+        System.out.println("짜바리 dto : " + displayTime);
+        System.out.println("짜바리 서비스 리턴값 : " + displayTime);
+
+
+        ItemInfoResponseDto list = announcementAdService.getAnnounceAdPrice(displayTime);
+
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, list));
     }
 
 

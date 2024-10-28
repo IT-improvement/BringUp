@@ -52,6 +52,8 @@
 	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
 
     <script src="/resources/script/company/product/registration.js"></script>
+    <script src="https://js.bootpay.co.kr/bootpay-5.0.1.min.js" type="application/javascript"></script>
+    <script src="/resources/script/common/Pay/payment.js"></script>
 
     <style>
         .list-group-item:hover {
@@ -213,7 +215,7 @@
                             <p id="duration" class="card-text">광고 기간: </p>
                         <% } %>
                         <p id="paymentAmount" class="card-text">결제 금액: </p>
-                        <button type="button" class="btn btn-primary w-100 mt-3" onclick="submitForm()">신청하기</button>
+                        <button type="button" class="btn btn-primary w-100 mt-3" id="paymentButton">신청하기</button>
                     </div>
                 </div>
             </div>
