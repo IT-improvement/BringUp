@@ -1,4 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('paymentButton').addEventListener('click',function (){
+        const itemIdx = sessionStorage.getItem(itemIdx);
+        if (itemIdx === null){
+            alert("아이템인덱스가 없습니다.");
+        }else {
+            console.log(itemIdx);
+        }
+    });
+
     const productName = document.querySelector('h3').textContent.trim();
 
     // 공통: 공고 선택 동작
@@ -263,23 +272,24 @@ if (productName.includes('어나운스')) {
         }
         let duration = event.target.value;
         if (duration) {
-            fetch("/com/advertisement/announce/price", {
-                method: 'POST',
+            fetch(`/com/advertisement/announce/price?displayTime=${duration}`, {
+                method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ displayTime: duration })
+                }
             })
             .then(response => {
-                console.log(response);
                 if (response.ok) {
                     return response.json();
                 }
                 throw new Error('Network response was not ok');
             })
             .then(data => {
-                const price = data.data;
+                console.log('Fetched data:', data); // 여기서 파싱된 JSON 데이터를 출력
+                const price = data.data.itemPrice;
+                const item = data.data.itemPrice.itemIdx;
+                sessionStorage.setItem(item, itemIdx);
                 if (duration === '12') {
                     duration = '1년';
                 } else {

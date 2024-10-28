@@ -5,12 +5,15 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
             return;
         }
-
-        // 주문 정보 수집
-        const saveOrderDto = {
-            itemIdx: document.querySelector("#itemIndex").value
-        };
-
+        const item = sessionStorage.getItem(itemIdx);
+        if (item!==null){
+            alert("아이템인덱스가 없습니다.");
+        }else {
+            // 주문 정보 수집
+            const saveOrderDto = {
+                itemIdx: item
+            };
+        }
         let paymentResponse;
 
         // 주문 정보 저장 요청
