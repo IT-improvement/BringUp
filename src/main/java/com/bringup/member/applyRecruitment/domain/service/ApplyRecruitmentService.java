@@ -13,7 +13,7 @@ import com.bringup.member.applyRecruitment.domain.entity.ApplyRecruitmentEntity;
 import com.bringup.member.applyRecruitment.domain.enums.ApplicationType;
 import com.bringup.member.applyRecruitment.domain.repository.ApplyRecruitmentRepository;
 import com.bringup.member.applyRecruitment.dto.request.ApplyRecruitmentRequestDto;
-import com.bringup.member.applyRecruitment.dto.response.ApplyRecruitmentResponseDto;
+import com.bringup.member.applyRecruitment.dto.request.ApplyRecruitmentResponseDto;
 import com.bringup.member.applyRecruitment.exception.ApplyRecruitmentException;
 import com.bringup.member.recruitment.exception.RecruitmentException;
 import com.bringup.member.resume.domain.entity.CVEntity;
