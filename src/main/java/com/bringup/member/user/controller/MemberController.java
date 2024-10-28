@@ -40,7 +40,6 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 public class MemberController {
     private final JoinService joinService;
     private final UserLoginService userLoginService;
-    private final UserRepository userRepository;
     private final MemberService memberService;
     private final ErrorResponseHandler errorResponseHandler;
 
@@ -50,13 +49,19 @@ public class MemberController {
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, userName));
     }
 
-    @PutMapping("/mem")
-    public ResponseEntity<BfResponse<?>> updateMember(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam Map<String, String> requestBody){
-        memberService.updateMember(userDetails, requestBody);
-        return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "Member update successful")));
+    @PutMapping("/update")
+    public ResponseEntity<BfResponse<?>> updateMember(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody MemberUpdateDto dto){
+        try {
+            memberService.updateMember(userDetails, dto);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "Member update successful")));
+        }catch (MemberException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }catch (Exception e){
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @DeleteMapping("/mem")
+    @DeleteMapping("/delete")
     public ResponseEntity<BfResponse<?>> deleteMember(@AuthenticationPrincipal UserDetailsImpl userDetails){
         try {
             memberService.deleteMember(userDetails);
@@ -68,7 +73,7 @@ public class MemberController {
         }
     }
 
-    @GetMapping("/memberInfo/post")
+    @GetMapping("/info")
     public ResponseEntity<BfResponse<?>> getMemberInfo(@AuthenticationPrincipal UserDetailsImpl userDetails){
         try {
             UserEntity user = memberService.getMemberInfo(userDetails);
@@ -111,7 +116,6 @@ public class MemberController {
         }
     }
 
-
     @PostMapping("/checkId")
     public ResponseEntity<ResponseDto> checkId(@RequestBody Map<String, String> requestBody) {
         String userEmail = requestBody.get("userEmail");
@@ -123,8 +127,4 @@ public class MemberController {
 
         return ResponseEntity.ok(new ResponseDto(ResponseCode.SUCCESS, message));
     }
-
-
-
-
 }
