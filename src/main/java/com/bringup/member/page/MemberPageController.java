@@ -142,5 +142,11 @@ public class MemberPageController {
     @GetMapping("/letterWrite")
     public String letterWrite() {return "member/user/career/letterWrite";}
 
+    @GetMapping("/blogList")
+    public String blogList() {return "member/user/career/blogList";}
+
+    @GetMapping("/record")
+    public String recordList() {return "member/user/career/record";}
+
 
 }

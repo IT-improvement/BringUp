@@ -53,7 +53,7 @@
 
         .blog-item input {
             margin-right: 10px;
-            width: 45%;
+            width: 100%;
         }
 
         .blog-item button {
@@ -67,6 +67,8 @@
             margin-left: auto;
             margin-right: 0; /* 오른쪽 정렬 */
         }
+
+
     </style>
 
     <script>
@@ -76,7 +78,7 @@
             // 페이지 로드 시 기본 예시 추가 (수정 불가)
             $('#blogList').append(
                 `<div class="blog-item" id="blog-0">
-                    <input type="text" value="예시 블로그 제목" class="form-control" readonly>
+
                     <input type="text" value="https://example.com" class="form-control" readonly>
                     <button class="btn btn-danger btn-sm" onclick="removeBlog(0)">삭제</button>
                 </div>`
@@ -87,7 +89,7 @@
                 blogCount++;
                 const newBlog = $(`
                     <div class="blog-item" id="blog-${blogCount}">
-                        <input type="text" placeholder="블로그 제목" class="form-control">
+
                         <input type="text" placeholder="블로그 URL" class="form-control">
                         <button class="btn btn-danger btn-sm">삭제</button>
                     </div>

@@ -163,6 +163,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/m_reviews"),
                 antMatcher("/member/company"),
                 antMatcher("/page/admin/**"),
+                antMatcher("/member/join"),
 
                 antMatcher("/main/list"),
                 antMatcher("/member/memberProfile"),
@@ -178,9 +179,12 @@ public class SpringSecurityConfig {
                 antMatcher("/member/blog"),
                 antMatcher("/member/file"),
                 antMatcher("/member/letterWrite"),
-                antMatcher("/portfolio/**"),
+                antMatcher("/member/blogList"),
+                antMatcher("/member/record"),
+                /*antMatcher("/portfolio/**"),*/
 
 
+                antMatcher("/portfolio/blog/delete"),
 
                 antMatcher("/freelancer/**")
 
@@ -222,6 +226,13 @@ public class SpringSecurityConfig {
                 antMatcher("/member/interview/{reviewId}"),
                 antMatcher("/member/interview/delete/{reviewId}"),
                 antMatcher("/member/interview/iv_create"),
+
+                antMatcher("/portfolio/blog/list"),
+                antMatcher("/portfolio/blog/insert"),
+
+                antMatcher("/portfolio/letter/info"),
+                antMatcher("/portfolio/letter/insert"),
+
 
                 antMatcher("/member/reviewDetail/{reviewId}")
         );

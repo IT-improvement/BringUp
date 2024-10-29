@@ -24,7 +24,7 @@
                                 <a class="ms-nav-link ms-small-link" href="/member/notion"><i class="bi bi-journal-code"></i> Notion</a>
                             </li>
                             <li class="ms-nav-item">
-                                <a class="ms-nav-link ms-small-link" href="/member/blog"><i class="bi bi-file-earmark"></i> 블로그</a>
+                                <a class="ms-nav-link ms-small-link" href="/member/blogList"><i class="bi bi-file-earmark"></i> 블로그</a>
                             </li>
                             <li class="ms-nav-item">
                                 <a class="ms-nav-link ms-small-link" href="/member/file"><i class="bi bi-folder"></i> 파일</a>
@@ -37,7 +37,7 @@
                     <a class="ms-nav-link" href="/member/letter"><i class="bi bi-pencil-square"></i> 자소서</a>
                 </li>
                 <li class="ms-nav-item">
-                    <a class="ms-nav-link" href="/member/record"><i class="bi bi-briefcase"></i> 이력</a>
+                    <a class="ms-nav-link" href="/member/record"><i class="bi bi-pen"></i> 학력</a>
                 </li>
                 <li class="ms-nav-item">
                     <a class="ms-nav-link" href="/member/impl"><i class="bi bi-bar-chart"></i> 경력</a>
