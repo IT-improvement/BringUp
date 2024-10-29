@@ -19,7 +19,9 @@ public class BlogService {
     public ResponseEntity<? super BlogReadResponseDto> getBLogList(int userIndex){
         List<BlogEntity> list = null;
         try{
-            list = blogRepository.findByUserIndex(userIndex);
+            list = blogRepository.findByUserIndex (userIndex);
+            System.out.println("userIdx = " + userIndex);
+            System.out.printf("list : " + list);
         } catch (Exception e) {
             return ResponseDto.databaseError();
         }

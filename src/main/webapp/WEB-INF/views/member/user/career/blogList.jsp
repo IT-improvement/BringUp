@@ -9,11 +9,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Webestica.com">
     <meta name="description" content="Bootstrap 기반 뉴스, 매거진 및 블로그 테마">
+    <!-- Dark Mode -->
+    <script src="/resources/script/common/darkmode/darkmode.js"></script>
 
-    <!-- Favicon & Styles -->
+    <!-- Favicon -->
     <link rel="shortcut icon" href="/resources/style/common/images/favicon.ico">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Plugins CSS -->
     <link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/font-awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/apexcharts/css/apexcharts.css">
+    <link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/overlay-scrollbar/css/OverlayScrollbars.min.css">
+
+    <!-- Theme CSS -->
     <link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
+
+    <!-- Bootstrap JS -->
+    <script src="/resources/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
@@ -101,20 +119,16 @@
         $(document).ready(function() {
             const accessToken = localStorage.getItem("accessToken");
 
-            // 블로그 목록 가져오기
             fetchBlogList(accessToken);
 
-            // "추가 및 삭제" 버튼 클릭 시 모달 창 표시
             $('#addBlogBtn').click(function() {
                 $('#blogModal').show();
             });
 
-            // 모달 창 닫기
             $('#closeModal').click(function() {
                 $('#blogModal').hide();
             });
 
-            // URL 저장
             $('#saveBlogButton').click(function() {
                 const url = $('#blogUrl').val();
                 if (url) {
@@ -126,7 +140,6 @@
             });
         });
 
-        // 블로그 목록을 가져오는 함수
         function fetchBlogList(accessToken) {
             fetch("/portfolio/blog/list", {
                 method: "GET",
@@ -136,19 +149,18 @@
                 }
             })
                 .then(response => response.json())
-                .then(data => displayBlogList(data.list, accessToken))
+                .then(data => displayBlogList(data.list))
                 .catch(error => console.error("Error fetching blog list:", error));
         }
 
-        // 블로그 목록을 테이블에 표시하는 함수
-        function displayBlogList(blogs, accessToken) {
+        function displayBlogList(blogs) {
             const tbody = document.querySelector("tbody");
             tbody.innerHTML = "";
 
             if (!blogs || blogs.length === 0) {
                 const row = document.createElement("tr");
                 const cell = document.createElement("td");
-                cell.colSpan = 3;
+                cell.colSpan = 2;
                 cell.textContent = "블로그가 없습니다.";
                 row.appendChild(cell);
                 tbody.appendChild(row);
@@ -158,10 +170,6 @@
             blogs.forEach(blog => {
                 const row = document.createElement("tr");
 
-                const userCell = document.createElement("td");
-                userCell.textContent = blog.userIndex;
-                row.appendChild(userCell);
-
                 const urlCell = document.createElement("td");
                 const link = document.createElement("a");
                 link.href = blog.url;
@@ -170,13 +178,12 @@
                 urlCell.appendChild(link);
                 row.appendChild(urlCell);
 
-                // 삭제 버튼 추가
                 const deleteCell = document.createElement("td");
                 const deleteButton = document.createElement("button");
                 deleteButton.classList.add("delete-btn");
                 deleteButton.textContent = "삭제";
                 deleteButton.onclick = function() {
-                    deleteBlog(blog.blogIndex, accessToken);
+                    deleteBlog(blog.blogIndex);
                 };
                 deleteCell.appendChild(deleteButton);
                 row.appendChild(deleteCell);
@@ -185,7 +192,6 @@
             });
         }
 
-        // 새로운 블로그 URL을 추가하는 함수
         function saveBlogUrl(url, accessToken) {
             fetch("/portfolio/blog/insert", {
                 method: "POST",
@@ -199,7 +205,7 @@
                 .then(data => {
                     if (data.code === "SU") {
                         alert("블로그 URL이 성공적으로 추가되었습니다.");
-                        location.reload(); // 페이지 새로고침으로 목록 갱신
+                        location.reload();
                     } else {
                         alert("블로그 URL 추가 실패: " + data.message);
                     }
@@ -210,14 +216,12 @@
                 });
         }
 
-        // 블로그 URL 삭제 함수
-        function deleteBlog(blogIndex, accessToken) {
+        function deleteBlog(blogIndex) {
             if (!confirm("정말로 이 블로그 URL을 삭제하시겠습니까?")) return;
 
-            fetch("/portfolio/blog/delete?index=" + blogIndex, {
+            fetch(`/portfolio/blog/delete?index=` + blogIndex, {
                 method: "DELETE",
                 headers: {
-                    "Authorization": `Bearer ` + accessToken,
                     "Content-Type": "application/json"
                 }
             })
@@ -225,7 +229,7 @@
                 .then(data => {
                     if (data.code === "SU") {
                         alert("블로그 URL이 성공적으로 삭제되었습니다.");
-                        location.reload(); // 페이지 새로고침으로 목록 갱신
+                        location.reload();
                     } else {
                         alert("블로그 URL 삭제 실패: " + data.message);
                     }
@@ -260,7 +264,6 @@
                 <table>
                     <thead>
                     <tr>
-                        <th>유저</th>
                         <th>URL</th>
                         <th>삭제</th>
                     </tr>
