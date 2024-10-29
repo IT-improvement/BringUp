@@ -1,4 +1,4 @@
-package com.bringup.common.chatgpt;
+package com.bringup.common.chatgpt.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
