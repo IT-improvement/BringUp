@@ -139,7 +139,11 @@ public class PremiumAdService {
         } else if (availableDays == 2) {
             item = itemRepository.findByItemName(AdType + " - 2day");
         } else if (availableDays == 0) {
-            throw new CompanyException(NOT_FOUND_ITEM); // 가능한 날짜가 없을 때 예외 발생
+            return UsableDisplayResponseDto.builder()
+                    .nonDisplay(unavailableDates)
+                    .itemIdx(0)
+                    .build();
+//            throw new CompanyException(NOT_FOUND_ITEM); // 가능한 날짜가 없을 때 예외 발생
         } else {
             item = itemRepository.findByItemName(AdType); // 기본 가격을 사용할 경우
         }
