@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('paymentButton').addEventListener('click',function (){
-        const itemIdx = sessionStorage.getItem(itemIdx);
+        const itemIdx = sessionStorage.getItem("itemIdx");
         if (itemIdx === null){
             alert("아이템인덱스가 없습니다.");
         }else {
@@ -129,13 +129,17 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 console.log('응답 데이터:', data); // 응답 데이터 확인
                 const itemIdx = data.data ? data.data.itemIdx : null; // 데이터가 있는지 확인
-                
+                sessionStorage.setItem("itemIdx", itemIdx);
                 if (itemIdx === 0 || itemIdx === "0") {
                     if(confirm("해당 시간대에 광고 신청이 불가능합니다.\n다른 시간대를 선택하시겠습니까?")) {
                         document.getElementById('productSelect').value = '';
+                        document.getElementById('adType').textContent = '광고 유형: ';
+                        document.getElementById('paymentAmount').textContent = '결제 금액: ';
                     } else {
                         document.getElementById('productSelect').value = '';
                         document.getElementById('premiumDateRange').value = '';
+                        document.getElementById('adType').textContent = '광고 유형: ';
+                        document.getElementById('paymentAmount').textContent = '결제 금액: ';
                     }
                 }else{
                     document.getElementById('adType').textContent = '광고 유형: '+data.data.itemName;
