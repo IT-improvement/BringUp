@@ -3,7 +3,6 @@ package com.bringup.member.applyRecruitment.domain.repository;
 import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.member.applyRecruitment.domain.entity.ApplyRecruitmentEntity;
 import com.bringup.member.applyRecruitment.domain.enums.ApplicationType;
-import com.bringup.member.applyRecruitment.dto.response.ApplyRecruitmentResponseDto;
 import com.bringup.member.resume.domain.entity.CVEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -19,4 +18,6 @@ public interface ApplyRecruitmentRepository extends JpaRepository<ApplyRecruitme
     int countByRecruitmentIndexAndApplicationType(int recruitmentIndex, ApplicationType applicationType);
 
     List<ApplyRecruitmentEntity> findAllByCvIndexAndApplicationType(int cvIndex, ApplicationType applicationType);
+
+    List<ApplyRecruitmentEntity> findAllByCvIndex(int cvIndex);
 }
