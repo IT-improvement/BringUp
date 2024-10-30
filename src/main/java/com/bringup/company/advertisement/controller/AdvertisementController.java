@@ -140,7 +140,7 @@ public class AdvertisementController {
 
     //-------------메인 라인----------------------------------------------
 
-    @GetMapping("/main/available-dates")
+    @PostMapping("/main/available-dates")
     public ResponseEntity<BfResponse<?>> getAvailableDates(
             @RequestBody MainDateRequestDto dto){
         UsableDisplayResponseDto availableDates = mainAdService.getUnavailableDates(dto);
