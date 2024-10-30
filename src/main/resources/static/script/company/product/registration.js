@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // 공통: 공고 선택 동작
     const advertisementInputElement = document.getElementById('advertisementInput');
     const accessToken = localStorage.getItem('accessToken');
+    let startDate = '';
+    let endDate = '';
+    let displayTime = '';
     if (advertisementInputElement) {
         advertisementInputElement.addEventListener('click', function() {
             $('#advertisementModal').modal('show');
@@ -85,8 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
             locale: "ko",
             onChange: function(selectedDates, dateStr, instance) {
                 if (selectedDates.length === 1) {
-                    const startDate = selectedDates[0];
-                    const endDate = new Date(startDate);
+                    startDate = selectedDates[0];
+                    endDate = new Date(startDate);
                     endDate.setDate(startDate.getDate() + 2);
                     instance.setDate([startDate, endDate], true, { silent: true });
                     instance.close();
@@ -100,31 +103,63 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('productSelect').addEventListener('change', function(event) {
             document.getElementById('displayTime').textContent = `시간대: ${event.target.value}`;
-            if(event.target.value === '01:00~04:00') {
+            displayTime = event.target.value;
+            startDate = document.getElementById('premiumDateRange').value.split(' ~ ')[0];
+            endDate = document.getElementById('premiumDateRange').value.split(' ~ ')[1];
+            console.log(startDate+", "+endDate+", "+displayTime);
+
+            fetch("/com/advertisement/premium/available-times", {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    startDate: startDate,
+                    endDate: endDate,
+                    timeSlot: displayTime
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data.data);
+            })
+            .catch(error => {
+                console.error('Error fetching available times:', error);
+            });
+            if(displayTime === '01:00 ~ 04:00') {
                 document.getElementById('adType').textContent = '광고 유형: P3';
-            } else if(event.target.value === '04:00~07:00') {
+            } else if(displayTime === '04:00 ~ 07:00') {
                 document.getElementById('adType').textContent = '광고 유형: P1';
-            } else if(event.target.value === '07:00~10:00') {
+            } else if(displayTime === '07:00 ~ 10:00') {
                 document.getElementById('adType').textContent = '광고 유형: GP';
-            } else if(event.target.value === '10:00~13:00') {
+            } else if(displayTime === '10:00 ~ 13:00') {
                 document.getElementById('adType').textContent = '광고 유형: P2';
-            } else if(event.target.value === '13:00~16:00') {
+            } else if(displayTime === '13:00 ~ 16:00') {
                 document.getElementById('adType').textContent = '광고 유형: P1';
-            } else if(event.target.value === '16:00~19:00') {
+            } else if(displayTime === '16:00 ~ 19:00') {
                 document.getElementById('adType').textContent = '광고 유형: GP';
-            } else if(event.target.value === '19:00~22:00') {
+            } else if(displayTime === '19:00 ~ 22:00') {
                 document.getElementById('adType').textContent = '광고 유형: P1';
-            } else if(event.target.value === '22:00~01:00') {
+            } else if(displayTime === '22:00 ~ 01:00') {
                 document.getElementById('adType').textContent = '광고 유형: P3';
             } else {
                 document.getElementById('adType').textContent = '광고 유형:';
             }
+            
         });
     }
 
     // 메인 상품 신청 페이지
     if (productName.includes('메인')) {
         const imageUploadElement = document.getElementById('imageUpload');
+        let startDate = '';
+        let endDate = '';
         if (imageUploadElement) {
             imageUploadElement.addEventListener('change', function(event) {
                 const file = event.target.files[0];
@@ -160,8 +195,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 locale: "ko",
                 onChange: function(selectedDates, dateStr, instance) {
                     if (selectedDates.length === 1) {
-                        const startDate = selectedDates[0];
-                        const endDate = new Date(startDate);
+                        startDate = selectedDates[0];
+                        endDate = new Date(startDate);
                         endDate.setDate(startDate.getDate() + durationDays - 1);
                         instance.setDate([startDate, endDate], true);
                         instance.close();
@@ -183,6 +218,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('mainDateRange').addEventListener('change', function(event) {
             document.getElementById('adDate').textContent = `광고 날짜: ${event.target.value}`;
+            const mainDateValue = document.getElementById('mainDateRange').value;
+            if (mainDateValue.includes(" ~ ")) {
+                startDate = mainDateValue.split(" ~ ")[0];
+                endDate = mainDateValue.split(" ~ ")[1];
+            } else {
+                startDate = mainDateValue;
+                endDate = mainDateValue;
+            }
+            console.log(startDate+", ",endDate);
+            fetch("/com/advertisement/main/available-dates", {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    startDate: startDate,
+                    endDate: endDate,
+                    timeSlot: displayTime
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('서버 응답:', data);
+                const itemName = data.itemName;
+                document.getElementById('adType').textContent = `광고 유형: ${itemName}`;
+            })
+            .catch(error => {
+                console.error('에러 발생:', error);
+            });
         });
     }
 
