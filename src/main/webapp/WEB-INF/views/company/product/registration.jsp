@@ -126,14 +126,14 @@
                         <label for="productSelect" class="form-label">프리미엄 광고 시간 선택</label>
                         <select class="form-select" id="productSelect" name="displayTime">
                             <option value="">시간 선택</option>
-                            <option value="22:00~01:00">22:00~01:00</option>
-                            <option value="01:00~04:00">01:00~04:00</option>
-                            <option value="04:00~07:00">04:00~07:00</option>
-                            <option value="07:00~10:00">07:00~10:00</option>
-                            <option value="10:00~13:00">10:00~13:00</option>
-                            <option value="13:00~16:00">13:00~16:00</option>
-                            <option value="16:00~19:00">16:00~19:00</option>
-                            <option value="19:00~22:00">19:00~22:00</option>
+                            <option value="22:00 ~ 01:00">22:00 ~ 01:00</option>
+                            <option value="01:00 ~ 04:00">01:00 ~ 04:00</option>
+                            <option value="04:00 ~ 07:00">04:00 ~ 07:00</option>
+                            <option value="07:00 ~ 10:00">07:00 ~ 10:00</option>
+                            <option value="10:00 ~ 13:00">10:00 ~ 13:00</option>
+                            <option value="13:00 ~ 16:00">13:00 ~ 16:00</option>
+                            <option value="16:00 ~ 19:00">16:00 ~ 19:00</option>
+                            <option value="19:00 ~ 22:00">19:00 ~ 22:00</option>
                         </select>
                     </div>
                     
