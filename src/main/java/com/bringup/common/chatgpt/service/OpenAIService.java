@@ -86,22 +86,28 @@ public class OpenAIService {
         return "다음은 자소서 질문에 대한 사용자의 응답입니다. " +
                 "질문: '학교 생활이나 사회경험 중 가장 어려웠거나 힘들었던 경험은 무엇이며, " +
                 "그 문제를 해결하기 위해 노력한 점이나 성공적으로 변화를 이루었던 경험을 작성해 주십시오.' " +
-                "사용자의 답변을 더 풍부하고 논리적이며 설득력 있게 보완해 주세요. " +
-                "비속어는 적절한 대체어로 수정해주세요. " +
-                "800자 이내로 서술해 주세요. " +
-                "응답은 한글로 작성해 주세요.\n\n" +
+                "사용자의 답변을 더 풍부하고 논리적이며 설득력 있게 보완해. " +
+                "두괄식으로 작성해. " +
+                "비속어는 적절한 대체어로 수정해. " +
+                "800자 이내로 서술해. " +
+                "응답은 한글로 작성해.\n\n" +
                 "사용자 응답: \"" + userContent + "\"\n\n" +
                 "개선된 응답:";
     }
 
     // 2번 질문에 대한 프롬프트 생성
     private String createPromptForQuestion2(String userContent) {
-        return "The following is a user's answer to a self-introduction question for a job application. " +
-                "The question is: 'What word or phrase best describes your personal values, and what " +
-                "experiences or individuals have most influenced these values?' " +
-                "Make the answer more compelling and insightful.\n\n" +
-                "User's answer: \"" + userContent + "\"\n\n" +
-                "Please rewrite the answer, providing a clearer and stronger explanation.";
+        return "다음은 자소서 질문에 대한 사용자의 응답입니다.. " +
+                "질문 2. 삶에 대한 본인의 가치관을 가장 잘 표현한 단어나 문장은 무엇이며 " +
+                "그 가치관이 형성되는데 가장 큰 영향을 끼친 일이나 인물이 있다면 설명해주십시오." +
+                "사용자의 답변에서 가치관을 표현한 단어나 문장이 없다면 **반드시** 생성해서 글의 초반에 넣어. " +
+                "두괄식으로 작성해. " +
+                "비속어는 적절한 대체어로 수정해." +
+                "800자 이내로 서술해. " +
+                "사용자가 작성한 글에서 중요한 키워드를 강조하지만, 중요한 키워드를 강조할 때는 **절대** 특수 문자나 볼드체, 기호를 사용하지 마. " +
+                "응답은 한글로 작성하는데 존댓말을 사용해.\n\n" +
+                "사용자 응답: \"" + userContent + "\"\n\n" +
+                "개선된 응답:";
     }
 
     // 3번 질문에 대한 프롬프트 생성
