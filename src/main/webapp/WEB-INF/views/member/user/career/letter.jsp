@@ -120,6 +120,22 @@
 		</main>
 	</div>
 </div>
+<script>
+	$(document).ready(function() {
+		const accessToken = localStorage.getItem("accessToken");
+		fetchSaveLetter(accessToken);
+		function fetchSaveLetter(accessToken) {
+			fetch("/portfolio/letter/insert", {
+				method: "POST",
+				headers: {
+					"Authorization": `Bearer ` + accessToken,
+					"Content-Type": "application/json"
+				}
+			})
+			alert("문서가 완전히 로드되었습니다!");
+		}
+	});
+</script>
 
 <!-- Footer -->
 <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
