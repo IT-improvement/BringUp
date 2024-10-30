@@ -5,15 +5,18 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
             return;
         }
-        const item = sessionStorage.getItem(itemIdx);
-        if (item!==null){
+
+        const item = sessionStorage.getItem("itemIdx");
+        if (item === null) {
             alert("아이템인덱스가 없습니다.");
-        }else {
-            // 주문 정보 수집
-            const saveOrderDto = {
-                itemIdx: item
-            };
+            return;
         }
+
+        // 주문 정보 수집
+        const saveOrderDto = {
+            "itemIdx": item
+        };
+
         let paymentResponse;
 
         // 주문 정보 저장 요청
@@ -25,22 +28,22 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify(saveOrderDto),
         })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.data && data.data.orderIndex) {
-                    // 성공적으로 DB에 저장되었다면 PaymentResponseDto 데이터를 저장
-                    paymentResponse = data.data;
-                } else {
-                    console.error(data.message);
-                    alert("주문 정보 저장에 실패했습니다. 다시 시도해주세요.");
-                    return;
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-                alert("주문 정보 저장 중 오류가 발생했습니다. 다시 시도해주세요.");
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.data && data.data.orderIndex) {
+                // 성공적으로 DB에 저장되었다면 PaymentResponseDto 데이터를 저장
+                paymentResponse = data.data;
+            } else {
+                console.error(data.message);
+                alert("주문 정보 저장에 실패했습니다. 다시 시도해주세요.");
                 return;
-            });
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("주문 정보 저장 중 오류가 발생했습니다. 다시 시도해주세요.");
+            return;
+        });
 
         if (!paymentResponse) {
             // 주문 정보가 제대로 저장되지 않았을 경우 종료
@@ -101,20 +104,20 @@ document.addEventListener("DOMContentLoaded", function () {
                         },
                         body: JSON.stringify(dto),
                     })
-                        .then((res) => res.json())
-                        .then((result) => {
-                            if (result.code === 0) {
-                                Bootpay.destroy();
-                                alert(result.message);
-                            } else {
-                                alert(result.message);
-                            }
-                            location.replace("/");
-                        })
-                        .catch((err) => {
-                            console.error(err);
-                            alert("결제 승인 중 오류가 발생했습니다. 다시 시도해주세요.");
-                        });
+                    .then((res) => res.json())
+                    .then((result) => {
+                        if (result.code === 0) {
+                            Bootpay.destroy();
+                            alert(result.message);
+                        } else {
+                            alert(result.message);
+                        }
+                        location.replace("/");
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                        alert("결제 승인 중 오류가 발생했습니다. 다시 시도해주세요.");
+                    });
                     break;
                 case "done":
                     // 결제 완료 처리

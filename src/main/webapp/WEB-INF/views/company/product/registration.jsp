@@ -55,6 +55,8 @@
     <script src="https://js.bootpay.co.kr/bootpay-5.0.1.min.js" type="application/javascript"></script>
     <script src="/resources/script/common/Pay/payment.js"></script>
 
+    <script src="/resources/script/common/Pay/payment.js"></script>
+
     <style>
         .list-group-item:hover {
             background-color: #f0f0f0; /* 마우스 오버 시 배경색 변경 */
