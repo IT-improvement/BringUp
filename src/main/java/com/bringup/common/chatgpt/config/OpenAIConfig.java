@@ -21,7 +21,7 @@ public class OpenAIConfig {
     @Value("${openai.model}")
     private String model;
 
-    private final int maxTokens = 300;
+    private final int maxTokens = 1000;
 
     private final double temperature = 0.7; // 0부터 1까지 창의력
 
