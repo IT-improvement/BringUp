@@ -127,31 +127,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(data => {
-                console.log(data.data);
+                console.log('응답 데이터:', data); // 응답 데이터 확인
+                const itemIdx = data.data ? data.data.itemIdx : null; // 데이터가 있는지 확인
+                
+                if (itemIdx === 0 || itemIdx === "0") {
+                    if(confirm("해당 시간대에 광고 신청이 불가능합니다.\n다른 시간대를 선택하시겠습니까?")) {
+                        document.getElementById('productSelect').value = '';
+                    } else {
+                        document.getElementById('productSelect').value = '';
+                        document.getElementById('premiumDateRange').value = '';
+                    }
+                }else{
+                    document.getElementById('adType').textContent = '광고 유형: '+data.data.itemName;
+                    document.getElementById('paymentAmount').textContent = '결제 금액: '+data.data.itemPrice+'원';
+                }
             })
             .catch(error => {
                 console.error('Error fetching available times:', error);
             });
-            if(displayTime === '01:00 ~ 04:00') {
-                document.getElementById('adType').textContent = '광고 유형: P3';
-            } else if(displayTime === '04:00 ~ 07:00') {
-                document.getElementById('adType').textContent = '광고 유형: P1';
-            } else if(displayTime === '07:00 ~ 10:00') {
-                document.getElementById('adType').textContent = '광고 유형: GP';
-            } else if(displayTime === '10:00 ~ 13:00') {
-                document.getElementById('adType').textContent = '광고 유형: P2';
-            } else if(displayTime === '13:00 ~ 16:00') {
-                document.getElementById('adType').textContent = '광고 유형: P1';
-            } else if(displayTime === '16:00 ~ 19:00') {
-                document.getElementById('adType').textContent = '광고 유형: GP';
-            } else if(displayTime === '19:00 ~ 22:00') {
-                document.getElementById('adType').textContent = '광고 유형: P1';
-            } else if(displayTime === '22:00 ~ 01:00') {
-                document.getElementById('adType').textContent = '광고 유형: P3';
-            } else {
-                document.getElementById('adType').textContent = '광고 유형:';
-            }
-            
         });
     }
 
