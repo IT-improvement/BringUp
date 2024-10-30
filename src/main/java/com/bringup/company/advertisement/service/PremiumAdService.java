@@ -105,50 +105,52 @@ public class PremiumAdService {
     public UsableDisplayResponseDto getAdvertisementData(ChoicedateRequestDto choicedatedto) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        // String으로 받은 날짜를 LocalDate로 변환
+        // 날짜 범위를 미리 파싱
         LocalDate startDate = LocalDate.parse(choicedatedto.getStartDate(), formatter);
         LocalDate endDate = LocalDate.parse(choicedatedto.getEndDate(), formatter);
-        String requestedTimeSlot = choicedatedto.getTimeSlot(); // 요청된 시간대
+        String requestedTimeSlot = choicedatedto.getTimeSlot();
 
-        String AdType = findAdTypeByTimeSlot(requestedTimeSlot);
+        String adType = findAdTypeByTimeSlot(requestedTimeSlot);
 
-        // 예약 불가능한 날짜를 저장할 Set
+        // 범위 내 모든 날짜에 대해 광고 데이터를 한 번에 조회
         Set<LocalDate> unavailableDates = new HashSet<>();
 
+        // 각 날짜에 대해 displayTime에 포함 여부 확인
         for (LocalDate currentDate = startDate; !currentDate.isAfter(endDate); currentDate = currentDate.plusDays(1)) {
             String formattedDate = currentDate.format(formatter);
 
-            // 해당 날짜와 시간대에 대한 광고가 있는지 확인
+            // 해당 날짜를 포함하는 광고가 있는지 확인
             List<Advertisement> adsForDate = advertisementRepository.findAllByDisplayContaining(formattedDate);
             boolean isUnavailable = adsForDate.stream()
                     .anyMatch(ad -> premiumAdvertisementRepository.findByAdvertisement(ad).stream()
                             .anyMatch(premiumAd -> premiumAd.getTimeSlot().equals(requestedTimeSlot)));
 
-            // 해당 시간대에 예약이 이미 되어 있다면 날짜를 예약 불가능 목록에 추가
+            // 예약이 되어 있다면 날짜를 예약 불가능 목록에 추가
             if (isUnavailable) {
                 unavailableDates.add(currentDate);
             }
         }
 
+        // 예약 불가능한 날짜 수 계산 및 가용 일수 확인
         int nonDisplayCount = unavailableDates.size();
         int availableDays = 3 - nonDisplayCount;
 
         Optional<Item> item;
         if (availableDays == 1) {
-            item = itemRepository.findByItemName(AdType + " - 1day");
+            item = itemRepository.findByItemName(adType + " - 1day");
         } else if (availableDays == 2) {
-            item = itemRepository.findByItemName(AdType + " - 2day");
+            item = itemRepository.findByItemName(adType + " - 2day");
         } else if (availableDays == 0) {
             return UsableDisplayResponseDto.builder()
                     .nonDisplay(unavailableDates)
                     .itemIdx(0)
                     .build();
-//            throw new CompanyException(NOT_FOUND_ITEM); // 가능한 날짜가 없을 때 예외 발생
         } else {
-            item = itemRepository.findByItemName(AdType); // 기본 가격을 사용할 경우
+            item = itemRepository.findByItemName(adType);
         }
+
         return UsableDisplayResponseDto.builder()
-                .nonDisplay(unavailableDates) // 예약 불가능한 날짜의 수
+                .nonDisplay(unavailableDates)
                 .itemIdx(item.get().getItemIndex())
                 .itemName(item.get().getItemName())
                 .itemPrice(item.get().getPrice())

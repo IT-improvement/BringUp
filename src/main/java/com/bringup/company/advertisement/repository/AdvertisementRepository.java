@@ -27,8 +27,9 @@ public interface AdvertisementRepository extends JpaRepository<Advertisement, In
             @Param("endDate") LocalDate endDate
     );
 
-    List<Advertisement> findAllByDisplayContaining(String date);
-
 
     List<Advertisement> findAllByRecruitmentCompany(Company company);
+
+    @Query("SELECT a FROM Advertisement a WHERE a.display LIKE %:date%")
+    List<Advertisement> findAllByDisplayContaining(@Param("date") String date);
 }
