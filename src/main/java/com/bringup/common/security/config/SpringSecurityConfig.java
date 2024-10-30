@@ -215,6 +215,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/m_create"),
                 antMatcher("/admin/**"),
                 antMatcher("/mem/**"),
+                antMatcher(GET, "/member/applyList"),
 
                 antMatcher("/member/interview/{reviewId}"),
                 antMatcher("/member/interview/delete/{reviewId}"),

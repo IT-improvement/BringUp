@@ -1,16 +1,13 @@
 package com.bringup.member.applyRecruitment.controller;
 
 import com.bringup.common.enums.GlobalErrorCode;
-import com.bringup.common.enums.GlobalSuccessCode;
 import com.bringup.common.event.exception.ErrorResponseHandler;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
-import com.bringup.member.applyRecruitment.domain.entity.ApplyRecruitmentEntity;
 import com.bringup.member.applyRecruitment.domain.service.ApplyRecruitmentService;
 import com.bringup.member.applyRecruitment.dto.request.ApplyRecruitmentRequestDto;
-import com.bringup.member.applyRecruitment.dto.response.ApplyRecruitmentResponseDto;
+import com.bringup.member.applyRecruitment.dto.request.ApplyRecruitmentResponseDto;
 import com.bringup.member.applyRecruitment.exception.ApplyRecruitmentException;
-import com.sun.net.httpserver.Authenticator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +30,17 @@ public class ApplyRecruitmentController {
             applyRecruitmentService.setApplyRecruitment(userDetails, dto);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, "add recruitment successfully"));
         }catch (ApplyRecruitmentException e){
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/member/applyList")
+    public ResponseEntity<BfResponse<?>> getApplyCVList(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        try {
+            List<ApplyRecruitmentResponseDto> applyList = applyRecruitmentService.getApplyCVList(userDetails);
+            return ResponseEntity.ok(new BfResponse<>(applyList));
+        }
+        catch (ApplyRecruitmentException e){
             return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
         }
     }

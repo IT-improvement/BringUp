@@ -27,6 +27,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,5 +63,36 @@ public class ApplyRecruitmentService {
 
         applyRecruitmentRepository.save(applyRecruitment);
     }
-    
+
+    @Transactional
+    public List<ApplyRecruitmentResponseDto> getApplyCVList(UserDetailsImpl userDetails){
+        List<CVEntity> cvList = cvRepository.findAllByUserIndex(userDetails.getId());
+
+        if (cvList.isEmpty()){
+            throw new ApplyRecruitmentException(NOT_FOUND_MEMBER_CV);
+        }
+
+        List<ApplyRecruitmentResponseDto> applyList = new ArrayList<>();
+
+        for (CVEntity cv : cvList){
+            List<ApplyRecruitmentEntity> applyRecruitments = applyRecruitmentRepository.findAllByCvIndex(cv.getCvIndex());
+            for (ApplyRecruitmentEntity applyRecruitment : applyRecruitments){
+                if (applyRecruitment.getApplicationType() != ApplicationType.FREELANCER){
+                    ApplyRecruitmentResponseDto dto = applyDto(applyRecruitment);
+                    applyList.add(dto);
+                }
+            }
+        }
+        return applyList;
+    }
+
+    private ApplyRecruitmentResponseDto applyDto(ApplyRecruitmentEntity applyRecruitment){
+        return ApplyRecruitmentResponseDto.builder()
+                .applyCVIndex(applyRecruitment.getApplyCVIndex())
+                .recruitmentIndex(applyRecruitment.getRecruitmentIndex())
+                .applicationType(applyRecruitment.getApplicationType())
+                .status(applyRecruitment.getStatus())
+                .applyCVDate(applyRecruitment.getApplyCVDate())
+                .build();
+    }
 }
