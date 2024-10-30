@@ -112,11 +112,12 @@ public class OpenAIService {
 
     // 3번 질문에 대한 프롬프트 생성
     private String createPromptForQuestion3(String userContent) {
-        return "The following is a user's answer to a self-introduction question for a job application. " +
-                "The question is: 'Describe your skills, knowledge, experience, and passion related to the field " +
-                "you are applying for. Mention any relevant projects, competitions, or research work.' " +
-                "Make the answer more compelling and persuasive.\n\n" +
-                "User's answer: \"" + userContent + "\"\n\n" +
-                "Please rewrite the answer to better highlight your qualifications and enthusiasm.";
+        return "다음은 자소서 질문에 대한 사용자의 응답입니다. " +
+                "질문 3. 지원한 분야와 관련된 본인의 역량(지식, 기술, 경험 등)과 열정, 노력(프로젝트, 공모전, 대외활동, 논문 등)에 대해 설명해 주십시오. " +
+                "사용자의 답변을 더 구체적이고 논리적으로 알맞게 보완해 주세요. " +
+                "800자 이내로 서술하며, 응답은 한글로 작성하고 존댓말을 사용해 주세요. " +
+                "특수 문자나 볼드체는 사용하지 말고, 중요한 키워드를 자연스럽게 강조해 주세요.\n\n" +
+                "사용자 응답: \"" + userContent + "\"\n\n" +
+                "개선된 응답:";
     }
 }
