@@ -28,4 +28,9 @@ public class SchoolController {
         int userCode = userDetails.getId();
         return schoolService.insertOrEditSchool(userCode, schoolRequestDto);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<? super SchoolResponseDto> deleteSchool(int schoolIndex){
+        return schoolService.deleteSchool(schoolIndex);
+    }
 }

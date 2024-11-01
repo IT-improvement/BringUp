@@ -71,4 +71,9 @@ public class SchoolService {
         }
         return SchoolResponseDto.success();
     }
+
+    public ResponseEntity<? super SchoolResponseDto> deleteSchool(int schoolIndex){
+        schoolRepository.deleteById(schoolIndex);
+        return SchoolResponseDto.success();
+    }
 }
