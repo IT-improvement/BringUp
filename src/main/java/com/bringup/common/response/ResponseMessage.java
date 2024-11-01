@@ -21,7 +21,7 @@ public interface ResponseMessage {
     String NOT_EXISTED_LETTER="NOT_EXISTED_LETTER";
     String NOT_EXISTED_CAREER="NOT_EXISTED_CAREER";
     String EXISTED_CAREER = "Existed career";
-
+    String EXISTED_AWARD = "Existed award";
     // HTTP Status 401
     String SIGN_IN_FAIL = "Login Inforam.";
     String AUTHORIZATION_FAILED = "Authorization Failed.";
