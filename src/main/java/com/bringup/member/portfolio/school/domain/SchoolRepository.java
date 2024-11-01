@@ -9,4 +9,6 @@ import java.util.List;
 public interface SchoolRepository extends JpaRepository<SchoolEntity, Integer> {
 
     List<SchoolEntity> findByUserIndex(int userIndex);
+    boolean existsByUserIndexAndType(int userIndex, String type);
+    SchoolEntity findByUserIndexAndType(int userIndex, String type);
 }
