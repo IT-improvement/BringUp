@@ -1,5 +1,6 @@
 package com.bringup.member.portfolio.award.domain;
 
+import com.bringup.member.portfolio.award.dto.AwardRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,4 +24,12 @@ public class AwardEntity {
     private String organization;
     private Date awarDate;
     private String details;
+
+    public AwardEntity(int userIndex, AwardRequestDto awardRequestDto) {
+        this.userIndex = userIndex;
+        this.title = awardRequestDto.getTitle();
+        this.organization = awardRequestDto.getOrganization();
+        this.awarDate = awardRequestDto.getAwarDate();
+        this.details = awardRequestDto.getDetails();
+    }
 }
