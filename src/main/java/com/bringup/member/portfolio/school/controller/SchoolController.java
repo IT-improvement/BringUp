@@ -29,8 +29,9 @@ public class SchoolController {
         return schoolService.insertOrEditSchool(userCode, schoolRequestDto);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<? super SchoolResponseDto> deleteSchool(int schoolIndex){
-        return schoolService.deleteSchool(schoolIndex);
+    @DeleteMapping("/delete/{index}")
+    public ResponseEntity<? super SchoolResponseDto> deleteSchool(@PathVariable("index") String schoolIndex){
+        int schoolId = Integer.parseInt(schoolIndex);
+        return schoolService.deleteSchool(schoolId);
     }
 }
