@@ -19,6 +19,7 @@ public interface ResponseCode {
     String NOT_EXISTED_LETTER="NEL";
     String NOT_EXISTED_CAREER="NXC";
     String EXISTED_CAREER="XC";
+    String EXISTED_AWARD="EA";
 
     String SPARE_REPORT_ALREADY_EXIST = "SR";
     String REPORT_ALREADY_FULL = "RF";
