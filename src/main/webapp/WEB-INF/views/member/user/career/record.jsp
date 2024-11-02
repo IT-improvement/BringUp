@@ -4,28 +4,27 @@
 <head>
     <title>BringUp</title>
 
-    <!-- 메타 태그 -->
+    <!-- 메타 태그 및 스타일 -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Webestica.com">
     <meta name="description" content="Bootstrap 기반 뉴스, 매거진 및 블로그 테마">
-    <!-- 다크 모드 -->
     <script src="/resources/script/common/darkmode/darkmode.js"></script>
 
-    <!-- 파비콘 -->
+    <!-- Favicon -->
     <link rel="shortcut icon" href="/resources/style/common/images/favicon.ico">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <!-- 플러그인 CSS -->
+    <!-- Plugins CSS -->
     <link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/font-awesome/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/apexcharts/css/apexcharts.css">
     <link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/overlay-scrollbar/css/OverlayScrollbars.min.css">
 
-    <!-- 테마 CSS -->
+    <!-- Theme CSS -->
     <link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
 
     <!-- Bootstrap JS -->
@@ -33,12 +32,10 @@
 
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
     <style>
-        /* 카드에 그림자 추가 */
-        .card {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
+        .card { box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1); border-radius: 8px; }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -67,6 +64,7 @@
                                 </select>
                             </div>
                         </div>
+                        <input type="hidden" id="educationType" name="type" value="">
                         <div id="fieldsContainer">
                             <!-- 학력에 따라 동적으로 변경되는 필드들이 여기에 추가됩니다 -->
                         </div>
@@ -86,11 +84,13 @@
     function updateFields() {
         const level = document.getElementById('educationLevel').value;
         const container = document.getElementById('fieldsContainer');
+        const typeField = document.getElementById('educationType');
         container.innerHTML = ''; // 기존 필드 초기화
 
         let fieldsHTML = '';
 
         if (level === 'highSchool') {
+            typeField.value = "고등";
             fieldsHTML += `
                 <div class="row mb-3">
                     <div class="col-md-6 mb-3">
@@ -102,20 +102,42 @@
                         <input type="text" class="form-control" id="schoolLocation" placeholder="고등학교 위치" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="admissionDate" class="form-label">입학 년월</label>
-                        <input type="month" class="form-control" id="admissionDate" required>
+                        <label for="admissionDate" class="form-label">입학 날짜</label>
+                        <input type="date" class="form-control" id="admissionDate" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="graduationDate" class="form-label">졸업 년월</label>
-                        <input type="month" class="form-control" id="graduationDate" required>
+                        <label for="graduationDate" class="form-label">졸업 날짜</label>
+                        <input type="date" class="form-control" id="graduationDate" required>
                     </div>
                 </div>`;
-        } else if (level === 'university' || level === 'majorUniversity') {
+        } else if (level === 'majorUniversity') {
+            typeField.value = "전문";
             fieldsHTML += `
                 <div class="row mb-3">
                     <div class="col-md-6 mb-3">
                         <label for="universityName" class="form-label">학교명</label>
-                        <input type="text" class="form-control" id="universityName" placeholder="대학교 이름" required>
+                        <input type="text" class="form-control" id="schoolName" placeholder="전문대 이름" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="universityLocation" class="form-label">소재지</label>
+                        <input type="text" class="form-control" id="universityLocation" placeholder="전문대 위치" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="admissionDate" class="form-label">입학 날짜</label>
+                        <input type="date" class="form-control" id="admissionDate" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="graduationDate" class="form-label">졸업 날짜</label>
+                        <input type="date" class="form-control" id="graduationDate">
+                    </div>
+                </div>`;
+        } else if (level === 'university') {
+            typeField.value = "학사";
+            fieldsHTML += `
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3">
+                        <label for="universityName" class="form-label">학교명</label>
+                        <input type="text" class="form-control" id="schoolName" placeholder="대학교 이름" required>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="universityLocation" class="form-label">소재지</label>
@@ -129,15 +151,13 @@
                         <label for="major" class="form-label">전공</label>
                         <input type="text" class="form-control" id="major" placeholder="전공명" required>
                     </div>
-                </div>
-                <div class="row mb-3">
                     <div class="col-md-6 mb-3">
-                        <label for="admissionDate" class="form-label">입학 년월</label>
-                        <input type="month" class="form-control" id="admissionDate" required>
+                        <label for="admissionDate" class="form-label">입학 날짜</label>
+                        <input type="date" class="form-control" id="admissionDate" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="graduationDate" class="form-label">졸업 년월</label>
-                        <input type="month" class="form-control" id="graduationDate">
+                        <label for="graduationDate" class="form-label">졸업 날짜</label>
+                        <input type="date" class="form-control" id="graduationDate">
                     </div>
                 </div>
                 <div id="dynamicFields" class="row mb-3"></div>
@@ -149,25 +169,24 @@
                     </div>
                 </div>`;
         } else if (level === 'graduate') {
+            typeField.value = "석사";
             fieldsHTML += `
                 <div class="row mb-3">
                     <div class="col-md-6 mb-3">
                         <label for="graduateSchoolName" class="form-label">학교명</label>
-                        <input type="text" class="form-control" id="graduateSchoolName" placeholder="대학원 이름" required>
+                        <input type="text" class="form-control" id="schoolName" placeholder="대학원 이름" required>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="graduateMajor" class="form-label">전공</label>
                         <input type="text" class="form-control" id="graduateMajor" placeholder="전공명" required>
                     </div>
-                </div>
-                <div class="row mb-3">
                     <div class="col-md-6 mb-3">
-                        <label for="graduateAdmissionDate" class="form-label">입학 년월</label>
-                        <input type="month" class="form-control" id="graduateAdmissionDate" required>
+                        <label for="graduateAdmissionDate" class="form-label">입학 날짜</label>
+                        <input type="date" class="form-control" id="graduateAdmissionDate" required>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="graduateGraduationDate" class="form-label">졸업 년월</label>
-                        <input type="month" class="form-control" id="graduateGraduationDate">
+                        <label for="graduateGraduationDate" class="form-label">졸업 날짜</label>
+                        <input type="date" class="form-control" id="graduateGraduationDate">
                     </div>
                 </div>`;
         }
@@ -196,7 +215,7 @@
                 case '학점':
                     inputHTML = `
                         <div class="d-flex">
-                            <input type="text" class="form-control me-2" placeholder="학점 입력" required>
+                            <input type="text" class="form-control me-2" placeholder="학점 입력" required id="maxGrade">
                             <select class="form-select" required>
                                 <option value="">기준학점</option>
                                 <option value="4.0">4.0</option>
@@ -219,20 +238,65 @@
                             <option value="야간">야간</option>
                         </select>`;
                     break;
-
             }
 
             div.innerHTML = `<label class="form-label">${'${fieldName}'}</label>${'${inputHTML}'}`;
             dynamicFields.appendChild(div);
 
-            button.innerHTML = `- ${'${fieldName}'} `;
+            button.innerHTML = `- ${'${fieldName}'}`;
             button.classList.remove('btn-outline-primary');
             button.classList.add('btn-outline-danger');
         }
     }
+
+    function submitEducationForm() {
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken) {
+            alert("로그인이 필요합니다.");
+            window.location.href = "/login";
+            return;
+        }
+
+        const data = {
+            type: document.getElementById('educationType').value,
+            schoolName: document.getElementById('schoolName') ? document.getElementById('schoolName').value : null,
+            location: document.getElementById('schoolLocation') ? document.getElementById('schoolLocation').value :
+                document.getElementById('universityLocation') ? document.getElementById('universityLocation').value : null,
+            startDate: document.getElementById('admissionDate') ? document.getElementById('admissionDate').value : null,
+            endDate: document.getElementById('graduationDate') ? document.getElementById('graduationDate').value : null,
+            department: document.getElementById('department') ? document.getElementById('department').value : null,
+            major: document.getElementById('major') ? document.getElementById('major').value :
+                document.getElementById('graduateMajor') ? document.getElementById('graduateMajor').value : null,
+            grade: document.getElementById('grade') ? document.getElementById('grade').value : null,
+            maxGrade: document.getElementById('maxGrade') ? document.getElementById('maxGrade').value : null
+        };
+
+        fetch("/school/insert", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ` + accessToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("학력 정보가 저장되었습니다.");
+                    location.reload();
+                } else {
+                    alert("학력 정보 저장 실패. 다시 시도해 주세요.");
+                }
+            })
+            .catch(error => console.error("Error:", error));
+    }
+
+    document.getElementById('educationForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        submitEducationForm();
+    });
 </script>
 
-<!-- 푸터 -->
 <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
 </body>
 </html>

@@ -135,7 +135,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/**"),
 */
                 antMatcher("/ws/**"),
-                antMatcher("/github/**"),// 정적 리소스
+              /*  antMatcher("/github/**"),// 정적 리소스*/
                 antMatcher("/member/potofolio"),
                 //antMatcher("/member/**"),
                 antMatcher("/member/letter"),//이력서
@@ -232,6 +232,9 @@ public class SpringSecurityConfig {
 
                 antMatcher("/portfolio/letter/info"),
                 antMatcher("/portfolio/letter/insert"),
+
+                antMatcher("/github/**"),
+                antMatcher("/school/**"),
 
 
                 antMatcher("/member/reviewDetail/{reviewId}")

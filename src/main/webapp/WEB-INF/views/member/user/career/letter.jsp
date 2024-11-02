@@ -132,7 +132,6 @@
 					"Content-Type": "application/json"
 				}
 			})
-			alert("문서가 완전히 로드되었습니다!");
 		}
 	});
 </script>
