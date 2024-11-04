@@ -42,13 +42,81 @@
 	<!-- JQuery -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+	<!-- Axios -->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 	<!-- 메인 스타일시트 -->
 	<!-- <link rel="stylesheet" type="text/css" href="/resources/style/member/user/파일명.css"> -->
 
 	<!--  JS -->
 	<!-- <script src="/resources/script/member/user/파일명.js"></script> -->
 	<script>
+		document.addEventListener('DOMContentLoaded', function(){
+			document.body.addEventListener('click', function(event) {
+				if (event.target.id === 'logoutButton' || event.target.closest('#logoutButton')) {
+					console.log("로그아웃 버튼 클릭");
+					event.preventDefault();
+					localStorage.removeItem('accessToken');
+					window.location.href = '/';
+				}
+			});
 
+			let currentPage = 1;
+			const itemsPerPage = 5;
+			let totalItems = 0;
+			let allData = [];
+			let filteredData = [];
+
+			function fetchData(){
+				fetch('/member/notice/list', {
+					method: 'GET'
+				})
+						.then(response => response.json())
+						.then(data => {
+							console.log("받은 데이터 : ", data);
+							allData = data.data;
+							filteredData = allData;
+							totalItems = allData.length;
+							renderPage(currentPage);
+
+						})
+						.catch(error => {
+							console.error('게시물 목록을 가져오는 중 오류 발생 : ', error);
+							const noticeListBody = document.getElementById('notice-list-body');
+							if (noticeListBody){
+								noticeListBody.innerHTML = '<tr><td colspan="6" class="text-center">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>';
+							}
+						});
+			}
+
+			function renderPage(page){
+				const noticeListBody = document.getElementById('notice-list-body');
+				noticeListBody.innerHTML = '';
+
+				const start = (page - 1) * itemsPerPage;
+				const end = start + itemsPerPage;
+				const pageData = filteredData.slice(start, end);
+
+				pageData.forEach((notice, index) => {
+					const row = document.createElement('tr');
+					const number = notice.index;
+
+					row.innerHTML = `
+						<td>${"${start + index + 1}"}</td>
+						<td>${"${notice.user.userEmail}"}</td>
+						<td>${"${notice.title}"}</td>
+						<td>${"${notice.updatePostTime}"}</td>
+					`;
+						row.style.cursor = 'pointer';
+						row.addEventListener('click', () => {
+							window.location.href = `/` + number;
+						});
+						noticeListBody.appendChild(row);
+				});
+
+			}
+			fetchData();
+		});
 	</script>
 
 </head>
@@ -101,7 +169,7 @@
 									<th scope="col">작성일</th>
 								</tr>
 								</thead>
-								<tbody id="recruitment-list-body" class="border-top-0 text-center">
+								<tbody id="notice-list-body" class="border-top-0 text-center">
 								</tbody>
 							</table>
 						</div>

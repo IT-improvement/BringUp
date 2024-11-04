@@ -62,7 +62,7 @@
 <div class="container" style="max-width: 1260px;">
     <main class="flex-grow-1">
         <div class="py-4">
-            <p class="h1">프로필</p>
+            <p class="h1"></p>
         </div>
     </main>
 </div>

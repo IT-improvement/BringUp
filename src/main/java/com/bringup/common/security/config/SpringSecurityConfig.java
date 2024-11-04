@@ -213,6 +213,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/delete/{reviewId}"),
                 antMatcher(GET, "/member/info"),
                 antMatcher("/member/m_create"),
+                antMatcher("/member/userNotice"),
                 antMatcher("/admin/**"),
                 antMatcher("/mem/**"),
                 antMatcher(GET, "/member/applyList"),
