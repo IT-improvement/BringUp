@@ -1,12 +1,160 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('paymentButton').addEventListener('click',function (){
-        const itemIdx = sessionStorage.getItem("itemIdx");
-        if (itemIdx === null){
-            alert("아이템인덱스가 없습니다.");
-        }else {
-            console.log(itemIdx);
+    const paymentFormButton = document.getElementById('paymentFormButton');
+    paymentFormButton.addEventListener('click', function() {
+        let isValid = true;
+        const invalidInputs = [];
+        
+        // 공고 선택 검증
+        const selectedAdvertisement = document.getElementById('selectedAdvertisement').value;
+        if (!selectedAdvertisement) {
+            document.getElementById('selectedAdvertisement').style.border = '2px solid red';
+            invalidInputs.push('공고');
+            isValid = false;
+        }
+
+        const productName = document.querySelector('h3').textContent.trim().split(' ')[0];
+
+        if (productName === '프리미엄') {
+            // 프리미엄 광고 검증
+            const premiumDateRange = document.getElementById('premiumDateRange').value;
+            const displayTime = document.getElementById('productSelect').value;
+            const imageUpload = document.getElementById('imageUpload').files[0];
+            
+            if (!premiumDateRange) {
+                document.getElementById('premiumDateRange').style.border = '2px solid red';
+                invalidInputs.push('날짜');
+                isValid = false;
+            }
+            if (!displayTime) {
+                document.getElementById('productSelect').style.border = '2px solid red';
+                invalidInputs.push('시간');
+                isValid = false;
+            }
+            if (!imageUpload) {
+                document.getElementById('imageUpload').style.border = '2px solid red';
+                invalidInputs.push('이미지');
+                isValid = false;
+            }
+
+        } else if (productName === '메인') {
+            // 메인 광고 검증
+            const mainDateRange = document.getElementById('mainDateRange').value;
+            const duration = document.getElementById('productSelect').value;
+            const imageUpload = document.getElementById('imageUpload').files[0];
+            
+            if (!mainDateRange) {
+                document.getElementById('mainDateRange').style.border = '2px solid red';
+                invalidInputs.push('날짜');
+                isValid = false;
+            }
+            if (!duration) {
+                document.getElementById('productSelect').style.border = '2px solid red';
+                invalidInputs.push('기간');
+                isValid = false;
+            }
+            if (!imageUpload) {
+                document.getElementById('imageUpload').style.border = '2px solid red';
+                invalidInputs.push('이미지');
+                isValid = false;
+            }
+
+        } else if (productName === '배너') {
+            // 배너 광고 검증
+            const bannerDateRange = document.getElementById('bannerDateRange').value;
+            const duration = document.getElementById('bannerProductSelect').value;
+            const imageUpload = document.getElementById('imageUpload').files[0];
+            
+            if (!bannerDateRange) {
+                document.getElementById('bannerDateRange').style.border = '2px solid red';
+                invalidInputs.push('날짜');
+                isValid = false;
+            }
+            if (!duration) {
+                document.getElementById('bannerProductSelect').style.border = '2px solid red';
+                invalidInputs.push('기간');
+                isValid = false;
+            }
+            if (!imageUpload) {
+                document.getElementById('imageUpload').style.border = '2px solid red';
+                invalidInputs.push('이미지');
+                isValid = false;
+            }
+
+        } else if (productName === '어나운스') {
+            // 일반 광고 검증
+            const startDate = document.getElementById('announceStartDate').value;
+            const duration = document.getElementById('productSelect').value;
+            
+            if (!startDate) {
+                document.getElementById('announceStartDate').style.border = '2px solid red';
+                invalidInputs.push('시작날짜');
+                isValid = false;
+            }
+            if (!duration) {
+                document.getElementById('productSelect').style.border = '2px solid red';
+                invalidInputs.push('기간');
+                isValid = false;
+            }
+        }
+
+        if (!isValid) {
+            alert(`다음 항목을 입력해주세요: ${invalidInputs.join(', ')}`);
+        } else {
+            const paymentButton = document.getElementById("paymentButton");
+            if (paymentButton) {
+                paymentButton.click();
+                
+            } else {
+                alert("결제 버튼을 찾을 수 없습니다.");
+            }
         }
     });
+
+    // 결제 결과 이벤트 수신
+    document.addEventListener("paymentResult", function(event) {
+        const status = event.detail.status;
+        switch (status) {
+            case "done":
+                console.log("결제 성공");
+                break;
+            case "failed":
+                console.log("결제 실패");
+                break;
+            case "cancel":
+                console.log("결제 취소");
+                break;
+            default:
+                console.log("알 수 없는 결제 상태");
+                break;
+        }
+    });
+
+    // 입력값 변경 시 빨간 테두리 제거
+    const inputs = [
+        'premiumDateRange',
+        'productSelect',
+        'imageUpload',
+        'mainDateRange',
+        'bannerDateRange',
+        'bannerProductSelect',
+        'announceStartDate'
+    ];
+
+    inputs.forEach(inputId => {
+        const element = document.getElementById(inputId);
+        if (element) {
+            if (element.type === 'file') {
+                element.addEventListener('change', function() {
+                    this.style.border = '';
+                });
+            } else {
+                element.addEventListener('input', function() {
+                    this.style.border = '';
+                });
+            }
+        }
+    });
+    
 
     const productName = document.querySelector('h3').textContent.trim();
 
@@ -50,6 +198,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         $('#advertisementModal').modal('hide');
                         // 카드에 선택된 공고 표시
                         document.getElementById('selectedAd').textContent = `선택된 공고: ${item.title}`;
+                        document.getElementById('selectedAdvertisement').style.border = '';
                     });
                     advertisementList.appendChild(listItem);
                 });
@@ -71,11 +220,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const img = new Image();
                 img.onload = function() {
-                    let valid = img.width === 875 && img.height === 500;
-                    if (!valid) {
-                        alert('이미지 크기가 올바르지 않습니다. 올바른 크기를 업로드하세요.');
-                        event.target.value = '';
-                    }
+                    // let valid = img.width === 875 && img.height === 500;
+                    // if (!valid) {
+                    //     alert('이미지 크기가 올바르지 않습니다. 올바른 크기를 업로드하세요.');
+                    //     event.target.value = '';
+                    // }
                 };
                 img.src = URL.createObjectURL(file);
             });
@@ -164,11 +313,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const img = new Image();
                 img.onload = function() {
-                    let valid = img.width === 1228 && img.height === 320;
-                    if (!valid) {
-                        alert('이미지 크기가 올바르지 않습니다. 올바른 크기를 업로드하세요.');
-                        event.target.value = '';
-                    }
+                    // let valid = img.width === 1228 && img.height === 320;
+                    // if (!valid) {
+                    //     alert('이미지 크기가 올바르지 않습니다. 올바른 크기를 업로드하세요.');
+                    //     event.target.value = '';
+                    // }
                 };
                 img.src = URL.createObjectURL(file);
             });
@@ -258,11 +407,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const img = new Image();
                 img.onload = function() {
-                    let valid = img.width === 1228 && img.height === 80;
-                    if (!valid) {
-                        alert('이미지 크기가 올바르지 않습니다. 올바른 크기를 업로드하세요.');
-                        event.target.value = '';
-                    }
+                    // let valid = img.width === 1228 && img.height === 80;
+                    // if (!valid) {
+                    //     alert('이미지 크기가 올바르지 않습니다. 올바른 크기를 업로드하세요.');
+                    //     event.target.value = '';
+                    // }
                 };
                 img.src = URL.createObjectURL(file);
             });
@@ -313,57 +462,59 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 어나운스 상품 신청 페이지
-if (productName.includes('어나운스')) {
-    flatpickr("#announceStartDate", {
-        dateFormat: "Y-m-d",
-        minDate: "today",
-        locale: "ko",
-        onChange: function(selectedDates, dateStr, instance) {
-            // 카드에 선택된 날짜 표시
-            document.getElementById('startDate').textContent = `광고 시작일: ${dateStr}`;
-        }
-    });
+    if (productName.includes('어나운스')) {
+        flatpickr("#announceStartDate", {
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            locale: "ko",
+            onChange: function(selectedDates, dateStr, instance) {
+                // 카드에 선택된 날짜 표시
+                document.getElementById('startDate').textContent = `광고 시작일: ${dateStr}`;
+            }
+        });
 
-    document.getElementById('productSelect').addEventListener('change', function(event) {
-        if(event.target.value === '') {
-            document.getElementById('duration').textContent = `광고 기간: `;
-        } else if(event.target.value === '12') {
-            document.getElementById('duration').textContent = `광고 기간: 1년`;
-        } else {
-            document.getElementById('duration').textContent = `광고 기간: ${event.target.value}개월`;
-        }
-        let duration = event.target.value;
-        if (duration) {
-            fetch(`/com/advertisement/announce/price?displayTime=${duration}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Network response was not ok');
-            })
-            .then(data => {
-                console.log('Fetched data:', data); // 여기서 파싱된 JSON 데이터를 출력
-                const price = data.data.itemPrice;
-                const item = data.data.itemPrice.itemIdx;
-                sessionStorage.setItem(item, itemIdx);
-                if (duration === '12') {
-                    duration = '1년';
-                } else {
-                    duration += '개월';
-                }
-                document.getElementById('paymentAmount').textContent = `결제 금액: ${price}원`;
-                document.getElementById('duration').textContent = `광고 기간: ${duration}`;
-            })
-            .catch(error => {
-                console.error('Error fetching announcement price:', error);
-            });
-        }
-    });
-}
+        document.getElementById('productSelect').addEventListener('change', function(event) {
+            if(event.target.value === '') {
+                document.getElementById('duration').textContent = `광고 기간: `;
+            } else if(event.target.value === '12') {
+                document.getElementById('duration').textContent = `광고 기간: 1년`;
+            } else {
+                document.getElementById('duration').textContent = `광고 기간: ${event.target.value}개월`;
+            }
+            let duration = event.target.value;
+            if (duration) {
+                fetch(`/com/advertisement/announce/price?displayTime=${duration}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok');
+                })
+                .then(data => {
+                    console.log('Fetched data:', data);
+                    const price = data.data.itemPrice;
+                    const itemIdx = data.data.itemIdx;
+                    sessionStorage.setItem("itemIdx", itemIdx);
+                    if (duration === '12') {
+                        duration = '1년';
+                    } else {
+                        duration += '개월';
+                    }
+                    document.getElementById('paymentAmount').textContent = `결제 금액: ${price}원`;
+                    document.getElementById('duration').textContent = `광고 기: ${duration}`;
+                })
+                .catch(error => {
+                    console.error('Error fetching announcement price:', error);
+                });
+            }
+        });
+    }
+
+
 });
