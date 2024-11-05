@@ -95,6 +95,9 @@ public class MemberPageController {
     @GetMapping("/userNotice")
     public String userNotice() { return "member/user/notice/userNotice"; }
 
+    @GetMapping("/createNotice")
+    public String createNotice() { return "member/user/notice/createNotice"; }
+
     @GetMapping("/memberProfile")
     public String memberProfile(){
         return "member/user/profile/memberProfile";
