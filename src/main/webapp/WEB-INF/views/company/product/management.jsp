@@ -10,6 +10,9 @@
 	<meta name="author" content="Webestica.com">
 	<meta name="description" content="Bootstrap 기반 뉴스, 매거진 및 블로그 테마">
 
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 	<!-- 다크 모드 -->
     <script src="/resources/script/common/darkmode/darkmode.js"></script>
 
@@ -41,15 +44,8 @@
     <script src="/resources/script/common/function/functions.js"></script>
 
     <!-- 메인 JS -->
-    <!-- <script src="/resources/script/company/main.js"></script> -->
+    <script src="/resources/script/company/product/management.js"></script>
 
-	<script>
-
-
-
-	</script>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -63,47 +59,15 @@
 				<thead>
 					<tr>
 						<th>번호</th>
-						<th>상품제목</th>
-						<th>등록일</th>
-						<th>표시수</th>
-						<th>조회수</th>
+						<th>공고제목</th>
+						<th>광고기간</th>
+						<th>광고타입</th>
+						<th>클릭수</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td>1</td>
-						<td>상품 1</td>
-						<td>2022-01-01</td>
-						<td>100</td>
-						<td>1000</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>상품 2</td>
-						<td>2022-01-02</td>
-						<td>200</td>
-						<td>2000</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>상품 3</td>
-						<td>2022-01-03</td>
-						<td>300</td>
-						<td>3000</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>상품 4</td>
-						<td>2022-01-04</td>
-						<td>400</td>
-						<td>4000</td>
-					</tr>
-					<tr>
-						<td>5</td>
-						<td>상품 5</td>
-						<td>2022-01-05</td>
-						<td>500</td>
-						<td>5000</td>
+						<td colspan="5" class="text-center">데이터를 불러오는 중...</td>
 					</tr>
 				</tbody>
 			</table>
