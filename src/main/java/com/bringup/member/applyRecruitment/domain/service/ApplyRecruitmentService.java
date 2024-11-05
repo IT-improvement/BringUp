@@ -1,9 +1,6 @@
 package com.bringup.member.applyRecruitment.domain.service;
 
 import com.bringup.common.enums.ApplyCVType;
-import com.bringup.common.enums.MemberErrorCode;
-import com.bringup.common.enums.RecruitmentErrorCode;
-import com.bringup.common.enums.RecruitmentType;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
@@ -15,25 +12,19 @@ import com.bringup.member.applyRecruitment.domain.repository.ApplyRecruitmentRep
 import com.bringup.member.applyRecruitment.dto.request.ApplyRecruitmentRequestDto;
 import com.bringup.member.applyRecruitment.dto.request.ApplyRecruitmentResponseDto;
 import com.bringup.member.applyRecruitment.exception.ApplyRecruitmentException;
-import com.bringup.member.recruitment.exception.RecruitmentException;
 import com.bringup.member.resume.domain.entity.CVEntity;
 import com.bringup.member.resume.domain.repository.CVRepository;
-import com.bringup.member.user.domain.entity.UserEntity;
-import com.bringup.member.user.domain.exception.MemberException;
 import com.bringup.member.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import static com.bringup.common.enums.ApplyRecruitmentErrorCode.*;
 import static com.bringup.common.enums.ApplyRecruitmentErrorCode.NOT_FOUND_MEMBER_ID;
-import static com.bringup.common.enums.MemberErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +32,7 @@ public class ApplyRecruitmentService {
     private final ApplyRecruitmentRepository applyRecruitmentRepository;
     private final CVRepository cvRepository;
     private final RecruitmentRepository recruitmentRepository;
+    private final CompanyRepository companyRepository;
     private final UserRepository userRepository;
 
     @Transactional
@@ -54,6 +46,11 @@ public class ApplyRecruitmentService {
 
         Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(dto.getRecruitmentIndex())
                 .orElseThrow(()->new ApplyRecruitmentException(NOT_FOUND_APPLY_RECRUITMENT));
+
+        boolean isAlreadyApply = applyRecruitmentRepository.existsByCvIndexAndRecruitmentIndex(cv.getCvIndex(), recruitment.getRecruitmentIndex());
+        if (isAlreadyApply){
+            throw new ApplyRecruitmentException(ALREADY_APPLY_RECRUITMENT);
+        }
 
         ApplyRecruitmentEntity applyRecruitment = new ApplyRecruitmentEntity();
         applyRecruitment.setCvIndex(cv.getCvIndex());
@@ -78,21 +75,38 @@ public class ApplyRecruitmentService {
             List<ApplyRecruitmentEntity> applyRecruitments = applyRecruitmentRepository.findAllByCvIndex(cv.getCvIndex());
             for (ApplyRecruitmentEntity applyRecruitment : applyRecruitments){
                 if (applyRecruitment.getApplicationType() != ApplicationType.FREELANCER){
-                    ApplyRecruitmentResponseDto dto = applyDto(applyRecruitment);
-                    applyList.add(dto);
+                    // 공고 정보 조회
+                    Optional<Recruitment> recruitmentOpt = recruitmentRepository.findByRecruitmentIndex(applyRecruitment.getRecruitmentIndex());
+                    if (recruitmentOpt.isPresent()){
+                        Recruitment recruitment = recruitmentOpt.get();
+
+                        //회사 정보 조회
+                        Optional<Company> companyOpt = companyRepository.findById(recruitment.getCompany().getCompanyId());
+                        String companyName = companyOpt.map(Company::getCompanyName).
+                                orElseThrow(() -> new ApplyRecruitmentException(NOT_FOUND_COMPANY));
+
+                        //Dto 값 설정
+                        ApplyRecruitmentResponseDto dto = applyDto(applyRecruitment, recruitment.getRecruitmentTitle(), companyName);
+                        dto.setRecruitmentTitle(recruitment.getRecruitmentTitle()); // 공고 제목
+                        dto.setCompanyName(companyName); // 회사 이름
+                        applyList.add(dto);
+                    }
                 }
             }
         }
         return applyList;
     }
 
-    private ApplyRecruitmentResponseDto applyDto(ApplyRecruitmentEntity applyRecruitment){
+    private ApplyRecruitmentResponseDto applyDto(ApplyRecruitmentEntity applyRecruitment, String recruitmentTitle, String companyName){
         return ApplyRecruitmentResponseDto.builder()
                 .applyCVIndex(applyRecruitment.getApplyCVIndex())
+                .cvIndex(applyRecruitment.getCvIndex())
                 .recruitmentIndex(applyRecruitment.getRecruitmentIndex())
                 .applicationType(applyRecruitment.getApplicationType())
                 .status(applyRecruitment.getStatus())
                 .applyCVDate(applyRecruitment.getApplyCVDate())
+                .recruitmentTitle(recruitmentTitle)
+                .companyName(companyName)
                 .build();
     }
 }
