@@ -217,7 +217,8 @@
                             <p id="duration" class="card-text">광고 기간: </p>
                         <% } %>
                         <p id="paymentAmount" class="card-text">결제 금액: </p>
-                        <button type="button" class="btn btn-primary w-100 mt-3" id="paymentButton">신청하기</button>
+                        <button type="button" class="btn btn-primary w-100 mt-3" id="paymentFormButton">신청하기</button>
+                        <button type="hidden" class="btn btn-primary w-100 mt-3" id="paymentButton" style="display: none;"></button>
                     </div>
                 </div>
             </div>
