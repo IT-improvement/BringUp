@@ -59,13 +59,30 @@
 
 <!-- 메인 콘텐츠 -->
 <body class="d-flex flex-column min-vh-100">
-<div class="container" style="max-width: 1260px;">
     <main class="flex-grow-1">
-        <div class="py-4">
-            <p class="h1"></p>
+        <div class="container mx-auto my-4" style="max-width: 1260px;">
+            <div class="card-header">
+                <h4 class="card-title">게시글 등록</h4>
+            </div>
+            <div class="card-body">
+                <form action="/member/notice/createPost" method="post" id="noticeForm">
+                    <div class="mb-3">
+                        <label class="form-label" for="title">글 제목</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    <div class="mb-3" id="">
+                        <label for="notice_img" class="form-label"><i class="fas fa-image"></i> 이미지</label>
+                        <div class="d-flex flex-wrap">
+                            <div class="input-group mb-2 mr-2">
+                                <input type="file" class="form-control" id="notice_img" name="notice_img" accept="image/*" required>
+                            </div>
+                            <button type="button" class="btn btn-primary mb-2 w-100" id="addCeoImage">이미지 추가</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </main>
-</div>
 </body>
 
 <!-- 푸터 -->
