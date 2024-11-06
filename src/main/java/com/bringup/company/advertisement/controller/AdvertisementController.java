@@ -199,7 +199,7 @@ public class AdvertisementController {
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, mad));
     }
 
-    @GetMapping("/main/price")
+    @PostMapping("/main/price")
     public ResponseEntity<BfResponse<?>> getPrice(@RequestParam Map<String, Integer> requestBody){
         int price = mainAdService.getItemPrice(requestBody.get("day"));
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, price));
@@ -241,7 +241,7 @@ public class AdvertisementController {
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, bad));
     }
 
-    @GetMapping("/banner/price")
+    @PostMapping("/banner/price")
     public ResponseEntity<BfResponse<?>> getBannerPrice(@RequestBody DateRequestDto dto){
         try{
             ItemInfoResponseDto response = bannerAdService.getBannerInfo(dto);
@@ -286,7 +286,7 @@ public class AdvertisementController {
         return ResponseEntity.ok(new BfResponse<>("기본 광고 삭제완료"));
     }
 
-    @GetMapping("/announce/price")
+    @PostMapping("/announce/price")
     public ResponseEntity<BfResponse<?>> getAnnounceAdPrice(@RequestParam(name = "displayTime") int displayTime){
         System.out.println("짜바리 dto : " + displayTime);
         System.out.println("짜바리 서비스 리턴값 : " + displayTime);

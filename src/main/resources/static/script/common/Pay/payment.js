@@ -103,24 +103,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     })
                         .then((res) => res.json())
                         .then((result) => {
-                            console.log(result.code);
-                            // result가 null이 아니고, 코드가 200인 경우 결제 완료 처리
-                            if (result && result.code === 200) {
-                                alert("결제 완료되었습니다.");
+                            console.log(result);
+                            if (result && result.data && result.data.status === 1) {
                                 eventDetail.status = "done";
-
-                                // 결제 완료 정보를 sessionStorage에 저장
-                                sessionStorage.setItem("paymentStatus", eventDetail.status);
-                                sessionStorage.setItem("paymentResponse", JSON.stringify(eventDetail.paymentResponse));
-
-                                // 결제 완료 페이지로 리다이렉트
-                                window.location.href = "/page/admin/payment/success";
+                                dispatchPaymentResultEvent(eventDetail);
                             } else {
-                                alert("결제가 실패했습니다. 다시 시도해주세요.");
                                 eventDetail.status = "failed";
+                                alert("결제가 실패했습니다. 다시 시도해주세요.");
+                                dispatchPaymentResultEvent(eventDetail);
                             }
-                            const paymentEvent = new CustomEvent("paymentResult", { detail: eventDetail });
-                            document.dispatchEvent(paymentEvent);
                         })
                         .catch((err) => {
                             console.error(err);
@@ -128,15 +119,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         });
                     break;
                 case "done":
-                    alert("결제 완료되었습니다.");
-                    const doneEvent = new CustomEvent("paymentResult", { detail: { status: "done" } });
-                    displayPaymentResult(paymentResponse, "done");
-                    document.dispatchEvent(doneEvent);
+                    eventDetail.status = "done";
+                    dispatchPaymentResultEvent(eventDetail);
                     break;
                 case "cancel":
                     alert("결제가 취소되었습니다.");
-                    const cancelEvent = new CustomEvent("paymentResult", { detail: { status: "cancel" } });
-                    document.dispatchEvent(cancelEvent);
+                    eventDetail.status = "cancel";
+                    dispatchPaymentResultEvent(eventDetail);
                     break;
                 default:
                     break;
@@ -151,16 +140,21 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // 결제 결과를 화면에 표시하는 함수
-    function displayPaymentResult(paymentResponse, status) {
-        const paymentResultDiv = document.getElementById("paymentResult");
-        const resultStatus = document.getElementById("resultStatus");
-        const resultOrderName = document.getElementById("resultOrderName");
-        const resultPrice = document.getElementById("resultPrice");
-
-        paymentResultDiv.style.display = "block";
-        resultStatus.textContent = `결제 상태: ${status}`;
-        resultOrderName.textContent = `상품명: ${paymentResponse.itemName}`;
-        resultPrice.textContent = `결제 금액: ${paymentResponse.price}원`;
+    function dispatchPaymentResultEvent(eventDetail) {
+        const paymentEvent = new CustomEvent("paymentResult", { detail: eventDetail });
+        document.dispatchEvent(paymentEvent);
     }
+
+    // 결과를 처리하는 이벤트 리스너
+    document.addEventListener("paymentResult", function (event) {
+        const status = event.detail.status;
+
+        if (status === "done") {
+            alert("결제가 성공적으로 완료되었습니다.");
+        } else if (status === "failed") {
+            alert("결제가 실패하였습니다. 다시 시도해주세요.");
+        } else if (status === "cancel") {
+            alert("결제가 취소되었습니다.");
+        }
+    });
 });
