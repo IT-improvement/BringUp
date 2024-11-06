@@ -45,109 +45,71 @@
     <!-- <script src="/resources/script/company/main.js"></script> -->
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        .profile-main{
-            display: flex;
-            width: 100%;
-            min-width: 100%;
-            transition: opacity 1s;
-            opacity: 1;
-        }
-        .profile-input{
-            display: grid;
-            flex-direction: column-reverse;
-            column-gap: 6.5rem;
-            padding: 72px 104px 24px 104px;
-            background-color: rgb(233, 236, 239);
-            border-radius: 6px;
-            position: relative;
-            top: 0;
-            margin: 32px auto;
-            width: 100%;
-            max-width: 80%;
-            min-width: 0;
-            height: fit-content;
-            word-break: keep-all;
-        }
-        .profile-email{
-            display: flex;
-            height: 25px;
-        }
-        .profile-name{
-            text-align: left;
-            margin: 0 0 4px;
-            font-size: 40px;
-            line-height: 56px;
-            font-weight: 700;
-            color: rgb(33, 37, 42);
-        }
-        .profile-email-fixed{
-            margin: 0;
-            min-width: 40px;
-            color: rgb(135,142,152);
-            line-height: 25px;
-        }
-        .profile-email-variable{
-            margin: 0 0 0 40px;
-            line-height: 25px;
-            color: rgb(33,37,42);
-        }
-        .profile-banner p{
-            margin: 0;
-            font-size: 18px;
-        }
-        .profile-banner a{
-            text-decoration: none;
-            color: #00796b;
-            font-weight: bold;
-        }
-        .profile-applications, .profile-submitted-applications{
-            background-color: #fff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            border: 1px solid #e5e5e5;
-        }
-        .profile-applications h2, .profile-submitted-applications h2{
-            margin-top: 0
-        }
-        .profile-status{
-            display: flex;
-            justify-content: space-between;
-        }
-        .profile-status div{
-            text-align: center;
-        }
-        .profile-status p{
-            margin: 5px 0;
-        }
-        .profile-status span{
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const accessToken = localStorage.getItem("accessToken");
+            console.log("Access token: " + accessToken);
+            const url = "/member/info"
+            if (accessToken) {
+                fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer `+ accessToken
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        // 데이터를 폼에 맞춰 입력
+                        const userEmail = data.data.userEmail ? data.data.userEmail : "정보없음";
+                        const userName = data.data.userName ? data.data.userName : "정보없음";
+                        const userAddress = data.data.userAddress ? data.data.userAddress : "정보없음";
+                        const userPhonenumber = data.data.userPhonenumber ? data.data.userPhonenumber : "정보없음";
+                        const userBirthday = data.data.userBirthday ? data.data.userBirthday : "정보없음";
+                        // 프로필 이미지 설정
+                        document.getElementById('userEmail').textContent = userEmail;
+                        document.getElementById('userName').textContent = userName;
+                        document.getElementById('userAddress').textContent = userAddress;
+                        document.getElementById('userPhonenumber').textContent = userPhonenumber;
+                        document.getElementById('userBirthday').textContent = userBirthday;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            } else {
+                console.log("토큰을 찾을 수 없습니다.");
+            }
+        });
+    </script>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 <!-- header-->
 <jsp:include page="/WEB-INF/views/member/header/member_header.jsp" flush="true" />
 
-<main class="flex-grow-1">
+<main class="flex-grow-1 m-4">
     <div class="container" style="max-width: 1260px;">
-        <div class="row">
-            <div class="col">
-                <div class="profile-main">
-                    <div class="profile-input">
-                        <div>
-                            <dd class="profile-name">퉤</dd>
-                        </div>
-                        <div class="profile-email">
-                            <dl class="profile-email-fixed">이메일</dl>
-                            <dd class="profile-email-variable">111@naver.com</dd>
-                        </div>
-                    </div>
-                </div>
+        <p class="h1">프로필</p>
+        <div class="m-4">
+            <div class="mb-3">
+                <p class="h5">아이디</p>
+                <div class="alert alert-light p-3 mb-5" role="alert" id="userEmail"></div>
+            </div>
+            <div class="mb-3">
+                <p class="h5">이름</p>
+                <div class="alert alert-light p-3 mb-5" role="alert" id="userName"></div>
+            </div>
+            <div class="mb-3">
+                <p class="h5">주소</p>
+                <div class="alert alert-light p-3 mb-5" role="alert" id="userAddress"></div>
+            </div>
+            <div class="mb-3">
+                <p class="h5">전화번호</p>
+                <div class="alert alert-light p-3 mb-5" role="alert" id="userPhonenumber"></div>
+            </div>
+            <div class="mb-3">
+                <p class="h5">생년월일</p>
+                <div class="alert alert-light p-3 mb-5" role="alert" id="userBirthday"></div>
             </div>
         </div>
     </div>
