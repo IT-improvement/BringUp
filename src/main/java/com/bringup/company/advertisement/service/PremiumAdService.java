@@ -244,8 +244,8 @@ public class PremiumAdService {
         premiumAdvertisementRepository.save(premiumAd);
     }
 
-    public PremiumAdResponseDto getPremiumAdDetail(UserDetailsImpl userDetails, Integer ad_index) {
-        Advertisement ad = advertisementRepository.findByAdvertisementIndex(ad_index)
+    public PremiumAdResponseDto getPremiumAdDetail(UserDetailsImpl userDetails, Integer adIdx) {
+        Advertisement ad = advertisementRepository.findByAdvertisementIndex(adIdx)
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         PremiumAdvertisement premiumAdvertisement = premiumAdvertisementRepository.findById(ad.getPremiumAdvertisement().getPremiumIndex())

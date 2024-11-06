@@ -263,7 +263,7 @@ public class AdvertisementController {
         return ResponseEntity.ok(new BfResponse<>("기본 광고 생성완료"));
     }
 
-    @GetMapping("/announce/{announcementId}")
+    @GetMapping("/announce/detail/{announcementId}")
     public ResponseEntity<BfResponse<?>> getAnnouncementAdDetail(
             @PathVariable int announcementId,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {

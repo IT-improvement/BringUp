@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const paymentButton = document.getElementById("paymentButton");
-    
+
     paymentButton.removeEventListener("click", handlePayment);
     paymentButton.addEventListener("click", handlePayment, { once: true });
 
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const response = await Bootpay.requestPayment(requestData);
 
-            let eventDetail = { status: response.event };
+            let eventDetail = { status: response.event, paymentResponse: paymentResponse };
 
             switch (response.event) {
                 case "confirm":
@@ -101,16 +101,24 @@ document.addEventListener("DOMContentLoaded", function () {
                         },
                         body: JSON.stringify(dto),
                     })
-                    .then((res) => res.json())
-                    .then((result) => {
-                        eventDetail.status = result.code === 0 ? "done" : "failed";
-                        const paymentEvent = new CustomEvent("paymentResult", { detail: eventDetail });
-                        document.dispatchEvent(paymentEvent);
-                    })
-                    .catch((err) => {
-                        console.error(err);
-                        alert("결제 승인 중 오류가 발생했습니다. 다시 시도해주세요.");
-                    });
+                        .then((res) => res.json())
+                        .then((result) => {
+                            console.log(result.code);
+                            // result가 null이 아니고, 코드가 1인 경우 결제 완료 처리
+                            if (result && result.code === 200) {
+                                alert("결제 완료되었습니다.");
+                                eventDetail.status = "done";
+                            } else {
+                                alert("결제가 실패했습니다. 다시 시도해주세요.");
+                                eventDetail.status = "failed";
+                            }
+                            const paymentEvent = new CustomEvent("paymentResult", { detail: eventDetail });
+                            document.dispatchEvent(paymentEvent);
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                            alert("결제 승인 중 오류가 발생했습니다. 다시 시도해주세요.");
+                        });
                     break;
                 case "done":
                     alert("결제 완료되었습니다.");
