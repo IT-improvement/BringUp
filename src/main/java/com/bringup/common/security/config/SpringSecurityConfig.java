@@ -137,7 +137,6 @@ public class SpringSecurityConfig {
                 antMatcher("/ws/**"),
               /*  antMatcher("/github/**"),// 정적 리소스*/
                 antMatcher("/member/potofolio"),
-                //antMatcher("/member/**"),
                 antMatcher("/member/letter"),//이력서
                 antMatcher("/member/resume"),//자소서
                 antMatcher("/member/companyReview"),
@@ -218,10 +217,14 @@ public class SpringSecurityConfig {
                 antMatcher("/main/memberInfo"),
                 antMatcher("/member/{reviewId}"),
                 antMatcher("/member/delete/{reviewId}"),
-                antMatcher("/member/memberInfo/post"),
+                antMatcher(GET, "/member/info"),
                 antMatcher("/member/m_create"),
+                antMatcher("/member/userNotice"),
+                antMatcher("/member/createNotice"),
+                antMatcher("/member/notice/createPost"),
                 antMatcher("/admin/**"),
                 antMatcher("/mem/**"),
+                antMatcher(GET, "/member/applyList"),
 
                 antMatcher("/member/interview/{reviewId}"),
                 antMatcher("/member/interview/delete/{reviewId}"),
