@@ -12,4 +12,9 @@ public class AdminPageController {
     public String payTest(){
         return "admin/payment/Payment";
     }
+
+    @GetMapping("/payment/success")
+    public String paySuccess(){
+        return "admin/payment/PaymentSuccess";
+    }
 }
