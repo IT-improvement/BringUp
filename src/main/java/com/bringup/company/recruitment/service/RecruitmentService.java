@@ -44,6 +44,16 @@ public class RecruitmentService {
     private final RecruitmentFreelancerRepository recruitmentFreelancerRepository;
     private final ApplyRecruitmentRepository applyCvRepository;
 
+    public int getApplyCvCount(UserDetailsImpl userDetails){
+        // 사용자 ID로 회사의 모든 공고 가져오기
+        List<Recruitment> recruitments = recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId());
+
+        // 각 공고별 지원자 수 합산
+        return recruitments.stream()
+                .mapToInt(recruitment -> applyCvRepository.countByRecruitmentIndex(recruitment.getRecruitmentIndex()))
+                .sum();
+    }
+
     // 공고 리스트업
     public List<RecruitmentResponseDto> getRecruitments(UserDetailsImpl userDetails) {
         // 공고를 가져옴

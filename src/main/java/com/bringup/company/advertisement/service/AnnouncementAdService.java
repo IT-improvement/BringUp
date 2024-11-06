@@ -1,9 +1,13 @@
 package com.bringup.company.advertisement.service;
 
+import com.bringup.admin.payment.entity.Item;
+import com.bringup.admin.payment.repository.ItemRepository;
 import com.bringup.common.enums.StatusType;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.dto.request.AnnouncementAdRequestDto;
+import com.bringup.company.advertisement.dto.request.DateRequestDto;
 import com.bringup.company.advertisement.dto.response.AnnouncementAdResponseDto;
+import com.bringup.company.advertisement.dto.response.ItemInfoResponseDto;
 import com.bringup.company.advertisement.entity.Advertisement;
 import com.bringup.company.advertisement.entity.AnnouncementAdvertisement;
 import com.bringup.company.advertisement.exception.AdvertisementException;
@@ -30,7 +34,20 @@ public class AnnouncementAdService {
     private final AnnouncementAdvertisementRepository announcementAdvertisementRepository;
     private final AdvertisementRepository advertisementRepository;
     private final RecruitmentRepository recruitmentRepository;
+    private final ItemRepository itemRepository;
 
+    public ItemInfoResponseDto getAnnounceAdPrice(int displayTime){
+        String itemName = "공고 광고 - " + displayTime + "달";
+
+        Item item = itemRepository.findByItemName(itemName)
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
+        return ItemInfoResponseDto.builder()
+                .itemName(item.getItemName())
+                .itemIdx(item.getItemIndex())
+                .itemPrice(item.getPrice())
+                .build();
+    }
 
     @Transactional
     public void createAnnouncementAd(AnnouncementAdRequestDto announcementAdDto, UserDetailsImpl userDetails) {

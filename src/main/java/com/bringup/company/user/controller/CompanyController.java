@@ -24,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Map;
 
 import static com.bringup.common.enums.GlobalSuccessCode.CREATE;
@@ -146,20 +147,18 @@ public class CompanyController {
     public ResponseEntity<BfResponse<?>> updateUserImage(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestPart(value = "c_logo", required = false) MultipartFile logo,  // 새로 업로드된 로고 파일
-            @RequestPart(value = "c_img0", required = false) MultipartFile image0,  // 이미지 0
-            @RequestPart(value = "c_img1", required = false) MultipartFile image1,  // 이미지 1
-            @RequestPart(value = "c_img2", required = false) MultipartFile image2,  // 이미지 2
-            @RequestPart(value = "c_img3", required = false) MultipartFile image3,  // 이미지 3
-            @RequestPart(value = "c_img4", required = false) MultipartFile image4,  // 이미지 4
             @RequestBody UpdateImageRequestDto updateImageRequestDto
     ) {
         try {
             // 서비스 호출을 통해 새로운 파일과 기존 경로 처리
-            companyService.updateUserImages(userDetails.getId(), logo, image0, image1, image2, image3, image4, updateImageRequestDto);
+            companyService.updateUserImages(userDetails.getId(), logo, updateImageRequestDto);
 
-            return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("message", "업데이트 완료")));
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, "업데이트 완료"));
         } catch (CompanyException e) {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (IOException e){
+            System.out.println("이미지 저장 에러");
+            throw new RuntimeException(e);
         }
     }
 
