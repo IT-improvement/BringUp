@@ -116,15 +116,19 @@ document.addEventListener('DOMContentLoaded', function() {
         switch (status) {
             case "done":
                 console.log("결제 성공");
+                alert("결제가 성공적으로 완료되었습니다.");
                 break;
             case "failed":
                 console.log("결제 실패");
+                alert("결제가 실패했습니다. 다시 시도해주세요.");
                 break;
             case "cancel":
                 console.log("결제 취소");
+                alert("결제가 취소되었습니다.");
                 break;
             default:
                 console.log("알 수 없는 결제 상태");
+                alert("알 수 없는 결제 상태입니다.");
                 break;
         }
     });
@@ -388,8 +392,12 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 console.log('서버 응답:', data);
-                const itemName = data.itemName;
-                document.getElementById('adType').textContent = `광고 유형: ${itemName}`;
+                const itemName = data.data.itemName;
+                const itemPrice = data.data.itemPrice;
+                const itemIdx = data.data.itemIdx;
+                sessionStorage.setItem("itemIdx", itemIdx);
+                document.getElementById('duration').textContent = `광고 기간: ${itemName}`;
+                document.getElementById('paymentAmount').textContent = `결제 금액: ${itemPrice}원`;
             })
             .catch(error => {
                 console.error('에러 발생:', error);
@@ -448,8 +456,30 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('bannerProductSelect').addEventListener('change', function(event) {
             if(event.target.value === '') {
                 document.getElementById('duration').textContent = `광고 기간: `;
+                document.getElementById('paymentAmount').textContent = `결제 금액: `;
             } else {
-                document.getElementById('duration').textContent = `광고 기간: ${event.target.value}일`;
+                console.log(event.target.value);
+                const duration = event.target.value;
+                fetch('/com/advertisement/banner/price?displayTime='+duration, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('서버 응답:', data);
+                    const itemPrice = data.data.itemPrice;
+                    const itemIdx = data.data.itemIdx;
+                    const itemName = data.data.itemName;
+                    sessionStorage.setItem("itemIdx", itemIdx);
+                    document.getElementById('duration').textContent = `광고 기간: ${itemName}`;
+                    document.getElementById('paymentAmount').textContent = `결제 금액: ${itemPrice}원`;
+                })
+                .catch(error => {
+                    console.error('에러 발생:', error);
+                });
             }
             // 배너 광고 기간 선택의 값이 변경되면 배너 광고 날짜 선택 입력칸 초기화
             bannerDateInput.value = '';
