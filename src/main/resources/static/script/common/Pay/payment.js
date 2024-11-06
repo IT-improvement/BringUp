@@ -104,10 +104,17 @@ document.addEventListener("DOMContentLoaded", function () {
                         .then((res) => res.json())
                         .then((result) => {
                             console.log(result.code);
-                            // result가 null이 아니고, 코드가 1인 경우 결제 완료 처리
+                            // result가 null이 아니고, 코드가 200인 경우 결제 완료 처리
                             if (result && result.code === 200) {
                                 alert("결제 완료되었습니다.");
                                 eventDetail.status = "done";
+
+                                // 결제 완료 정보를 sessionStorage에 저장
+                                sessionStorage.setItem("paymentStatus", eventDetail.status);
+                                sessionStorage.setItem("paymentResponse", JSON.stringify(eventDetail.paymentResponse));
+
+                                // 결제 완료 페이지로 리다이렉트
+                                window.location.href = "/page/admin/payment/success";
                             } else {
                                 alert("결제가 실패했습니다. 다시 시도해주세요.");
                                 eventDetail.status = "failed";
@@ -123,6 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 case "done":
                     alert("결제 완료되었습니다.");
                     const doneEvent = new CustomEvent("paymentResult", { detail: { status: "done" } });
+                    displayPaymentResult(paymentResponse, "done");
                     document.dispatchEvent(doneEvent);
                     break;
                 case "cancel":
@@ -141,5 +149,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 alert("결제 요청 중 오류가 발생했습니다. 다시 시도해주세요.");
             }
         }
+    }
+
+    // 결제 결과를 화면에 표시하는 함수
+    function displayPaymentResult(paymentResponse, status) {
+        const paymentResultDiv = document.getElementById("paymentResult");
+        const resultStatus = document.getElementById("resultStatus");
+        const resultOrderName = document.getElementById("resultOrderName");
+        const resultPrice = document.getElementById("resultPrice");
+
+        paymentResultDiv.style.display = "block";
+        resultStatus.textContent = `결제 상태: ${status}`;
+        resultOrderName.textContent = `상품명: ${paymentResponse.itemName}`;
+        resultPrice.textContent = `결제 금액: ${paymentResponse.price}원`;
     }
 });
