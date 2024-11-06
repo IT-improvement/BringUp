@@ -174,7 +174,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/reviewDetail/{reviewId}"),
                 antMatcher("/member/myCareer"),
                 antMatcher("/freelancer/**"),
-                antMatcher("/openai/**")
+                antMatcher("/openai/**"),
                 antMatcher("/member/git"),
                 antMatcher("/member/notion"),
                 antMatcher("/member/blog"),
