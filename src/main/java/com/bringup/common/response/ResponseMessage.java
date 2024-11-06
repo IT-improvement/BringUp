@@ -17,11 +17,15 @@ public interface ResponseMessage {
     String SPARE_REPORT_ALREADY_EXIST = "Spare report already exist";
     String REPORT_ALREADY_FULL = "Report already exist";
     String REPORT_ALREADY_WROTE  = "Report already wrote";
-
+    String NOT_EXISTED_BLOG="NOT_EXISTED_BLOG";
+    String NOT_EXISTED_LETTER="NOT_EXISTED_LETTER";
+    String NOT_EXISTED_CAREER="NOT_EXISTED_CAREER";
+    String EXISTED_CAREER = "Existed career";
+    String EXISTED_AWARD = "Existed award";
     // HTTP Status 401
     String SIGN_IN_FAIL = "Login Inforam.";
     String AUTHORIZATION_FAILED = "Authorization Failed.";
-
+    String EXISTED_URL = "Existed URL";
     // HTTP Status 403
     String NO_PERMISSION = "Do not have Permission.";
 

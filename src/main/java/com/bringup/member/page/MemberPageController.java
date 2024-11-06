@@ -50,8 +50,8 @@ public class MemberPageController {
     }
 
     @GetMapping("/AnnouncementRecruitment")
-    public String AnnouncementRecruitment() {
-        return "member/user/recruitment/AnnouncementRecruitment";
+    public String announcementRecruitment() {
+        return "member/user/profile/applyCV";
     }
 
     @GetMapping("/proposeRecruitment")
@@ -65,7 +65,7 @@ public class MemberPageController {
         return "member/user/career/potofolio";
     }
 
-    @GetMapping("/letter")
+        @GetMapping("/letter")
     public String letter()
     {
         return "member/user/career/letter";
@@ -91,6 +91,12 @@ public class MemberPageController {
     public String notice() {
         return "member/user/notice/notice";
     }
+
+    @GetMapping("/userNotice")
+    public String userNotice() { return "member/user/notice/userNotice"; }
+
+    @GetMapping("/createNotice")
+    public String createNotice() { return "member/user/notice/createNotice"; }
 
     @GetMapping("/memberProfile")
     public String memberProfile(){
@@ -126,5 +132,27 @@ public class MemberPageController {
 
     @GetMapping("/myCareer")
     public String myCareer() {return "member/user/career/myCareer";}
+
+    @GetMapping("/git")
+    public String myGit() {return "member/user/career/git";}
+
+    @GetMapping("/notion")
+    public String myNotion() {return "member/user/career/notion";}
+
+    @GetMapping("/blog")
+    public String myBlog() {return "member/user/career/blog";}
+
+    @GetMapping("/file")
+    public String myFile() {return "member/user/career/file";}
+
+    @GetMapping("/letterWrite")
+    public String letterWrite() {return "member/user/career/letterWrite";}
+
+    @GetMapping("/blogList")
+    public String blogList() {return "member/user/career/blogList";}
+
+    @GetMapping("/record")
+    public String recordList() {return "member/user/career/record";}
+
 
 }

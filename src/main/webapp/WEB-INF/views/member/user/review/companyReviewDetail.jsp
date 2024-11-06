@@ -4,237 +4,293 @@
 <head>
     <title>BringUp</title>
 
-    <!-- 메타 태그 -->
+    <!-- Meta Tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Webestica.com">
     <meta name="description" content="Bootstrap 기반 뉴스, 매거진 및 블로그 테마">
 
-    <!-- 다크 모드 -->
-    <script src="/resources/script/common/darkmode/darkmode.js"></script>
-
-    <!-- 파비콘 -->
+    <!-- Favicon & Styles -->
     <link rel="shortcut icon" href="/resources/style/common/images/favicon.ico">
-
-    <!-- 구글 폰트 -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
-
-    <!-- 플러그인 CSS -->
     <link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/font-awesome/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/bootstrap-icons/bootstrap-icons.css">
-    <link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/apexcharts/css/apexcharts.css">
-    <link rel="stylesheet" type="text/css" href="/resources/style/common/vendor/overlay-scrollbar/css/OverlayScrollbars.min.css">
-
-    <!-- 테마 CSS -->
     <link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
-
-    <!-- Bootstrap JS -->
-    <script src="/resources/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- 벤더 -->
-    <script src="/resources/style/common/vendor/apexcharts/js/apexcharts.min.js"></script>
-    <script src="/resources/style/common/vendor/overlay-scrollbar/js/OverlayScrollbars.min.js"></script>
-
-    <!-- 테마 JS -->
-    <script src="/resources/script/common/function/functions.js"></script>
-
-    <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
-        .md_review-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
+        .blog-container {
+            max-width: 90%;
+            margin: auto;
+            padding: 2%;
         }
-        .md_review-header {
+        .blog-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 2%;
         }
-        .md_review-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: #333;
+        .search-container input {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            width: 100%;
+            max-width: 40%;
         }
-        .md_review-date {
-            font-size: 14px;
-            color: #888;
+        .search-container button {
+            margin-left: 1%;
+            padding: 5px 2%;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
         }
-        .md_star-rating {
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2%;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 1%;
+            text-align: left;
+        }
+        table th {
+            background-color: #f4f4f4;
+        }
+        .delete-btn {
+            color: #fff;
+            background-color: #dc3545;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 2%;
+            border-radius: 8px;
+            max-width: 80%;
+            width: 35%;
+        }
+        .modal-header, .modal-footer {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
-            font-size: 28px; /* 별 크기를 키우기 */
+            justify-content: space-between;
         }
-        .md_star-rating i {
-            color: #ffa500; /* 노란색 */
-            margin-right: 5px;
+        .modal-header h5 {
+            margin: 0;
         }
-        .md_progress-bar-container {
-            margin: 10px 0;
-            width: 20%;
-        }
-        .md_progress-bar-label {
-            font-size: 14px;
-            color: #555;
-            margin-bottom: 5px;
-        }
-        .md_progress-bar {
-            display: flex;
-            gap: 2px;
-        }
-        .md_progress-segment {
-            width: 20%;
-            height: 8px;
-            background-color: #f1f1f1;
-            border-radius: 2px;
-        }
-        .md_progress-segment.active {
-            background-color: #28a745;
-        }
-        .md_section-title {
-            font-weight: bold;
-            margin-top: 20px;
-            color: #333;
-        }
-        .md_section-content {
-            font-size: 14px;
-            color: #555;
-            line-height: 1.5;
-            margin-bottom: 10px;
+        .modal-footer {
+            justify-content: flex-end;
         }
     </style>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const accessToken = localStorage.getItem('accessToken');
-            if (!accessToken) {
-                window.location.href = '/member/Login';
-                alert("로그인을 하셔야합니다");
-            }
+        $(document).ready(function() {
+            const accessToken = localStorage.getItem("accessToken");
+
+            // 블로그 목록 가져오기
+            fetchBlogList(accessToken);
+
+            // "추가 및 삭제" 버튼 클릭 시 모달 창 표시
+            $('#addBlogBtn').click(function() {
+                $('#blogModal').show();
+            });
+
+            // 모달 창 닫기
+            $('#closeModal').click(function() {
+                $('#blogModal').hide();
+            });
+
+            // URL 저장
+            $('#saveBlogButton').click(function() {
+                const url = $('#blogUrl').val();
+                if (url) {
+                    saveBlogUrl(url, accessToken);
+                    $('#blogModal').hide();
+                } else {
+                    alert("URL을 입력해주세요.");
+                }
+            });
         });
+
+        // 블로그 목록을 가져오는 함수
+        function fetchBlogList(accessToken) {
+            fetch("/portfolio/blog/list", {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ` + accessToken,
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => response.json())
+                .then(data => displayBlogList(data.list, accessToken))
+                .catch(error => console.error("Error fetching blog list:", error));
+        }
+
+        // 블로그 목록을 테이블에 표시하는 함수
+        function displayBlogList(blogs, accessToken) {
+            const tbody = document.querySelector("tbody");
+            tbody.innerHTML = "";
+
+            if (!blogs || blogs.length === 0) {
+                const row = document.createElement("tr");
+                const cell = document.createElement("td");
+                cell.colSpan = 3;
+                cell.textContent = "블로그가 없습니다.";
+                row.appendChild(cell);
+                tbody.appendChild(row);
+                return;
+            }
+
+            blogs.forEach(blog => {
+                const row = document.createElement("tr");
+
+                const userCell = document.createElement("td");
+                userCell.textContent = blog.userIndex;
+                row.appendChild(userCell);
+
+                const urlCell = document.createElement("td");
+                const link = document.createElement("a");
+                link.href = blog.url;
+                link.target = "_blank";
+                link.textContent = blog.url;
+                urlCell.appendChild(link);
+                row.appendChild(urlCell);
+
+                // 삭제 버튼 추가
+                const deleteCell = document.createElement("td");
+                const deleteButton = document.createElement("button");
+                deleteButton.classList.add("delete-btn");
+                deleteButton.textContent = "삭제";
+                deleteButton.onclick = function() {
+                    deleteBlog(blog.blogIndex, accessToken);
+                };
+                deleteCell.appendChild(deleteButton);
+                row.appendChild(deleteCell);
+
+                tbody.appendChild(row);
+            });
+        }
+
+        // 새로운 블로그 URL을 추가하는 함수
+        function saveBlogUrl(url, accessToken) {
+            fetch("/portfolio/blog/insert", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ` + accessToken,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ url: url })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === "SU") {
+                        alert("블로그 URL이 성공적으로 추가되었습니다.");
+                        location.reload(); // 페이지 새로고침으로 목록 갱신
+                    } else {
+                        alert("블로그 URL 추가 실패: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error saving blog URL:", error);
+                    alert("저장 중 오류가 발생했습니다.");
+                });
+        }
+
+        // 블로그 URL 삭제 함수
+        function deleteBlog(blogIndex, accessToken) {
+            if (!confirm("정말로 이 블로그 URL을 삭제하시겠습니까?")) return;
+
+            fetch("/portfolio/blog/delete?index=" + blogIndex, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ` + accessToken,
+                    "Content-Type": "application/json"
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === "SU") {
+                        alert("블로그 URL이 성공적으로 삭제되었습니다.");
+                        location.reload(); // 페이지 새로고침으로 목록 갱신
+                    } else {
+                        alert("블로그 URL 삭제 실패: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error deleting blog URL:", error);
+                    alert("삭제 중 오류가 발생했습니다.");
+                });
+        }
     </script>
 </head>
-<body>
-
-<!-- 헤더 -->
+<body class="d-flex flex-column min-vh-100">
+<!-- Header -->
 <jsp:include page="/WEB-INF/views/member/header/member_header.jsp" flush="true" />
 
-<!-- 메인 콘텐츠 -->
-<body class="d-flex flex-column min-vh-100">
+<div class="d-flex flex-grow-1">
+    <!-- Sidebar -->
+    <jsp:include page="/WEB-INF/views/member/sidebar/sidebar.jsp" flush="true" />
 
-<!-- 메인 콘텐츠 -->
-<div class="container" style="max-width: 1260px;">
-    <main class="flex-grow-1">
-        <div class="md_review-container" id="review-container">
-            <div class="md_review-header">
-                <div class="md_review-title" id="review-title">리뷰 제목</div>
-                <div class="md_review-date" id="review-date">리뷰 날짜</div>
+    <div class="container ms-main-content" style="max-width: 90%; margin: 0 auto;">
+        <main class="flex-grow-1">
+            <div class="blog-container">
+                <div class="blog-header">
+                    <h1>나의 블로그 리스트</h1>
+                    <div class="search-container">
+                        <input type="text" placeholder="검색어 입력...">
+                        <button class="btn btn-secondary"><i class="fas fa-search"></i> 검색</button>
+                        <button id="addBlogBtn" class="btn btn-primary"><i class="fas fa-pencil-alt"></i> 추가 및 삭제</button>
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>유저</th>
+                        <th>URL</th>
+                        <th>삭제</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- 블로그 리스트가 여기에 추가됩니다 -->
+                    </tbody>
+                </table>
             </div>
-
-            <!-- 수정하기 버튼 (로그인한 유저가 작성자인 경우에만 보이게 함) -->
-            <button id="edit-btn" class="btn btn-primary" style="display: none;">수정하기</button>
-
-            <div class="md_progress-bar-label">평균 별점</div>
-            <div class="md_star-rating" id="star-rating"></div>
-
-            <!-- 승진 기회 및 가능성 -->
-            <div class="md_progress-bar-container">
-                <div class="md_progress-bar-label">승진 기회 및 가능성</div>
-                <div class="md_progress-bar" id="advancement-bar"></div>
-            </div>
-
-            <!-- 복지 및 급여 -->
-            <div class="md_progress-bar-container">
-                <div class="md_progress-bar-label">복지 및 급여</div>
-                <div class="md_progress-bar" id="benefit-bar"></div>
-            </div>
-
-            <!-- 업무와 삶의 균형 -->
-            <div class="md_progress-bar-container">
-                <div class="md_progress-bar-label">업무와 삶의 균형</div>
-                <div class="md_progress-bar" id="work-life-bar"></div>
-            </div>
-
-            <!-- 사내문화 -->
-            <div class="md_progress-bar-container">
-                <div class="md_progress-bar-label">사내문화</div>
-                <div class="md_progress-bar" id="company-culture-bar"></div>
-            </div>
-
-            <!-- 경영진 -->
-            <div class="md_progress-bar-container">
-                <div class="md_progress-bar-label">경영진</div>
-                <div class="md_progress-bar" id="management-bar"></div>
-            </div>
-
-            <!-- 리뷰 내용 -->
-            <div class="md_section-title">리뷰 내용</div>
-            <div class="md_section-content" id="content"></div>
-        </div>
-    </main>
+        </main>
+    </div>
 </div>
 
-</body>
+<!-- 블로그 추가 모달 -->
+<div id="blogModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5>블로그 URL 추가</h5>
+            <button id="closeModal" style="border: none; background: none; font-size: 1.2em;">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="text" id="blogUrl" placeholder="블로그 URL을 입력하세요" class="form-control">
+        </div>
+        <div class="modal-footer">
+            <button id="saveBlogButton" class="btn btn-primary">저장</button>
+        </div>
+    </div>
+</div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const path = window.location.pathname;
-        const reviewId = path.split('/').pop(); // URL에서 마지막 부분 (recruitmentId) 추출
-        const reviewUrl = `/member/reviewDetail/`  + reviewId;
-
-        fetch(reviewUrl)
-            .then(response => response.json())
-            .then(data => {
-                const review = data.data;
-
-                // 별점 표시
-                const averageRating = Math.round(review.averageRating);
-                let starHtml = '';
-                for (let i = 0; i < 5; i++) {
-                    starHtml += i < averageRating ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
-                }
-                document.getElementById('star-rating').innerHTML = starHtml;
-
-                // 나머지 데이터 표시
-                document.getElementById('review-title').textContent = review.companyReviewTitle;
-                document.getElementById('review-date').textContent = review.companyReviewDate;
-
-                updateProgressBar('advancement-bar', review.advancement);
-                updateProgressBar('benefit-bar', review.benefit);
-                updateProgressBar('work-life-bar', review.workLife);
-                updateProgressBar('company-culture-bar', review.companyCulture);
-                updateProgressBar('management-bar', review.management);
-
-                document.getElementById('content').textContent = review.content;
-            })
-            .catch(error => console.error('Error fetching review:', error));
-
-        function updateProgressBar(barId, value) {
-            const progressBar = document.getElementById(barId);
-            progressBar.innerHTML = '';
-            for (let i = 0; i < 5; i++) {
-                const segment = document.createElement('div');
-                segment.classList.add('md_progress-segment');
-                if (i < value) {
-                    segment.classList.add('active');
-                }
-                progressBar.appendChild(segment);
-            }
-        }
-    });
-</script>
-<!-- 푸터 -->
+<!-- Footer -->
 <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
-
-<!-- 맨 위로 가기 버튼 -->
-<div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
-
 </body>
 </html>

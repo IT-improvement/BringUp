@@ -80,7 +80,7 @@
 
                     <!-- 네비 아이템 3 상품 -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="pagesMenu" href="/member/myCareer">마이 커리어</a>
+                        <a class="nav-link" id="pagesMenu" href="/member/myCareer">마이 커리어</a>
                <%--         <ul class="dropdown-menu" aria-labelledby="pagesMenu">
                             <li><a class="dropdown-item" href="/member/potofolio">내 포토폴리오</a></li>
                             <li><a class="dropdown-item" href="/member/letter">내 이력서</a></li>
@@ -98,8 +98,12 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="/member/notice" id="recommendMenu">만남의 광장</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="recommendMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">만남의 광장</a>
+                        <ul class="dropdown-menu" aria-labelledby="postMenu">
+                            <li><a class="dropdown-item" href="/member/notice">게시글 목록</a></li>
+                            <li><a class="dropdown-item" href="/member/userNotice">작성한 게시글</a></li>
+                        </ul>
                     </li>
 
                 </ul>
