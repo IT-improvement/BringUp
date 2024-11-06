@@ -53,12 +53,13 @@ document.addEventListener('DOMContentLoaded', function() {
             window.logout();
         });
     }
-
+    const accessToken = localStorage.getItem('accessToken');
     function fetchUserName(accessToken) {
         fetch('/member/name', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${accessToken}`
+                'Authorization': `Bearer ` + accessToken, // 토큰을 헤더에 포함
+                'Content-Type': 'application/json'
             }
         })
         .then(response => response.json())
@@ -70,8 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Error fetching user name:', error));
     }
-
-    const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
         console.error('액세스 토큰을 찾을 수 없습니다.');
         return;

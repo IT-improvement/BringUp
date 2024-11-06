@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,25 +30,24 @@ import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
 @Service
 @RequiredArgsConstructor
 //@Log4j
-public class MemberService implements UserDetailsService{
+public class MemberService{
     private final UserRepository userRepository;
     private final JoinService joinService;
     private final UserLoginService userLoginService;
-
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void updateMember(UserDetailsImpl userDetails, Map<String, String> requestBody){
+    public void updateMember(UserDetailsImpl userDetails, MemberUpdateDto dto){
         UserEntity user = userRepository.findById(userDetails.getId())
                 .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
-        user.setUserEmail(requestBody.get("user_email"));
-        user.setUserPassword(requestBody.get("user_password"));
-        user.setUserAddress(requestBody.get("user_address"));
-        user.setUserName(requestBody.get("user_name"));
-        user.setUserPhonenumber(requestBody.get("user_phonenumber"));
-        user.setUserBirthday(requestBody.get("user_birthday"));
-        if (requestBody.containsKey("freelancer")){
-            user.setFreelancer(Boolean.parseBoolean(requestBody.get("freelancer")));
-        }
+
+        user.setUserEmail(dto.getUserEmail());
+        user.setUserPassword(passwordEncoder.encode(dto.getUserPassword()));
+        user.setUserName(dto.getUserName());
+        user.setUserAddress(dto.getUserAddress());
+        user.setUserBirthday(dto.getUserBirthday());
+        user.setFreelancer(dto.isFreelancer());
+
         userRepository.save(user);
     }
 
@@ -56,11 +56,6 @@ public class MemberService implements UserDetailsService{
         UserEntity user = userRepository.findById(userDetails.getId())
                 .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
         user.setStatus("INACTIVE");
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
     }
 
     public UserEntity getMemberInfo(UserDetailsImpl userDetails){

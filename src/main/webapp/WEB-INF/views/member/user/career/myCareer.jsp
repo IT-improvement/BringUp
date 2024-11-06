@@ -35,175 +35,64 @@
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- Custom Styles -->
     <style>
-        /* Sidebar Styling */
-        .sidebar {
-            background-color: #f7f8f9 !important;
-            padding: 10px;
-            height: calc(100vh - 150px); /* 100vh에서 헤더와 푸터 높이를 뺀 값 */
-            position: fixed;
-            width: 220px;
+        .repository-card {
+            background-color: #f9f9f9; /* 카드 배경색 */
+            transition: transform 0.2s, box-shadow 0.2s;
+            padding: 20px;
         }
 
-        .main-content {
-            margin-left: 240px;
-            padding-top: 20px;
+        .repository-card:hover {
+            transform: translateY(-5px); /* 마우스 오버 시 살짝 올라오게 */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 마우스 오버 시 그림자 효과 */
         }
 
-        .nav-link {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            color: #6c757d;
-            text-align: center;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .nav-link.active {
-            background-color: #eaf3ff;
-            color: #007bff;
-            border-radius: 5px;
-        }
-
-        .nav-link i {
-            margin-right: 10px;
-            font-size: 30px;
-        }
-
-        .collapse-icon {
-            transition: transform 0.3s ease;
-            margin-left: 60px;
-        }
-
-        .collapse-icon[aria-expanded="true"] {
-            transform: rotate(180deg);
-        }
-
-        .sidebar-content {
+        .delete-btn {
             margin-left: 10px;
-            width: 100%;
+            display: inline-block;
         }
 
-        .collapse {
-            transition: height 0.3s ease;
+        .card-body {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        /* Hover effect for links */
-        .nav-link:hover {
-            background-color: #d8e8ff;
-            color: #007bff;
+        .card-body div {
+            flex-grow: 1;
         }
 
-        .sidebar-icon {
-            margin-left: 60px;
+        .badge, .delete-btn {
+            margin-left: 10px;
         }
 
-        /* Small icon and text styles for collapsed content */
-        .small-link {
-            font-size: 14px; /* Smaller text size */
-            padding: 5px 15px; /* Adjust padding */
+        .d-flex.flex-grow-1 {
+            min-height: calc(100vh - 60px); /* 헤더 높이 제외 */
         }
 
-        .small-link i {
-            font-size: 18px; /* Smaller icon size */
-            margin-right: 5px; /* Adjust icon margin */
+        .ms-sidebar {
+            height: calc(100vh - 60px); /* 헤더와 푸터 사이 공간 */
         }
     </style>
 
-    <script>
-        $(document).ready(function() {
-            // Collapse icon toggle
-            $('#resumeCollapse').on('show.bs.collapse', function () {
-                $('#resumeIcon').addClass('bi-caret-up-fill').removeClass('bi-caret-down-fill');
-            }).on('hide.bs.collapse', function () {
-                $('#resumeIcon').addClass('bi-caret-down-fill').removeClass('bi-caret-up-fill');
-            });
-
-            // Add active class on click
-            $('.nav-link').on('click', function() {
-                $('.nav-link').removeClass('active');
-                $(this).addClass('active');
-            });
-        });
-    </script>
 </head>
-<body>
-
+<body class="d-flex flex-column min-vh-100">
 <!-- Header -->
 <jsp:include page="/WEB-INF/views/member/header/member_header.jsp" flush="true" />
 
-<!-- Main Content -->
-<body class="d-flex flex-column min-vh-100">
-<div class="row">
+<div class="d-flex flex-grow-1">
     <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="sidebar-content">
-            <nav>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-file-earmark-person"></i> 이력서</a> <!-- 이력서 아이콘 설정 -->
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#portfolioCollapse" role="button" aria-expanded="false" aria-controls="portfolioCollapse">
-                            <i class="bi bi-folder-symlink"></i> 포트폴리오 <!-- 포트폴리오 아이콘 설정 -->
-                            <div class="collapse-icon">
-                                <span id="portfolioIcon" class="arrow-icon">▼</span> <!-- 펼침 아이콘 -->
-                            </div>
-                        </a>
-                        <div class="collapse" id="portfolioCollapse">
-                            <ul class="nav flex-column ms-3">
-                                <!-- 포트폴리오 내부 아이템 -->
-                                <li class="nav-item">
-                                    <a class="nav-link small-link" href="#"><i class="bi bi-github"></i> Git</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link small-link" href="#"><i class="bi bi-journal-code"></i> Notion</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link small-link" href="#"><i class="bi bi-file-earmark"></i> 블로그</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link small-link" href="#"><i class="bi bi-folder"></i> 파일</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
+    <jsp:include page="/WEB-INF/views/member/sidebar/sidebar.jsp" flush="true" />
 
-                    <!-- Larger items outside of the collapse -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-pencil-square"></i> 자소서</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-briefcase"></i> 이력</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-bar-chart"></i> 경력</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="bi bi-award"></i> 어학 / 자격증</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </aside>
-
-    <!-- Main Section -->
-    <div class="container main-content" style="max-width: 1260px;">
+    <div class="container ms-main-content" style="max-width: 1000px; margin-left: 100px;">
         <main class="flex-grow-1">
-            <h1>내이력서</h1>
-            <p>여기에 이력서 내용이 표시됩니다.</p>
+            <h1>이력서</h1>
+
         </main>
     </div>
 </div>
-</body>
 
 <!-- Footer -->
 <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
-
-<!-- Back to Top Button -->
-<div class="back-top"><i class="bi bi-arrow-up-short"></i></div>
-
 </body>
 </html>

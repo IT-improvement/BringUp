@@ -48,6 +48,8 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private RolesType role = RolesType.ROLE_MEMBER;
 
+    private String githubToken;
+
     public UserEntity(JoinDTO joinDTO){
         this.userEmail = joinDTO.getUserEmail();
         this.userName = joinDTO.getUserName();

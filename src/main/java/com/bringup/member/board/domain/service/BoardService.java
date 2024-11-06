@@ -78,9 +78,9 @@ public class BoardService {
         UserEntity user = userRepository.findById(userDetails.getId())
                 .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
 
-        String crateImages;
+        String createImages;
         try {
-            crateImages = imageService.uploadImages(boardImage);
+            createImages = imageService.uploadImages(boardImage);
         } catch (BoardException e){
             throw new BoardException(IMAGE_UPLOAD_FAIL);
         }
@@ -89,7 +89,7 @@ public class BoardService {
                 .user(user)
                 .title(boardRequestDto.getTitle())
                 .content(boardRequestDto.getContent())
-                .boardImage(crateImages)
+                .boardImage(createImages)
                 .status(BoardType.COMPLETE)
                 .build();
 
