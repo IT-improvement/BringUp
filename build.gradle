@@ -87,7 +87,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.9.0'
 
     // payment
-    implementation 'io.github.bootpay:backend:+'
+    implementation 'io.github.bootpay:backend:2.3.3'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 
     // sms
     implementation 'net.nurigo:sdk:4.3.0'
