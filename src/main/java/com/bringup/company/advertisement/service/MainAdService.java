@@ -54,8 +54,8 @@ public class MainAdService {
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
         advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
-        advertisement.setStartDate(LocalDate.parse(mainAdDto.getStartDate()));
-        advertisement.setEndDate(LocalDate.parse(mainAdDto.getEndDate()));
+        advertisement.setStartDate(mainAdDto.getStartDate());
+        advertisement.setEndDate(mainAdDto.getEndDate());
 
         advertisementRepository.save(advertisement);
 
@@ -80,8 +80,8 @@ public class MainAdService {
         Advertisement ad = mainAd.getAdvertisement();
         ad.setStringListFromList(mainAdDto.getUseDate());
         ad.setStatus(StatusType.CRT_WAIT); // 수정 시에도 초기 상태로 변경
-        mainAd.getAdvertisement().setStartDate(LocalDate.parse(mainAdDto.getStartDate()));
-        mainAd.getAdvertisement().setEndDate(LocalDate.parse(mainAdDto.getEndDate()));
+        mainAd.getAdvertisement().setStartDate(mainAdDto.getStartDate());
+        mainAd.getAdvertisement().setEndDate(mainAdDto.getEndDate());
 
         mainAdvertisementRepository.save(mainAd);
     }
