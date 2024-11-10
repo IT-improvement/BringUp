@@ -136,7 +136,7 @@ public class AdvertisementController {
      */
     @GetMapping("/premium/detail/{ad_index}")
     public ResponseEntity<BfResponse<?>> detailPremiumAd(
-            @PathVariable int ad_index,
+            @PathVariable("ad_index") int ad_index,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         PremiumAdResponseDto pad = premiumAdService.getPremiumAdDetail(userDetails, ad_index);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, pad));
@@ -212,7 +212,7 @@ public class AdvertisementController {
      */
     @GetMapping("/main/detail/{ad_index}")
     public ResponseEntity<BfResponse<?>> detailMainAd(
-            @PathVariable int ad_index,
+            @PathVariable("ad_index") int ad_index,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         MainAdResponseDto mad = mainAdService.getMainAdDetail(ad_index, userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, mad));
@@ -262,7 +262,7 @@ public class AdvertisementController {
 
     @GetMapping("/banner/detail/{ad_index}")
     public ResponseEntity<BfResponse<?>> detailBannerAd(
-            @PathVariable int ad_index,
+            @PathVariable("ad_index") int ad_index,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         BannerAdResponseDto bad = bannerAdService.getBannerAdDetail(ad_index, userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, bad));
@@ -290,11 +290,11 @@ public class AdvertisementController {
         return ResponseEntity.ok(new BfResponse<>("기본 광고 생성완료"));
     }
 
-    @GetMapping("/announce/detail/{announcementId}")
+    @GetMapping("/announce/detail/{ad_index}")
     public ResponseEntity<BfResponse<?>> getAnnouncementAdDetail(
-            @PathVariable int announcementId,
+            @PathVariable("ad_index") int ad_index,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        AnnouncementAdResponseDto announcementAd = announcementAdService.getAnnouncementAdDetail(announcementId, userDetails);
+        AnnouncementAdResponseDto announcementAd = announcementAdService.getAnnouncementAdDetail(ad_index, userDetails);
         return ResponseEntity.ok(new BfResponse<>(announcementAd));
     }
 
