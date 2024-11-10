@@ -190,8 +190,8 @@ public class PremiumAdService {
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
         advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
-        advertisement.setStartDate(premiumAdDto.getStartDate());
-        advertisement.setEndDate(premiumAdDto.getEndDate());
+        advertisement.setStartDate(LocalDate.parse(premiumAdDto.getStartDate()));
+        advertisement.setEndDate(LocalDate.parse(premiumAdDto.getEndDate()));
         advertisementRepository.save(advertisement);
 
         // 프리미엄 광고 정보 등록
@@ -225,8 +225,8 @@ public class PremiumAdService {
         premiumAd.setAdType(premiumAdDto.getAdType());
         premiumAd.setTimeSlot(premiumAdDto.getTimeSlot());
         premiumAd.setImage(imageService.saveImage(img)); // 이미지를 새로 저장
-        premiumAd.getAdvertisement().setStartDate(premiumAdDto.getStartDate());
-        premiumAd.getAdvertisement().setEndDate(premiumAdDto.getEndDate());
+        premiumAd.getAdvertisement().setStartDate(LocalDate.parse(premiumAdDto.getStartDate()));
+        premiumAd.getAdvertisement().setEndDate(LocalDate.parse(premiumAdDto.getEndDate()));
 
         premiumAdvertisementRepository.save(premiumAd);
         // TODO: 웹소켓으로 어드민소통해야함 일단 그냥 CRT_WAIT으로 생성
