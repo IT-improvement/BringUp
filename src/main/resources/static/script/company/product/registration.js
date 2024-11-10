@@ -186,11 +186,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     formData.append('image', document.getElementById('imageUpload').files[0]);
                     formData.append('data', JSON.stringify(data));
                 } else if(type === "announce") {
+                    console.log('Start Date:', document.getElementById('announceStartDate').value);
+                    console.log('Duration Months:', document.getElementById('productSelect').value);
                     const data = {
                         recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
-                        durationDays: document.getElementById('productSelect').value,
-                        startDate: startDate,
-                        endDate: endDate
+                        durationDays: parseInt(document.getElementById('productSelect').value),
+                        startDate: document.getElementById('announceStartDate').value,
+                        endDate: document.getElementById('announceStartDate').value
                     }
                     formData.append('data', JSON.stringify(data));
                 }
@@ -694,7 +696,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let duration = event.target.value;
             if (duration) {
                 fetch(`/com/advertisement/announce/price?displayTime=${duration}`, {
-                    method: 'GET',
+                    method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
                         'Content-Type': 'application/json'
@@ -717,7 +719,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         duration += '개월';
                     }
                     document.getElementById('paymentAmount').textContent = `결제 금액: ${price}원`;
-                    document.getElementById('duration').textContent = `광고 기: ${duration}`;
+                    document.getElementById('duration').textContent = `광고 기간: ${duration}`;
                 })
                 .catch(error => {
                     console.error('Error fetching announcement price:', error);
