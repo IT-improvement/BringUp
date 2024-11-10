@@ -65,7 +65,6 @@
                         </div>
                     </div>
                     <% String adType = (String)request.getAttribute("adType");%>
-                    <% console.log(adType); %>
                     <div class="row">
                         <div class="col-md-6">
                             <p class="card-text">상품 이름: <span id="adType"></span> 광고</p>
