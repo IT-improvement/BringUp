@@ -60,7 +60,7 @@ public class AnnouncementAdService {
 
         // 광고 등록
         Advertisement advertisement = new Advertisement();
-        advertisement.getRecruitment().setRecruitmentIndex(announcementAdDto.getRecruitmentIndex());
+        advertisement.setRecruitment(recruitment);
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
         advertisement.setDisplay(String.valueOf(announcementAdDto.getDurationDays()));
