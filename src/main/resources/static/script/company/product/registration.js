@@ -158,10 +158,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if(type === "premium") {
                     const data = {
                         recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
-                        adType: document.getElementById('adType').value,
-                        timeSlot: displayTime.replace(/ ~ /g, '~'),
+                        adType: document.getElementById('adType').textContent.replace(/광고 유형: /g, ''),
+                        timeSlot: displayTime,
                         startDate: startDate,
-                        endDate: endDate
+                        endDate: endDate,
+                        displayDate: Array.from({length: (new Date(endDate) - new Date(startDate)) / (24*60*60*1000) + 1}, 
+                            (_, i) => new Date(new Date(startDate).getTime() + i * 24*60*60*1000).toISOString().split('T')[0]),
                     }
                     formData.append('image', document.getElementById('imageUpload').files[0]);
                     formData.append('data', JSON.stringify(data));
@@ -207,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         for (let pair of formData.entries()) {
                             console.log(pair[0] + ': ' + pair[1]);
                         }
-                        console.log('상품 등록 응답:', data);
+                        console.log('상품 등록 응답:', data.json());
                     })
                     .catch(error => {
                         console.error('상품 등록 에러:', error);
@@ -606,7 +608,7 @@ document.addEventListener('DOMContentLoaded', function() {
         bannerDateInput.addEventListener('focus', function(event) {
             const durationDays = parseInt(durationSelect.value, 10);
             if (!durationDays) {
-                alert('먼저 광고 기간을 선택��세요.');
+                alert('먼저 광고 기간을 선택세요.');
                 durationSelect.focus();
                 return;
             }
@@ -635,12 +637,15 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 console.log(event.target.value);
                 const duration = event.target.value;
-                fetch('/com/advertisement/banner/price?displayTime='+duration, {
-                    method: 'GET',
+                fetch('/com/advertisement/banner/price', {
+                    method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({
+                        displayTime: duration
+                    })
                 })
                 .then(response => response.json())
                 .then(data => {
