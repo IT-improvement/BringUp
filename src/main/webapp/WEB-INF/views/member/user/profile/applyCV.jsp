@@ -46,7 +46,74 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function (){
+            const accessToken = localStorage.getItem('accessToken');
+            if (!accessToken){
+                window.location.href = "/member/Login";
+                return;
+            }
 
+            let currentPage = 1;
+            const itemsPerPage = 5;
+            let totalItems = 0;
+            let allData = [];
+            let filteredData = [];
+
+            function fetchData(){
+                fetch('/member/applyList', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ` + accessToken,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("받은 데이터 : " + data);
+                        allData = data.data;
+                        filteredData = allData;
+                        totalItems = allData.length;
+                        renderPage(currentPage);
+                    })
+                    .catch(error => {
+                        console.error('기업 북마크 목록을 가져오는 중 오류 발생 : ', error);
+                        const recruitmentListBody = document.getElementById('apply-list-body');
+                        if (recruitmentListBody) {
+                            recruitmentListBody.innerHTML = '<tr><td colspan="6" class="text-center">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>';
+                        }
+                    });
+            }
+
+            function renderPage(page){
+                const applyListBody = document.getElementById('apply-list-body');
+                applyListBody.innerHTML = '';
+
+                const start = (page - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
+                const pageData = filteredData.slice(start, end);
+
+                pageData.forEach((apply, index) => {
+                    const row = document.createElement('tr');
+                    const number = apply.index;
+
+                    row.innerHTML = `
+						<td>${"${start + index + 1}"}</td>
+						<td>${"${apply.cvIndex}"}</td>
+						<td>${"${apply.companyName}"}</td>
+						<td>${"${apply.recruitmentTitle}"}</td>
+						<td>${"${apply.applicationType}"}</td>
+						<td>${"${apply.status}"}</td>
+						<td>${"${apply.applyCVDate}"}</td>
+					`;
+                    row.style.cursor = 'pointer';
+                    row.addEventListener('click', () => {
+                        window.location.href = `/` + number;
+                    });
+                    applyListBody.appendChild(row);
+                });
+            }
+            fetchData();
+        });
     </script>
 </head>
 
@@ -128,12 +195,14 @@
                                 <tr>
                                     <th scope="col">번호</th>
                                     <th scope="col">이력서 번호</th>
-                                    <th scope="col">공고</th>
-                                    <th scope="col">회사</th>
+                                    <th scope="col">기업 이름</th>
+                                    <th scope="col">공고 이름</th>
+                                    <th scope="col">지원 타입</th>
                                     <th scope="col">진행 상태</th>
+                                    <th scope="col">등록 일자</th>
                                 </tr>
                                 </thead>
-                                <tbody id="recruitment-list-body" class="border-top-0 text-center">
+                                <tbody id="apply-list-body" class="border-top-0 text-center">
                                 </tbody>
                             </table>
                         </div>

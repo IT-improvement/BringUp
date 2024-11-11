@@ -21,10 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_BOOKMARK;
@@ -61,15 +58,11 @@ public class CompanyBookMarkService {
         List<CompanyBookMarkEntity> bookMarkList = companyBookMarkRepository.findByUserAndStatus(user, BookmarkType.BOOKMARK);
 
         if(bookMarkList.isEmpty()){
-            throw new BookmarkException(NOT_FOUND_BOOKMARK);
+            return Collections.emptyList();
         }
 
         return bookMarkList.stream()
-                .map(bookMark -> {
-                    Company company = companyRepository.findById(bookMark.getCompany().getCompanyId())
-                            .orElseThrow(()->new RuntimeException("해당 기업을 찾을 수 없습니다."));
-                    return new CompanyBookMarkResponseDto(bookMark);
-                })
+                .map(CompanyBookMarkResponseDto::new)
                 .collect(Collectors.toList());
     }
 
