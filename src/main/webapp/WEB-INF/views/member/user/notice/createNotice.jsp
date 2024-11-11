@@ -48,7 +48,37 @@
     <!--  JS -->
     <!-- <script src="/resources/script/member/user/파일명.js"></script> -->
     <script>
+        document.addEventListener('DOMContentLoaded', function (){
+           document.getElementById('noticeForm').addEventListener('submit', function (e){
+              e.preventDefault();
+              const accessToken = localStorage.getItem('accessToken');
 
+              const formData = {
+                  title: document.getElementById('title').value().trim(),
+                  content: document.getElementById('content').value().trim()
+              };
+
+              fetch('/member/notice/createPost', {
+                  method: 'Post',
+                  headers: {
+                      'Authorization': `Bearer `+ accessToken,
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(formData)
+              }).then(response => {
+                  if (!response.ok){
+                      return response.json().then(err => { throw new Error(err.message); });
+                  }
+                  return response.json();
+              }).then(data => {
+                  alert('게시글이 성공적으로 등록되었습니다.');
+                  location.href = '/member/notice';
+              }).catch(error => {
+                  console.error('Error : ', error);
+                  alert(error.message || '공고 등록에 실패했습니다. 다시 시도해주세요.');
+              });
+           });
+        });
     </script>
 
 </head>
@@ -70,14 +100,13 @@
                         <label class="form-label" for="title">글 제목</label>
                         <input type="text" class="form-control" id="title" name="title" required>
                     </div>
-                    <div class="mb-3" id="">
-                        <label for="notice_img" class="form-label"><i class="fas fa-image"></i> 이미지</label>
-                        <div class="d-flex flex-wrap">
-                            <div class="input-group mb-2 mr-2">
-                                <input type="file" class="form-control" id="notice_img" name="notice_img" accept="image/*" required>
-                            </div>
-                            <button type="button" class="btn btn-primary mb-2 w-100" id="addCeoImage">이미지 추가</button>
-                        </div>
+                    <div class="mb-3">
+                        <label for="notice-img" class="form-label"><i class="fas fa-image"></i> 이미지</label>
+                        <input type="file" class="form-control" id="notice-img" name="notice-img" accept="image/*">
+                    </div>
+                    <div class="mb-3">
+                        <label for="content" class="form-label"><i class="fas fa-briefcase"></i>글 내용</label>
+                        <textarea class="form-control" id="content" name="content" placeholder="글 내용을 입력하세요." required></textarea>
                     </div>
                 </form>
             </div>
