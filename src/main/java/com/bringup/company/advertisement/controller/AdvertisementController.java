@@ -90,7 +90,7 @@ public class AdvertisementController {
      * @return
      */
     @PostMapping("/premium")
-    public ResponseEntity<BfResponse<?>> createPremiumAd(@RequestBody PremiumAdRequestDto premiumAdDto,
+    public ResponseEntity<BfResponse<?>> createPremiumAd(@RequestPart("premiumAdDto") @RequestBody PremiumAdRequestDto premiumAdDto,
                                                          @RequestPart("image") MultipartFile img,
                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try{
