@@ -13,4 +13,5 @@ public class AnnouncementAdRequestDto {
     private String startDate; // 시작 날짜
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private String endDate; // 끝 날짜
+    private int orderIdx;
 }

@@ -17,4 +17,5 @@ public class PremiumAdRequestDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private String endDate; // 사용자가 지정한 광고 종료 날짜
     private List<String> displayDate;
+    private int orderIdx;
 }
