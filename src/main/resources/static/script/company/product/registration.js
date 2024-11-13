@@ -183,13 +183,47 @@ document.addEventListener('DOMContentLoaded', function() {
                         formData.append('image', imageFile);
 
                     } else if (type === "main") {
+                        const mainDateRangeValue = document.getElementById('mainDateRange').value;
+                        if (mainDateRangeValue.includes(' ~ ')) {
+                            startDate = mainDateRangeValue.split(' ~ ')[0];
+                            endDate = mainDateRangeValue.split(' ~ ')[1];
+                        } else {
+                            startDate = mainDateRangeValue;
+                            endDate = mainDateRangeValue;
+                        }
                         data.exposureDays = document.getElementById('productSelect').value;
-                        formData.append('image', document.getElementById('imageUpload').files[0]);
-                        formData.append('data', JSON.stringify(data));
+                        const imageFile = document.getElementById('imageUpload').files[0];
+                        const mainData = {
+                            recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
+                            exposureDays: document.getElementById('productSelect').value,
+                            startDate: startDate,
+                            endDate: endDate,
+                            useDate: Array.from(
+                                { length: (new Date(endDate) - new Date(startDate)) / (24 * 60 * 60 * 1000) + 1 },
+                                (_, i) => new Date(new Date(startDate).getTime() + i * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+                            )
+                        };
+                        formData.append('mainAdDto', new Blob([JSON.stringify(mainData)], {type: 'application/json'}));
+                        formData.append('image', imageFile);
                     } else if (type === "banner") {
+                        const mainDateRangeValue = document.getElementById('mainDateRange').value;
+                        if (mainDateRangeValue.includes(' ~ ')) {
+                            startDate = mainDateRangeValue.split(' ~ ')[0];
+                            endDate = mainDateRangeValue.split(' ~ ')[1];
+                        } else {
+                            startDate = mainDateRangeValue;
+                            endDate = mainDateRangeValue;
+                        }
                         data.exposureDays = document.getElementById('bannerProductSelect').value;
-                        formData.append('image', document.getElementById('imageUpload').files[0]);
-                        formData.append('data', JSON.stringify(data));
+                        const imageFile = document.getElementById('imageUpload').files[0];
+                        const bannerData = {
+                            recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
+                            exposureDays: document.getElementById('bannerProductSelect').value,
+                            startDate: new Date(startDate).toISOString().split('T')[0],
+                            endDate: new Date(endDate).toISOString().split('T')[0]
+                        };
+                        formData.append('bannerAdDto', new Blob([JSON.stringify(bannerData)], {type: 'application/json'}));
+                        formData.append('image', imageFile);
                     }
 
                     fetch(`/com/advertisement/${type}`, {
@@ -201,7 +235,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .then(response => {
                         if (!response.ok) {
-                            console.log("데이터"+formData.get('premiumAdDto'));
+                            console.log("프리미엄 데이터"+formData.get('premiumAdDto'));
+                            console.log("메인 데이터"+formData.get('mainAdDto'));
+                            console.log("배너 데이터"+formData.get('bannerAdDto'));
                             console.log("이미지"+formData.get('image'));
                             throw new Error('Network response was not ok');
                         }
@@ -218,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .catch(error => {
                         console.error('에러 발생:', error);
-                        alert("광고 등록 중 오류가 발생했습니다. 이미지 형식을 확인해주세요.");
+                        alert("광고 등록 중 오류가 발생했습니다.");
                     });
 
                 } else if (type === "announce") {
