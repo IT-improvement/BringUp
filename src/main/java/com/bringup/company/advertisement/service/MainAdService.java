@@ -109,10 +109,11 @@ public class MainAdService {
 
     // 메인 광고 상세 조회
     public MainAdResponseDto getMainAdDetail(int mainAdId, UserDetailsImpl userDetails) {
-        MainAdvertisement mainAd = mainAdvertisementRepository.findById(mainAdId)
+        Advertisement ad = advertisementRepository.findByAdvertisementIndex(mainAdId)
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
-        Advertisement ad = mainAd.getAdvertisement();
+        MainAdvertisement mainAd = mainAdvertisementRepository.findById(ad.getMainAdvertisement().getMainId())
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         // 광고 소유자인지 확인
         if (!ad.getRecruitment().getCompany().getCompanyId().equals(userDetails.getId())) {
