@@ -70,7 +70,7 @@ public class AdService {
         adrepo.saveAll(adsToDeactivate);
     }
 
-    public List<UserAdvertisementResponseDto> getUserAdvertisement(UserDetailsImpl userDetails) {
+    public List<UserAdvertisementResponseDto> getUserAdvertisement(UserDetailsImpl userDetails){
 
         // 사용자 회사 정보 조회
         Company company = companyRepository.findBycompanyId(userDetails.getId())
@@ -79,33 +79,35 @@ public class AdService {
         // 해당 회사의 모든 광고 조회
         List<Advertisement> ads = advertisementRepository.findAllByRecruitmentCompany(company);
 
-        // 결제 내역 조회 및 맵핑 (광고 인덱스 기준)
-        Map<Integer, Integer> advertisementPayments = paymentRepository.findByUserIdxAndRoles(company.getCompanyId(), RolesType.ROLE_COMPANY)
-                .stream()
-                .collect(Collectors.toMap(
-                        payment -> payment.getItemIdx().getItemIndex(),
-                        payment -> payment.getItemIdx().getPrice().intValue()
-                ));
+        // 해당 회사의 결제 내역을 조회 (userIdx와 role을 사용)
+        List<Payment> payments = paymentRepository.findByUserIdxAndRoles(company.getCompanyId(), RolesType.ROLE_COMPANY);
+
+        // 광고에 대한 결제 정보를 맵핑하기 위해 광고 인덱스를 기준으로 맵을 만듦
+        Map<Integer, Integer> advertisementPayments = new HashMap<>();
+        for (Payment payment : payments) {
+            advertisementPayments.put(payment.getItemIdx().getItemIndex(), payment.getItemIdx().getPrice().intValue());
+        }
 
         // 광고 목록을 UserAdvertisementResponseDto로 변환
         return ads.stream().map(ad -> {
-            // 광고 타입 결정
+            // 광고 타입 결정 (프리미엄, 메인, 배너 등)
             String adType = determineAdType(ad);
 
-            // 결제 금액 조회 (없으면 0)
+            // 해당 광고에 대한 결제 금액을 조회
             int paymentAmount = advertisementPayments.getOrDefault(ad.getAdvertisementIndex(), 0);
 
             return UserAdvertisementResponseDto.builder()
                     .adIdx(ad.getAdvertisementIndex())
                     .adType(adType)
                     .recruitmentTitle(ad.getRecruitment().getRecruitmentTitle())
-                    .startDate(ad.getStartDate().format(DateTimeFormatter.ISO_LOCAL_DATE))
-                    .endDate(ad.getEndDate().format(DateTimeFormatter.ISO_LOCAL_DATE))
+                    .startDate(ad.getStartDate().toString())
+                    .endDate(ad.getEndDate().toString())
                     .clickCount(ad.getC_count())
-                    .payed(paymentAmount)
+                    .payed(paymentAmount)  // 결제 금액이 있으면 반환, 없으면 0
                     .build();
         }).collect(Collectors.toList());
     }
+
 
 
     // 광고 타입을 결정하는 메소드
