@@ -20,6 +20,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import static com.bringup.common.enums.AdvertisementErrorCode.ALREADY_ACTIVE;
@@ -64,8 +65,8 @@ public class AnnouncementAdService {
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
         advertisement.setDisplay(String.valueOf(announcementAdDto.getDurationDays()));
-        advertisement.setStartDate(announcementAdDto.getStartDate());
-        advertisement.setEndDate(announcementAdDto.getEndDate());
+        advertisement.setStartDate(LocalDate.parse(announcementAdDto.getStartDate()));
+        advertisement.setEndDate(LocalDate.parse(announcementAdDto.getEndDate()));
         advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
         advertisementRepository.save(advertisement);
 
@@ -84,8 +85,8 @@ public class AnnouncementAdService {
         }
 
         announcementAd.getAdvertisement().setStatus(StatusType.CRT_WAIT);
-        announcementAd.getAdvertisement().setStartDate(announcementAdDto.getStartDate());
-        announcementAd.getAdvertisement().setEndDate(announcementAdDto.getEndDate());
+        announcementAd.getAdvertisement().setStartDate(LocalDate.parse(announcementAdDto.getStartDate()));
+        announcementAd.getAdvertisement().setEndDate(LocalDate.parse(announcementAdDto.getEndDate()));
 
         announcementAdvertisementRepository.save(announcementAd);
     }
