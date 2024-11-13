@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const adIdx = urlParams.get('adIdx');
-    const adType = urlParams.get('adType');
+    let adType = urlParams.get('adType');
     const accessToken = localStorage.getItem('accessToken');
 
     let recruitmentId = null;
@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('광고 타입 또는 ID가 지정되지 않았습니다.');
         return;
     }
+
+    adType = adType.toLowerCase();
 
     fetch(`/com/advertisement/${adType}/detail/${adIdx}`, {
         method: 'GET',
@@ -51,12 +53,12 @@ document.addEventListener('DOMContentLoaded', function() {
             switch(adType) {
                 case 'premium':
                     document.getElementById('status').innerText = ad.status || '-';
-                    document.getElementById('adType').innerText = ad.adType || '-';
                     document.getElementById('timeSlot').innerText = ad.timeSlot || '-';
                     document.getElementById('adPeriod').innerText = `${ad.startDate || '-'} ~ ${ad.endDate || '-'}`;
                     document.getElementById('adImg').src = ad.ad_img || '';
                     document.getElementById('viewCount').innerText = ad.view_count || 0;
                     document.getElementById('clickCount').innerText = ad.click_count || 0;
+                    document.getElementById('adType').innerText = ad.adType || '-';
                     break;
 
                 case 'main':
