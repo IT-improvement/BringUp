@@ -1,7 +1,9 @@
 package com.bringup.company.advertisement.service;
 
 import com.bringup.admin.payment.entity.Item;
+import com.bringup.admin.payment.entity.Payment;
 import com.bringup.admin.payment.repository.ItemRepository;
+import com.bringup.admin.payment.repository.PaymentRepository;
 import com.bringup.common.enums.StatusType;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.dto.request.AnnouncementAdRequestDto;
@@ -36,6 +38,7 @@ public class AnnouncementAdService {
     private final AdvertisementRepository advertisementRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final ItemRepository itemRepository;
+    private final PaymentRepository paymentRepository;
 
     public ItemInfoResponseDto getAnnounceAdPrice(int displayTime){
         String itemName = "공고 광고 - " + displayTime + "달";
@@ -55,6 +58,9 @@ public class AnnouncementAdService {
         Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(announcementAdDto.getRecruitmentIndex())
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_RECRUITMENT));
 
+        Payment order = paymentRepository.findByOrderIndex(announcementAdDto.getOrderIdx())
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
         if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
             throw new CompanyException(NOT_FOUND_MEMBER_ID);
         }
@@ -67,6 +73,7 @@ public class AnnouncementAdService {
         advertisement.setDisplay(String.valueOf(announcementAdDto.getDurationDays()));
         advertisement.setStartDate(LocalDate.parse(announcementAdDto.getStartDate()));
         advertisement.setEndDate(LocalDate.parse(announcementAdDto.getEndDate()));
+        advertisement.setOrder(order);
         advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
         advertisementRepository.save(advertisement);
 
@@ -77,7 +84,10 @@ public class AnnouncementAdService {
 
     @Transactional
     public void updateAnnouncementAd(int announcementId, AnnouncementAdRequestDto announcementAdDto, UserDetailsImpl userDetails) {
-        AnnouncementAdvertisement announcementAd = announcementAdvertisementRepository.findById(announcementId)
+        Advertisement ad = advertisementRepository.findByAdvertisementIndex(announcementId)
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
+        AnnouncementAdvertisement announcementAd = announcementAdvertisementRepository.findById(ad.getAnnouncementAdvertisement().getAnnouncementId())
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         if (!announcementAd.getAdvertisement().getRecruitment().getCompany().getCompanyId().equals(userDetails.getId())) {

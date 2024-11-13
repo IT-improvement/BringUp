@@ -9,4 +9,5 @@ public class ChoicedateRequestDto {
     private String startDate;
     private String endDate;
     private String timeSlot;
+    private int orderIdx;
 }

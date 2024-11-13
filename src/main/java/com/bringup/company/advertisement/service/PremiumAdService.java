@@ -1,7 +1,9 @@
 package com.bringup.company.advertisement.service;
 
 import com.bringup.admin.payment.entity.Item;
+import com.bringup.admin.payment.entity.Payment;
 import com.bringup.admin.payment.repository.ItemRepository;
+import com.bringup.admin.payment.repository.PaymentRepository;
 import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.enums.StatusType;
 import com.bringup.common.image.ImageService;
@@ -41,6 +43,7 @@ public class PremiumAdService {
     private final CompanyRepository companyRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final ItemRepository itemRepository;
+    private final PaymentRepository paymentRepository;
 
     /*public List<String> getUnavailableDates(ChoicedateRequestDto choicedatedto) {
 
@@ -179,6 +182,9 @@ public class PremiumAdService {
         Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(premiumAdDto.getRecruitmentIndex())
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_RECRUITMENT));
 
+        Payment order = paymentRepository.findByOrderIndex(premiumAdDto.getOrderIdx())
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
         if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
             throw new CompanyException(NOT_FOUND_MEMBER_ID);
         }
@@ -190,6 +196,7 @@ public class PremiumAdService {
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
         advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
+        advertisement.setOrder(order);
         advertisement.setStartDate(LocalDate.parse(premiumAdDto.getStartDate()));
         advertisement.setEndDate(LocalDate.parse(premiumAdDto.getEndDate()));
         advertisementRepository.save(advertisement);
