@@ -84,7 +84,10 @@ public class AnnouncementAdService {
 
     @Transactional
     public void updateAnnouncementAd(int announcementId, AnnouncementAdRequestDto announcementAdDto, UserDetailsImpl userDetails) {
-        AnnouncementAdvertisement announcementAd = announcementAdvertisementRepository.findById(announcementId)
+        Advertisement ad = advertisementRepository.findByAdvertisementIndex(announcementId)
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
+        AnnouncementAdvertisement announcementAd = announcementAdvertisementRepository.findById(ad.getAnnouncementAdvertisement().getAnnouncementId())
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         if (!announcementAd.getAdvertisement().getRecruitment().getCompany().getCompanyId().equals(userDetails.getId())) {

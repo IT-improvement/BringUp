@@ -88,7 +88,10 @@ public class BannerAdService {
 
     @Transactional
     public BannerAdResponseDto getBannerAdDetail(int bannerId, UserDetailsImpl userDetails) {
-        BannerAdvertisement bannerAd = bannerAdRepository.findById(bannerId)
+        Advertisement ad = advertisementRepository.findByAdvertisementIndex(bannerId)
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
+        BannerAdvertisement bannerAd = bannerAdRepository.findById(ad.getBannerAdvertisement().getBannerId())
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         // 광고 소유자인지 확인
