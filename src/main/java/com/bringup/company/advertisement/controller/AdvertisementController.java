@@ -85,7 +85,7 @@ public class AdvertisementController {
 
     /**
      *
-     * @param premiumAdDto
+     * @param premiumAdDtoJson
      * @param img
      * @return
      */
