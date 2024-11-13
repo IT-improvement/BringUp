@@ -163,7 +163,7 @@ public class AdvertisementController {
      * @return
      */
     @PostMapping("/main")
-    public ResponseEntity<BfResponse<?>> createMainAd(@RequestParam("mainAdDto") String mainAdDtoJson,
+    public ResponseEntity<BfResponse<?>> createMainAd(@RequestPart("mainAdDto") String mainAdDtoJson,
                                                          @RequestPart("image") MultipartFile img,
                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try{
@@ -225,7 +225,7 @@ public class AdvertisementController {
 
     @PostMapping("/banner")
     public ResponseEntity<BfResponse<String>> createBannerAd(
-            @RequestParam("bannerAdDto") String bannerAdDtoJson,
+            @RequestPart("bannerAdDto") String bannerAdDtoJson,
             @RequestPart("image") MultipartFile img,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try{
