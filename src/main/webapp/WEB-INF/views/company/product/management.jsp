@@ -65,12 +65,13 @@
 						<th>클릭수</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="adTableBody">
 					<tr>
 						<td colspan="5" class="text-center">데이터를 불러오는 중...</td>
 					</tr>
 				</tbody>
 			</table>
+			<div id="pagination" class="d-flex justify-content-center mt-3"></div>
 		</div>
     </main>
 
