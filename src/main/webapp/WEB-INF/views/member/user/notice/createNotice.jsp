@@ -48,36 +48,63 @@
     <!--  JS -->
     <!-- <script src="/resources/script/member/user/파일명.js"></script> -->
     <script>
-        document.addEventListener('DOMContentLoaded', function (){
-           document.getElementById('noticeForm').addEventListener('submit', function (e){
-              e.preventDefault();
-              const accessToken = localStorage.getItem('accessToken');
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('noticeForm').addEventListener('submit', function (e) {
+                e.preventDefault();
 
-              const formData = {
-                  title: document.getElementById('title').value().trim(),
-                  content: document.getElementById('content').value().trim()
-              };
+                // localStorage에서 access token을 가져옵니다.
+                const accessToken = localStorage.getItem('accessToken');
 
-              fetch('/member/notice/createPost', {
-                  method: 'Post',
-                  headers: {
-                      'Authorization': `Bearer `+ accessToken,
-                      'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify(formData)
-              }).then(response => {
-                  if (!response.ok){
-                      return response.json().then(err => { throw new Error(err.message); });
-                  }
-                  return response.json();
-              }).then(data => {
-                  alert('게시글이 성공적으로 등록되었습니다.');
-                  location.href = '/member/notice';
-              }).catch(error => {
-                  console.error('Error : ', error);
-                  alert(error.message || '공고 등록에 실패했습니다. 다시 시도해주세요.');
-              });
-           });
+                // FormData 객체를 생성합니다.
+                const formData = new FormData();
+
+                // 파일이 포함된 경우, 파일 입력을 가져와서 추가합니다.
+                const boardImage = document.getElementById('notice-img'); // 파일 입력 요소의 ID
+                if (boardImage.files.length > 0) {
+                    // 여러 파일이 있을 수 있으므로 모든 파일을 추가합니다.
+                    for (let i = 0; i < boardImage.files.length; i++) {
+                        formData.append('boardImage', boardImage.files[i]);
+                    }
+                }
+
+                // boardRequestDto 객체 생성 (제목과 내용 포함)
+                const boardRequestDto = {
+                    title: document.getElementById('title').value.trim(),
+                    content: document.getElementById('content').value.trim(),
+                };
+
+                // boardRequestDto를 JSON 문자열로 변환하여 FormData에 추가
+                formData.append('boardRequestDto', JSON.stringify(boardRequestDto));
+
+                // Fetch API로 POST 요청을 보냅니다.
+                fetch('/member/notice/createPost', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ` + accessToken,
+                        // Content-Type을 설정할 필요는 없습니다. FormData가 자동으로 Content-Type을 설정합니다.
+                    },
+                    body: formData  // FormData를 body에 포함시킴
+                }).then(response => {
+                        if (!response.ok) {
+                            // 서버 응답이 성공적이지 않은 경우 에러 메시지를 반환
+                            return response.json().then(err => {
+                                throw new Error(err.message || '게시글 등록에 실패했습니다.');
+                            });
+                        }
+                        // 응답이 성공적이면 JSON 데이터 반환
+                        return response.json();
+                    }).then(data => {
+                        // 성공적인 게시글 등록 후 사용자에게 알림
+                        alert('게시글이 성공적으로 등록되었습니다.');
+                        // 게시글 목록 페이지로 리디렉션
+                        location.href = '/member/notice';
+                    }).catch(error => {
+                        // 오류 발생 시 콘솔에 에러 출력
+                        console.error('Error : ', error);
+                        // 사용자에게 오류 메시지 알림
+                        alert(error.message || '게시글 등록에 실패했습니다. 다시 시도해주세요.');
+                    });
+            });
         });
     </script>
 
@@ -94,7 +121,7 @@
             <div class="card-header">
                 <h4 class="card-title">게시글 등록</h4>
             </div>
-            <div class="card-body">
+            <div class="card-body m-4">
                 <form action="/member/notice/createPost" method="post" id="noticeForm">
                     <div class="mb-3">
                         <label class="form-label" for="title">글 제목</label>
@@ -106,8 +133,10 @@
                     </div>
                     <div class="mb-3">
                         <label for="content" class="form-label"><i class="fas fa-briefcase"></i>글 내용</label>
-                        <textarea class="form-control" id="content" name="content" placeholder="글 내용을 입력하세요." required></textarea>
+                        <textarea class="form-control" style="height: 21rem; width: 100%" id="content" name="content" placeholder="글 내용을 입력하세요." required></textarea>
                     </div>
+                    <button type="button" class="btn btn-secondary" onclick="location.href='/member/notice'">돌아가기</button>
+                    <button type="submit" class="btn btn-primary" style="float: right;">완료</button>
                 </form>
             </div>
         </div>

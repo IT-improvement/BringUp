@@ -50,7 +50,7 @@ public class BoardController {
     }
 
     @PostMapping("/createPost")
-    public ResponseEntity<BfResponse<?>> createPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto, @RequestParam MultipartFile[] boardImage){
+    public ResponseEntity<BfResponse<?>> createPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestPart("boardRequestDto") BoardRequestDto boardRequestDto, @RequestPart("boardImage") MultipartFile[] boardImage){
         try {
             boardService.createPost(userDetails, boardRequestDto, boardImage);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, "create post successfully"));
