@@ -155,71 +155,87 @@ document.addEventListener('DOMContentLoaded', function() {
             if (paymentButton) {
                 const type = productName.includes("프리미엄") ? "premium" : productName.includes("메인") ? "main" : productName.includes("배너") ? "banner" : "announce";
                 const formData = new FormData();
-                if(type === "premium") {
-                    const data = {
+                let data = {};
+
+                if (type === "premium" || type === "main" || type === "banner") {
+                    data = {
                         recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
-                        adType: document.getElementById('adType').textContent.replace(/광고 유형: /g, ''),
-                        timeSlot: displayTime,
-                        startDate: startDate,
-                        endDate: endDate,
-                        displayDate: Array.from({length: (new Date(endDate) - new Date(startDate)) / (24*60*60*1000) + 1}, 
-                            (_, i) => new Date(new Date(startDate).getTime() + i * 24*60*60*1000).toISOString().split('T')[0]),
-                    }
-                    formData.append('image', document.getElementById('imageUpload').files[0]);
-                    formData.append('data', JSON.stringify(data));
-                } else if(type === "main") {
-                    const data = {
-                        recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
-                        exposureDays: document.getElementById('productSelect').value,
                         startDate: startDate,
                         endDate: endDate
+                    };
+
+                    if (type === "premium") {
+                        // PremiumAdRequestDto 형식에 맞게 데이터 구성
+                        data = {
+                            recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
+                            adType: document.getElementById('adType').textContent.replace(/광고 유형: /g, ''),
+                            timeSlot: displayTime,
+                            startDate: startDate,
+                            endDate: endDate,
+                            displayDate: Array.from(
+                                { length: (new Date(endDate) - new Date(startDate)) / (24 * 60 * 60 * 1000) + 1 },
+                                (_, i) => new Date(new Date(startDate).getTime() + i * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+                            )
+                        };
+                    } else if (type === "main") {
+                        data.exposureDays = document.getElementById('productSelect').value;
+                    } else if (type === "banner") {
+                        data.exposureDays = document.getElementById('bannerProductSelect').value;
                     }
+
                     formData.append('image', document.getElementById('imageUpload').files[0]);
                     formData.append('data', JSON.stringify(data));
-                } else if(type === "banner") {
-                    const data = {
-                        recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
-                        exposureDays: document.getElementById('bannerProductSelect').value, 
-                        startDate: startDate,
-                        endDate: endDate
-                    }
-                    formData.append('image', document.getElementById('imageUpload').files[0]);
-                    formData.append('data', JSON.stringify(data));
-                } else if(type === "announce") {
+
+                    fetch(`/com/advertisement/${type}`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                            // 'Content-Type': 'multipart/form-data' // 자동으로 설정됨
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(responseData => {
+                        console.log("보낸 데이터 :", formData.get('data'));
+                        console.log('응답 데이터:', responseData);
+                    })
+                    .catch(error => {
+                        console.error('에러 발생:', error);
+                    });
+
+                } else if (type === "announce") {
                     console.log('Start Date:', document.getElementById('announceStartDate').value);
                     console.log('Duration Months:', document.getElementById('productSelect').value);
-                    const data = {
+                    data = {
                         recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
                         durationDays: parseInt(document.getElementById('productSelect').value),
                         startDate: document.getElementById('announceStartDate').value,
                         endDate: document.getElementById('announceStartDate').value
-                    }
-                    formData.append('data', JSON.stringify(data));
-                }
-                
-                try {
+                    };
+
                     fetch(`/com/advertisement/${type}`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${accessToken}`,
                             'Content-Type': 'application/json'
                         },
-                        body: formData
+                        body: JSON.stringify(data)
                     })
-                    .then(data => {
-                        // FormData의 모든 항목 출력
-                        for (let pair of formData.entries()) {
-                            console.log(pair[0] + ': ' + pair[1]);
+                    .then(response => response.json())
+                    .then(responseData => {
+                        console.log('응답 데이터:', responseData);
+                        if(responseData.code === 200) {
+                            alert("광고 등록이 완료되었습니다.");
+                            sessionStorage.clear();
+                            location.href = "/company/product/management";
+                        } else {
+                            alert("광고 등록에 실패했습니다.");
                         }
-                        console.log('상품 등록 응답:', data.json());
                     })
                     .catch(error => {
-                        console.error('상품 등록 에러:', error);
+                        console.error('에러 발생:', error);
                     });
-                } catch (error) {
-                    console.error("상품 등록 실패:", error);
                 }
-                // paymentButton.click();
             } else {
                 alert("결제 버튼을 찾을 수 없습니다.");
             }
