@@ -66,8 +66,8 @@ public class BannerAdService {
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
         advertisement.setDisplay(String.valueOf(bannerAdDto.getExposureDays()));
-        advertisement.setStartDate(bannerAdDto.getStartDate());
-        advertisement.setEndDate(bannerAdDto.getEndDate());
+        advertisement.setStartDate(LocalDate.parse(bannerAdDto.getStartDate()));
+        advertisement.setEndDate(LocalDate.parse(bannerAdDto.getEndDate()));
         advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
         advertisementRepository.save(advertisement);
 
@@ -103,8 +103,8 @@ public class BannerAdService {
 
         bannerAd.getAdvertisement().setStatus(StatusType.CRT_WAIT);
         bannerAd.setBannerImage(imageService.saveImage(img));
-        bannerAd.getAdvertisement().setStartDate(bannerAdDto.getStartDate());
-        bannerAd.getAdvertisement().setEndDate(bannerAdDto.getEndDate());
+        bannerAd.getAdvertisement().setStartDate(LocalDate.parse(bannerAdDto.getStartDate()));
+        bannerAd.getAdvertisement().setEndDate(LocalDate.parse(bannerAdDto.getEndDate()));
 
         bannerAdRepository.save(bannerAd);
     }

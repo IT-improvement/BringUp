@@ -11,7 +11,7 @@ public class BannerAdRequestDto {
     private int recruitmentIndex; // 채용공고 인덱스
     private int exposureDays; // 노출 일수
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate startDate;
+    private String startDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate endDate;
+    private String endDate;
 }
