@@ -14,4 +14,5 @@ public class BannerAdRequestDto {
     private String startDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private String endDate;
+    private int orderIdx;
 }

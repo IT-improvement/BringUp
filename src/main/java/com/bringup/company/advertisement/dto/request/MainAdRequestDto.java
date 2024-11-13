@@ -16,4 +16,5 @@ public class MainAdRequestDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private String endDate; // 종료날짜
     private List<String> useDate;
+    private int orderIdx;
 }
