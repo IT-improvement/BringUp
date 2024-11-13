@@ -1,7 +1,9 @@
 package com.bringup.company.advertisement.service;
 
 import com.bringup.admin.payment.entity.Item;
+import com.bringup.admin.payment.entity.Payment;
 import com.bringup.admin.payment.repository.ItemRepository;
+import com.bringup.admin.payment.repository.PaymentRepository;
 import com.bringup.common.enums.StatusType;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
@@ -37,6 +39,7 @@ public class BannerAdService {
     private final RecruitmentRepository recruitmentRepository;
     private final ImageService imageService;
     private final ItemRepository itemRepository;
+    private final PaymentRepository paymentRepository;
 
     public ItemInfoResponseDto getBannerInfo(DateRequestDto dto){
         String itemName = "배너 광고 - " + dto.getDisplayTime() + "일";
@@ -57,6 +60,9 @@ public class BannerAdService {
         Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(bannerAdDto.getRecruitmentIndex())
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_RECRUITMENT));
 
+        Payment order = paymentRepository.findByOrderIndex(bannerAdDto.getOrderIdx())
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
         if(!recruitment.getCompany().getCompanyId().equals(userDetails.getId())){
             throw new CompanyException(NOT_FOUND_MEMBER_ID);
         }
@@ -68,6 +74,7 @@ public class BannerAdService {
         advertisement.setDisplay(String.valueOf(bannerAdDto.getExposureDays()));
         advertisement.setStartDate(LocalDate.parse(bannerAdDto.getStartDate()));
         advertisement.setEndDate(LocalDate.parse(bannerAdDto.getEndDate()));
+        advertisement.setOrder(order);
         advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
         advertisementRepository.save(advertisement);
 
