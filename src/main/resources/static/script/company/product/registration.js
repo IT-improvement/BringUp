@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     if (type === "premium") {
                         // PremiumAdRequestDto 형식에 맞게 데이터 구성
-                        data = {
+                        const premiumData = {
                             recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
                             adType: document.getElementById('adType').textContent.replace(/광고 유형: /g, ''),
                             timeSlot: displayTime,
@@ -177,30 +177,48 @@ document.addEventListener('DOMContentLoaded', function() {
                                 (_, i) => new Date(new Date(startDate).getTime() + i * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
                             )
                         };
+
+                        const imageFile = document.getElementById('imageUpload').files[0];
+                        formData.append('premiumAdDto', new Blob([JSON.stringify(premiumData)], {type: 'application/json'}));
+                        formData.append('image', imageFile);
+
                     } else if (type === "main") {
                         data.exposureDays = document.getElementById('productSelect').value;
+                        formData.append('image', document.getElementById('imageUpload').files[0]);
+                        formData.append('data', JSON.stringify(data));
                     } else if (type === "banner") {
                         data.exposureDays = document.getElementById('bannerProductSelect').value;
+                        formData.append('image', document.getElementById('imageUpload').files[0]);
+                        formData.append('data', JSON.stringify(data));
                     }
-
-                    formData.append('image', document.getElementById('imageUpload').files[0]);
-                    formData.append('data', JSON.stringify(data));
 
                     fetch(`/com/advertisement/${type}`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${accessToken}`
-                            // 'Content-Type': 'multipart/form-data' // 자동으로 설정됨
                         },
                         body: formData
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            console.log("데이터"+formData.get('premiumAdDto'));
+                            console.log("이미지"+formData.get('image'));
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
                     .then(responseData => {
-                        console.log("보낸 데이터 :", formData.get('data'));
-                        console.log('응답 데이터:', responseData);
+                        if(responseData.code === 200) {
+                            alert("광고 등록이 완료되었습니다.");
+                            sessionStorage.clear();
+                            location.href = "/company/product/management";
+                        } else {
+                            alert("광고 등록에 실패했습니다.");
+                        }
                     })
                     .catch(error => {
                         console.error('에러 발생:', error);
+                        alert("광고 등록 중 오류가 발생했습니다. 이미지 형식을 확인해주세요.");
                     });
 
                 } else if (type === "announce") {
