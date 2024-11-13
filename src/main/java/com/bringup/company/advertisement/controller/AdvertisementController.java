@@ -85,28 +85,20 @@ public class AdvertisementController {
 
     /**
      *
-     * @param premiumAdDtoJson
+     * @param premiumAdDto
      * @param img
      * @return
      */
     @PostMapping("/premium")
-    public ResponseEntity<BfResponse<?>> createPremiumAd(@RequestParam("premiumAdDto") String premiumAdDtoJson,
+    public ResponseEntity<BfResponse<?>> createPremiumAd(@RequestBody PremiumAdRequestDto premiumAdDto,
                                                          @RequestPart("image") MultipartFile img,
                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try{
-            PremiumAdRequestDto premiumAdDto = objectMapper.readValue(premiumAdDtoJson, PremiumAdRequestDto.class);
-
-            // 서비스 호출
             premiumAdService.createPremiumAd(premiumAdDto, img, userDetails);
-
             BfResponse<String> response = new BfResponse<>(SUCCESS, "Premium Advertisement Created Successfully");
             return ResponseEntity.ok(response);
         } catch (AdvertisementException e){
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
-        } catch (JsonMappingException e) {
-            throw new RuntimeException(e);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         }
     }
 
