@@ -153,6 +153,21 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             const paymentButton = document.getElementById("paymentButton");
             if (paymentButton) {
+                paymentButton.click();
+            } else {
+                alert("결제 버튼을 찾을 수 없습니다.");
+            }
+        }
+    });
+
+    // 결제 결과 이벤트 수신
+    document.addEventListener("paymentResult", function(event) {
+        const status = event.detail.status;
+        const paymentResponse = event.detail.paymentResponse;
+        switch (status) {
+            case "done":
+                console.log("결제 성공");
+                console.log(paymentResponse);
                 const type = productName.includes("프리미엄") ? "premium" : productName.includes("메인") ? "main" : productName.includes("배너") ? "banner" : "announce";
                 const formData = new FormData();
                 let data = {};
@@ -175,7 +190,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             displayDate: Array.from(
                                 { length: (new Date(endDate) - new Date(startDate)) / (24 * 60 * 60 * 1000) + 1 },
                                 (_, i) => new Date(new Date(startDate).getTime() + i * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
-                            )
+                            ),
+                            orderIdx: paymentResponse.orderindex
                         };
 
                         const imageFile = document.getElementById('imageUpload').files[0];
@@ -183,13 +199,49 @@ document.addEventListener('DOMContentLoaded', function() {
                         formData.append('image', imageFile);
 
                     } else if (type === "main") {
+                        const mainDateRangeValue = document.getElementById('mainDateRange').value;
+                        if (mainDateRangeValue.includes(' ~ ')) {
+                            startDate = mainDateRangeValue.split(' ~ ')[0];
+                            endDate = mainDateRangeValue.split(' ~ ')[1];
+                        } else {
+                            startDate = mainDateRangeValue;
+                            endDate = mainDateRangeValue;
+                        }
                         data.exposureDays = document.getElementById('productSelect').value;
-                        formData.append('image', document.getElementById('imageUpload').files[0]);
-                        formData.append('data', JSON.stringify(data));
+                        const imageFile = document.getElementById('imageUpload').files[0];
+                        const mainData = {
+                            recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
+                            exposureDays: document.getElementById('productSelect').value,
+                            startDate: startDate,
+                            endDate: endDate,
+                            useDate: Array.from(
+                                { length: (new Date(endDate) - new Date(startDate)) / (24 * 60 * 60 * 1000) + 1 },
+                                (_, i) => new Date(new Date(startDate).getTime() + i * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+                            ),
+                            orderIdx: paymentResponse.orderindex
+                        };
+                        formData.append('mainAdDto', new Blob([JSON.stringify(mainData)], {type: 'application/json'}));
+                        formData.append('image', imageFile);
                     } else if (type === "banner") {
+                        const bannerDateRangeValue = document.getElementById('bannerDateRange').value;
+                        if (bannerDateRangeValue.includes(' ~ ')) {
+                            startDate = bannerDateRangeValue.split(' ~ ')[0];
+                            endDate = bannerDateRangeValue.split(' ~ ')[1];
+                        } else {
+                            startDate = bannerDateRangeValue;
+                            endDate = bannerDateRangeValue;
+                        }
                         data.exposureDays = document.getElementById('bannerProductSelect').value;
-                        formData.append('image', document.getElementById('imageUpload').files[0]);
-                        formData.append('data', JSON.stringify(data));
+                        const imageFile = document.getElementById('imageUpload').files[0];
+                        const bannerData = {
+                            recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
+                            exposureDays: document.getElementById('bannerProductSelect').value,
+                            startDate: new Date(startDate).toISOString().split('T')[0],
+                            endDate: new Date(endDate).toISOString().split('T')[0],
+                            orderIdx: paymentResponse.orderindex
+                        };
+                        formData.append('bannerAdDto', new Blob([JSON.stringify(bannerData)], {type: 'application/json'}));
+                        formData.append('image', imageFile);
                     }
 
                     fetch(`/com/advertisement/${type}`, {
@@ -201,7 +253,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .then(response => {
                         if (!response.ok) {
-                            console.log("데이터"+formData.get('premiumAdDto'));
+                            console.log("프리미엄 데이터"+formData.get('premiumAdDto'));
+                            console.log("메인 데이터"+formData.get('mainAdDto'));
+                            console.log("배너 데이터"+formData.get('bannerAdDto'));
                             console.log("이미지"+formData.get('image'));
                             throw new Error('Network response was not ok');
                         }
@@ -218,7 +272,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .catch(error => {
                         console.error('에러 발생:', error);
-                        alert("광고 등록 중 오류가 발생했습니다. 이미지 형식을 확인해주세요.");
+                        alert("광고 등록 중 오류가 발생했습니다.");
                     });
 
                 } else if (type === "announce") {
@@ -228,7 +282,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
                         durationDays: parseInt(document.getElementById('productSelect').value),
                         startDate: document.getElementById('announceStartDate').value,
-                        endDate: document.getElementById('announceStartDate').value
+                        endDate: document.getElementById('announceStartDate').value,
+                        orderIdx: paymentResponse.orderindex
                     };
 
                     fetch(`/com/advertisement/${type}`, {
@@ -254,80 +309,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.error('에러 발생:', error);
                     });
                 }
-            } else {
-                alert("결제 버튼을 찾을 수 없습니다.");
-            }
-        }
-    });
-
-    // 결제 결과 이벤트 수신
-    document.addEventListener("paymentResult", function(event) {
-        const status = event.detail.status;
-        switch (status) {
-            case "done":
-                console.log("결제 성공");
-                // const type = productName.includes("프리미엄") ? "premium" : productName.includes("메인") ? "main" : productName.includes("배너") ? "banner" : "announce";
-                // const formData = new FormData();
-                // if(type === "premium") {
-                //     const data = {
-                //         recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
-                //         adType: document.getElementById('adType').value,
-                //         timeSlot: displayTime,
-                //         startDate: startDate,
-                //         endDate: endDate
-                //     }
-                //     formData.append('image', document.getElementById('imageUpload').files[0]);
-                //     formData.append('data', JSON.stringify(data));
-                // } else if(type === "main") {
-                //     const data = {
-                //         recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
-                //         exposureDays: document.getElementById('productSelect').value,
-                //         startDate: startDate,
-                //         endDate: endDate
-                //     }
-                //     formData.append('image', document.getElementById('imageUpload').files[0]);
-                //     formData.append('data', JSON.stringify(data));
-                // } else if(type === "banner") {
-                //     const data = {
-                //         recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
-                //         exposureDays: document.getElementById('bannerProductSelect').value, 
-                //         startDate: startDate,
-                //         endDate: endDate
-                //     }
-                //     formData.append('image', document.getElementById('imageUpload').files[0]);
-                //     formData.append('data', JSON.stringify(data));
-                // } else if(type === "announce") {
-                //     const data = {
-                //         recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
-                //         durationDays: document.getElementById('productSelect').value,
-                //         startDate: startDate,
-                //         endDate: endDate
-                //     }
-                //     formData.append('data', JSON.stringify(data));
-                // }
-                
-                // try {
-                //     fetch(`/com/advertisement/${type}`, {
-                //         method: 'POST',
-                //         headers: {
-                //             'Authorization': `Bearer ${accessToken}`,
-                //             'Content-Type': 'application/json'
-                //         },
-                //         body: formData
-                //     })
-                //     .then(data => {
-                //         // FormData의 모든 항목 출력
-                //         for (let pair of formData.entries()) {
-                //             console.log(pair[0] + ': ' + pair[1]);
-                //         }
-                //         console.log('상품 등록 응답:', data);
-                //     })
-                //     .catch(error => {
-                //         console.error('상품 등록 에러:', error);
-                //     });
-                // } catch (error) {
-                //     console.error("상품 등록 실패:", error);
-                // }
                 break;
             case "failed":
                 console.log("결제 실패");
