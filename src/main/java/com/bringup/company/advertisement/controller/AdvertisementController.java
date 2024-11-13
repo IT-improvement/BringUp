@@ -90,15 +90,19 @@ public class AdvertisementController {
      * @return
      */
     @PostMapping("/premium")
-    public ResponseEntity<BfResponse<?>> createPremiumAd(@RequestPart("premiumAdDto") @RequestBody PremiumAdRequestDto premiumAdDto,
-                                                         @RequestPart("image") MultipartFile img,
-                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        try{
+    public ResponseEntity<BfResponse<?>> createPremiumAd(
+            @RequestPart("premiumAdDto") String premiumAdDtoJson,
+            @RequestPart("image") MultipartFile img,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            PremiumAdRequestDto premiumAdDto = objectMapper.readValue(premiumAdDtoJson, PremiumAdRequestDto.class);
             premiumAdService.createPremiumAd(premiumAdDto, img, userDetails);
             BfResponse<String> response = new BfResponse<>(SUCCESS, "Premium Advertisement Created Successfully");
             return ResponseEntity.ok(response);
-        } catch (AdvertisementException e){
+        } catch (AdvertisementException e) {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
