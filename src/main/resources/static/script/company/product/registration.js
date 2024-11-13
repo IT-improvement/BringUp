@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     .then(response => response.json())
                     .then(responseData => {
-                        console.log("보낸 데이터 :", formData);
+                        console.log("보낸 데이터 :", formData.get('data'));
                         console.log('응답 데이터:', responseData);
                     })
                     .catch(error => {
@@ -224,6 +224,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     .then(response => response.json())
                     .then(responseData => {
                         console.log('응답 데이터:', responseData);
+                        if(responseData.code === 200) {
+                            alert("광고 등록이 완료되었습니다.");
+                            sessionStorage.clear();
+                            location.href = "/company/product/management";
+                        } else {
+                            alert("광고 등록에 실패했습니다.");
+                        }
                     })
                     .catch(error => {
                         console.error('에러 발생:', error);
