@@ -154,5 +154,8 @@ public class MemberPageController {
     @GetMapping("/record")
     public String recordList() {return "member/user/career/record";}
 
+    @GetMapping("/awards")
+    public String awards() {return "member/user/career/awards";}
+
 
 }

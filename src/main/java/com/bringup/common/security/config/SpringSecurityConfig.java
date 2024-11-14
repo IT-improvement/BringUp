@@ -177,15 +177,19 @@ public class SpringSecurityConfig {
                 antMatcher("/openai/**"),
                 antMatcher("/member/git"),
                 antMatcher("/member/notion"),
+                antMatcher("/member/checkId"),
                 antMatcher("/member/blog"),
                 antMatcher("/member/file"),
                 antMatcher("/member/letterWrite"),
                 antMatcher("/member/blogList"),
                 antMatcher("/member/record"),
+                antMatcher("/member/awards"),
                 /*antMatcher("/portfolio/**"),*/
-
+                antMatcher("/award/delete/{index}"),
 
                 antMatcher("/portfolio/blog/delete"),
+
+                antMatcher("/school/delete/{index}"),
 
                 antMatcher("/freelancer/**")
 
@@ -242,7 +246,13 @@ public class SpringSecurityConfig {
                 antMatcher("/portfolio/letter/insert"),
 
                 antMatcher("/github/**"),
-                antMatcher("/school/**"),
+                antMatcher("/school/info/list"),
+                antMatcher("/school/insert"),
+
+                antMatcher("/award/insert"),
+                antMatcher("/award/list"),
+
+
 
 
                 antMatcher("/member/reviewDetail/{reviewId}")
