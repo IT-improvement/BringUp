@@ -4,6 +4,8 @@ import com.bringup.common.enums.StatusType;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Setter
 @Getter
 public class JoinDTO {
@@ -15,4 +17,5 @@ public class JoinDTO {
     private String userBirthday;
     private boolean freelancer;
     private String status;
+    private List<MilitaryItem> militaryList;
 }
