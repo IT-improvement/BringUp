@@ -30,7 +30,7 @@ public class AwardController {
         return awardService.getListAward(userCode);
     }
 
-    @DeleteMapping("/delete/{index+")
+    @DeleteMapping("/delete/{index}")
     public ResponseEntity<? super AwardResponseDto> deleteAward(@PathVariable String index){
         int id = Integer.parseInt(index);
         return awardService.deleteAward(id);
