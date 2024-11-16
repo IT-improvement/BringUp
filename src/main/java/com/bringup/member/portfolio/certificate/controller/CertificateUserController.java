@@ -1,7 +1,7 @@
 package com.bringup.member.portfolio.certificate.controller;
 
 import com.bringup.common.security.service.UserDetailsImpl;
-import com.bringup.member.portfolio.certificate.domain.CertificateService;
+import com.bringup.member.portfolio.certificate.domain.CertificateUserService;
 import com.bringup.member.portfolio.certificate.dto.CertificateListResponseDto;
 import com.bringup.member.portfolio.certificate.dto.CertificateRequestDto;
 import com.bringup.member.portfolio.certificate.dto.CertificateResponseDto;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/mem/certificate")
 @RequiredArgsConstructor
-public class CertificateController {
+public class CertificateUserController {
 
-    private final CertificateService certificateService;
+    private final CertificateUserService certificateService;
 
     @GetMapping("/list")
     public ResponseEntity<? super CertificateListResponseDto> getList(@AuthenticationPrincipal UserDetailsImpl userDetails) {

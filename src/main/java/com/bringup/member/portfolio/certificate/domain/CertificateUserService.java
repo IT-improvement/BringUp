@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CertificateService {
+public class CertificateUserService {
 
     private final CertificateRepository certificateRepository;
 
