@@ -50,6 +50,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function (){
             const accessToken = localStorage.getItem('accessToken');
+            console.log("Access token: " + accessToken);
             if (!accessToken){
                 window.location.href = "/member/Login";
                 return;

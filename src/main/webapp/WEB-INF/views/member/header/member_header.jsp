@@ -103,6 +103,7 @@
                         <ul class="dropdown-menu" aria-labelledby="postMenu">
                             <li><a class="dropdown-item" href="/member/notice">게시글 목록</a></li>
                             <li><a class="dropdown-item" href="/member/userNotice">작성한 게시글</a></li>
+                            <li><a class="dropdown-item" href="/member/createNotice">게시글 등록</a></li>
                         </ul>
                     </li>
 
