@@ -25,11 +25,12 @@ public class BlogController {
     @PostMapping("/insert")
     public ResponseEntity<?> insertBlog(@RequestBody BlogInsertRequestDto blogRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         int userIndex = userDetails.getId();
+        System.out.printf("inserrid" + userIndex);
         return blogService.insertBlog(blogRequestDto, userIndex);
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteBlog(@RequestParam String index){
+    public ResponseEntity<?> deleteBlog(@RequestParam(name = "index") String index){
         int blogIndex = Integer.parseInt(index);
         return blogService.deleteBlog(blogIndex);
     }

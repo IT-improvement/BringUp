@@ -8,4 +8,5 @@ import java.util.List;
 public class ChoicedateRequestDto {
     private String startDate;
     private String endDate;
+    private String timeSlot;
 }

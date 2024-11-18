@@ -50,8 +50,8 @@ public class MemberPageController {
     }
 
     @GetMapping("/AnnouncementRecruitment")
-    public String AnnouncementRecruitment() {
-        return "member/user/recruitment/AnnouncementRecruitment";
+    public String announcementRecruitment() {
+        return "member/user/profile/applyCV";
     }
 
     @GetMapping("/proposeRecruitment")
@@ -91,6 +91,12 @@ public class MemberPageController {
     public String notice() {
         return "member/user/notice/notice";
     }
+
+    @GetMapping("/userNotice")
+    public String userNotice() { return "member/user/notice/userNotice"; }
+
+    @GetMapping("/createNotice")
+    public String createNotice() { return "member/user/notice/createNotice"; }
 
     @GetMapping("/memberProfile")
     public String memberProfile(){
@@ -141,6 +147,15 @@ public class MemberPageController {
 
     @GetMapping("/letterWrite")
     public String letterWrite() {return "member/user/career/letterWrite";}
+
+    @GetMapping("/blogList")
+    public String blogList() {return "member/user/career/blogList";}
+
+    @GetMapping("/record")
+    public String recordList() {return "member/user/career/record";}
+
+    @GetMapping("/awards")
+    public String awards() {return "member/user/career/awards";}
 
 
 }

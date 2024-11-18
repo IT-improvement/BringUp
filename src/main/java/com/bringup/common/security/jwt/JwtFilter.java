@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static com.bringup.common.enums.GlobalErrorCode.*;
 import static org.springframework.util.StringUtils.hasText;
@@ -52,17 +53,21 @@ public class JwtFilter extends OncePerRequestFilter {
                 // 토큰 만료
                 errorCode = VALIDATION_TOKEN_EXPIRED;
                 log.warn(">>>>> ExpiredJwtException : ", e);
+                sendErrorResponse(response, errorCode, "토큰이 만료되었습니다.");
             } else if (e instanceof AuthenticationCredentialsNotFoundException) {
                 // 유효하지 않은 토큰
                 errorCode = VALIDATION_TOKEN_FAILED;
                 log.warn(">>>>> AuthenticationCredentialsNotFoundException : ", e);
+                sendErrorResponse(response, errorCode, "유효하지 않은 토큰입니다.");
             } else if (e instanceof AccessDeniedException) {
                 // 접근권한이 없음
                 errorCode = VALIDATION_TOKEN_NOT_AUTHORIZATION;
                 log.warn(">>>>> AccessDeniedException : ", e);
+                sendErrorResponse(response, errorCode, "접근 권한이 없습니다.");
             } else {
                 errorCode = VALIDATION_TOKEN_FAILED;
                 log.warn(">>>>> TokenException : ", e);
+                sendErrorResponse(response, errorCode, "토큰 검증에 실패했습니다.");
             }
 
             response.setStatus(errorCode.getStatus().value()); // 상태 코드 설정
@@ -75,6 +80,23 @@ public class JwtFilter extends OncePerRequestFilter {
 
             response.getWriter().write(responseMessage);
         }
+    }
+
+
+    private void sendErrorResponse(HttpServletResponse response, BaseErrorCode errorCode, String message) throws IOException {
+        response.setStatus(errorCode.getStatus().value());
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        // JSON 응답 구성
+        ObjectMapper objectMapper = new ObjectMapper();
+        String responseMessage = objectMapper.writeValueAsString(Map.of(
+                "code", errorCode.getErrorCode(),
+                "message", message,
+                "status", errorCode.getStatus().value()
+        ));
+
+        response.getWriter().write(responseMessage);
     }
 
     /**

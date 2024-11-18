@@ -237,9 +237,7 @@ public class CompanyService {
         }
     }
 
-    public void updateUserImages(int userId, MultipartFile logo, MultipartFile image0, MultipartFile image1,
-                                 MultipartFile image2, MultipartFile image3, MultipartFile image4,
-                                 UpdateImageRequestDto updateImageRequestDto) {
+    public void updateUserImages(int userId, MultipartFile logo, UpdateImageRequestDto updateImageRequestDto) throws IOException {
         // 회사 정보 가져오기
         Company company = companyRepository.findBycompanyId(userId)
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
@@ -254,7 +252,7 @@ public class CompanyService {
         List<String> existingImages = new ArrayList<>(Arrays.asList(company.getCompanyImg().split(",")));
 
         // 새로운 이미지를 처리하고, 이미지를 앞으로 당기는 로직 적용
-        processAndRearrangeImages(updateImageRequestDto, Arrays.asList(image0, image1, image2, image3, image4), existingImages);
+        processAndRearrangeImages(updateImageRequestDto, existingImages);
 
         // 수정된 이미지 경로 업데이트
         company.setCompanyImg(String.join(",", existingImages));
@@ -263,53 +261,72 @@ public class CompanyService {
         companyRepository.save(company);
     }
 
-    private void processAndRearrangeImages(UpdateImageRequestDto updateImageRequestDto, List<MultipartFile> newImages, List<String> existingImages) {
-        List<String> updatedImages = new ArrayList<>();
+    // 이미지 상태에 따라 이미지를 처리하고 재정렬하는 메소드
+    private void processAndRearrangeImages(UpdateImageRequestDto dto, List<String> existingImages) throws IOException {
+        // 클라이언트에서 받은 이미지와 상태 목록
+        List<String> newImages = Arrays.asList(dto.getC_img0(), dto.getC_img1(), dto.getC_img2(), dto.getC_img3(), dto.getC_img4());
+        List<String> imageStatuses = Arrays.asList(dto.getImg0_status(), dto.getImg1_status(), dto.getImg2_status(), dto.getImg3_status(), dto.getImg4_status());
 
-        // 각 이미지 상태에 맞게 처리
+        // 최종 이미지 리스트
+        List<String> finalImageList = new ArrayList<>();
+
         for (int i = 0; i < newImages.size(); i++) {
-            String imageStatus = getImageStatus(updateImageRequestDto, i);  // 이미지 상태를 가져옴
-            MultipartFile imageFile = newImages.get(i);
-            String currentImagePath = existingImages.size() > i ? existingImages.get(i) : "";
+            String newImage = newImages.get(i);
+            String status = imageStatuses.get(i);
 
-            switch (imageStatus) {
-                case "EXISTING":
-                    if (!currentImagePath.isEmpty()) {
-                        updatedImages.add(currentImagePath);  // 기존 경로 유지
-                    }
-                    break;
-                case "NEW":
-                    if (imageFile != null && !imageFile.isEmpty()) {
-                        String newImagePath = imageService.saveImage(imageFile);  // 새 이미지 저장
-                        updatedImages.add(newImagePath);  // 새 경로 추가
-                    }
-                    break;
-                case "REMOVE":
-                    // 이미지 제거 (아무 작업도 안 함)
-                    break;
-                default:
-                    throw new IllegalArgumentException("Invalid image status: " + imageStatus);
+            // 클라이언트에서 보낸 값이 없고 상태가 delete라면 기존 이미지 삭제
+            if (newImage == null && "deleted".equals(status) && i < existingImages.size()) {
+                existingImages.set(i, null);  // 삭제된 이미지를 null로 설정
+            }
+            // status가 "수정"일 때, 이미지 순서가 바뀌거나 새 이미지가 추가된 경우 처리
+            else if ("modify".equals(status)) {
+                if (newImage != null && isBase64Image(newImage)) {
+                    // 새 이미지가 Base64로 인코딩된 경우 처리
+                    String imagePath = saveBase64Image(newImage, i);
+                    finalImageList.add(imagePath);  // 새 이미지로 교체
+                } else if (existingImages.size() > i && newImage != null && existingImages.get(i).equals(newImage)) {
+                    // 이미지 순서가 변경된 경우, 기존 이미지를 새 순서대로 재배치
+                    finalImageList.add(existingImages.get(i));  // 기존 이미지 유지
+                } else if (newImage != null && i < existingImages.size() && !existingImages.get(i).equals(newImage)) {
+                    // 순서가 변경된 기존 이미지를 새 순서대로 배치
+                    finalImageList.add(newImage);
+                }
+            }
+            // 새 이미지가 없고 삭제된 이미지가 아닌 경우 기존 이미지를 유지
+            else if (newImage == null && i < existingImages.size() && existingImages.get(i) != null) {
+                finalImageList.add(existingImages.get(i));
             }
         }
 
-        // 기존 이미지 리스트를 업데이트된 이미지로 변경
+        // 이미지 리스트에서 빈 값(null)을 제거하고 순서를 앞으로 당김
+        finalImageList.removeIf(img -> img == null || img.isEmpty());
+
+        // 기존 이미지 리스트를 업데이트된 리스트로 대체
         existingImages.clear();
-        existingImages.addAll(updatedImages);  // 삭제 후 당겨진 이미지들로 덮어쓰기
-    }
-
-    // 이미지 상태를 가져오는 헬퍼 메서드
-    private String getImageStatus(UpdateImageRequestDto dto, int index) {
-        switch (index) {
-            case 0: return dto.getImg0_status();
-            case 1: return dto.getImg1_status();
-            case 2: return dto.getImg2_status();
-            case 3: return dto.getImg3_status();
-            case 4: return dto.getImg4_status();
-            default: throw new IllegalArgumentException("Invalid index: " + index);
-        }
+        existingImages.addAll(finalImageList);
     }
 
 
+    // Base64 이미지인지 확인하는 메소드
+    private boolean isBase64Image(String imageString) {
+        return imageString.contains(",") && imageString.split(",").length == 2;
+    }
+
+    // Base64 이미지를 디코딩하고 저장하는 메소드
+    private String saveBase64Image(String base64ImageString, int index) throws IOException {
+        // "data:image/png;base64," 부분을 제거하고 Base64 데이터만 남김
+        String base64Data = base64ImageString.substring(base64ImageString.indexOf(",") + 1);
+
+        // MIME 타입 추출
+        String mimeType = base64ImageString.substring(base64ImageString.indexOf(":") + 1, base64ImageString.indexOf(";"));
+
+        // 저장할 파일 이름 설정
+        String fileExtension = mimeType.split("/")[1];  // "png", "jpeg" 등 확장자 추출
+        String fileName = "company_img" + index + "." + fileExtension;
+
+        // Base64 데이터를 파일로 저장
+        return imageService.saveBase64Image(base64Data, fileName);
+    }
 
     // 회원 탈퇴
     @Transactional

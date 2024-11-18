@@ -10,6 +10,9 @@
 	<meta name="author" content="Webestica.com">
 	<meta name="description" content="Bootstrap 기반 뉴스, 매거진 및 블로그 테마">
 
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 	<!-- 다크 모드 -->
     <script src="/resources/script/common/darkmode/darkmode.js"></script>
 
@@ -41,17 +44,34 @@
     <script src="/resources/script/common/function/functions.js"></script>
 
     <!-- 메인 JS -->
-    <!-- <script src="/resources/script/company/main.js"></script> -->
+    <script src="/resources/script/company/product/management.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
 
 	<jsp:include page="/WEB-INF/views/company/header/company_header.jsp" flush="true" />
 
-    <main class="flex-grow-1">
-		<p>상품관리</p>
+    <main class="flex-grow-1 mt-5">
+		<div class="container">
+			<h2>상품관리</h2>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>번호</th>
+						<th>공고제목</th>
+						<th>광고기간</th>
+						<th>광고타입</th>
+						<th>클릭수</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="5" class="text-center">데이터를 불러오는 중...</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
     </main>
 
 	<jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />

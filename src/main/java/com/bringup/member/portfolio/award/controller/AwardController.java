@@ -31,7 +31,9 @@ public class AwardController {
     }
 
     @DeleteMapping("/delete/{index}")
-    public ResponseEntity<? super AwardResponseDto> deleteAward(@PathVariable String index){
+
+    public ResponseEntity<? super AwardResponseDto> deleteAward(@PathVariable("index") String index){
+
         int id = Integer.parseInt(index);
         return awardService.deleteAward(id);
     }

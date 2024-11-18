@@ -114,4 +114,9 @@ public class PageController {
     public String findauth(){
         return "company/auth/findauth/findauth";
     }
+
+    @GetMapping("/product/detail")
+    public String productDetail(){
+        return "company/product/productDetail";
+    }
 }

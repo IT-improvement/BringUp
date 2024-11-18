@@ -1,276 +1,550 @@
-var currentPage = 1;
-var itemsPerPage = 5;
-var allItems = [];
-
-$(document).ready(function() {
-    $('#selectedAdvertisement').click(function() {
-        if (allItems.length === 0) {
-            fetchAllItems();
-        } else {
-            updateList();
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentFormButton = document.getElementById('paymentFormButton');
+    paymentFormButton.addEventListener('click', function() {
+        let isValid = true;
+        const invalidInputs = [];
+        
+        // 공고 선택 검증
+        const selectedAdvertisement = document.getElementById('selectedAdvertisement').value;
+        if (!selectedAdvertisement) {
+            document.getElementById('selectedAdvertisement').style.border = '2px solid red';
+            invalidInputs.push('공고');
+            isValid = false;
         }
-        $('#advertisementModal').modal('show');
-    });
 
-    $('#searchAdvertisement').keyup(function() {
-        var searchValue = $(this).val().toLowerCase();
-        var filteredItems = allItems.filter(function(item) {
-            return item.recruitmentTitle.toLowerCase().includes(searchValue);
-        });
-        updateList(filteredItems);
-    });
+        const productName = document.querySelector('h3').textContent.trim().split(' ')[0];
 
-    $('#premiumDateRange').change(function() {
-        var Date = $(this).val();
-
-        if (Date) {
-            console.log(Date);
-            var startDate = Date.split(' ~ ')[0];
-            var endDate = Date.split(' ~ ')[1];
-            console.log(startDate);
-            console.log(endDate);
+        if (productName === '프리미엄') {
+            // 프리미엄 광고 검증
+            const premiumDateRange = document.getElementById('premiumDateRange').value;
+            const displayTime = document.getElementById('productSelect').value;
+            const imageUpload = document.getElementById('imageUpload').files[0];
             
-            fetch('/com/advertisement/premium/available-times', {
-                method: 'POST',
+            if (!premiumDateRange) {
+                document.getElementById('premiumDateRange').style.border = '2px solid red';
+                invalidInputs.push('날짜');
+                isValid = false;
+            }
+            if (!displayTime) {
+                document.getElementById('productSelect').style.border = '2px solid red';
+                invalidInputs.push('시간');
+                isValid = false;
+            }
+            if (!imageUpload) {
+                document.getElementById('imageUpload').style.border = '2px solid red';
+                invalidInputs.push('이미지');
+                isValid = false;
+            }
+
+        } else if (productName === '메인') {
+            // 메인 광고 검증
+            const mainDateRange = document.getElementById('mainDateRange').value;
+            const duration = document.getElementById('productSelect').value;
+            const imageUpload = document.getElementById('imageUpload').files[0];
+            
+            if (!mainDateRange) {
+                document.getElementById('mainDateRange').style.border = '2px solid red';
+                invalidInputs.push('날짜');
+                isValid = false;
+            }
+            if (!duration) {
+                document.getElementById('productSelect').style.border = '2px solid red';
+                invalidInputs.push('기간');
+                isValid = false;
+            }
+            if (!imageUpload) {
+                document.getElementById('imageUpload').style.border = '2px solid red';
+                invalidInputs.push('이미지');
+                isValid = false;
+            }
+
+        } else if (productName === '배너') {
+            // 배너 광고 검증
+            const bannerDateRange = document.getElementById('bannerDateRange').value;
+            const duration = document.getElementById('bannerProductSelect').value;
+            const imageUpload = document.getElementById('imageUpload').files[0];
+            
+            if (!bannerDateRange) {
+                document.getElementById('bannerDateRange').style.border = '2px solid red';
+                invalidInputs.push('날짜');
+                isValid = false;
+            }
+            if (!duration) {
+                document.getElementById('bannerProductSelect').style.border = '2px solid red';
+                invalidInputs.push('기간');
+                isValid = false;
+            }
+            if (!imageUpload) {
+                document.getElementById('imageUpload').style.border = '2px solid red';
+                invalidInputs.push('이미지');
+                isValid = false;
+            }
+
+        } else if (productName === '어나운스') {
+            // 일반 광고 검증
+            const startDate = document.getElementById('announceStartDate').value;
+            const duration = document.getElementById('productSelect').value;
+            
+            if (!startDate) {
+                document.getElementById('announceStartDate').style.border = '2px solid red';
+                invalidInputs.push('시작날짜');
+                isValid = false;
+            }
+            if (!duration) {
+                document.getElementById('productSelect').style.border = '2px solid red';
+                invalidInputs.push('기간');
+                isValid = false;
+            }
+        }
+
+        if (!isValid) {
+            alert(`다음 항목을 입력해주세요: ${invalidInputs.join(', ')}`);
+        } else {
+            const paymentButton = document.getElementById("paymentButton");
+            if (paymentButton) {
+                paymentButton.click();
+                
+            } else {
+                alert("결제 버튼을 찾을 수 없습니다.");
+            }
+        }
+    });
+
+    // 결제 결과 이벤트 수신
+    document.addEventListener("paymentResult", function(event) {
+        const status = event.detail.status;
+        switch (status) {
+            case "done":
+                console.log("결제 성공");
+                alert("결제가 성공적으로 완료되었습니다.");
+                break;
+            case "failed":
+                console.log("결제 실패");
+                alert("결제가 실패했습니다. 다시 시도해주세요.");
+                break;
+            case "cancel":
+                console.log("결제 취소");
+                alert("결제가 취소되었습니다.");
+                break;
+            default:
+                console.log("알 수 없는 결제 상태");
+                alert("알 수 없는 결제 상태입니다.");
+                break;
+        }
+    });
+
+    // 입력값 변경 시 빨간 테두리 제거
+    const inputs = [
+        'premiumDateRange',
+        'productSelect',
+        'imageUpload',
+        'mainDateRange',
+        'bannerDateRange',
+        'bannerProductSelect',
+        'announceStartDate'
+    ];
+
+    inputs.forEach(inputId => {
+        const element = document.getElementById(inputId);
+        if (element) {
+            if (element.type === 'file') {
+                element.addEventListener('change', function() {
+                    this.style.border = '';
+                });
+            } else {
+                element.addEventListener('input', function() {
+                    this.style.border = '';
+                });
+            }
+        }
+    });
+    
+
+    const productName = document.querySelector('h3').textContent.trim();
+
+    // 공통: 공고 선택 동작
+    const advertisementInputElement = document.getElementById('advertisementInput');
+    const accessToken = localStorage.getItem('accessToken');
+    let startDate = '';
+    let endDate = '';
+    let displayTime = '';
+    if (advertisementInputElement) {
+        advertisementInputElement.addEventListener('click', function() {
+            $('#advertisementModal').modal('show');
+            const advertisementList = document.getElementById('advertisementList');
+            advertisementList.innerHTML = '<li class="list-group-item text-center"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 로딩 중...</li>';
+
+            fetch('/com/recruitment/list', {
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+                    'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    startDate: startDate,
-                    endDate: endDate
-                })
+                }
             })
-            .then(response => response.json())
-            .then(result => {
-                console.log(result);
-                updateProductSelect(result);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const advertisementData = data.data;
+                if (!Array.isArray(advertisementData)) {
+                    throw new Error('Invalid data format');
+                }
+                advertisementList.innerHTML = '';
+                advertisementData.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
+                    listItem.textContent = item.title;
+                    listItem.addEventListener('click', function() {
+                        document.getElementById('selectedAdvertisement').value = item.title;
+                        document.getElementById('selectedAd').textContent = `선택된 공고: ${item.title}`;
+                        $('#advertisementModal').modal('hide');
+                        // 카드에 선택된 공고 표시
+                        document.getElementById('selectedAd').textContent = `선택된 공고: ${item.title}`;
+                        document.getElementById('selectedAdvertisement').style.border = '';
+                    });
+                    advertisementList.appendChild(listItem);
+                });
             })
             .catch(error => {
-                console.error('Error:', error);
-                alert('가용 시간을 불러오는 데 실패했습니다. 다시 시도해 주세요.');
+                console.error('Error fetching advertisement list:', error);
+                advertisementList.innerHTML = '<li class="list-group-item text-center text-danger">데이터를 불러오는 데 실패했습니다.</li>';
             });
-        } else {
-            resetProductSelect();
+        });
+    }
+
+    // 프리미엄 상품 신청 페이지
+    if (productName.includes('프리미엄')) {
+        const imageUploadElement = document.getElementById('imageUpload');
+        if (imageUploadElement) {
+            imageUploadElement.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const img = new Image();
+                img.onload = function() {
+                    // let valid = img.width === 875 && img.height === 500;
+                    // if (!valid) {
+                    //     alert('이미지 크기가 올바르지 않습니다. 올바른 크기를 업로드하세요.');
+                    //     event.target.value = '';
+                    // }
+                };
+                img.src = URL.createObjectURL(file);
+            });
         }
-    });
 
-    let flatpickrInstance;
-
-    $('#productSelect').change(function() {
-        const duration = parseInt($(this).val());
-        if (duration) {
-            initializeFlatpickr(duration);
-        } else {
-            if (flatpickrInstance) {
-                flatpickrInstance.destroy();
-            }
-            $('#mainDateRange').val('');
-        }
-    });
-
-    function initializeFlatpickr(inputId, selectId, fixedDuration) {
-        let flatpickrInstance;
-
-        const commonConfig = {
+        flatpickr("#premiumDateRange", {
             mode: "range",
             dateFormat: "Y-m-d",
             minDate: "today",
             locale: "ko",
-            disableMobile: "true"
-        };
+            onChange: function(selectedDates, dateStr, instance) {
+                if (selectedDates.length === 1) {
+                    startDate = selectedDates[0];
+                    endDate = new Date(startDate);
+                    endDate.setDate(startDate.getDate() + 2);
+                    instance.setDate([startDate, endDate], true, { silent: true });
+                    instance.close();
+                }
+            }
+        });
 
-        if (fixedDuration) {
-            flatpickrInstance = flatpickr(inputId, {
-                ...commonConfig,
+        document.getElementById('premiumDateRange').addEventListener('change', function(event) {
+            document.getElementById('adDate').textContent = `광고 날짜: ${event.target.value}`;
+        });
+
+        document.getElementById('productSelect').addEventListener('change', function(event) {
+            document.getElementById('displayTime').textContent = `시간대: ${event.target.value}`;
+            displayTime = event.target.value;
+            startDate = document.getElementById('premiumDateRange').value.split(' ~ ')[0];
+            endDate = document.getElementById('premiumDateRange').value.split(' ~ ')[1];
+            console.log(startDate+", "+endDate+", "+displayTime);
+
+            fetch("/com/advertisement/premium/available-times", {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    startDate: startDate,
+                    endDate: endDate,
+                    timeSlot: displayTime
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('응답 데이터:', data); // 응답 데이터 확인
+                const itemIdx = data.data ? data.data.itemIdx : null; // 데이터가 있는지 확인
+                sessionStorage.setItem("itemIdx", itemIdx);
+                if (itemIdx === 0 || itemIdx === "0") {
+                    if(confirm("해당 시간대에 광고 신청이 불가능합니다.\n다른 시간대를 선택하시겠습니까?")) {
+                        document.getElementById('productSelect').value = '';
+                        document.getElementById('adType').textContent = '광고 유형: ';
+                        document.getElementById('paymentAmount').textContent = '결제 금액: ';
+                    } else {
+                        document.getElementById('productSelect').value = '';
+                        document.getElementById('premiumDateRange').value = '';
+                        document.getElementById('adType').textContent = '광고 유형: ';
+                        document.getElementById('paymentAmount').textContent = '결제 금액: ';
+                    }
+                }else{
+                    document.getElementById('adType').textContent = '광고 유형: '+data.data.itemName;
+                    document.getElementById('paymentAmount').textContent = '결제 금액: '+data.data.itemPrice+'원';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching available times:', error);
+            });
+        });
+    }
+
+    // 메인 상품 신청 페이지
+    if (productName.includes('메인')) {
+        const imageUploadElement = document.getElementById('imageUpload');
+        let startDate = '';
+        let endDate = '';
+        if (imageUploadElement) {
+            imageUploadElement.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const img = new Image();
+                img.onload = function() {
+                    // let valid = img.width === 1228 && img.height === 320;
+                    // if (!valid) {
+                    //     alert('이미지 크기가 올바르지 않습니다. 올바른 크기를 업로드하세요.');
+                    //     event.target.value = '';
+                    // }
+                };
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        const mainDateInput = document.getElementById('mainDateRange');
+        const durationSelect = document.getElementById('productSelect');
+
+        mainDateInput.addEventListener('focus', function(event) {
+            const durationDays = parseInt(durationSelect.value, 10);
+            if (!durationDays) {
+                alert('먼저 광고 기간을 선택하세요.');
+                durationSelect.focus();
+                return;
+            }
+
+            flatpickr(mainDateInput, {
+                mode: "range",
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                locale: "ko",
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates.length === 1) {
+                        startDate = selectedDates[0];
+                        endDate = new Date(startDate);
+                        endDate.setDate(startDate.getDate() + durationDays - 1);
+                        instance.setDate([startDate, endDate], true);
+                        instance.close();
+                    }
+                }
+            }).open();
+        });
+
+        document.getElementById('productSelect').addEventListener('change', function(event) {
+            if(event.target.value === '') {
+                document.getElementById('duration').textContent = `광고 기간: `;
+            } else {
+                document.getElementById('duration').textContent = `광고 기간: ${event.target.value}일`;
+            }
+            // 메인 광고 기간 선택의 값이 변경되면 메인 광고 날짜 선택 입력칸 초기화
+            mainDateInput.value = '';
+            document.getElementById('adDate').textContent = '광고 날짜: ';
+        });
+
+        document.getElementById('mainDateRange').addEventListener('change', function(event) {
+            document.getElementById('adDate').textContent = `광고 날짜: ${event.target.value}`;
+            const mainDateValue = document.getElementById('mainDateRange').value;
+            if (mainDateValue.includes(" ~ ")) {
+                startDate = mainDateValue.split(" ~ ")[0];
+                endDate = mainDateValue.split(" ~ ")[1];
+            } else {
+                startDate = mainDateValue;
+                endDate = mainDateValue;
+            }
+            console.log(startDate+", ",endDate);
+            fetch("/com/advertisement/main/available-dates", {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    startDate: startDate,
+                    endDate: endDate,
+                    timeSlot: displayTime
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('서버 응답:', data);
+                const itemName = data.data.itemName;
+                const itemPrice = data.data.itemPrice;
+                const itemIdx = data.data.itemIdx;
+                sessionStorage.setItem("itemIdx", itemIdx);
+                document.getElementById('duration').textContent = `광고 기간: ${itemName}`;
+                document.getElementById('paymentAmount').textContent = `결제 금액: ${itemPrice}원`;
+            })
+            .catch(error => {
+                console.error('에러 발생:', error);
+            });
+        });
+    }
+
+    // 배너 상품 신청 페이지
+    if (productName.includes('배너')) {
+        const imageUploadElement = document.getElementById('imageUpload');
+        if (imageUploadElement) {
+            imageUploadElement.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const img = new Image();
+                img.onload = function() {
+                    // let valid = img.width === 1228 && img.height === 80;
+                    // if (!valid) {
+                    //     alert('이미지 크기가 올바르지 않습니다. 올바른 크기를 업로드하세요.');
+                    //     event.target.value = '';
+                    // }
+                };
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        const bannerDateInput = document.getElementById('bannerDateRange');
+        const durationSelect = document.getElementById('bannerProductSelect');
+
+        bannerDateInput.addEventListener('focus', function(event) {
+            const durationDays = parseInt(durationSelect.value, 10);
+            if (!durationDays) {
+                alert('먼저 광고 기간을 선택하세요.');
+                durationSelect.focus();
+                return;
+            }
+
+            flatpickr(bannerDateInput, {
+                mode: "range",
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                locale: "ko",
                 onChange: function(selectedDates, dateStr, instance) {
                     if (selectedDates.length === 1) {
                         const startDate = selectedDates[0];
                         const endDate = new Date(startDate);
-                        endDate.setDate(endDate.getDate() + fixedDuration - 1);
-                        instance.setDate([startDate, endDate]);
-                        setTimeout(() => instance.close(), 0);
+                        endDate.setDate(startDate.getDate() + durationDays - 1);
+                        instance.setDate([startDate, endDate], true);
+                        instance.close();
                     }
                 }
-            });
-        } else {
-            $(selectId).change(function() {
-                const duration = parseInt($(this).val());
-                if (duration) {
-                    if (flatpickrInstance) {
-                        flatpickrInstance.destroy();
-                    }
-                    flatpickrInstance = flatpickr(inputId, {
-                        ...commonConfig,
-                        onChange: function(selectedDates, dateStr, instance) {
-                            if (selectedDates.length === 1) {
-                                const startDate = selectedDates[0];
-                                const endDate = new Date(startDate);
-                                endDate.setDate(endDate.getDate() + duration - 1);
-                                instance.setDate([startDate, endDate]);
-                                setTimeout(() => instance.close(), 0);
-                            }
-                        }
-                    });
-                } else {
-                    if (flatpickrInstance) {
-                        flatpickrInstance.destroy();
-                    }
-                    $(inputId).val('');
-                }
-            });
-        }
-    }
-
-    // 프리미엄 광고 날짜 선택 초기화 (3일 고정)
-    initializeFlatpickr("#premiumDateRange", null, 3);
-
-    // 메인 광고 날짜 선택 초기화
-    initializeFlatpickr("#mainDateRange", "#productSelect");
-
-    // 배너 광고 날짜 선택 초기화
-    initializeFlatpickr("#bannerDateRange", "#bannerProductSelect");
-});
-
-function fetchAllItems() {
-    fetch('/com/recruitment/list', {
-        method: 'GET',
-        headers: {
-            'Authorization': 'Bearer '+ localStorage.getItem('accessToken')
-        }
-    })
-    .then(response => response.json())
-    .then(result => {
-        if (result.code === 200 && Array.isArray(result.data)) {
-            allItems = result.data;
-            updateList();
-        } else {
-            console.error('예상치 못한 데이터 구조:', result);
-            $('#advertisementList').html('<li class="list-group-item">데이터를 불러올 수 없습니다.</li>');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        $('#advertisementList').html('<li class="list-group-item">데이터를 불러오는 중 오류가 발생했습니다.</li>');
-    });
-}
-
-function updateList(items = allItems) {
-    var startIndex = (currentPage - 1) * itemsPerPage;
-    var endIndex = startIndex + itemsPerPage;
-    var pageItems = items.slice(startIndex, endIndex);
-
-    var list = '';
-    if (pageItems.length > 0) {
-        pageItems.forEach(function(item) {
-            list += '<button type="button" class="list-group-item list-group-item-action" onclick="selectAdvertisement(\'' + item.title + '\', ' + item.index + ')">' + item.title + '</button>';
+            }).open();
         });
-    } else {
-        list = '<p class="list-group-item text-center">표시할 항목이 없습니다.</p>';
+
+        document.getElementById('bannerProductSelect').addEventListener('change', function(event) {
+            if(event.target.value === '') {
+                document.getElementById('duration').textContent = `광고 기간: `;
+                document.getElementById('paymentAmount').textContent = `결제 금액: `;
+            } else {
+                console.log(event.target.value);
+                const duration = event.target.value;
+                fetch('/com/advertisement/banner/price?displayTime='+duration, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('서버 응답:', data);
+                    const itemPrice = data.data.itemPrice;
+                    const itemIdx = data.data.itemIdx;
+                    const itemName = data.data.itemName;
+                    sessionStorage.setItem("itemIdx", itemIdx);
+                    document.getElementById('duration').textContent = `광고 기간: ${itemName}`;
+                    document.getElementById('paymentAmount').textContent = `결제 금액: ${itemPrice}원`;
+                })
+                .catch(error => {
+                    console.error('에러 발생:', error);
+                });
+            }
+            // 배너 광고 기간 선택의 값이 변경되면 배너 광고 날짜 선택 입력칸 초기화
+            bannerDateInput.value = '';
+            document.getElementById('adDate').textContent = '광고 날짜: ';
+        });
+
+        document.getElementById('bannerDateRange').addEventListener('change', function(event) {
+            document.getElementById('adDate').textContent = `광고 날짜: ${event.target.value}`;
+        });
     }
-    $('#advertisementList').html(list);
-    
-    // 리스트 항목이 적을 때 빈 공간을 채우기 위한 더미 항목 추가
-    var dummyCount = itemsPerPage - pageItems.length;
-    for (var i = 0; i < dummyCount; i++) {
-        list += '<div class="list-group-item" style="visibility: hidden;">&nbsp;</div>';
+
+    // 어나운스 상품 신청 페이지
+    if (productName.includes('어나운스')) {
+        flatpickr("#announceStartDate", {
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            locale: "ko",
+            onChange: function(selectedDates, dateStr, instance) {
+                // 카드에 선택된 날짜 표시
+                document.getElementById('startDate').textContent = `광고 시작일: ${dateStr}`;
+            }
+        });
+
+        document.getElementById('productSelect').addEventListener('change', function(event) {
+            if(event.target.value === '') {
+                document.getElementById('duration').textContent = `광고 기간: `;
+            } else if(event.target.value === '12') {
+                document.getElementById('duration').textContent = `광고 기간: 1년`;
+            } else {
+                document.getElementById('duration').textContent = `광고 기간: ${event.target.value}개월`;
+            }
+            let duration = event.target.value;
+            if (duration) {
+                fetch(`/com/advertisement/announce/price?displayTime=${duration}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Network response was not ok');
+                })
+                .then(data => {
+                    console.log('Fetched data:', data);
+                    const price = data.data.itemPrice;
+                    const itemIdx = data.data.itemIdx;
+                    sessionStorage.setItem("itemIdx", itemIdx);
+                    if (duration === '12') {
+                        duration = '1년';
+                    } else {
+                        duration += '개월';
+                    }
+                    document.getElementById('paymentAmount').textContent = `결제 금액: ${price}원`;
+                    document.getElementById('duration').textContent = `광고 기: ${duration}`;
+                })
+                .catch(error => {
+                    console.error('Error fetching announcement price:', error);
+                });
+            }
+        });
     }
-    $('#advertisementList').html(list);
-    
-    updatePagination(items.length);
-}
 
-function updatePagination(totalItems) {
-    var totalPages = Math.ceil(totalItems / itemsPerPage);
-    var paginationHtml = '';
-    for (var i = 1; i <= totalPages; i++) {
-        paginationHtml += '<li class="page-item text-center"><button class="page-link btn-xs border-0 bg-transparent text-dark text-decoration-none" onclick="changePage(' + i + ')">' + i + '</button></li>';
-    }
-    $('#pagination').html(paginationHtml);
-    $('#pagination li').eq(currentPage - 1).addClass('active');
-}
 
-function changePage(newPage) {
-    currentPage = newPage;
-    updateList();
-}
-
-function selectAdvertisement(title, index) {
-    $('#selectedAdvertisement').val(title);
-    $('#selectedRecruitmentIndex').val(index);
-    $('#advertisementModal').modal('hide');
-}
-
-$(document).on('mouseenter', '#pagination .page-link', function() {
-    $(this).removeClass('text-decoration-none').addClass('text-decoration-underline');
-}).on('mouseleave', '#pagination .page-link', function() {
-    $(this).removeClass('text-decoration-underline').addClass('text-decoration-none');
 });
-
-function updateProductSelect(availableTimes) {
-    var $productSelect = $('#productSelect');
-    $productSelect.empty().append('<option value="">광고 노출 시간대 선택</option>');
-    availableTimes.forEach(function(time) {
-        $productSelect.append('<option value="' + time + '">' + time + '</option>');
-    });
-    $productSelect.prop('disabled', false);
-}
-
-function resetProductSelect() {
-    var $productSelect = $('#productSelect');
-    $productSelect.empty().append('<option value="">광고 노출 시간대 선택</option>');
-    $productSelect.prop('disabled', true);
-}
-
-function submitForm() {
-    var form = document.getElementById('advertisementForm');
-    var formData = new FormData(form);
-    const type = document.querySelector('h3').textContent.split(' ')[0];
-
-    // AdvertisementRequestDto에 맞는 JSON 객체 생성
-    var advertisementRequestDto = {
-        recruitmentIndex: formData.get('recruitmentIndex'),
-    };
-
-    if (type === '프리미엄') {
-        var startDate = new Date(formData.get('premiumStartDate'));
-        advertisementRequestDto.startDate = startDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식
-        var endDate = new Date(startDate);
-        endDate.setDate(endDate.getDate() + 3);
-        advertisementRequestDto.endDate = endDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식
-        advertisementRequestDto.timeSlot = formData.get('displayTime');
-        var displayTime = formData.get('displayTime');
-        if(displayTime === '22:00~01:00'){
-            advertisementRequestDto.adType = 'GP';
-        }
-        else if(displayTime === '01:00~04:00'){
-            advertisementRequestDto.adType = 'P1';
-        }
-        else if(displayTime === '04:00~07:00'){
-            advertisementRequestDto.adType = 'P2';
-        }
-        else{
-            advertisementRequestDto.adType = 'P3';
-        }
-    }
-
-    // JSON 객체를 문자열로 변환하여 FormData에 추가
-    formData.append('advertisementRequestDto', new Blob([JSON.stringify(advertisementRequestDto)], {
-        type: 'application/json'
-    }));
-
-    // 콘솔에 FormData 내용 출력
-    console.log('FormData 내용:');
-    for (var pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-    }
-
-    // advertisementRequestDto 내용 출력
-    console.log('advertisementRequestDto 내용:', advertisementRequestDto);
-
-    // 여기에 서버로 데이터를 전송하는 코드를 추가할 수 있습니다.
-}
-
-function goBack() {
-    window.history.back();
-}
