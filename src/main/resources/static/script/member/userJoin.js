@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
             militaryServiceCard.classList.remove('visible');
             setTimeout(() => {
                 militaryServiceCard.style.display = 'none';
-            }, 0);
+            }, 300);
         });
     } else {
         console.error("필수 요소 중 하나를 찾을 수 없습니다. ID 값을 확인하세요.");
