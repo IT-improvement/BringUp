@@ -13,6 +13,13 @@ document.addEventListener('DOMContentLoaded', function() {
     checkEmailBtn.addEventListener('click', function() {
         const userEmail = document.getElementById('userEmail').value;
 
+        // 이메일 형식 확인
+        if (!userEmail.includes('@') || !userEmail.includes('.')) {
+            emailCheckResult.textContent = '올바르지 않은 이메일 형식입니다. 다시 입력해주세요.';
+            emailCheckResult.style.color = 'red';
+            return;
+        }
+
         fetch('/member/checkId', {
             method: 'POST',
             headers: {
@@ -67,8 +74,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const userAddress = document.getElementById('userAddress').value;
         const userPhonenumber = document.getElementById('userPhonenumber').value;
         const userBirthday = document.getElementById('userBirthday').value;
-        const freelancer = document.getElementById('freelancer').checked;
-        const status = document.getElementById('status').value;
 
         // 서버에 보낼 데이터 객체를 만듭니다.
         const formData = {
@@ -77,9 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
             userName: userName,
             userAddress: userAddress,
             userPhonenumber: userPhonenumber,
-            userBirthday: userBirthday,
-            freelancer: freelancer,
-            status: status
+            userBirthday: userBirthday
         };
 
         // Fetch API를 사용해 데이터를 서버에 전송합니다.
@@ -101,29 +104,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.includes("회원가입이 성공적으로 완료되었습니다.")) {
                     const modal = document.createElement('div');
                     modal.style.cssText = `
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background-color: rgba(0,0,0,0.5);
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    z-index: 1000;
-                `;
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0,0,0,0.5);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 1000;
+                    `;
                     const modalContent = document.createElement('div');
                     modalContent.style.cssText = `
-                    background-color: white;
-                    padding: 20px;
-                    border-radius: 5px;
-                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                `;
+                        background-color: white;
+                        padding: 20px;
+                        border-radius: 5px;
+                        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                    `;
                     modalContent.innerHTML = `
-                    <h3>알림</h3>
-                    <p>회원가입에 성공하셨습니다!</p>
-                    <button id="modalConfirmButton">확인</button>
-                `;
+                        <h3>알림</h3>
+                        <p>회원가입에 성공하셨습니다!</p>
+                        <button id="modalConfirmButton">확인</button>
+                    `;
                     modal.appendChild(modalContent);
                     document.body.appendChild(modal);
 
@@ -141,4 +144,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('회원가입 중 오류가 발생했습니다. 나중에 다시 시도해주세요.');
             });
     });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const maleButton = document.getElementById('maleButton');
+    const femaleButton = document.getElementById('femaleButton');
+    const militaryServiceCard = document.getElementById('militaryServiceCard');
+    const closeMilitaryCard = document.getElementById('closeMilitaryCard');
+
+    // 요소가 제대로 로드되었는지 확인
+    if (maleButton && femaleButton && militaryServiceCard && closeMilitaryCard) {
+        maleButton.addEventListener('click', function() {
+            maleButton.classList.add('active');
+            femaleButton.classList.remove('active');
+            document.getElementById('userGender').value = '남';
+
+            // Show military service card by sliding in from the right
+            militaryServiceCard.style.display = 'block';
+            setTimeout(() => {
+                militaryServiceCard.classList.add('visible');
+            }, 0);
+        });
+
+        femaleButton.addEventListener('click', function() {
+            femaleButton.classList.add('active');
+            maleButton.classList.remove('active');
+            document.getElementById('userGender').value = '여';
+
+            // Hide military service card by sliding out to the right
+            militaryServiceCard.classList.remove('visible');
+            setTimeout(() => {
+                militaryServiceCard.style.display = 'none';
+            }, 0);
+        });
+
+        // Close button to hide the military service card
+        closeMilitaryCard.addEventListener('click', function() {
+            militaryServiceCard.classList.remove('visible');
+            setTimeout(() => {
+                militaryServiceCard.style.display = 'none';
+            }, 300);
+        });
+    } else {
+        console.error("필수 요소 중 하나를 찾을 수 없습니다. ID 값을 확인하세요.");
+    }
 });

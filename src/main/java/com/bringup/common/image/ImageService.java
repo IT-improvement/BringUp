@@ -9,9 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.UUID;
 
 @Service
@@ -99,4 +102,28 @@ public class ImageService {
             return null;
         }
     }
+
+    public String saveBase64Image(String base64Data, String fileName) throws IOException {
+        // Base64 데이터를 디코딩
+        byte[] decodedBytes = Base64.getDecoder().decode(base64Data);
+
+        // 확장자 추출 (fileName에서)
+        String extension = fileName.substring(fileName.lastIndexOf("."));
+
+        // UUID로 고유한 파일 이름 생성
+        String uuid = UUID.randomUUID().toString();
+        String saveFileName = uuid + extension;
+
+        // 저장 경로 설정
+        Path savePath = Paths.get(filePath + saveFileName);
+
+        // 파일 저장
+        try (FileOutputStream fos = new FileOutputStream(savePath.toFile())) {
+            fos.write(decodedBytes);
+        }
+
+        // 저장된 파일 경로 반환
+        return savePath.toString();
+    }
+
 }

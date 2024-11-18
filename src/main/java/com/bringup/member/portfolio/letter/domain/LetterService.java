@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class LetterService {
 
     private final LetterRepository letterRepository;
-
     public ResponseEntity<? super LetterListResponseDto> listLetter(int userIndex){
 
         LetterEntity letterEntity = null;
@@ -28,6 +27,7 @@ public class LetterService {
 
         return LetterListResponseDto.success(letterEntity);
     }
+
 
     public ResponseEntity<? super LetterResponseDto> insertLetter(int userIndex, LetterInsertRequestDto requestDto){
         LetterEntity letterEntity = null;

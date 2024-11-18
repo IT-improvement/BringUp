@@ -8,7 +8,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="author" content="Webestica.com">
-	<meta name="description" content="Bootstrap 기반 뉴스, 매거진 및 블로그 테마">
+	<meta name="description" content="Bootstrap 기본 뉴스, 매거진 및 블로그 테마">
 
 	<!-- Dark Mode -->
 	<script src="/resources/script/common/darkmode/darkmode.js"></script>
@@ -36,7 +36,49 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 	<style>
+		.question-title {
+			font-weight: bold;
+			font-size: 1.2em;
+			margin-top: 20px;
+		}
 
+		.question-textarea {
+			width: 100%;
+			height: 200px;
+			margin-top: 10px;
+			padding: 10px;
+			font-size: 1em;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+		}
+
+		.question-container {
+			margin-bottom: 30px;
+		}
+
+		.button-container {
+			text-align: center;
+			margin-top: 20px;
+		}
+
+		.action-button {
+			padding: 10px 20px;
+			font-size: 1em;
+			margin: 10px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+
+		.save-button {
+			background-color: #4CAF50;
+			color: white;
+		}
+
+		.ai-generate-button {
+			background-color: #008CBA;
+			color: white;
+		}
 	</style>
 
 </head>
@@ -50,98 +92,49 @@
 
 	<div class="container ms-main-content" style="max-width: 1000px; margin-left: 100px;">
 		<main class="flex-grow-1">
-			<div class="container py-4">
-				<h2>자소서 관리</h2>
-				<div class="d-flex justify-content-end mb-3">
-					<input type="text" class="form-control me-2" style="max-width: 300px;" placeholder="자기소개서 제목, 문항, 내용으로 검색해보세요">
-					<button class="btn btn-outline-secondary">검색</button>
-				</div>
-				<div class="alert alert-info mt-4" role="alert">
-					📝 자소서 AI 작성을 해준다고?
-				</div>
+			<h2>자소서 문항 작성</h2>
 
-				<!-- 자소서 등록하기 Section -->
-				<div class="d-flex justify-content-end mb-3">
-					<button class="btn btn-primary me-2">파일로 등록</button>
-					<button class="btn btn-primary" onclick="window.location.href='/member/letterWrite'">자소서 등록하기</button>
-				</div>
+			<!-- Question 1 -->
+			<div class="question-container">
+				<div class="question-title">1. 학교 생활이나 사회경험 중 가장 어려웠거나 힘들었던 경험은 무엇이 있으며, 그 문제를 해결하기 위해 노력한 점이나 성공적으로 변화를 이루었던 경험을 작성해 주십시오.</div>
+				<textarea class="question-textarea" maxlength="800" placeholder="800자 작성"></textarea>
+			</div>
 
-				<!-- 자소서 리스트 -->
-				<div class="card mb-4" style="border-left: 1px solid #ddd; border-right: 1px solid #ddd;">
-					<div class="card-body">
-						<h6 class="card-title">박주혁님의 자소서_240314 11:17</h6>
-						<p class="card-text">
-							[대학생의 DBMS 경험으로 미래를 열다] DBMS에 대해 관심을 가지며 3학년 때 여러 개의 프로젝트를 경험해 보았습니다.
-							DBMS를 활용하여 데이터베이스를 구축하고 관리하는 과정에서 많은 것을 배우게 되었습니다.
-						</p>
-						<small class="text-muted">2024.03.14 11:18:32 수정</small>
-						<!-- Action Buttons -->
-						<div class="d-flex justify-content-end">
-							<button class="btn btn-outline-secondary me-2">수정하기</button>
-							<button class="btn btn-outline-secondary">AI 자소서 코칭받기</button>
-						</div>
-					</div>
-				</div>
+			<!-- Question 2 -->
+			<div class="question-container">
+				<div class="question-title">2. 삶에 대한 본인의 가치관을 가장 잘 표현한 단어나 문장은 무엇이며 그 가치관이 형성되는데 가장 큰 영향을 끼친 일이나 인물이 있다면 설명해주십시오.</div>
+				<textarea class="question-textarea" maxlength="800" placeholder="800자 작성"></textarea>
+			</div>
 
-				<!-- 자소서 리스트 -->
-				<div class="card mb-4" style="border-left: 1px solid #ddd; border-right: 1px solid #ddd;">
-					<div class="card-body">
-						<h6 class="card-title">박주혁님의 자소서 두번째</h6>
-						<p class="card-text">
-							고등학생때부터 개발에 흥미가 있었서 시작삼아 가벼운 게임을 만들어 보았습니다...
-						</p>
-						<small class="text-muted">2024.03.14 11:18:32 수정</small>
-						<!-- Action Buttons -->
-						<div class="d-flex justify-content-end">
-							<button class="btn btn-outline-secondary me-2">수정하기</button>
-							<button class="btn btn-outline-secondary">AI 자소서 코칭받기</button>
-						</div>
-					</div>
-				</div>
+			<!-- Question 3 -->
+			<div class="question-container">
+				<div class="question-title">3. 지원한 분야와 관련된 본인의 역량(지식, skill, 경험 등)과 열정, 노력(프로젝트, 공모전, 대외활동, 논문 등)에 대해 기술해 주십시오.</div>
+				<textarea class="question-textarea" maxlength="800" placeholder="800자 작성"></textarea>
+			</div>
 
-
-				<!-- 자소서 리스트 -->
-				<div class="card mb-4" style="border-left: 1px solid #ddd; border-right: 1px solid #ddd;">
-					<div class="card-body">
-						<h6 class="card-title">박주혁님의 자소서 두번째</h6>
-						<p class="card-text">
-							고등학생때부터 개발에 흥미가 있었서 시작삼아 가벼운 게임을 만들어 보았습니다...
-						</p>
-						<small class="text-muted">2024.03.14 11:18:32 수정</small>
-						<!-- Action Buttons -->
-						<div class="d-flex justify-content-end">
-							<button class="btn btn-outline-secondary me-2">수정하기</button>
-							<button class="btn btn-outline-secondary">AI 자소서 코칭받기</button>
-						</div>
-					</div>
-				</div>
-
-
-
-				<!-- 자소서 리스트 -->
-				<div class="card mb-4" style="border-left: 1px solid #ddd; border-right: 1px solid #ddd;">
-					<div class="card-body">
-						<h6 class="card-title">박주혁님의 자소서 두번째</h6>
-						<p class="card-text">
-							고등학생때부터 개발에 흥미가 있었서 시작삼아 가벼운 게임을 만들어 보았습니다...
-						</p>
-						<small class="text-muted">2024.03.14 11:18:32 수정</small>
-						<!-- Action Buttons -->
-						<div class="d-flex justify-content-end">
-							<button class="btn btn-outline-secondary me-2">수정하기</button>
-							<button class="btn btn-outline-secondary">AI 자소서 코칭받기</button>
-						</div>
-					</div>
-				</div>
-
-
-
+			<!-- Buttons -->
+			<div class="button-container">
+				<button class="action-button save-button">저장하기</button>
+				<button class="action-button ai-generate-button">AI 문항 생성하기</button>
 			</div>
 		</main>
-
-
 	</div>
 </div>
+<script>
+	$(document).ready(function() {
+		const accessToken = localStorage.getItem("accessToken");
+		fetchSaveLetter(accessToken);
+		function fetchSaveLetter(accessToken) {
+			fetch("/portfolio/letter/insert", {
+				method: "POST",
+				headers: {
+					"Authorization": `Bearer ` + accessToken,
+					"Content-Type": "application/json"
+				}
+			})
+		}
+	});
+</script>
 
 <!-- Footer -->
 <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />

@@ -135,9 +135,8 @@ public class SpringSecurityConfig {
                 antMatcher("/member/**"),
 */
                 antMatcher("/ws/**"),
-                antMatcher("/github/**"),// 정적 리소스
+              /*  antMatcher("/github/**"),// 정적 리소스*/
                 antMatcher("/member/potofolio"),
-                //antMatcher("/member/**"),
                 antMatcher("/member/letter"),//이력서
                 antMatcher("/member/resume"),//자소서
                 antMatcher("/member/companyReview"),
@@ -163,6 +162,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/m_reviews"),
                 antMatcher("/member/company"),
                 antMatcher("/page/admin/**"),
+                antMatcher("/member/join"),
 
                 antMatcher("/main/list"),
                 antMatcher("/member/memberProfile"),
@@ -173,14 +173,23 @@ public class SpringSecurityConfig {
                 antMatcher("/member/editReview"),
                 antMatcher("/member/reviewDetail/{reviewId}"),
                 antMatcher("/member/myCareer"),
+                antMatcher("/freelancer/**"),
+                antMatcher("/openai/**"),
                 antMatcher("/member/git"),
                 antMatcher("/member/notion"),
+                antMatcher("/member/checkId"),
                 antMatcher("/member/blog"),
                 antMatcher("/member/file"),
                 antMatcher("/member/letterWrite"),
-                antMatcher("/portfolio/**"),
+                antMatcher("/member/blogList"),
+                antMatcher("/member/record"),
+                antMatcher("/member/awards"),
+                /*antMatcher("/portfolio/**"),*/
+                antMatcher("/award/delete/{index}"),
 
+                antMatcher("/portfolio/blog/delete"),
 
+                antMatcher("/school/delete/{index}"),
 
                 antMatcher("/freelancer/**")
 
@@ -195,17 +204,20 @@ public class SpringSecurityConfig {
      */
     private RequestMatcher[] AuthRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
+                antMatcher("/portfolio/**"),
                 antMatcher(POST, "/com/companyName"),               // 기업명 헤더 삽입
                 antMatcher(GET, "/com/companyInfo/post"),           // 회원 정보 조회
                 antMatcher("/com/user/**"),
 
                 antMatcher("/com/recruitment/**"),
+                antMatcher("/com/bookmarkCount"),
 
                 antMatcher(POST, "/com/c_reviews"),                 // 기업 리뷰 열람
                 antMatcher(POST, "/com/c_review/delete"),           // 기업 리뷰 삭제
 
                 antMatcher(POST, "/com/i_reviews"),                 // 면접 리뷰 열람
                 antMatcher(POST, "/com/i_review/delete"),         // 면접 리뷰 삭제
+                antMatcher("/com/advertisement/**"),
                 antMatcher("/com/freelancer/**"),
                 antMatcher("/com/headhunt/**"),
                 antMatcher("/membership/**"), // 사용자 멤버십
@@ -214,14 +226,34 @@ public class SpringSecurityConfig {
                 antMatcher("/main/memberInfo"),
                 antMatcher("/member/{reviewId}"),
                 antMatcher("/member/delete/{reviewId}"),
-                antMatcher("/member/memberInfo/post"),
+                antMatcher(GET, "/member/info"),
                 antMatcher("/member/m_create"),
+                antMatcher("/member/userNotice"),
+                antMatcher("/member/createNotice"),
+                antMatcher("/member/notice/createPost"),
                 antMatcher("/admin/**"),
                 antMatcher("/mem/**"),
+                antMatcher(GET, "/member/applyList"),
 
                 antMatcher("/member/interview/{reviewId}"),
                 antMatcher("/member/interview/delete/{reviewId}"),
                 antMatcher("/member/interview/iv_create"),
+
+                antMatcher("/portfolio/blog/list"),
+                antMatcher("/portfolio/blog/insert"),
+
+                antMatcher("/portfolio/letter/info"),
+                antMatcher("/portfolio/letter/insert"),
+
+                antMatcher("/github/**"),
+                antMatcher("/school/info/list"),
+                antMatcher("/school/insert"),
+
+                antMatcher("/award/insert"),
+                antMatcher("/award/list"),
+
+
+
 
                 antMatcher("/member/reviewDetail/{reviewId}")
         );

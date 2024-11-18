@@ -1,39 +1,31 @@
 package com.bringup.company.advertisement.service;
 
+import com.bringup.admin.payment.entity.Item;
+import com.bringup.admin.payment.repository.ItemRepository;
 import com.bringup.common.enums.MemberErrorCode;
-import com.bringup.common.enums.RolesType;
 import com.bringup.common.enums.StatusType;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.dto.request.ChoicedateRequestDto;
 import com.bringup.company.advertisement.dto.request.PremiumAdRequestDto;
-import com.bringup.company.advertisement.dto.response.AvailableDatesResponseDto;
 import com.bringup.company.advertisement.dto.response.PremiumAdResponseDto;
+import com.bringup.company.advertisement.dto.response.UsableDisplayResponseDto;
 import com.bringup.company.advertisement.entity.Advertisement;
 import com.bringup.company.advertisement.entity.PremiumAdvertisement;
-import com.bringup.company.advertisement.enums.Ad_Type;
 import com.bringup.company.advertisement.exception.AdvertisementException;
 import com.bringup.company.advertisement.repository.AdvertisementRepository;
 import com.bringup.company.advertisement.repository.PremiumAdvertisementRepository;
 import com.bringup.company.recruitment.entity.Recruitment;
-import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
-import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.exception.CompanyException;
 import com.bringup.company.user.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static com.bringup.common.enums.AdvertisementErrorCode.ALREADY_ACTIVE;
 import static com.bringup.common.enums.AdvertisementErrorCode.NOT_FOUND_ADVERTISEMENT;
@@ -48,55 +40,138 @@ public class PremiumAdService {
     private final AdvertisementRepository advertisementRepository;
     private final CompanyRepository companyRepository;
     private final RecruitmentRepository recruitmentRepository;
+    private final ItemRepository itemRepository;
 
-    public List<String> getUnavailableDates(ChoicedateRequestDto choicedatedto) {
+    /*public List<String> getUnavailableDates(ChoicedateRequestDto choicedatedto) {
 
-        // DateTimeFormatter를 사용하여 String을 LocalDate로 변환
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         // String으로 받은 날짜를 LocalDate로 변환
         LocalDate startDate = LocalDate.parse(choicedatedto.getStartDate(), formatter);
         LocalDate endDate = LocalDate.parse(choicedatedto.getEndDate(), formatter);
 
-        // 해당 기간에 예약된 프리미엄 광고들을 가져옴
-        List<PremiumAdvertisement> reservedAds = premiumAdvertisementRepository
-                .findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(startDate, endDate);
-
-        // 예약 불가능한 날짜 및 시간을 저장할 리스트
+        // 예약 불가능한 날짜 및 시간대를 저장할 리스트
         List<String> unavailableDates = new ArrayList<>();
 
         // 각 날짜별로 확인
-        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-            String[] timeSlots = {
-                    "01:00 ~ 04:00",
-                    "04:00 ~ 07:00",
-                    "07:00 ~ 10:00",
-                    "10:00 ~ 13:00",
-                    "13:00 ~ 16:00",
-                    "16:00 ~ 19:00",
-                    "19:00 ~ 22:00",
-                    "22:00 ~ 01:00"
-            };
+        for (LocalDate currentDate = startDate; !currentDate.isAfter(endDate); currentDate = currentDate.plusDays(1)) {
+            String formattedDate = currentDate.format(formatter);
 
-            // 각 시간대별로 예약 여부를 확인
-            for (String timeSlot : timeSlots) {
-                boolean isTimeSlotUnavailable = false;
+            // 해당 날짜의 프리미엄 광고를 확인 (advertisement의 display_time에 해당 날짜가 포함되는지 확인)
+            List<Advertisement> adsForDate = advertisementRepository.findAllByDisplayContaining(formattedDate);
 
-                for (PremiumAdvertisement pad : reservedAds) {
-                    if (pad.getAdvertisement().getStartDate().equals(date) && pad.getTimeSlot().equals(timeSlot)) {
-                        isTimeSlotUnavailable = true;
-                        break;  // 예약된 시간대를 찾으면 더 이상 확인하지 않음
+            if (!adsForDate.isEmpty()) {
+                for (Advertisement ad : adsForDate) {
+                    // 각 광고의 프리미엄 타임슬롯 확인 (advertisement_premium 테이블에서 확인)
+                    List<PremiumAdvertisement> premiumAds = premiumAdvertisementRepository.findByAdvertisement(ad);
+
+                    String[] timeSlots = {
+                            "01:00 ~ 04:00",
+                            "04:00 ~ 07:00",
+                            "07:00 ~ 10:00",
+                            "10:00 ~ 13:00",
+                            "13:00 ~ 16:00",
+                            "16:00 ~ 19:00",
+                            "19:00 ~ 22:00",
+                            "22:00 ~ 01:00"
+                    };
+
+                    // 예약된 타임슬롯을 저장
+                    List<String> reservedTimeSlots = new ArrayList<>();
+
+                    for (String timeSlot : timeSlots) {
+                        boolean isTimeSlotUnavailable = premiumAds.stream()
+                                .anyMatch(premiumAd -> premiumAd.getTimeSlot().equals(timeSlot));
+
+                        // 예약된 시간대에 추가
+                        if (isTimeSlotUnavailable) {
+                            reservedTimeSlots.add(timeSlot);
+                        }
                     }
-                }
 
-                // 예약 불가능한 시간대를 리스트에 추가
-                if (isTimeSlotUnavailable) {
-                    unavailableDates.add(date + " (" + timeSlot + ")");
+                    // 예약된 타임슬롯을 모두 표시
+                    if (!reservedTimeSlots.isEmpty()) {
+                        for (String reservedSlot : reservedTimeSlots) {
+                            unavailableDates.add(formattedDate + " (" + reservedSlot + ")");
+                        }
+                    }
                 }
             }
         }
 
         return unavailableDates;  // 예약 불가능한 날짜 및 시간대 반환
+    }*/
+
+    public UsableDisplayResponseDto getAdvertisementData(ChoicedateRequestDto choicedatedto) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // 날짜 범위를 미리 파싱
+        LocalDate startDate = LocalDate.parse(choicedatedto.getStartDate(), formatter);
+        LocalDate endDate = LocalDate.parse(choicedatedto.getEndDate(), formatter);
+        String requestedTimeSlot = choicedatedto.getTimeSlot();
+
+        String adType = findAdTypeByTimeSlot(requestedTimeSlot);
+
+        // 범위 내 모든 날짜에 대해 광고 데이터를 한 번에 조회
+        Set<LocalDate> unavailableDates = new HashSet<>();
+
+        // 각 날짜에 대해 displayTime에 포함 여부 확인
+        for (LocalDate currentDate = startDate; !currentDate.isAfter(endDate); currentDate = currentDate.plusDays(1)) {
+            String formattedDate = currentDate.format(formatter);
+
+            // 해당 날짜를 포함하는 광고가 있는지 확인
+            List<Advertisement> adsForDate = advertisementRepository.findAllByDisplayContaining(formattedDate);
+            boolean isUnavailable = adsForDate.stream()
+                    .anyMatch(ad -> premiumAdvertisementRepository.findByAdvertisement(ad).stream()
+                            .anyMatch(premiumAd -> premiumAd.getTimeSlot().equals(requestedTimeSlot)));
+
+            // 예약이 되어 있다면 날짜를 예약 불가능 목록에 추가
+            if (isUnavailable) {
+                unavailableDates.add(currentDate);
+            }
+        }
+
+        // 예약 불가능한 날짜 수 계산 및 가용 일수 확인
+        int nonDisplayCount = unavailableDates.size();
+        int availableDays = 3 - nonDisplayCount;
+
+        Optional<Item> item;
+        if (availableDays == 1) {
+            item = itemRepository.findByItemName(adType + " - 1day");
+        } else if (availableDays == 2) {
+            item = itemRepository.findByItemName(adType + " - 2day");
+        } else if (availableDays == 0) {
+            return UsableDisplayResponseDto.builder()
+                    .nonDisplay(unavailableDates)
+                    .itemIdx(0)
+                    .build();
+        } else {
+            item = itemRepository.findByItemName(adType);
+        }
+
+        return UsableDisplayResponseDto.builder()
+                .nonDisplay(unavailableDates)
+                .itemIdx(item.get().getItemIndex())
+                .itemName(item.get().getItemName())
+                .itemPrice(item.get().getPrice())
+                .build();
+    }
+
+    private String findAdTypeByTimeSlot(String requestedTimeSlot) {
+        // 시간대와 광고 타입을 매핑한 Map 생성
+        Map<String, String> timeSlotToAdType = Map.of(
+                "01:00 ~ 04:00", "P3",
+                "04:00 ~ 07:00", "P1",
+                "07:00 ~ 10:00", "GP",
+                "10:00 ~ 13:00", "P2",
+                "13:00 ~ 16:00", "P1",
+                "16:00 ~ 19:00", "GP",
+                "19:00 ~ 22:00", "P1",
+                "22:00 ~ 01:00", "P3"
+        );
+
+        // 요청된 시간대에 맞는 광고 타입 반환, 없을 경우 null 반환
+        return timeSlotToAdType.getOrDefault(requestedTimeSlot, null);
     }
 
     public void createPremiumAd(PremiumAdRequestDto premiumAdDto, MultipartFile img, UserDetailsImpl userDetails) {
@@ -169,8 +244,8 @@ public class PremiumAdService {
         premiumAdvertisementRepository.save(premiumAd);
     }
 
-    public PremiumAdResponseDto getPremiumAdDetail(UserDetailsImpl userDetails, Integer ad_index) {
-        Advertisement ad = advertisementRepository.findByAdvertisementIndex(ad_index)
+    public PremiumAdResponseDto getPremiumAdDetail(UserDetailsImpl userDetails, Integer adIdx) {
+        Advertisement ad = advertisementRepository.findByAdvertisementIndex(adIdx)
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         PremiumAdvertisement premiumAdvertisement = premiumAdvertisementRepository.findById(ad.getPremiumAdvertisement().getPremiumIndex())
@@ -202,6 +277,7 @@ public class PremiumAdService {
     }*/
 
     // 날짜 리스트를 콤마로 구분된 문자열로 변환
+/*
     private String convertDatesToString(LocalDate startDate, LocalDate endDate) {
         List<LocalDate> dateList = startDate.datesUntil(endDate.plusDays(1))
                 .collect(Collectors.toList());
@@ -211,5 +287,6 @@ public class PremiumAdService {
                 .map(LocalDate::toString)
                 .collect(Collectors.joining(", "));
     }
+*/
 
 }

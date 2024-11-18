@@ -34,4 +34,8 @@ public interface PremiumAdvertisementRepository extends JpaRepository<PremiumAdv
     List<PremiumAdvertisement> findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
+
+    List<PremiumAdvertisement> findByAdvertisement(Advertisement advertisementIndex);
+
+
 }

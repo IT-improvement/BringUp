@@ -29,6 +29,16 @@ public class RecruitmentController {
     private final RecruitmentService recruitmentService;
     private final ErrorResponseHandler errorResponseHandler;
 
+    @GetMapping("/countApplyCv")
+    public ResponseEntity<BfResponse<?>> getApplyCvCount(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        try{
+            int count = recruitmentService.getApplyCvCount(userDetails);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, count));
+        } catch (RecruitmentException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+    }
+
     @PostMapping("/register")
     public ResponseEntity<BfResponse<?>> registerRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                              @RequestBody RecruitmentRequestDto requestDto) {

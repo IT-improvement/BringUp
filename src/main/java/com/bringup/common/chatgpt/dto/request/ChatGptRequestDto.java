@@ -1,4 +1,4 @@
-package com.bringup.common.chatgpt;
+package com.bringup.common.chatgpt.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 @Getter
 @NoArgsConstructor
+@Builder
 public class ChatGptRequestDto implements Serializable {
     private String model;
     private String prompt;

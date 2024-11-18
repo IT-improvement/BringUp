@@ -18,7 +18,8 @@ import java.util.Date;
 public class AwardEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int id;  // 기본 키 필드 추가
+
     private int userIndex;
     private String title;
     private String organization;

@@ -60,8 +60,8 @@
         <div class="mb-4 border">
             <div>
                 <h3 class="mx-4 my-2">프리미엄</h3>
-                <div class="border p-3 mb-3 mx-auto" style="width: 577px; height: 353px;">
-                    <img src="/resources/style/company/product/프리미엄광고.png">
+                <div class="border p-3 mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 577px; height: 353px; overflow: hidden;">
+                    <img src="/resources/style/company/product/프리미엄광고.png" class="img-fluid" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                 </div>
                 <div class="d-flex justify-content-end mx-4 my-2">
                     <button class="btn btn-primary" onclick="applyProduct('프리미엄')">신청하기</button>
@@ -72,8 +72,8 @@
         <div class="mb-4 border">
             <div>
                 <h3 class="mx-4 my-2">메인</h3>
-                <div class="border p-3 mb-3 mx-auto" style="width: 577px; height: 353px;">
-                    <img src="/resources/style/company/product/메인광고.png">
+                <div class="border p-3 mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 577px; height: 353px; overflow: hidden;">
+                    <img src="/resources/style/company/product/메인광고.png" class="img-fluid" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                 </div>
                 <div class="d-flex justify-content-end mx-4 my-2">
                     <button class="btn btn-primary" onclick="applyProduct('메인')">신청하기</button>
@@ -84,8 +84,8 @@
         <div class="mb-4 border">
             <div>
                 <h3 class="mx-4 my-2">배너</h3>
-                <div class="border p-3 mb-3 mx-auto" style="width: 577px; height: 353px;">
-                    <img src="/resources/style/company/product/배너광고.png">
+                <div class="border p-3 mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 577px; height: 353px; overflow: hidden;">
+                    <img src="/resources/style/company/product/배너광고.png" class="img-fluid" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                 </div>
                 <div class="d-flex justify-content-end mx-4 my-2">
                     <button class="btn btn-primary" onclick="applyProduct('배너')">신청하기</button>
@@ -95,8 +95,8 @@
         <div class="mb-4 border">
             <div>
                 <h3 class="mx-4 my-2">어나운스</h3>
-                <div class="border p-3 mb-3 mx-auto" style="width: 577px; height: 353px;">
-                    <img src="/resources/style/company/product/어나운스광고.png">
+                <div class="border p-3 mb-3 mx-auto d-flex align-items-center justify-content-center" style="width: 577px; height: 353px; overflow: hidden;">
+                    <img src="/resources/style/company/product/어나운스광고.png" class="img-fluid" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                 </div>
                 <div class="d-flex justify-content-end mx-4 my-2">
                     <button class="btn btn-primary" onclick="applyProduct('어나운스')">신청하기</button>
