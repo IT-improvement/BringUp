@@ -300,6 +300,9 @@
 
                         awardCard.className = 'award-card mb-3 p-3 d-flex align-items-center justify-content-between';
                         awardCard.id = `award-${'${award.id}'}`;
+                        awardCard.setAttribute('data-type', award.type); // 타입 정보를 속성으로 저장
+                        console.log()
+
 
 
                         let typeLabel = '';
@@ -322,7 +325,7 @@
                 <div class="text-muted">${'${award.organization}'}</div>
             </div>
             <div class="d-flex align-items-center">
-                <i class="bi bi-pencil-square edit-icon me-3" onclick="editAward(${'${award.id}'}, ${'${award.type}'})"></i>
+                <i class="bi bi-pencil-square edit-icon me-3" onclick="editAward(${'${award.id}'})"></i>
                 <i class="bi bi-trash delete-icon" onclick="deleteAward(${'${award.id}'})"></i>
             </div>
         `;
@@ -355,17 +358,21 @@
                 // 페이지 로드 시 수상 내역 리스트 불러오기
                 document.addEventListener('DOMContentLoaded', fetchAwardList);
 
-                function editAward(id, type) {
+                function editAward(id) {
                     const awardCard = document.getElementById(`award-${'${id}'}`);
+                    const type = awardCard.getAttribute('data-type'); // 타입 정보 가져오기
+                    const title = awardCard.querySelector('h5').textContent;
+                    const organization = awardCard.querySelector('.text-muted').textContent;
+                    const awardDate = awardCard.querySelector('span').textContent;
+
                     let editFields = '';
-                    console.log(type);
 
                     if (type === 'award') {
                         editFields = `
-            <input type="text" class="form-control mb-2" placeholder="수상 제목" id="editAwardTitle">
-            <input type="text" class="form-control mb-2" placeholder="주관(주체기관)" id="editAwardOrganization">
-            <input type="date" class="form-control mb-2" placeholder="수상일자" id="editAwardDate">
-            <textarea class="form-control mb-2" placeholder="수상 내역" id="editAwardDetails"></textarea>
+       <input type="text" class="form-control mb-2" value="${'${title}'}" placeholder="수상 제목" id="editAwardTitle">
+            <input type="text" class="form-control mb-2" value="${'${organization}'}" placeholder="주관(주체기관)" id="editAwardOrganization">
+            <input type="date" class="form-control mb-2" value="${'${awardDate}'}" placeholder="수상일자" id="editAwardDate">
+            <textarea class="form-control mb-2" placeholder="수상 내역" id="editAwardDetails">${'${award.details || ``}'}</textarea>
         `;
                     } else if (type === 'language') {
                         editFields = `
@@ -387,7 +394,7 @@
         <div>${'${editFields}'}</div>
         <div class="d-flex justify-content-end mt-3">
             <button class="btn btn-outline-primary me-2" onclick="cancelEdit(${'${id}'})">취소</button>
-            <button class="btn btn-primary" onclick="saveAward(${'${id}'}, ${'${type}'})">저장</button>
+            <button class="btn btn-primary" onclick="saveAward(${'${id}'})">저장</button>
         </div>
     `;
                 }
@@ -396,7 +403,10 @@
                     fetchAwardList(); // 기존 목록을 다시 불러와서 카드 내용을 원래 상태로 복구
                 }
 
-                function saveAward(id, type) {
+                function saveAward(id) {
+                    const awardCard = document.getElementById(`award-${'${id}'}`);
+                    const type = awardCard.getAttribute('data-type'); // 타입 정보 가져오기
+                    console.log()
                     const updatedData = {};
 
                     if (type === 'award') {
@@ -424,7 +434,7 @@
                             'Authorization': `Bearer ` + accessToken,
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify(awardData)
+                        body: JSON.stringify(updatedData)
                     })
                         .then(response => response.json())
                         .then(data => {

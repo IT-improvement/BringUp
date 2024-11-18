@@ -25,6 +25,8 @@ public class AwardEntity {
     private String organization;
     private Date awarDate;
     private String details;
+    @Enumerated(EnumType.STRING) // Enum 값을 문자열로 저장
+    private AwardType awardType; // 추가된 필드
 
     public AwardEntity(int userIndex, AwardRequestDto awardRequestDto) {
         this.userIndex = userIndex;
@@ -32,5 +34,8 @@ public class AwardEntity {
         this.organization = awardRequestDto.getOrganization();
         this.awarDate = awardRequestDto.getAwarDate();
         this.details = awardRequestDto.getDetails();
+        this.awardType = awardRequestDto.getAwardType(); // DTO에서 Enum 가져오기
+
+
     }
 }

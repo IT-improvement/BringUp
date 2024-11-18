@@ -28,6 +28,7 @@ public class AwardService {
             return AwardResponseDto.duplicateAward();
 
         AwardEntity awardEntity = new AwardEntity(userIndex,awardRequestDto);
+        awardEntity.setAwardType(awardRequestDto.getAwardType()); // awardType 설정
 
         try{
             awardRepository.save(awardEntity);
