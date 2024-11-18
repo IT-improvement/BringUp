@@ -3,9 +3,12 @@ package com.bringup.member.user.domain.service;
 import com.bringup.common.enums.RolesType;
 import com.bringup.member.portfolio.letter.domain.LetterEntity;
 import com.bringup.member.portfolio.letter.domain.LetterRepository;
+import com.bringup.member.user.domain.entity.MilitaryEntity;
 import com.bringup.member.user.domain.entity.UserEntity;
+import com.bringup.member.user.domain.repository.MilitaryRepsitory;
 import com.bringup.member.user.domain.repository.UserRepository;
 import com.bringup.member.user.dto.JoinDTO;
+import com.bringup.member.user.dto.MilitaryItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,11 +22,14 @@ public class JoinService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final LetterRepository letterRepository;
+    private final MilitaryRepsitory militaryRepsitory;
+
     @Autowired
-    public JoinService(UserRepository userRepository, PasswordEncoder passwordEncoder, LetterRepository letterRepository) {
+    public JoinService(UserRepository userRepository, PasswordEncoder passwordEncoder, LetterRepository letterRepository, MilitaryRepsitory militaryRepsitory) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.letterRepository = letterRepository;
+        this.militaryRepsitory = militaryRepsitory;
     }
 
     public void joinProcess(JoinDTO joinDTO) {
@@ -57,6 +63,11 @@ public class JoinService {
         LetterEntity letterEntity = new LetterEntity(userIndex);
         letterRepository.save(letterEntity);
 
+        /*military save*/
+        for(MilitaryItem item: joinDTO.getMilitaryList()) {
+            MilitaryEntity militaryEntity = new MilitaryEntity(item,userIndex);
+            militaryRepsitory.save(militaryEntity);
+        }
     }
 
     /**
