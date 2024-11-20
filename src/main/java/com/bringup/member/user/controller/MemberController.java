@@ -23,7 +23,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Member;
 import java.security.Principal;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
@@ -42,6 +45,7 @@ public class MemberController {
     private final UserLoginService userLoginService;
     private final MemberService memberService;
     private final ErrorResponseHandler errorResponseHandler;
+    private final UserRepository userRepository;
 
     @PostMapping("/name")
     public ResponseEntity<BfResponse<?>> getMemberName(@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -86,18 +90,46 @@ public class MemberController {
     }
 
 
+
     @PostMapping("/userLogin")
     public ResponseEntity<BfResponse<UserLoginTokenDTO>> login(@Valid @RequestBody UserLoginDTO loginDTO) {
-        // 디버그 로그 추가
         System.out.println("Controller: login method called with " + loginDTO.getUserEmail());
-        return ResponseEntity.ok(new BfResponse<>(userLoginService.login(loginDTO)));
+
+        try {
+            // 이메일 존재 여부를 미리 확인
+            Optional<UserEntity> user = userRepository.findByUserEmail(loginDTO.getUserEmail());
+            if (!user.isPresent()) {
+                throw new UsernameNotFoundException("존재하지 않는 이메일입니다.");
+            }
+
+            // 비밀번호 검증 및 인증 처리
+            UserLoginTokenDTO tokenDTO = userLoginService.login(loginDTO);
+            return ResponseEntity.ok(new BfResponse<>(tokenDTO));
+        } catch (UsernameNotFoundException ex) {
+            // 이메일 오류 처리
+            System.err.println("Error: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new BfResponse<>(40101, "존재하지 않는 이메일입니다."));
+        } catch (BadCredentialsException ex) {
+            // 비밀번호 오류 처리
+            System.err.println("Error: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new BfResponse<>(40102, "비밀번호가 일치하지 않습니다."));
+        } catch (Exception ex) {
+            // 기타 오류 처리
+            System.err.println("Unexpected error: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new BfResponse<>(50000, "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."));
+        }
+    }
+
         /*  로직 설명
         1.LoginController에서 로그인 요청 처리
     LoginController의 login 메서드가 요청을 받습니다.
     login 메서드는 전달된 UserLoginDTO 객체(로그인 정보가 포함된 DTO)를 사용하여 UserLoginService의 login 메서드를 호출합니다.
     LoginController는 UserLoginService로부터 반환된 UserLoginTokenDTO를 클라이언트에 응답합니다.
      */
-    }
+
 
 
     @PostMapping("/joinProc")
