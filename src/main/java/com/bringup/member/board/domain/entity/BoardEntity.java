@@ -20,7 +20,7 @@ public class BoardEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_index")
-    private int boardIndex;
+    private Integer boardIndex;
 
     @ManyToOne
     @JoinColumn(name = "user_index")
