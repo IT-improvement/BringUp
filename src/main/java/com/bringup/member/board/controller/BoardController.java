@@ -9,6 +9,8 @@ import com.bringup.member.board.dto.request.BoardRequestDto;
 import com.bringup.member.board.dto.response.BoardResponseDto;
 import com.bringup.member.board.exception.BoardException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -49,8 +51,8 @@ public class BoardController {
         }
     }
 
-    @PostMapping("/createPost")
-    public ResponseEntity<BfResponse<?>> createPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto boardRequestDto, @RequestParam MultipartFile[] boardImage){
+    @PostMapping(value = "/createPost", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BfResponse<?>> createPost(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestPart("boardRequestDto") BoardRequestDto boardRequestDto, @RequestPart("boardImage") MultipartFile[] boardImage){
         try {
             boardService.createPost(userDetails, boardRequestDto, boardImage);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, "create post successfully"));
@@ -61,7 +63,7 @@ public class BoardController {
         }
     }
 
-    @GetMapping("/detail/{boardIndex}")
+    @GetMapping("/postDetail/{boardIndex}")
     public ResponseEntity<BfResponse<?>> getPostDetails(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable("boardIndex") int boardIndex){
         try {
             BoardResponseDto boardDetails = boardService.getPostDetails(userDetails, boardIndex);

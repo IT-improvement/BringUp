@@ -134,7 +134,7 @@
 					<div class="card-header bg-transparent border-bottom p-3">
 						<div class="d-sm-flex justify-content-between align-items-center">
 							<h5 class="mb-2 mb-sm-0">게시글<span id="jobCount" class="badge bg-primary bg-opacity-10 text-primary"></span></h5>
-							<a href="" class="btn btn-sm btn-primary mb-0">작성</a>
+							<a href="/member/createNotice" class="btn btn-sm btn-primary mb-0">작성</a>
 						</div>
 					</div>
 					<div class="card-body">

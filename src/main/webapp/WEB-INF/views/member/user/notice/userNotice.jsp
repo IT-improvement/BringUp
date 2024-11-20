@@ -48,7 +48,24 @@
     <!--  JS -->
     <!-- <script src="/resources/script/member/user/파일명.js"></script> -->
     <script>
+        document.addEventListener('DOMContentLoaded', function (){
+            const accessToken = localStorage.getItem('accessToken');
+            console.log("Access token: " + accessToken);
+            if (!accessToken){
+                window.location.href = "/member/Login";
+                return;
+            }
 
+            let currentPage = 1;
+            const itemsPerPage = 5;
+            let totalItems = 0;
+            let allData = [];
+            let filteredData = [];
+
+            function fetchData(){
+                fetch('')
+            }
+        });
     </script>
 
 </head>
@@ -60,12 +77,13 @@
 <!-- 메인 콘텐츠 -->
 <body class="d-flex flex-column min-vh-100">
 <div class="container" style="max-width: 1260px;">
-    <main class="flex-grow-1">
+    <main class="flex-grow-1 m-4">
+        <p class="h1">나의 게시글</p>
         <div class="py-4">
             <div class="card border bg-transparent rounded-3">
                 <div class="card-header bg-transparent border-bottom p-3">
                     <div class="d-sm-flex justify-content-between align-items-center">
-                        <h5 class="mb-2 mb-sm-0">작성한 게시글<span id="jobCount" class="badge bg-primary bg-opacity-10 text-primary"></span></h5>
+                        <h5 class="mb-2 mb-sm-0">게시글<span id="jobCount" class="badge bg-primary bg-opacity-10 text-primary"></span></h5>
                         <a href="" class="btn btn-sm btn-primary mb-0">작성</a>
                     </div>
                 </div>
@@ -101,7 +119,7 @@
                                 <th scope="col">작성일</th>
                             </tr>
                             </thead>
-                            <tbody id="recruitment-list-body" class="border-top-0 text-center">
+                            <tbody id="notice-list-body" class="border-top-0 text-center">
                             </tbody>
                         </table>
                     </div>

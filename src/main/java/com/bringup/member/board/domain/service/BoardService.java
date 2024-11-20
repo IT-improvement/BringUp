@@ -151,7 +151,7 @@ public class BoardService {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .boardImage(board.getBoardImage())
-                .createPostTime(board.getCreatedPostTime())
+                .updatePostTime(board.getUpdatePostTime())
                 .build();
     }
 }
