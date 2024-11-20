@@ -104,7 +104,12 @@
                     </div>
                 </div>
                 <div id="entryContainer" class="mt-3" style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #007bff; border-radius: 5px; padding: 20px; display: none;">
-                    <!-- 선택된 항목에 따라 폼이 동적으로 여기에 표시됩니다 -->
+                    <input type="hidden" id="awardType" value="">
+                    <div id="formContent">
+                        <!-- 선택된 항목에 따라 폼이 동적으로 여기에 표시됩니다 -->
+                    </div>
+
+
                 </div>
                 <div id="awardListContainer" class="award-mt-3"></div> <!-- 여기 추가 -->
 
@@ -120,15 +125,33 @@
 
                 // 구분 선택에 따라 폼을 동적으로 표시
                 document.getElementById('categorySelect').addEventListener('change', function() {
-                    const selectedValue = this.value;
-                    console.log(selectedValue);
+                    const selectedValue = this.value; // 선택된 값 (수상, 어학시험, 자격증)
+                    const awardTypeElement = document.getElementById('awardType');
+                    const categoryMap = {
+                        award: "수상",
+                        language: "어학",
+                        certification: "자격증"
+                    };
+
+                    if (awardTypeElement) {
+                        awardTypeElement.value = categoryMap[selectedValue]; // Hidden 필드에 한글 값 저장
+                        console.log("Award Type 값:", categoryMap[selectedValue]);
+                    } else {
+                        console.error("Hidden field 'awardType' 이 없음.");
+                        return;
+                    }
+
+
                     const entryContainer = document.getElementById('entryContainer');
                     entryContainer.style.display = 'block';
+
 
                     if (selectedValue === 'award') {
                         entryContainer.innerHTML = `
                 <h3>수상 내역 추가</h3>
                 <div class="row g-3">
+            <input type="hidden" id="awardType" value="${'${categoryMap[selectedValue]}'}"> <!-- Hidden 필드 유지 -->
+
                     <div class="col-md-6">
                         <input type="text" class="form-control" placeholder="수상 제목" id="awardTitle">
                     </div>
@@ -218,16 +241,25 @@
                         alert("로그인이 필요합니다.");
                         return;
                     }
+                    const awardTypeElement = document.getElementById('awardType');
+                    if (!awardTypeElement || !awardTypeElement.value) {
+                        alert("수상 구분이 설정되지 않았습니다. 구분을 선택해주세요.");
+                        return;
+                    }
+
+                    const awardType = awardTypeElement.value;
                     const awardTitle = document.getElementById('awardTitle').value;
                     const awardOrganization = document.getElementById('awardOrganization').value;
                     const awardDate = document.getElementById('awardDate').value;
                     const awardDetails = document.getElementById('awardDetails').value;
 
                     const awardData = {
+                        awardType : awardType,
                         title: awardTitle,
                         organization: awardOrganization,
                         awarDate: awardDate,
                         details: awardDetails,
+
 
 
                     };
@@ -300,29 +332,17 @@
 
                         awardCard.className = 'award-card mb-3 p-3 d-flex align-items-center justify-content-between';
                         awardCard.id = `award-${'${award.id}'}`;
-                        awardCard.setAttribute('data-type', award.type); // 타입 정보를 속성으로 저장
-                        console.log()
-
-
-
-                        let typeLabel = '';
-                        if (award.type === 'award') {
-                            typeLabel = '수상';
-                        } else if (award.type === 'language') {
-                            typeLabel = '어학시험';
-                        } else if (award.type === 'certification') {
-                            typeLabel = '자격증';
-                        }
 
 
                         awardCard.innerHTML = `
             <div class="d-flex flex-column">
-                            <h4>${'${typeLabel}'}</h4>
+                            <h4>${'${award.awardType}'}</h4>
                 <div class="d-flex align-items-center">
                     <h5 class="me-3 mb-0">${'${award.title}'}</h5>
                     <span>${'${new Date(award.awarDate).toISOString().split(`T`)[0]}'}</span>
                 </div>
                 <div class="text-muted">${'${award.organization}'}</div>
+                <div class="text-muted">${'${award.details}'}</div>
             </div>
             <div class="d-flex align-items-center">
                 <i class="bi bi-pencil-square edit-icon me-3" onclick="editAward(${'${award.id}'})"></i>
@@ -331,6 +351,8 @@
         `;
 
                         awardListContainer.appendChild(awardCard);
+                        awardCard.setAttribute('data-type', award.awardType);
+
                     });
                 }
 
@@ -360,95 +382,139 @@
 
                 function editAward(id) {
                     const awardCard = document.getElementById(`award-${'${id}'}`);
-                    const type = awardCard.getAttribute('data-type'); // 타입 정보 가져오기
+                    const type = awardCard.getAttribute('data-type');
                     const title = awardCard.querySelector('h5').textContent;
                     const organization = awardCard.querySelector('.text-muted').textContent;
                     const awardDate = awardCard.querySelector('span').textContent;
+                    const details = awardCard.querySelector('.text-muted:last-child')?.textContent || '';
 
                     let editFields = '';
 
-                    if (type === 'award') {
+                    if (type === '수상') {
                         editFields = `
-       <input type="text" class="form-control mb-2" value="${'${title}'}" placeholder="수상 제목" id="editAwardTitle">
-            <input type="text" class="form-control mb-2" value="${'${organization}'}" placeholder="주관(주체기관)" id="editAwardOrganization">
-            <input type="date" class="form-control mb-2" value="${'${awardDate}'}" placeholder="수상일자" id="editAwardDate">
-            <textarea class="form-control mb-2" placeholder="수상 내역" id="editAwardDetails">${'${award.details || ``}'}</textarea>
+            <h3>수상 내역 수정</h3>
+            <div class="row g-3">
+                <div class="col-md-6">
+                                <input type="hidden" id="awardId" value="${'${id}'}">
+                                <input type="hidden" id="awardType" value="${'${type}'}">
+                    <input type="text" class="form-control" value="${'${title}'}" placeholder="수상 제목" id="awardTitle">
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" value="${'${organization}'}" placeholder="주관(주체기관)" id="awardOrganization">
+                </div>
+                <div class="col-md-6">
+                    <input type="date" class="form-control" value="${'${awardDate}'}" placeholder="수상일자" id="awardDate">
+                </div>
+                <div class="col-md-6">
+                    <textarea class="form-control" placeholder="수상 내역" rows="3" id="awardDetails">${'${details}'}</textarea>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button class="btn btn-outline-primary me-2" onclick="cancelEdit(${'${id}'})">취소</button>
+                <button class="btn btn-primary" onclick="editSaveAward()">저장</button>
+            </div>
         `;
-                    } else if (type === 'language') {
+                    } else if (type === '어학') {
                         editFields = `
-            <input type="text" class="form-control mb-2" placeholder="어학 시험명" id="editLanguageTitle">
-            <input type="text" class="form-control mb-2" placeholder="언어" id="editLanguage">
-            <input type="date" class="form-control mb-2" placeholder="취득일자" id="editLanguageDate">
-            <input type="text" class="form-control mb-2" placeholder="급수" id="editLanguageLevel">
-            <input type="text" class="form-control mb-2" placeholder="점수" id="editLanguageScore">
+            <h3>어학 시험 수정</h3>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" value="${'${title}'}" placeholder="어학 시험명" id="editLanguageTitle">
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" value="${'${organization}'}" placeholder="언어" id="editLanguage">
+                </div>
+                <div class="col-md-6">
+                    <input type="date" class="form-control" value="${'${awardDate}'}" placeholder="취득일자" id="editLanguageDate">
+                </div>
+                <div class="col-md-6">
+                    <textarea class="form-control" placeholder="점수" rows="3" id="editLanguageDetails">${'${details}'}</textarea>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button class="btn btn-outline-primary me-2" onclick="cancelEdit(${'${id}'})">취소</button>
+                <button class="btn btn-primary" onclick="saveAward(${'${id}'}, ${'${type}'})">저장</button>
+            </div>
         `;
-                    } else if (type === 'certification') {
+                    } else if (type === '자격증') {
                         editFields = `
-            <input type="text" class="form-control mb-2" placeholder="자격증 제목" id="editCertificationTitle">
-            <input type="text" class="form-control mb-2" placeholder="발급 기관" id="editCertificationIssuer">
-            <input type="date" class="form-control mb-2" placeholder="취득일자" id="editCertificationDate">
+            <h3>자격증 수정</h3>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" value="${'${title}'}" placeholder="자격증 제목" id="editCertificationTitle">
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" value="${'${organization}'}" placeholder="발급 기관" id="editCertificationIssuer">
+                </div>
+                <div class="col-md-6">
+                    <input type="date" class="form-control" value="${'${awardDate}'}" placeholder="취득일자" id="editCertificationDate">
+                </div>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button class="btn btn-outline-primary me-2" onclick="cancelEdit(${'${id}'})">취소</button>
+                <button class="btn btn-primary" onclick="editSaveAward(${'${id}'}, ${'${type}'})">저장</button>
+            </div>
         `;
                     }
 
                     awardCard.innerHTML = `
-        <div>${'${editFields}'}</div>
-        <div class="d-flex justify-content-end mt-3">
-            <button class="btn btn-outline-primary me-2" onclick="cancelEdit(${'${id}'})">취소</button>
-            <button class="btn btn-primary" onclick="saveAward(${'${id}'})">저장</button>
+        <div class="p-3" style="box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); border: 1px solid #007bff; border-radius: 5px;">
+           ${'${editFields}'}
         </div>
     `;
                 }
 
+
                 function cancelEdit(id) {
                     fetchAwardList(); // 기존 목록을 다시 불러와서 카드 내용을 원래 상태로 복구
-                }
+                }editSaveAward
 
-                function saveAward(id) {
-                    const awardCard = document.getElementById(`award-${'${id}'}`);
-                    const type = awardCard.getAttribute('data-type'); // 타입 정보 가져오기
-                    console.log()
-                    const updatedData = {};
+                function () {
+                    const accessToken = localStorage.getItem("accessToken");
+                    console.log(id);
 
-                    if (type === 'award') {
-                        updatedData.title = document.getElementById('editAwardTitle').value;
-                        updatedData.organization = document.getElementById('editAwardOrganization').value;
-                        updatedData.awarDate = document.getElementById('editAwardDate').value;
-                        updatedData.details = document.getElementById('editAwardDetails').value;
-                    } else if (type === 'language') {
-                        updatedData.title = document.getElementById('editLanguageTitle').value;
-                        updatedData.language = document.getElementById('editLanguage').value;
-                        updatedData.acquisitionDate = document.getElementById('editLanguageDate').value;
-                        updatedData.level = document.getElementById('editLanguageLevel').value;
-                        updatedData.score = document.getElementById('editLanguageScore').value;
-                    } else if (type === 'certification') {
-                        updatedData.title = document.getElementById('editCertificationTitle').value;
-                        updatedData.issuer = document.getElementById('editCertificationIssuer').value;
-                        updatedData.acquisitionDate = document.getElementById('editCertificationDate').value;
+                    if (!accessToken) {
+                        alert("로그인이 필요합니다.");
+                        return;
                     }
 
-                    const accessToken = localStorage.getItem("accessToken");
+                    // 데이터 수집
+                    const data = {
+                        id:document.getElementById('awardId') ? document.getElementById('awardId').value : null,
+                        awardType: document.getElementById('awardType') ? document.getElementById('awardType').value : null, // awardType 값 수집
+                        title: document.getElementById('awardTitle') ? document.getElementById('awardTitle').value : null,
+                        organization: document.getElementById('awardOrganization') ? document.getElementById('awardOrganization').value : null,
+                        awardDate: document.getElementById('awardDate') ? document.getElementById('awardDate').value : null,
+                        details: document.getElementById('awardDetails') ? document.getElementById('awardDetails').value : null,
+                    };
 
+                    // 필수 필드 검증
+                    if (!data.title || !data.organization || !data.awardDate) {
+                        alert("모든 필수 필드를 입력해주세요.");
+                        return;
+                    }
+
+                    // 데이터 전송
                     fetch('/award/insert', {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ` + accessToken,
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify(updatedData)
+                        body: JSON.stringify(data),
                     })
                         .then(response => response.json())
-                        .then(data => {
-                            if (data.code === "SU") {
-                                alert("수상 내역이 저장되었습니다.");
-                                fetchAwardList();
-                                hideForm();
+                        .then(result => {
+                            if (result.code === "SU") {
+                                alert("수상 내역이 성공적으로 수정되었습니다.");
+                                location.reload(); // 페이지를 새로고침하여 변경된 내용 반영
                             } else {
-                                alert("수상 내역 저장에 실패했습니다.");
+                                alert("수정에 실패했습니다: " + result.message);
                             }
                         })
-                        .catch(error => console.error('Error:', error));
-
+                        .catch(error => console.error("Error:", error));
                 }
+
             </script>
         </main>
     </div>
