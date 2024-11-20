@@ -40,7 +40,7 @@
                     <a class="ms-nav-link" href="/member/record"><i class="bi bi-pen"></i> 학력</a>
                 </li>
                 <li class="ms-nav-item">
-                    <a class="ms-nav-link" href="/member/awards"><i class="bi bi-bar-chart"></i> 경력</a>
+                    <a class="ms-nav-link" href="/member/career"><i class="bi bi-bar-chart"></i> 경력</a>
                 </li>
                 <li class="ms-nav-item">
                     <a class="ms-nav-link" href="/member/awards"><i class="bi bi-award"></i> 어학 / 자격증</a>
