@@ -1,5 +1,6 @@
 package com.bringup.member.portfolio.award.dto;
 
+import com.bringup.member.portfolio.award.domain.AwardType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,4 +13,6 @@ public class AwardRequestDto {
     private String organization;
     private Date awarDate;
     private String details;
+    private AwardType awardType; // 추가된 필드
+
 }
