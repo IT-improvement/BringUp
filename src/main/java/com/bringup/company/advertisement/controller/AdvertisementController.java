@@ -8,6 +8,9 @@ import com.bringup.company.advertisement.dto.response.*;
 import com.bringup.company.advertisement.exception.AdvertisementException;
 import com.bringup.company.advertisement.service.*;
 import com.bringup.company.user.exception.CompanyException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +35,9 @@ public class AdvertisementController {
     private final MainAdService mainAdService;
     private final ErrorResponseHandler errorResponseHandler;
     private final AdService adService;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
 
     //--------------광고 조회 관련-----------------------------------------
 
@@ -79,20 +85,24 @@ public class AdvertisementController {
 
     /**
      *
-     * @param premiumAdDto
+     * @param premiumAdDtoJson
      * @param img
      * @return
      */
     @PostMapping("/premium")
-    public ResponseEntity<BfResponse<?>> createPremiumAd(@RequestBody PremiumAdRequestDto premiumAdDto,
-                                                         @RequestPart("image") MultipartFile img,
-                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        try{
+    public ResponseEntity<BfResponse<?>> createPremiumAd(
+            @RequestPart("premiumAdDto") String premiumAdDtoJson,
+            @RequestPart("image") MultipartFile img,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            PremiumAdRequestDto premiumAdDto = objectMapper.readValue(premiumAdDtoJson, PremiumAdRequestDto.class);
             premiumAdService.createPremiumAd(premiumAdDto, img, userDetails);
             BfResponse<String> response = new BfResponse<>(SUCCESS, "Premium Advertisement Created Successfully");
             return ResponseEntity.ok(response);
-        } catch (AdvertisementException e){
+        } catch (AdvertisementException e) {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -122,7 +132,7 @@ public class AdvertisementController {
      */
     @GetMapping("/premium/detail/{ad_index}")
     public ResponseEntity<BfResponse<?>> detailPremiumAd(
-            @PathVariable int ad_index,
+            @PathVariable("ad_index") int ad_index,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         PremiumAdResponseDto pad = premiumAdService.getPremiumAdDetail(userDetails, ad_index);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, pad));
@@ -148,20 +158,25 @@ public class AdvertisementController {
     }
     /**
      *
-     * @param mainAdDto
+     * @param mainAdDtoJson
      * @param img
      * @return
      */
     @PostMapping("/main")
-    public ResponseEntity<BfResponse<?>> createMainAd(@RequestBody MainAdRequestDto mainAdDto,
+    public ResponseEntity<BfResponse<?>> createMainAd(@RequestPart("mainAdDto") String mainAdDtoJson,
                                                          @RequestPart("image") MultipartFile img,
                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try{
+            MainAdRequestDto mainAdDto = objectMapper.readValue(mainAdDtoJson, MainAdRequestDto.class);
             mainAdService.createMainAd(mainAdDto, img, userDetails);
             BfResponse<String> response = new BfResponse<>(SUCCESS, "메인광고 생성완료");
             return ResponseEntity.ok(response);
         } catch (AdvertisementException e){
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -193,13 +208,13 @@ public class AdvertisementController {
      */
     @GetMapping("/main/detail/{ad_index}")
     public ResponseEntity<BfResponse<?>> detailMainAd(
-            @PathVariable int ad_index,
+            @PathVariable("ad_index") int ad_index,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         MainAdResponseDto mad = mainAdService.getMainAdDetail(ad_index, userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, mad));
     }
 
-    @GetMapping("/main/price")
+    @PostMapping("/main/price")
     public ResponseEntity<BfResponse<?>> getPrice(@RequestParam Map<String, Integer> requestBody){
         int price = mainAdService.getItemPrice(requestBody.get("day"));
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, price));
@@ -210,11 +225,19 @@ public class AdvertisementController {
 
     @PostMapping("/banner")
     public ResponseEntity<BfResponse<String>> createBannerAd(
-            @RequestBody BannerAdRequestDto bannerAdDto,
+            @RequestPart("bannerAdDto") String bannerAdDtoJson,
             @RequestPart("image") MultipartFile img,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        bannerAdService.createBannerAd(bannerAdDto, img, userDetails);
-        return ResponseEntity.ok(new BfResponse<>("배너 광고가 성공적으로 생성되었습니다."));
+        try{
+            BannerAdRequestDto bannerAdDto = objectMapper.readValue(bannerAdDtoJson, BannerAdRequestDto.class);
+            bannerAdService.createBannerAd(bannerAdDto, img, userDetails);
+            return ResponseEntity.ok(new BfResponse<>("배너 광고가 성공적으로 생성되었습니다."));
+        } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @PutMapping("/banner/{bannerId}")
@@ -235,13 +258,13 @@ public class AdvertisementController {
 
     @GetMapping("/banner/detail/{ad_index}")
     public ResponseEntity<BfResponse<?>> detailBannerAd(
-            @PathVariable int ad_index,
+            @PathVariable("ad_index") int ad_index,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         BannerAdResponseDto bad = bannerAdService.getBannerAdDetail(ad_index, userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, bad));
     }
 
-    @GetMapping("/banner/price")
+    @PostMapping("/banner/price")
     public ResponseEntity<BfResponse<?>> getBannerPrice(@RequestBody DateRequestDto dto){
         try{
             ItemInfoResponseDto response = bannerAdService.getBannerInfo(dto);
@@ -263,11 +286,11 @@ public class AdvertisementController {
         return ResponseEntity.ok(new BfResponse<>("기본 광고 생성완료"));
     }
 
-    @GetMapping("/announce/detail/{announcementId}")
+    @GetMapping("/announce/detail/{ad_index}")
     public ResponseEntity<BfResponse<?>> getAnnouncementAdDetail(
-            @PathVariable int announcementId,
+            @PathVariable("ad_index") int ad_index,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        AnnouncementAdResponseDto announcementAd = announcementAdService.getAnnouncementAdDetail(announcementId, userDetails);
+        AnnouncementAdResponseDto announcementAd = announcementAdService.getAnnouncementAdDetail(ad_index, userDetails);
         return ResponseEntity.ok(new BfResponse<>(announcementAd));
     }
 
@@ -286,7 +309,7 @@ public class AdvertisementController {
         return ResponseEntity.ok(new BfResponse<>("기본 광고 삭제완료"));
     }
 
-    @GetMapping("/announce/price")
+    @PostMapping("/announce/price")
     public ResponseEntity<BfResponse<?>> getAnnounceAdPrice(@RequestParam(name = "displayTime") int displayTime){
         System.out.println("짜바리 dto : " + displayTime);
         System.out.println("짜바리 서비스 리턴값 : " + displayTime);

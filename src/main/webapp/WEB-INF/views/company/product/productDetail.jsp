@@ -64,37 +64,24 @@
                             <button class="btn btn-danger" id="deleteButton">삭제</button>
                         </div>
                     </div>
+                    <% String adType = (String)request.getAttribute("adType");%>
                     <div class="row">
                         <div class="col-md-6">
-                            <p class="card-text">상품 이름: <span id="productName"></span> 광고</p>
+                            <p class="card-text">상품 이름: <span id="adType"></span> 광고</p>
                             <p class="card-text">공고 제목: <span id="recruitmentTitle"></span></p>
-                            <% String adType = request.getParameter("adType"); %>
-                            
+                            <p class="card-text">광고 날짜: <span id="adPeriod"></span></p>
                             <% if (adType != null && adType.equals("premium")) { %>
-                                <p class="card-text">광고 날짜: <span id="adDate"></span></p>
-                                <p class="card-text">광고 시간: <span id="displayTime"></span></p>
-                                <p class="card-text">이미지 크기: <span>875x500px</span></p>
-                            <% } else if (adType != null && adType.equals("main")) { %>
-                                <p class="card-text">광고 기간: <span id="duration"></span></p>
-                                <p class="card-text">광고 날짜: <span id="adDate"></span></p>
-                                <p class="card-text">이미지 크기: <span>1228x320px</span></p>
-                            <% } else if (adType != null && adType.equals("banner")) { %>
-                                <p class="card-text">광고 기간: <span id="duration"></span></p>
-                                <p class="card-text">광고 날짜: <span id="adDate"></span></p>
-                                <p class="card-text">이미지 크기: <span>1228x80px</span></p>
-                            <% } else if (adType != null && adType.equals("announcement")) { %>
-                                <p class="card-text">광고 시작일: <span id="startDate"></span></p>
-                                <p class="card-text">광고 기간: <span id="duration"></span></p>
+                                <p class="card-text">광고 시간: <span id="timeSlot"></span></p>
                             <% } %>
                             <p class="card-text">결제 금액: <span id="paymentAmount"></span></p>
                             <p class="card-text">클릭 수: <span id="clickCount"></span></p>
+                            <p class="card-text">조회수: <span id="viewCount"></span></p>
+                            <p class="card-text">상태: <span id="status"></span></p>
                         </div>
-                        <% if (!adType.equals("announcement")) { %>
                         <div class="col-md-6">
                             <h5 class="mb-3">광고 이미지</h5>
                             <img id="adImage" src="" alt="광고 이미지" class="img-fluid rounded">
                         </div>
-                        <% } %>
                     </div>
                 </div>
             </div>

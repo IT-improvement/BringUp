@@ -1,6 +1,7 @@
 package com.bringup.company.advertisement.entity;
 
 
+import com.bringup.admin.payment.entity.Payment;
 import com.bringup.common.enums.StatusType;
 import com.bringup.company.recruitment.entity.Recruitment;
 import jakarta.persistence.*;
@@ -39,6 +40,10 @@ public class Advertisement {
 
     @Column(name = "click_count")
     private Integer c_count = 0;
+
+    @OneToOne
+    @JoinColumn(name = "order_index")
+    private Payment order;
 
     @Setter
     @Enumerated(EnumType.STRING)

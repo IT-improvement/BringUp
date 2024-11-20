@@ -1,7 +1,9 @@
 package com.bringup.company.advertisement.service;
 
 import com.bringup.admin.payment.entity.Item;
+import com.bringup.admin.payment.entity.Payment;
 import com.bringup.admin.payment.repository.ItemRepository;
+import com.bringup.admin.payment.repository.PaymentRepository;
 import com.bringup.common.enums.StatusType;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
@@ -22,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+
 import static com.bringup.common.enums.AdvertisementErrorCode.ALREADY_ACTIVE;
 import static com.bringup.common.enums.AdvertisementErrorCode.NOT_FOUND_ADVERTISEMENT;
 import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_MEMBER_ID;
@@ -35,6 +39,7 @@ public class BannerAdService {
     private final RecruitmentRepository recruitmentRepository;
     private final ImageService imageService;
     private final ItemRepository itemRepository;
+    private final PaymentRepository paymentRepository;
 
     public ItemInfoResponseDto getBannerInfo(DateRequestDto dto){
         String itemName = "배너 광고 - " + dto.getDisplayTime() + "일";
@@ -55,17 +60,21 @@ public class BannerAdService {
         Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(bannerAdDto.getRecruitmentIndex())
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_RECRUITMENT));
 
+        Payment order = paymentRepository.findByOrderIndex(bannerAdDto.getOrderIdx())
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
         if(!recruitment.getCompany().getCompanyId().equals(userDetails.getId())){
             throw new CompanyException(NOT_FOUND_MEMBER_ID);
         }
 
         Advertisement advertisement = new Advertisement();
-        advertisement.getRecruitment().setRecruitmentIndex(bannerAdDto.getRecruitmentIndex());
+        advertisement.setRecruitment(recruitment);
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
         advertisement.setDisplay(String.valueOf(bannerAdDto.getExposureDays()));
-        advertisement.setStartDate(bannerAdDto.getStartDate());
-        advertisement.setEndDate(bannerAdDto.getEndDate());
+        advertisement.setStartDate(LocalDate.parse(bannerAdDto.getStartDate()));
+        advertisement.setEndDate(LocalDate.parse(bannerAdDto.getEndDate()));
+        advertisement.setOrder(order);
         advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
         advertisementRepository.save(advertisement);
 
@@ -79,7 +88,10 @@ public class BannerAdService {
 
     @Transactional
     public BannerAdResponseDto getBannerAdDetail(int bannerId, UserDetailsImpl userDetails) {
-        BannerAdvertisement bannerAd = bannerAdRepository.findById(bannerId)
+        Advertisement ad = advertisementRepository.findByAdvertisementIndex(bannerId)
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
+        BannerAdvertisement bannerAd = bannerAdRepository.findById(ad.getBannerAdvertisement().getBannerId())
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         // 광고 소유자인지 확인
@@ -101,8 +113,8 @@ public class BannerAdService {
 
         bannerAd.getAdvertisement().setStatus(StatusType.CRT_WAIT);
         bannerAd.setBannerImage(imageService.saveImage(img));
-        bannerAd.getAdvertisement().setStartDate(bannerAdDto.getStartDate());
-        bannerAd.getAdvertisement().setEndDate(bannerAdDto.getEndDate());
+        bannerAd.getAdvertisement().setStartDate(LocalDate.parse(bannerAdDto.getStartDate()));
+        bannerAd.getAdvertisement().setEndDate(LocalDate.parse(bannerAdDto.getEndDate()));
 
         bannerAdRepository.save(bannerAd);
     }

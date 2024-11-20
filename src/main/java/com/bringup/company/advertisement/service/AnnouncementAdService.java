@@ -1,7 +1,9 @@
 package com.bringup.company.advertisement.service;
 
 import com.bringup.admin.payment.entity.Item;
+import com.bringup.admin.payment.entity.Payment;
 import com.bringup.admin.payment.repository.ItemRepository;
+import com.bringup.admin.payment.repository.PaymentRepository;
 import com.bringup.common.enums.StatusType;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.advertisement.dto.request.AnnouncementAdRequestDto;
@@ -20,6 +22,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import static com.bringup.common.enums.AdvertisementErrorCode.ALREADY_ACTIVE;
@@ -35,6 +38,7 @@ public class AnnouncementAdService {
     private final AdvertisementRepository advertisementRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final ItemRepository itemRepository;
+    private final PaymentRepository paymentRepository;
 
     public ItemInfoResponseDto getAnnounceAdPrice(int displayTime){
         String itemName = "공고 광고 - " + displayTime + "달";
@@ -54,18 +58,22 @@ public class AnnouncementAdService {
         Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(announcementAdDto.getRecruitmentIndex())
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_RECRUITMENT));
 
+        Payment order = paymentRepository.findByOrderIndex(announcementAdDto.getOrderIdx())
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
         if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
             throw new CompanyException(NOT_FOUND_MEMBER_ID);
         }
 
         // 광고 등록
         Advertisement advertisement = new Advertisement();
-        advertisement.getRecruitment().setRecruitmentIndex(announcementAdDto.getRecruitmentIndex());
+        advertisement.setRecruitment(recruitment);
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
         advertisement.setDisplay(String.valueOf(announcementAdDto.getDurationDays()));
-        advertisement.setStartDate(announcementAdDto.getStartDate());
-        advertisement.setEndDate(announcementAdDto.getEndDate());
+        advertisement.setStartDate(LocalDate.parse(announcementAdDto.getStartDate()));
+        advertisement.setEndDate(LocalDate.parse(announcementAdDto.getEndDate()));
+        advertisement.setOrder(order);
         advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
         advertisementRepository.save(advertisement);
 
@@ -76,7 +84,10 @@ public class AnnouncementAdService {
 
     @Transactional
     public void updateAnnouncementAd(int announcementId, AnnouncementAdRequestDto announcementAdDto, UserDetailsImpl userDetails) {
-        AnnouncementAdvertisement announcementAd = announcementAdvertisementRepository.findById(announcementId)
+        Advertisement ad = advertisementRepository.findByAdvertisementIndex(announcementId)
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
+        AnnouncementAdvertisement announcementAd = announcementAdvertisementRepository.findById(ad.getAnnouncementAdvertisement().getAnnouncementId())
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         if (!announcementAd.getAdvertisement().getRecruitment().getCompany().getCompanyId().equals(userDetails.getId())) {
@@ -84,8 +95,8 @@ public class AnnouncementAdService {
         }
 
         announcementAd.getAdvertisement().setStatus(StatusType.CRT_WAIT);
-        announcementAd.getAdvertisement().setStartDate(announcementAdDto.getStartDate());
-        announcementAd.getAdvertisement().setEndDate(announcementAdDto.getEndDate());
+        announcementAd.getAdvertisement().setStartDate(LocalDate.parse(announcementAdDto.getStartDate()));
+        announcementAd.getAdvertisement().setEndDate(LocalDate.parse(announcementAdDto.getEndDate()));
 
         announcementAdvertisementRepository.save(announcementAd);
     }

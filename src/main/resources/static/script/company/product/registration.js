@@ -1,4 +1,57 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // 이전 페이지가 /company/product/introduction인지 확인
+    if (document.referrer.includes('/company/product/introduction')) {
+        sessionStorage.clear(); // 세션 스토리지 초기화
+    }
+
+    let productName = document.querySelector('h3').textContent.trim();
+
+    // productName에 따른 입력값 저장
+    const inputGroups = {
+        '프리미엄': ['premiumDateRange', 'productSelect', 'imageUpload'],
+        '메인': ['mainDateRange', 'productSelect', 'imageUpload'],
+        '배너': ['bannerDateRange', 'bannerProductSelect', 'imageUpload'],
+        '어나운스': ['announceStartDate', 'productSelect']
+    };
+
+    const selectedInputs = inputGroups[productName] || [];
+
+    selectedInputs.forEach(inputId => {
+        const element = document.getElementById(inputId);
+        if (element) {
+            element.addEventListener('input', function() {
+                sessionStorage.setItem(inputId, this.value);
+            });
+            if (element.type === 'file') {
+                element.addEventListener('change', function() {
+                    sessionStorage.setItem(inputId, this.files[0] ? this.files[0].name : '');
+                });
+            }
+        }
+    });
+
+    // 페이지 로드 시 sessionStorage에서 값 복원
+    selectedInputs.forEach(inputId => {
+        const element = document.getElementById(inputId);
+        if (element) {
+            const storedValue = sessionStorage.getItem(inputId);
+            if (storedValue) {
+                if (element.type === 'file') {
+                    // 파일 입력은 파일명을 복원할 수 없으므로 무시
+                } else {
+                    element.value = storedValue;
+                }
+            }
+        }
+    });
+
+    // 페이지를 벗어날 때 세션 스토리지 초기화
+    window.addEventListener('beforeunload', function() {
+        selectedInputs.forEach(inputId => {
+            sessionStorage.removeItem(inputId);
+        });
+    });
+
     const paymentFormButton = document.getElementById('paymentFormButton');
     paymentFormButton.addEventListener('click', function() {
         let isValid = true;
@@ -11,8 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
             invalidInputs.push('공고');
             isValid = false;
         }
-
-        const productName = document.querySelector('h3').textContent.trim().split(' ')[0];
 
         if (productName === '프리미엄') {
             // 프리미엄 광고 검증
@@ -103,7 +154,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const paymentButton = document.getElementById("paymentButton");
             if (paymentButton) {
                 paymentButton.click();
-                
             } else {
                 alert("결제 버튼을 찾을 수 없습니다.");
             }
@@ -113,18 +163,162 @@ document.addEventListener('DOMContentLoaded', function() {
     // 결제 결과 이벤트 수신
     document.addEventListener("paymentResult", function(event) {
         const status = event.detail.status;
+        const paymentResponse = event.detail.paymentResponse;
         switch (status) {
             case "done":
                 console.log("결제 성공");
-                alert("결제가 성공적으로 완료되었습니다.");
+                console.log(paymentResponse);
+                const type = productName.includes("프리미엄") ? "premium" : productName.includes("메인") ? "main" : productName.includes("배너") ? "banner" : "announce";
+                const formData = new FormData();
+                let data = {};
+
+                if (type === "premium" || type === "main" || type === "banner") {
+                    data = {
+                        recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
+                        startDate: startDate,
+                        endDate: endDate
+                    };
+
+                    if (type === "premium") {
+                        // PremiumAdRequestDto 형식에 맞게 데이터 구성
+                        const premiumData = {
+                            recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
+                            adType: document.getElementById('adType').textContent.replace(/광고 유형: /g, ''),
+                            timeSlot: displayTime,
+                            startDate: startDate,
+                            endDate: endDate,
+                            displayDate: Array.from(
+                                { length: (new Date(endDate) - new Date(startDate)) / (24 * 60 * 60 * 1000) + 1 },
+                                (_, i) => new Date(new Date(startDate).getTime() + i * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+                            ),
+                            orderIdx: paymentResponse.orderindex
+                        };
+
+                        const imageFile = document.getElementById('imageUpload').files[0];
+                        formData.append('premiumAdDto', new Blob([JSON.stringify(premiumData)], {type: 'application/json'}));
+                        formData.append('image', imageFile);
+
+                    } else if (type === "main") {
+                        const mainDateRangeValue = document.getElementById('mainDateRange').value;
+                        if (mainDateRangeValue.includes(' ~ ')) {
+                            startDate = mainDateRangeValue.split(' ~ ')[0];
+                            endDate = mainDateRangeValue.split(' ~ ')[1];
+                        } else {
+                            startDate = mainDateRangeValue;
+                            endDate = mainDateRangeValue;
+                        }
+                        data.exposureDays = document.getElementById('productSelect').value;
+                        const imageFile = document.getElementById('imageUpload').files[0];
+                        const mainData = {
+                            recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
+                            exposureDays: document.getElementById('productSelect').value,
+                            startDate: startDate,
+                            endDate: endDate,
+                            useDate: Array.from(
+                                { length: (new Date(endDate) - new Date(startDate)) / (24 * 60 * 60 * 1000) + 1 },
+                                (_, i) => new Date(new Date(startDate).getTime() + i * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+                            ),
+                            orderIdx: paymentResponse.orderindex
+                        };
+                        formData.append('mainAdDto', new Blob([JSON.stringify(mainData)], {type: 'application/json'}));
+                        formData.append('image', imageFile);
+                    } else if (type === "banner") {
+                        const bannerDateRangeValue = document.getElementById('bannerDateRange').value;
+                        if (bannerDateRangeValue.includes(' ~ ')) {
+                            startDate = bannerDateRangeValue.split(' ~ ')[0];
+                            endDate = bannerDateRangeValue.split(' ~ ')[1];
+                        } else {
+                            startDate = bannerDateRangeValue;
+                            endDate = bannerDateRangeValue;
+                        }
+                        data.exposureDays = document.getElementById('bannerProductSelect').value;
+                        const imageFile = document.getElementById('imageUpload').files[0];
+                        const bannerData = {
+                            recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
+                            exposureDays: document.getElementById('bannerProductSelect').value,
+                            startDate: new Date(startDate).toISOString().split('T')[0],
+                            endDate: new Date(endDate).toISOString().split('T')[0],
+                            orderIdx: paymentResponse.orderindex
+                        };
+                        formData.append('bannerAdDto', new Blob([JSON.stringify(bannerData)], {type: 'application/json'}));
+                        formData.append('image', imageFile);
+                    }
+
+                    fetch(`/com/advertisement/${type}`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`
+                        },
+                        body: formData
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            console.log("프리미엄 데이터"+formData.get('premiumAdDto'));
+                            console.log("메인 데이터"+formData.get('mainAdDto'));
+                            console.log("배너 데이터"+formData.get('bannerAdDto'));
+                            console.log("이미지"+formData.get('image'));
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(responseData => {
+                        if(responseData.code === 200) {
+                            alert("광고 등록이 완료되었습니다.");
+                            sessionStorage.clear();
+                            location.href = "/company/product/management";
+                        } else {
+                            alert("광고 등록에 실패했습니다.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('에러 발생:', error);
+                        alert("광고 등록 중 오류가 발생했습니다.");
+                    });
+
+                } else if (type === "announce") {
+                    console.log('Start Date:', document.getElementById('announceStartDate').value);
+                    console.log('Duration Months:', document.getElementById('productSelect').value);
+                    data = {
+                        recruitmentIndex: parseInt(sessionStorage.getItem("recruitmentIndex")),
+                        durationDays: parseInt(document.getElementById('productSelect').value),
+                        startDate: document.getElementById('announceStartDate').value,
+                        endDate: document.getElementById('announceStartDate').value,
+                        orderIdx: paymentResponse.orderindex
+                    };
+
+                    fetch(`/com/advertisement/${type}`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => response.json())
+                    .then(responseData => {
+                        console.log('응답 데이터:', responseData);
+                        if(responseData.code === 200) {
+                            alert("광고 등록이 완료되었습니다.");
+                            sessionStorage.clear();
+                            location.href = "/company/product/management";
+                        } else {
+                            alert("광고 등록에 실패했습니다.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('에러 발생:', error);
+                    });
+                }
                 break;
             case "failed":
                 console.log("결제 실패");
                 alert("결제가 실패했습니다. 다시 시도해주세요.");
+                location.reload(); // 페이지 새로고침
                 break;
             case "cancel":
                 console.log("결제 취소");
                 alert("결제가 취소되었습니다.");
+                location.reload(); // 페이지 새로고침
                 break;
             default:
                 console.log("알 수 없는 결제 상태");
@@ -159,8 +353,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-
-    const productName = document.querySelector('h3').textContent.trim();
 
     // 공통: 공고 선택 동작
     const advertisementInputElement = document.getElementById('advertisementInput');
@@ -197,9 +389,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     listItem.className = 'list-group-item';
                     listItem.textContent = item.title;
                     listItem.addEventListener('click', function() {
+                        console.log(item);
                         document.getElementById('selectedAdvertisement').value = item.title;
                         document.getElementById('selectedAd').textContent = `선택된 공고: ${item.title}`;
                         $('#advertisementModal').modal('hide');
+                        sessionStorage.setItem("recruitmentIndex", item.index);
                         // 카드에 선택된 공고 표시
                         document.getElementById('selectedAd').textContent = `선택된 공고: ${item.title}`;
                         document.getElementById('selectedAdvertisement').style.border = '';
@@ -226,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 img.onload = function() {
                     // let valid = img.width === 875 && img.height === 500;
                     // if (!valid) {
-                    //     alert('이미지 크기가 올바르지 않습니다. 올바른 크기를 업로드하세요.');
+                    //     alert('이미지 크기가 올바르지 않습니다. 올바 크기를 업로드하요.');
                     //     event.target.value = '';
                     // }
                 };
@@ -282,7 +476,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 console.log('응답 데이터:', data); // 응답 데이터 확인
                 const itemIdx = data.data ? data.data.itemIdx : null; // 데이터가 있는지 확인
-                sessionStorage.setItem("itemIdx", itemIdx);
                 if (itemIdx === 0 || itemIdx === "0") {
                     if(confirm("해당 시간대에 광고 신청이 불가능합니다.\n다른 시간대를 선택하시겠습니까?")) {
                         document.getElementById('productSelect').value = '';
@@ -295,6 +488,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         document.getElementById('paymentAmount').textContent = '결제 금액: ';
                     }
                 }else{
+                    sessionStorage.setItem("itemIdx", itemIdx);
                     document.getElementById('adType').textContent = '광고 유형: '+data.data.itemName;
                     document.getElementById('paymentAmount').textContent = '결제 금액: '+data.data.itemPrice+'원';
                 }
@@ -431,7 +625,7 @@ document.addEventListener('DOMContentLoaded', function() {
         bannerDateInput.addEventListener('focus', function(event) {
             const durationDays = parseInt(durationSelect.value, 10);
             if (!durationDays) {
-                alert('먼저 광고 기간을 선택하세요.');
+                alert('먼저 광고 기간을 선택세요.');
                 durationSelect.focus();
                 return;
             }
@@ -460,12 +654,15 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 console.log(event.target.value);
                 const duration = event.target.value;
-                fetch('/com/advertisement/banner/price?displayTime='+duration, {
-                    method: 'GET',
+                fetch('/com/advertisement/banner/price', {
+                    method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    body: JSON.stringify({
+                        displayTime: duration
+                    })
                 })
                 .then(response => response.json())
                 .then(data => {
@@ -514,7 +711,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let duration = event.target.value;
             if (duration) {
                 fetch(`/com/advertisement/announce/price?displayTime=${duration}`, {
-                    method: 'GET',
+                    method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,
                         'Content-Type': 'application/json'
@@ -537,7 +734,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         duration += '개월';
                     }
                     document.getElementById('paymentAmount').textContent = `결제 금액: ${price}원`;
-                    document.getElementById('duration').textContent = `광고 기: ${duration}`;
+                    document.getElementById('duration').textContent = `광고 기간: ${duration}`;
                 })
                 .catch(error => {
                     console.error('Error fetching announcement price:', error);
@@ -545,6 +742,4 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-
-
 });

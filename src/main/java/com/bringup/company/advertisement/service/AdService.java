@@ -109,6 +109,7 @@ public class AdService {
     }
 
 
+
     // 광고 타입을 결정하는 메소드
     private String determineAdType(Advertisement ad) {
         if (ad.getPremiumAdvertisement() != null) {
