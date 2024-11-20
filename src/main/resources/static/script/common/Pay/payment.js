@@ -103,17 +103,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     })
                         .then((res) => res.json())
                         .then((result) => {
-                            console.log(result.code);
-                            // result가 null이 아니고, 코드가 1인 경우 결제 완료 처리
-                            if (result && result.code === 200) {
-                                alert("결제 완료되었습니다.");
+                            console.log(result);
+                            if (result && result.data && result.data.status === 1) {
                                 eventDetail.status = "done";
+                                dispatchPaymentResultEvent(eventDetail);
                             } else {
-                                alert("결제가 실패했습니다. 다시 시도해주세요.");
                                 eventDetail.status = "failed";
+                                alert("결제가 실패했습니다. 다시 시도해주세요.");
+                                dispatchPaymentResultEvent(eventDetail);
                             }
-                            const paymentEvent = new CustomEvent("paymentResult", { detail: eventDetail });
-                            document.dispatchEvent(paymentEvent);
                         })
                         .catch((err) => {
                             console.error(err);
@@ -121,14 +119,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         });
                     break;
                 case "done":
-                    alert("결제 완료되었습니다.");
-                    const doneEvent = new CustomEvent("paymentResult", { detail: { status: "done" } });
-                    document.dispatchEvent(doneEvent);
+                    eventDetail.status = "done";
+                    dispatchPaymentResultEvent(eventDetail);
                     break;
                 case "cancel":
                     alert("결제가 취소되었습니다.");
-                    const cancelEvent = new CustomEvent("paymentResult", { detail: { status: "cancel" } });
-                    document.dispatchEvent(cancelEvent);
+                    eventDetail.status = "cancel";
+                    dispatchPaymentResultEvent(eventDetail);
                     break;
                 default:
                     break;
@@ -142,4 +139,22 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     }
+
+    function dispatchPaymentResultEvent(eventDetail) {
+        const paymentEvent = new CustomEvent("paymentResult", { detail: eventDetail });
+        document.dispatchEvent(paymentEvent);
+    }
+
+    // 결과를 처리하는 이벤트 리스너
+    document.addEventListener("paymentResult", function (event) {
+        const status = event.detail.status;
+
+        if (status === "done") {
+            alert("결제가 성공적으로 완료되었습니다.");
+        } else if (status === "failed") {
+            alert("결제가 실패하였습니다. 다시 시도해주세요.");
+        } else if (status === "cancel") {
+            alert("결제가 취소되었습니다.");
+        }
+    });
 });

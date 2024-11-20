@@ -1,7 +1,9 @@
 package com.bringup.company.advertisement.service;
 
 import com.bringup.admin.payment.entity.Item;
+import com.bringup.admin.payment.entity.Payment;
 import com.bringup.admin.payment.repository.ItemRepository;
+import com.bringup.admin.payment.repository.PaymentRepository;
 import com.bringup.common.enums.StatusType;
 import com.bringup.common.image.ImageService;
 import com.bringup.common.security.service.UserDetailsImpl;
@@ -38,11 +40,15 @@ public class MainAdService {
     private final AdvertisementRepository advertisementRepository;
     private final ImageService imageService;
     private final ItemRepository itemRepository;
+    private final PaymentRepository paymentRepository;
 
     // 메인 광고 생성
     public void createMainAd(MainAdRequestDto mainAdDto, MultipartFile img, UserDetailsImpl userDetails) {
         Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(mainAdDto.getRecruitmentIndex())
                 .orElseThrow(() -> new CompanyException(NOT_FOUND_RECRUITMENT));
+
+        Payment order = paymentRepository.findByOrderIndex(mainAdDto.getOrderIdx())
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         if (!recruitment.getCompany().getCompanyId().equals(userDetails.getId())) {
             throw new CompanyException(NOT_FOUND_MEMBER_ID);
@@ -50,12 +56,13 @@ public class MainAdService {
 
         // 광고 등록
         Advertisement advertisement = new Advertisement();
-        advertisement.getRecruitment().setRecruitmentIndex(mainAdDto.getRecruitmentIndex());
+        advertisement.setRecruitment(recruitment);
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
         advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
-        advertisement.setStartDate(mainAdDto.getStartDate());
-        advertisement.setEndDate(mainAdDto.getEndDate());
+        advertisement.setStartDate(LocalDate.parse(mainAdDto.getStartDate()));
+        advertisement.setOrder(order);
+        advertisement.setEndDate(LocalDate.parse(mainAdDto.getEndDate()));
 
         advertisementRepository.save(advertisement);
 
@@ -80,8 +87,8 @@ public class MainAdService {
         Advertisement ad = mainAd.getAdvertisement();
         ad.setStringListFromList(mainAdDto.getUseDate());
         ad.setStatus(StatusType.CRT_WAIT); // 수정 시에도 초기 상태로 변경
-        mainAd.getAdvertisement().setStartDate(mainAdDto.getStartDate());
-        mainAd.getAdvertisement().setEndDate(mainAdDto.getEndDate());
+        mainAd.getAdvertisement().setStartDate(LocalDate.parse(mainAdDto.getStartDate()));
+        mainAd.getAdvertisement().setEndDate(LocalDate.parse(mainAdDto.getEndDate()));
 
         mainAdvertisementRepository.save(mainAd);
     }
@@ -102,10 +109,11 @@ public class MainAdService {
 
     // 메인 광고 상세 조회
     public MainAdResponseDto getMainAdDetail(int mainAdId, UserDetailsImpl userDetails) {
-        MainAdvertisement mainAd = mainAdvertisementRepository.findById(mainAdId)
+        Advertisement ad = advertisementRepository.findByAdvertisementIndex(mainAdId)
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
-        Advertisement ad = mainAd.getAdvertisement();
+        MainAdvertisement mainAd = mainAdvertisementRepository.findById(ad.getMainAdvertisement().getMainId())
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         // 광고 소유자인지 확인
         if (!ad.getRecruitment().getCompany().getCompanyId().equals(userDetails.getId())) {
