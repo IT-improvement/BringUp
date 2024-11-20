@@ -59,18 +59,23 @@ public class BoardService {
     public List<BoardResponseDto> getPostList(UserDetailsImpl userDetails){
         List<BoardEntity> boardList = boardRepository.findByUserUserIndex(userDetails.getId());
 
-        if (boardList == null || boardList.isEmpty()){
+        if (boardList.isEmpty()){
             throw new BoardException(NOT_FOUND_WRITING);
         }
 
-        List<BoardResponseDto> boards = new ArrayList<>();
-
-        for (BoardEntity board : boardList){
-            BoardResponseDto dto = convertDto(board);
-            boards.add(dto);
-        }
-
-        return boards;
+        return boardList.stream()
+                .map(userBoard -> {
+                    return BoardResponseDto.builder()
+                            .boardIndex(userBoard.getBoardIndex())
+                            .user(userBoard.getUser())
+                            .title(userBoard.getTitle())
+                            .content(userBoard.getContent())
+                            .boardImage(userBoard.getBoardImage())
+                            .updatePostTime(userBoard.getUpdatePostTime())
+                            .status(userBoard.getStatus())
+                            .build();
+                })
+                .collect(Collectors.toList());
     }
 
     @Transactional
