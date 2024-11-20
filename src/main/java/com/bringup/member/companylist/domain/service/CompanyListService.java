@@ -4,6 +4,7 @@ import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.exception.CompanyException;
 import com.bringup.company.user.repository.CompanyRepository;
 import com.bringup.member.companylist.dto.response.CompanyListResponseDto;
+import com.bringup.member.companylist.dto.response.CompanyUserResponseDto;
 import com.bringup.member.companylist.exception.CompanyListException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,5 +36,31 @@ public class CompanyListService {
                             .companyLogo(company.getCompanyLogo())
                             .build();
                 }).collect(Collectors.toList());
+    }
+
+    public CompanyUserResponseDto getCompanyDetails(int companyId){
+        Company company = companyRepository.findById(companyId)
+                .orElseThrow(()->new CompanyListException(NOT_FOUND_MEMBER_ID));
+
+        return convertDto(company);
+    }
+
+    private CompanyUserResponseDto convertDto(Company company){
+        return CompanyUserResponseDto.builder()
+                .email(company.getManagerEmail())
+                .cName(company.getCompanyName())
+                .managerName(company.getManagerName())
+                .companyPhone(company.getCompanyPhonenumber())
+                .category(company.getCompanyCategory())
+                .license(company.getCompanyLicense())
+                .address(company.getCompanyAddress())
+                .welfare(company.getCompanyWelfare())
+                .vision(company.getCompanyVision())
+                .history(company.getCompanyHistory())
+                .ceoName(company.getMasterName())
+                .managerPhone(company.getManagerPhonenumber())
+                .cSize(company.getCompanySize())
+                .logo(company.getCompanyLogo())
+                .build();
     }
 }
