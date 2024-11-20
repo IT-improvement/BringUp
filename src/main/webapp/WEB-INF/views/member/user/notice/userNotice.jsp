@@ -63,8 +63,56 @@
             let filteredData = [];
 
             function fetchData(){
-                fetch('')
+                fetch('/member/notice/detail/list', {
+                    method: "GET",
+                    headers: {
+                        'Authorization': `Bearer ` + accessToken,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("받은 데이터 : " + data);
+                        allData = data.data;
+                        filteredData = allData;
+                        totalItems = allData.length;
+                        renderPage(currentPage);
+                    })
+                    .catch(error => {
+                        console.error('작성한 게시글 목록을 가져오는 중 오류 발생 : ', error);
+                        const noticeListBody = document.getElementById('notice-list-body');
+                        if (noticeListBody) {
+                            noticeListBody.innerHTML = '<tr><td colspan="6" class="text-center">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>';
+                        }
+                    });
             }
+
+            function renderPage(page){
+                const noticeListBody = document.getElementById('notice-list-body');
+                noticeListBody.innerHTML = '';
+
+                const start = (page - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
+                const pageData = filteredData.slice(start, end);
+
+                pageData.forEach((notice, index) => {
+                    const row = document.createElement('tr');
+                    const number = notice.index;
+
+                    row.innerHTML = `
+						<td>${"${start + index + 1}"}</td>
+						<td>${"${notice.user.userEmail}"}</td>
+						<td>${"${notice.title}"}</td>
+						<td>${"${notice.updatePostTime}"}</td>
+					`;
+                    row.style.cursor = 'pointer';
+                    row.addEventListener('click', () => {
+                        window.location.href = `/member/notice/postDetail/${"${number}"}`;
+                    });
+                    noticeListBody.appendChild(row);
+                });
+            }
+            fetchData();
         });
     </script>
 
@@ -84,7 +132,7 @@
                 <div class="card-header bg-transparent border-bottom p-3">
                     <div class="d-sm-flex justify-content-between align-items-center">
                         <h5 class="mb-2 mb-sm-0">게시글<span id="jobCount" class="badge bg-primary bg-opacity-10 text-primary"></span></h5>
-                        <a href="" class="btn btn-sm btn-primary mb-0">작성</a>
+                        <a href="/member/createNotice" class="btn btn-sm btn-primary mb-0">작성</a>
                     </div>
                 </div>
                 <div class="card-body">

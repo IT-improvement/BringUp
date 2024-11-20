@@ -143,6 +143,8 @@ public class SpringSecurityConfig {
                 antMatcher("/member/interviewReview"),
                 antMatcher("/member/notice"),
                 antMatcher("/member/createNotice"),
+                antMatcher("/member/userNotice"),
+                antMatcher("/member/noticeDetail"),
                 antMatcher("/member/Login"),
                 antMatcher("/member/userLogin"),
                 antMatcher("/member/recruitmentPage"),
@@ -167,7 +169,6 @@ public class SpringSecurityConfig {
 
                 antMatcher("/main/list"),
                 antMatcher("/member/memberProfile"),
-                antMatcher("/member/userNotice"),
                 antMatcher("/member/interview/iv_list"),
                 antMatcher("/member/m_reviewDetail"),
                 antMatcher("/member/createReview"),
@@ -185,12 +186,16 @@ public class SpringSecurityConfig {
                 antMatcher("/member/blogList"),
                 antMatcher("/member/record"),
                 antMatcher("/member/awards"),
+                antMatcher("/member/career"),
                 /*antMatcher("/portfolio/**"),*/
                 antMatcher("/award/delete/{index}"),
 
                 antMatcher("/portfolio/blog/delete"),
 
                 antMatcher("/school/delete/{index}"),
+
+                antMatcher("/mem/certificate/delete/{index}"),
+
 
                 antMatcher("/freelancer/**")
 
@@ -234,7 +239,6 @@ public class SpringSecurityConfig {
                 antMatcher("/member/notice/detail/list"),
                 antMatcher("/member/notice/postDetail/{boardIndex}"),
                 antMatcher("/admin/**"),
-                antMatcher("/mem/**"),
                 antMatcher(GET, "/member/applyList"),
 
                 antMatcher("/member/interview/{reviewId}"),
@@ -250,6 +254,8 @@ public class SpringSecurityConfig {
                 antMatcher("/github/**"),
                 antMatcher("/school/info/list"),
                 antMatcher("/school/insert"),
+                antMatcher("/mem/certificate/list"),
+                antMatcher("/mem/certificate/insert"),
 
                 antMatcher("/award/insert"),
                 antMatcher("/award/list"),
