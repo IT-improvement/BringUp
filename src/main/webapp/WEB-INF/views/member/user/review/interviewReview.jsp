@@ -206,7 +206,7 @@
 		}
 
 		function showReviewDetails(review) {
-			const existingDetailRow = document.querySelector(`tr[data-detail-index="${review.interviewReviewIndex}"]`);
+			const existingDetailRow = document.querySelector(`tr[data-detail-index="${"${review.interviewReviewIndex}"}"]`);
 
 			if (existingDetailRow) {
 				// 이미 열려 있는 경우 닫기
@@ -218,7 +218,7 @@
 			const existingDetailRows = document.querySelectorAll("tr[data-detail-index]");
 			existingDetailRows.forEach(row => row.remove());
 
-			const row = document.querySelector(`tr[data-index="${review.interviewReviewIndex}"]`);
+			const row = document.querySelector(`tr[data-index="${"${review.interviewReviewIndex}"}"]`);
 			if (!row) {
 				console.error("해당 리뷰의 행을 찾을 수 없습니다. 리뷰 인덱스: " + review.interviewReviewIndex);
 				return;
