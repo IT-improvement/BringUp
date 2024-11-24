@@ -1,5 +1,6 @@
 package com.bringup.member.review.service;
 
+import com.bringup.common.enums.ReviewErrorCode;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.review.entity.CompanyReview;
 import com.bringup.company.review.entity.InterviewReview;
@@ -8,16 +9,20 @@ import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.repository.CompanyRepository;
 import com.bringup.member.review.dto.request.InterviewReviewRequestDto;
 import com.bringup.member.review.dto.response.InterviewReviewResponseDto;
+import com.bringup.member.review.exception.MemberReviewException;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -115,12 +120,37 @@ public class MemberInterviewReviewService {
         InterviewReviewResponseDto responseDto = new InterviewReviewResponseDto();
 
         responseDto.setInterviewReviewIndex(review.getInterviewReviewIndex());
-        responseDto.setAmbience(String.valueOf(review.getAmbience()));
+        responseDto.setAmbience(review.getAmbience());
         responseDto.setDifficulty(review.getDifficulty());
         responseDto.setInterviewReviewTitle(review.getInterviewReviewTitle());
         responseDto.setInterviewReviewDate(review.getInterviewReviewDate().toString()); // Assuming it's a LocalDateTime
         responseDto.setInterviewReviewContent(review.getInterviewReviewContent());
 
         return responseDto;
+    }
+
+    public InterviewReviewResponseDto getMostStar(int companyIdx){
+        Pageable pageable = PageRequest.of(0, 1); // 첫 번째 리뷰만 가져오기
+        List<InterviewReview> reviews = interviewReviewRepository.findTopByAverageRating(companyIdx, pageable);
+
+        if (reviews.isEmpty()) {
+            throw new MemberReviewException(ReviewErrorCode.NOT_FOUND_REVIEW);
+        }
+
+        InterviewReview review = reviews.get(0);
+
+        // DTO로 매핑
+        return convertToDto(review);
+    }
+
+    // 특정 기업의 리뷰 리스트 조회
+    public List<InterviewReviewResponseDto> getAllReviewsByCompany(int companyId) {
+        // 특정 기업의 리뷰 조회
+        List<InterviewReview> reviews = interviewReviewRepository.findAllByCompanyCompanyId(companyId);
+
+        // DTO 리스트로 변환
+        return reviews.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 }
