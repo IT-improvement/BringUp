@@ -32,8 +32,8 @@ public class CareerController {
         return careerService.insertCareer(userIndex, careerInsertRequestDto);
     }
 
-        @DeleteMapping("/delete")
-        public ResponseEntity<? super CareerResponseDto> deleteCareer(@RequestParam("index") String index){
+    @DeleteMapping("/delete")
+    public ResponseEntity<? super CareerResponseDto> deleteCareer(@RequestParam("index") String index){
             int careerIndex = Integer.parseInt(index);
             return careerService.deleteCareer(careerIndex);
         }

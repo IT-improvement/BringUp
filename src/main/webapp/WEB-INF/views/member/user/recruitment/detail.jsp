@@ -44,9 +44,8 @@
     <script src="/resources/script/member/recruitmentDetail.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 현재 URL 경로에서 recruitmentId 추출
             const path = window.location.pathname;
-            const recruitmentId = path.split('/').pop(); // URL에서 마지막 부분 (recruitmentId) 추출
+            const recruitmentId = path.split('/').pop();
 
             if (!recruitmentId) {
                 console.error('recruitmentId is null or undefined');
@@ -55,16 +54,13 @@
 
             const fetchUrl = `/recruitment/detail/` + recruitmentId;
 
-            // 데이터 가져오기
             fetch(fetchUrl, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: { 'Content-Type': 'application/json' }
             })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                        throw new Error(`HTTP error! status: ` + response.status);
                     }
                     return response.json();
                 })
@@ -76,24 +72,23 @@
 
                     const recruitmentData = data.data;
 
-                    // 화면에 데이터 표시
-                    document.getElementById('c_name').textContent = recruitmentData.companyName;
-                    document.getElementById('recruitmentTitle').textContent = recruitmentData.recruitmentTitle;
-                    document.getElementById('c_intro').textContent = recruitmentData.companyContent;
-                    document.getElementById('r_workdetail').textContent = recruitmentData.workDetail;
-                    document.getElementById('r_career').textContent = recruitmentData.career;
-                    document.getElementById('r_salary').textContent = recruitmentData.salary;
-                    document.getElementById('r_period').textContent = recruitmentData.recruitmentPeriod;
-                    document.getElementById('r_requirement').textContent = recruitmentData.requirements;
-                    document.getElementById('r_hospitality').textContent = recruitmentData.hospitality;
-                    document.getElementById('c_welfare').textContent = recruitmentData.companyWelfare;
-                    document.getElementById('c_address').textContent = recruitmentData.companyAddress;
-                    document.getElementById('c_logo').src = recruitmentData.companyImg;
+                    // 회사 정보와 채용 정보 업데이트
+                    document.getElementById('c_logo').src = recruitmentData.c_logo;
+                    document.getElementById('c_name').textContent = recruitmentData.c_name;
+                    document.getElementById('c_intro').textContent = recruitmentData.c_intro;
+                    document.getElementById('r_workdetail').textContent = recruitmentData.r_workdetail;
+                    document.getElementById('r_requirement').textContent = recruitmentData.r_requirement;
+                    document.getElementById('r_hospitality').textContent = recruitmentData.r_hospitality;
+                    document.getElementById('r_career').textContent = recruitmentData.r_career;
+                    document.getElementById('r_salary').textContent = recruitmentData.r_salary;
+                    document.getElementById('r_period').textContent = recruitmentData.r_period;
+                    document.getElementById('c_welfare').textContent = recruitmentData.c_welfare;
+                    document.getElementById('c_address').textContent = recruitmentData.c_address;
 
-                    // 슬라이드 이미지 처리
+                    // 캐러셀 이미지 업데이트
                     const carouselInner = document.querySelector('.carousel-inner');
                     const carouselIndicators = document.querySelector('.carousel-indicators');
-                    recruitmentData.companyImgs.forEach((imgSrc, index) => {
+                    recruitmentData.c_img.forEach((imgSrc, index) => {
                         const item = document.createElement('div');
                         item.classList.add('carousel-item', index === 0 ? 'active' : '');
 
@@ -106,7 +101,6 @@
                         item.appendChild(img);
                         carouselInner.appendChild(item);
 
-                        // 인디케이터
                         const indicator = document.createElement('button');
                         indicator.type = 'button';
                         indicator.setAttribute('data-bs-target', '#carouselExampleIndicators');
@@ -117,6 +111,7 @@
                 })
                 .catch(error => console.error('Error:', error));
         });
+
     </script>
 </head>
 

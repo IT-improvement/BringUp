@@ -95,7 +95,6 @@ public class UserRecruitmentService {
     }
 
 
-
     public UserRecruitmentDetailDto getRecruitmentDetail(int recruitmentId) {
         // 채용 공고 정보 가져오기
         Recruitment recruitment = userRecruitmentRepository.findById(recruitmentId)
@@ -103,28 +102,28 @@ public class UserRecruitmentService {
 
         // 회사 정보 가져오기
         Company company = recruitment.getCompany();
-        String[] images = company.getCompanyImg().replaceAll(" ", "").replaceAll("\n", "").split(",");
+        String[] images = company.getCompanyImg() != null
+                ? company.getCompanyImg().replaceAll(" ", "").replaceAll("\n", "").split(",")
+                : new String[0];
 
-
-        // 회사 이미지 및 다른 정보들을 함께 DTO에 담기
+        // 회사 정보 및 채용 정보를 함께 DTO로 변환
         return UserRecruitmentDetailDto.builder()
-                .companyName(company.getCompanyName())
-                .companyImg(images)  // 회사 이미지 가져오기
-                .companyContent(company.getCompanyContent())
-                .companyWelfare(company.getCompanyWelfare())
-                .companyAddress(company.getCompanyAddress())
-                .recruitmentTitle(recruitment.getRecruitmentTitle())
-                .career(recruitment.getCareer())
-                .salary(recruitment.getSalary())
-                .recruitmentPeriod(recruitment.getPeriod())
-                .requirements(recruitment.getRequirement())
-                .hospitality(recruitment.getHospitality())
-                .workDetail(recruitment.getWorkDetail())
-                .applicantCount(recruitment.getViewCount())  // 지원자 수
-                .minimumSalary(Integer.parseInt(recruitment.getSalary()))  // 최소 연봉
-                .deadline(recruitment.getPeriod())  // 마감일
+                .c_logo(company.getCompanyLogo())
+                .c_name(company.getCompanyName())
+                .c_img(images)
+                .c_intro(company.getCompanyContent())
+                .c_welfare(company.getCompanyWelfare())
+                .c_address(company.getCompanyAddress())
+                .r_title(recruitment.getRecruitmentTitle())
+                .r_workdetail(recruitment.getWorkDetail())
+                .r_requirement(recruitment.getRequirement())
+                .r_hospitality(recruitment.getHospitality())
+                .r_career(recruitment.getCareer())
+                .r_salary(recruitment.getSalary())
+                .r_period(recruitment.getPeriod())
                 .build();
     }
+
 
 
     private UserRecruitmentDto convertToDto(Recruitment recruitment) {

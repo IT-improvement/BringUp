@@ -127,6 +127,12 @@
             align-items: flex-end !important;
             justify-content: center;
         }
+        .p-3{
+            border-bottom: solid 1px;
+        }
+        .mt-4{
+            border-top: solid 1px;
+        }
     </style>
 
 </head>
@@ -150,7 +156,7 @@
                 </div>
 
                 <!-- 안내 메시지 -->
-                <div id="initialMessage" class="mt-3 p-3 text-center" style="border: 1px solid #ddd; border-radius: 5px; color: #888;">
+                <div id="initialMessage" class="mt-3 p-3 text-center" style="border: 1px solid #ddd; border-radius: 5px; color: #888; ">
                     자격/어학/수상 내역을 입력해주세요
                 </div>
                 <!-- 경력 추가 폼 -->
@@ -335,7 +341,7 @@
 
         careers.forEach(career => {
             const careerCard = document.createElement('div');
-            careerCard.className = 'career-card mb-3 p-3 d-flex align-items-center justify-content-between';
+            careerCard.className = 'career-card mb-3 p-3 d-flex align-items-center justify-content-between ';
             careerCard.id = `career-${'${career.careerIndex}'}`;
 
             careerCard.innerHTML = `
