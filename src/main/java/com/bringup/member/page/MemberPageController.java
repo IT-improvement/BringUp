@@ -163,5 +163,8 @@ public class MemberPageController {
     @GetMapping("/career")
     public String career() {return "member/user/career/career";}
 
-
+    @GetMapping("/company/detail/{companyId}")
+    public String companyDetail(@PathVariable("companyId") int companyId) {
+        return "member/user/company/companyDetail";
+    }
 }
