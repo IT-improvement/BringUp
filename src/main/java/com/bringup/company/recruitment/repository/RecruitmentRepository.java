@@ -23,4 +23,5 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Intege
     List<Recruitment> findAllByStatus(StatusType status);
 
     List<Recruitment> findTop100ByOrderByViewCountDesc();
+
 }
