@@ -187,10 +187,11 @@ public class SpringSecurityConfig {
                 antMatcher("/member/record"),
                 antMatcher("/member/awards"),
                 antMatcher("/member/career"),
-                /*antMatcher("/portfolio/**"),*/
+
                 antMatcher("/award/delete/{index}"),
 
                 antMatcher("/portfolio/blog/delete"),
+                antMatcher("/portfolio/career/delete"),
 
                 antMatcher("/school/delete/{index}"),
 
@@ -210,7 +211,6 @@ public class SpringSecurityConfig {
      */
     private RequestMatcher[] AuthRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
-                antMatcher("/portfolio/**"),
                 antMatcher(POST, "/com/companyName"),               // 기업명 헤더 삽입
                 antMatcher(GET, "/com/companyInfo/post"),           // 회원 정보 조회
                 antMatcher("/com/user/**"),
@@ -254,11 +254,12 @@ public class SpringSecurityConfig {
                 antMatcher("/github/**"),
                 antMatcher("/school/info/list"),
                 antMatcher("/school/insert"),
-                antMatcher("/mem/certificate/list"),
-                antMatcher("/mem/certificate/insert"),
+
 
                 antMatcher("/award/insert"),
                 antMatcher("/award/list"),
+                antMatcher("/portfolio/career/list"),
+                antMatcher("/portfolio/career/insert"),
 
 
 
