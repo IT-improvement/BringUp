@@ -107,7 +107,7 @@
 					`;
                     row.style.cursor = 'pointer';
                     row.addEventListener('click', () => {
-                        window.location.href = `/member/notice/postDetail/${"${number}"}`;
+                        window.location.href = `/member/noticeDetail;`
                     });
                     noticeListBody.appendChild(row);
                 });
