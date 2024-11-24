@@ -4,6 +4,7 @@ import com.bringup.common.enums.GlobalErrorCode;
 import com.bringup.common.event.exception.ErrorResponseHandler;
 import com.bringup.common.response.BfResponse;
 import com.bringup.common.security.service.UserDetailsImpl;
+import com.bringup.member.board.domain.entity.BoardEntity;
 import com.bringup.member.board.domain.service.BoardService;
 import com.bringup.member.board.dto.request.BoardRequestDto;
 import com.bringup.member.board.dto.response.BoardResponseDto;
@@ -56,6 +57,18 @@ public class BoardController {
         try {
             boardService.createPost(userDetails, boardRequestDto, boardImage);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, "create post successfully"));
+        }catch (BoardException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }catch (Exception e){
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/noticeDetail/{boardIndex}")
+    public ResponseEntity<BfResponse<?>> getNoticeDetails(@PathVariable("boardIndex") int boardIndex){
+        try {
+            BoardResponseDto boardDetails = boardService.getNoticeDetails(boardIndex);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, boardDetails));
         }catch (BoardException e){
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         }catch (Exception e){
