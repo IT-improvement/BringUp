@@ -12,28 +12,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "cv")
 @Entity
-public class        CVEntity {
+public class CVEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cvIndex;
-    private String cvImage;
     private boolean mainCv;
-    private String education;
     private String skill;
     private int userIndex;
-    private String status;
+    private String title;
 
 
 
 
     public CVEntity(CVInsertRequestDto dto){
-        this.cvIndex = dto.getCvIndex();
-        this.cvImage = dto.getCvimage();
-        this.mainCv = dto.isMaincv();
-        this.education=dto.getEducation();
+        this.mainCv = dto.isMainCv();
         this.skill=dto.getSkill();
         this.userIndex=dto.getUserIndex();
-        this.status=dto.getStatus();
     }
 
 

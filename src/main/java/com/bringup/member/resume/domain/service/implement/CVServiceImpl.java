@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 public class CVServiceImpl implements CVService {
 
     private final CVRepository cvRepository;
-    private final ImageService imageService;
     @Override
     public ResponseEntity<? super CVInsertResponseDto> insertCv(CVInsertRequestDto request) {
         CVEntity cv = new CVEntity(request);
