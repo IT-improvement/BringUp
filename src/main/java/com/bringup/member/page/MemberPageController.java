@@ -77,13 +77,13 @@ public class MemberPageController {
         return "member/user/career/resume";
     }
 
-    @GetMapping("/companyReview")
-    public String companyReview() {
+    @GetMapping("/companyReview/{companyId}")
+    public String companyReview(@PathVariable("companyId") int companyId) {
         return "member/user/review/companyReview";
     }
 
-    @GetMapping("/interviewReview")
-    public String interviewReview() {
+    @GetMapping("/interviewReview/{companyId}")
+    public String interviewReview(@PathVariable("companyId") int companyId) {
         return "member/user/review/interviewReview";
     }
 
@@ -126,6 +126,15 @@ public class MemberPageController {
     {
         return "member/user/review/createReview";
     }
+
+    @GetMapping("/createInterviewReview")
+    public String createInterviewReview()
+    {
+        return "member/user/review/createInterviewReview";
+    }
+
+    @GetMapping("/myReview")
+    public String myReview() {return "member/user/review/myReview";}
 
     @GetMapping("/editReview")
     public String editReview()

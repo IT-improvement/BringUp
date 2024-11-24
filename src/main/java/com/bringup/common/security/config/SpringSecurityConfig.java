@@ -152,6 +152,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/confirmRecruitment"),
                 antMatcher("/member/AnnouncementRecruitment"),
                 antMatcher("/member/proposeRecruitment"),
+                antMatcher("/member/myReview"),
                 antMatcher("/image/**"),
                 antMatcher("/recruitment/**"),
                 antMatcher("/main/image/**"),

@@ -92,16 +92,16 @@ public class MemberReviewController {
     }
 
     @GetMapping("/top-review/{companyId}")
-    public ResponseEntity<BfResponse<?>> getTopAverageRatingReviewForCompany(@PathVariable int companyId) {
-        try{
+    public ResponseEntity<BfResponse<?>> getTopAverageRatingReviewForCompany(@PathVariable("companyId") int companyId) {
+        try {
             MemberCompanyReviewDto topReview = memberReviewService.getMostStar(companyId);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, topReview));
-        } catch (MemberReviewException e){
+        } catch (MemberReviewException e) {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         }
     }
 
-    @GetMapping("/company/{companyIdx}")
+    @GetMapping("/company-review/{companyIdx}")
     public ResponseEntity<BfResponse<?>> getReviewsByCompany(@PathVariable("companyIdx") int companyIdx){
         List<MemberCompanyReviewDto> reviews = memberReviewService.getAllReviewsByCompany(companyIdx);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, reviews));
