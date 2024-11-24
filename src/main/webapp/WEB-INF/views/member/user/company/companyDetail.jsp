@@ -77,10 +77,117 @@
 	}
 
 
+	
+		fetch("/member/top-review/" + companyId)
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			return response.json();
+		})
+		.then(data => {
+			console.log(data);
+			if (data.code === 400) {
+				console.log(data.message);
+				document.getElementById('companyReview').innerHTML = `
+					<div class="card mb-3 border-1 border-secondary">
+						<div class="card-body">
+							<p class="card-text">등록된 리뷰가 없습니다.</p>
+						</div>
+					</div>
+				`;
+			}else{
+				const reviewData = data.data;
+				const starRating = (rating) => {
+					const fullStars = Math.floor(rating);
+					const halfStar = rating % 1 !== 0;
+					let starsHtml = '';
+					for (let i = 0; i < fullStars; i++) {
+						starsHtml += '<i class="bi bi-star-fill text-warning"></i>';
+					}
+					if (halfStar) {
+						starsHtml += '<i class="bi bi-star-half text-warning"></i>';
+					}
+					for (let i = fullStars + (halfStar ? 1 : 0); i < 5; i++) {
+						starsHtml += '<i class="bi bi-star text-warning"></i>';
+					}
+					return starsHtml;
+				};
+
+				const reviewHtml = `
+					<div class="card mb-3 border-1 border-secondary">
+						<div class="card-body">
+							<div class="d-flex justify-content-between">
+								<div class="d-flex">
+									<h5 class="card-title">${"${reviewData.companyReviewTitle}"}</h5>
+									<h6 class="card mb-2 ms-2">작성자 : ${"${reviewData.userEmail}"}</h6>
+								</div>
+								<p class="card-text"><small class="text-muted">작성일: ${"${reviewData.companyReviewDate}"}</small></p>
+							</div>
+							<div class="d-flex justify-content-between">
+								<div class="d-flex align-items-center">
+									<div class="me-2">평점:</div>
+									<div>${"${starRating(reviewData.averageRating)}"}</div>
+								</div>
+							</div>
+							<p class="card-text">${"${reviewData.content}"}</p>
+						</div>
+					</div>
+				`;
+				document.getElementById('companyReview').innerHTML = reviewHtml;
+			}
+		})
+		.catch(error => {
+			console.error('There was a problem with the fetch operation:', error);
+			document.getElementById('companyReview').innerHTML = `
+				<div class="card mb-3 border-1 border-secondary">
+					<div class="card-body">
+						<p class="card-text">리뷰를 불러오는 중 오류가 발생했습니다.</p>
+					</div>
+				</div>
+			`;
+		});
+
 		fetch("/member/interview/top-review/" + companyId)
 		.then(response => response.json())
 		.then(data => {
 			console.log(data);
+			if (data.code === 400) {
+				console.log(data.message);
+				document.getElementById('interviewReview').innerHTML = `
+					<div class="card mb-3 border-1 border-secondary">
+						<div class="card-body">
+							<p class="card-text">등록된 리뷰가 없습니다.</p>
+						</div>
+					</div>
+				`;
+			}else{
+				const interviewData = data.data;
+				const interviewHtml = `
+					<div class="card mb-3 border-1 border-secondary">
+						<div class="card-body">
+							<div class="d-flex justify-content-between">
+								<div class="d-flex">
+									<h5 class="card-title">${"${interviewData.interviewReviewTitle}"}</h5>
+									<h6 class="card mb-2 ms-2">작성일 : ${"${interviewData.interviewReviewDate}"}</h6>
+								</div>
+							</div>
+							<div class="d-flex justify-content-between">
+								<div class="d-flex align-items-center">
+									<div class="me-2">분위기:</div>
+									<div>${"${interviewData.ambience}"}</div>
+								</div>
+								<div class="d-flex align-items-center">
+									<div class="me-2">난이도:</div>
+									<div>${"${interviewData.difficulty}"}</div>
+								</div>
+							</div>
+							<p class="card-text">${"${interviewData.interviewReviewContent}"}</p>
+						</div>
+					</div>
+				`;
+				document.getElementById('interviewReview').innerHTML = interviewHtml;
+			}
 		});
 		
         fetch(url, {
@@ -328,9 +435,15 @@ function initSwiper() {
 				<p id="companySalary"></p>
 				<h3>계열사</h3>
 				<p id="companySubsidiary"></p>
-				<h3>기업 리뷰</h3>
+				<div class="d-flex justify-content-between">
+					<h3>기업 리뷰</h3>
+					<button class="btn btn-outline-secondary btn-sm" onclick="window.location.href='/member/companyReview/${companyId}'">기업 리뷰 전체보기</button>
+				</div>
 				<p id="companyReview"></p>
-				<h3>면접 리뷰</h3>
+				<div class="d-flex justify-content-between">
+					<h3>면접 리뷰</h3>
+					<button class="btn btn-outline-secondary btn-sm" onclick="window.location.href='/member/interviewReview/${companyId}'">면접 리뷰 전체보기</button>
+				</div>
 				<p id="interviewReview"></p>
 			</div>
 			<div class="d-flex flex-column" style="width: 380px; height: 710px;">
