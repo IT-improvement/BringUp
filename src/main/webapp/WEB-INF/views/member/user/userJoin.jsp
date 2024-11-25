@@ -246,9 +246,9 @@
                 <!-- 병역 영역 -->
                 <div class="military-service-card" id="militaryServiceCard" style="display: none;">
                     <h3>병역 정보</h3>
-                    <form id="militaryServiceForm">
-
+                    <div>
                         <label class="user-form-label">군필 여부</label>
+                        <input type="hidden" id="militaryStatusHidden" name="military_status_hidden" value="">
                         <select class="user-form-control" id="militaryStatus" name="military_status" required>
                             <option value="군필">군필</option>
                             <option value="미필">미필</option>
@@ -277,7 +277,7 @@
                         <input type="text" class="user-form-control" id="exemptionReason" name="exemption_reason" placeholder="면제사유를 입력하세요">
 
                         <button type="button" class="user-btn-secondary" id="closeMilitaryCard">닫기</button>
-                    </form>
+                    </div>
                 </div>
 
                 <label for="userAddress" class="user-form-label"><i class="fas fa-map-marker-alt"></i> 주소</label>

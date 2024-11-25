@@ -1,3 +1,4 @@
+/*
 package com.bringup.member.resume.domain.service.implement;
 
 import com.bringup.common.image.ImageService;
@@ -30,3 +31,4 @@ public class CVServiceImpl implements CVService {
     }
 
 }
+*/

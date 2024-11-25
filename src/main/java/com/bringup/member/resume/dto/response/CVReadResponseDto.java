@@ -1,3 +1,4 @@
+/*
 package com.bringup.member.resume.dto.response;
 
 import com.bringup.member.resume.domain.entity.CVEntity;
@@ -21,3 +22,4 @@ public class CVReadResponseDto {
         this.userIndex = cv.getUserIndex();
     }
 }
+*/
