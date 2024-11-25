@@ -39,13 +39,13 @@ public class LetterService {
         }
 
         if(requestDto.getAnswser1()!=null){
-            letterEntity.setAnswser1(requestDto.getAnswser1());
+            letterEntity.setAnswer1(requestDto.getAnswser1());
         }
         if(requestDto.getAnswser2()!=null) {
-            letterEntity.setAnswser2(requestDto.getAnswser2());
+            letterEntity.setAnswer2(requestDto.getAnswser2());
         }
         if(requestDto.getAnswser3()!=null) {
-            letterEntity.setAnswser3(requestDto.getAnswser3());
+            letterEntity.setAnswer3(requestDto.getAnswser3());
         }
         try{
             letterRepository.save(letterEntity);
