@@ -1,4 +1,3 @@
-/*
 package com.bringup.member.resume.domain.service.implement;
 
 import com.bringup.common.response.ResponseDto;
@@ -101,4 +100,3 @@ public class CVServiceImpl implements CVService {
         return CVListResponseDto.success(list);
     }
 }
-*/
