@@ -153,9 +153,10 @@ public class SpringSecurityConfig {
                 antMatcher("/member/confirmRecruitment"),
                 antMatcher("/member/AnnouncementRecruitment"),
                 antMatcher("/member/proposeRecruitment"),
+                antMatcher("/member/visitRecruitment"),
                 antMatcher("/member/myReview"),
                 antMatcher("/image/**"),
-
+                antMatcher("/recruitment/detail/{recruitmentIndex}"),
                 antMatcher("/main/image/**"),
                 antMatcher("/main/advertisements"),
                 antMatcher("/main/recruitmentImage"),
@@ -275,9 +276,9 @@ public class SpringSecurityConfig {
 
                 antMatcher("/recruitment/scrap/{recruitmentIndex}"),
                 antMatcher("/recruitment/scrap/delete/{recruitmentIndex}"),
-                antMatcher("/recruitment/isBookmarked/{recruitmentId}"),
-
-
+                antMatcher("/recruitment/isBookmarked/{recruitmentIndex}"),
+                antMatcher("/recruitment/visit/{recruitmentIndex}"),
+                antMatcher("/recruitment/visitList"),
 
 
                 antMatcher("/member/reviewDetail/{reviewId}")

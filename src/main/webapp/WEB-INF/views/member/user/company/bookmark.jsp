@@ -119,7 +119,7 @@
 					`;
                     row.style.cursor = 'pointer';
                     row.addEventListener('click', () => {
-                        window.location.href = `` + number;
+                        window.location.href = `/member/company/detail/` + number;
                     });
                     bookmarkListBody.appendChild(row);
                 });
