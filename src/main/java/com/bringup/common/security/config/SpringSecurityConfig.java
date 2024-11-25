@@ -268,9 +268,12 @@ public class SpringSecurityConfig {
                 antMatcher("/award/list"),
                 antMatcher("/portfolio/career/list"),
                 antMatcher("/portfolio/career/insert"),
+
+
                 antMatcher("/recruitment/scrap/{recruitmentIndex}"),
                 antMatcher("/recruitment/scrap/delete/{recruitmentIndex}"),
                 antMatcher("/recruitment/isBookmarked/{recruitmentId}"),
+
 
 
 
