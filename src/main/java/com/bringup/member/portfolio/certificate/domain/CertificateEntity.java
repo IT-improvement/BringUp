@@ -21,11 +21,14 @@ public class CertificateEntity {
     private String title;
     private String issueStatus;
     private String issueCenter;
+    private String certificateType;
+
 
     public CertificateEntity(int userIndex, CertificateRequestDto dto){
         this.userIndex = userIndex;
         this.title = dto.getTitle();
         this.issueStatus = dto.getIssueStatus();
         this.issueCenter = dto.getIssueCenter();
+        this.certificateType=dto.getCertificateType();
     }
 }
