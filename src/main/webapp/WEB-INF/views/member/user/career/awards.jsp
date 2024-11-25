@@ -468,9 +468,9 @@
 
 
                 function cancelEdit(id) {
+                    console.log(id);
                     fetchAwardList(); // 기존 목록을 다시 불러와서 카드 내용을 원래 상태로 복구
                 }
-
                 function editSaveAward() {
                     const accessToken = localStorage.getItem("accessToken");
                     console.log(id);

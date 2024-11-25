@@ -52,40 +52,53 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     });
 
-    document.getElementById('userJoin').addEventListener('submit', function(e) {
-        e.preventDefault(); // 폼의 기본 제출 동작을 막습니다.
+    const form = document.getElementById('userSignupForm');
+    const militaryStatusSelect = document.getElementById('militaryStatus');
+    const militaryStatusHidden = document.getElementById('militaryStatusHidden');
 
-        // 중복 체크가 이루어졌는지 확인
-        if (!isEmailChecked) {
-            alert('이메일 중복 체크를 먼저 해주세요.');
+
+    // 페이지 로드 시 기본 값을 히든 필드에 설정
+    militaryStatusHidden.value = militaryStatusSelect.value;
+    militaryStatusSelect.addEventListener('change', function() {
+
+        militaryStatusHidden.value = militaryStatusSelect.value;
+    });
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // 추가 유효성 검사
+        if (!isEmailChecked || !isEmailAvailable) {
+            alert('이메일 중복 확인을 완료해주세요.');
             return;
         }
 
-        // 사용 중인 이메일이면 경고 표시
-        if (!isEmailAvailable) {
-            alert('이미 사용 중인 이메일입니다. 이메일을 수정해 주세요.');
-            return;
-        }
+        // Military 리스트 생성
+        const militaryList = [{
+            militaryStatus: document.getElementById('militaryStatusHidden').value,
+            militaryType: document.getElementById('militaryType').value,
+            specialty: document.getElementById('specialty').value,
+            rankName: document.getElementById('rankName').value,
+            dischargeReason: document.getElementById('dischargeReason').value,
+            enlistmentDate: document.getElementById('enlistmentDate').value,
+            dischargeDate: document.getElementById('dischargeDate').value,
+            exemptionReason: document.getElementById('exemptionReason').value
+        }];
 
-        // 폼 필드의 값을 가져옵니다.
-        const userEmail = document.getElementById('userEmail').value;
-        const userPassword = document.getElementById('userPassword').value;
-        const userName = document.getElementById('userName').value;
-        const userAddress = document.getElementById('userAddress').value;
-        const userPhonenumber = document.getElementById('userPhonenumber').value;
-        const userBirthday = document.getElementById('userBirthday').value;
-
-        // 서버에 보낼 데이터 객체를 만듭니다.
         const formData = {
-            userEmail: userEmail,
-            userPassword: userPassword,
-            userName: userName,
-            userAddress: userAddress,
-            userPhonenumber: userPhonenumber,
-            userBirthday: userBirthday
+            userEmail: document.getElementById('userEmail').value,
+            userPassword: document.getElementById('userPassword').value,
+            userName: document.getElementById('userName').value,
+            userAddress: document.getElementById('userAddress').value,
+            userPhonenumber: document.getElementById('userPhoneNumber').value,
+            userBirthday: document.getElementById('userBirthday').value,
+            userGender: document.getElementById('userGender').value,
+            militaryList: militaryList // Military 리스트 포함
         };
 
-        // Fetch API를 사용해 데이터를 서버에 전송합니다.
+        // Console로 데이터 확인
+        console.log("전송할 데이터:", formData);
+
         fetch('/member/joinProc', {
             method: 'POST',
             headers: {
@@ -94,54 +107,21 @@ document.addEventListener('DOMContentLoaded', function() {
             body: JSON.stringify(formData)
         })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('서버 응답이 올바르지 않습니다.');
-                }
-                return response.text(); // 서버 응답을 텍스트로 처리
+                if (!response.ok) throw new Error('서버 응답 오류');
+                return response.text();
             })
             .then(data => {
-                console.log('서버 응답:', data);
+                console.log("서버 응답:", data);
                 if (data.includes("회원가입이 성공적으로 완료되었습니다.")) {
-                    const modal = document.createElement('div');
-                    modal.style.cssText = `
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background-color: rgba(0,0,0,0.5);
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        z-index: 1000;
-                    `;
-                    const modalContent = document.createElement('div');
-                    modalContent.style.cssText = `
-                        background-color: white;
-                        padding: 20px;
-                        border-radius: 5px;
-                        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                    `;
-                    modalContent.innerHTML = `
-                        <h3>알림</h3>
-                        <p>회원가입에 성공하셨습니다!</p>
-                        <button id="modalConfirmButton">확인</button>
-                    `;
-                    modal.appendChild(modalContent);
-                    document.body.appendChild(modal);
-
-                    document.getElementById('modalConfirmButton').addEventListener('click', function() {
-                        modal.remove();
-                        window.location.href = '/member/userLoginForm';
-                    });
+                    alert('회원가입 성공!');
+                    window.location.href = '/member/Login';
                 } else {
-                    console.error('회원가입 실패:', data);
-                    alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+                    alert('회원가입 실패: ' + data);
                 }
             })
             .catch(error => {
-                console.error('에러:', error);
-                alert('회원가입 중 오류가 발생했습니다. 나중에 다시 시도해주세요.');
+                console.error('회원가입 중 오류:', error);
+                alert('회원가입 중 오류가 발생했습니다.');
             });
     });
 });

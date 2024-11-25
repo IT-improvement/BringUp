@@ -27,7 +27,7 @@ public class MilitaryEntity {
     private String dischargeReason;
     private Date enlistmentDate;
     private Date dischargeDate;
-    private String exemptionReasons;
+    private String exemptionReason;
 
     public MilitaryEntity(MilitaryItem item, int userIndex) {
         this.userIndex = userIndex;
@@ -38,6 +38,6 @@ public class MilitaryEntity {
         this.dischargeReason = item.getDischargeReason();
         this.enlistmentDate = item.getEnlistmentDate();
         this.dischargeDate = item.getDischargeDate();
-        this.exemptionReasons = item.getExemptionReasons();
+        this.exemptionReason = item.getExemptionReason();
     }
 }
