@@ -356,4 +356,11 @@ public class CompanyService {
             throw new CompanyException(NOT_FOUND_MEMBER_EMAIL);
         }
     }
+
+    public String getCompanyName(int companyIdx){
+        Company company = companyRepository.findBycompanyId(companyIdx)
+                .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
+
+        return company.getCompanyName();
+    }
 }

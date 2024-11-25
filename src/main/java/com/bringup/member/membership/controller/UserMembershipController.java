@@ -30,7 +30,6 @@ public class UserMembershipController {
         int userIndex = userDetails.getId();
         System.out.println("User Index: " + userIndex);
 
-
         membershipDto.setUserIndex(userIndex);
 
         UserMembershipDto savedMembership = userMembershipService.subscribeMembership(userIndex, membershipDto.getPeriod());
