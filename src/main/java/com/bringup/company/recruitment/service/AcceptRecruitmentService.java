@@ -1,3 +1,4 @@
+/*
 package com.bringup.company.recruitment.service;
 
 import com.bringup.common.enums.MemberErrorCode;
@@ -33,7 +34,8 @@ public class AcceptRecruitmentService {
     private final UserRepository userRepository;
     private final CareerService careerService;
 
-    public List<AcceptCVResponseDto> getVolunteerListInCompany(UserDetailsImpl userDetails) {
+*/
+/*    public List<AcceptCVResponseDto> getVolunteerListInCompany(UserDetailsImpl userDetails) {
         List<Recruitment> recruitment = recruitmentRepository.findAllByCompanyCompanyId(userDetails.getId());
 
         List<Integer> recruitmentIdx = recruitment.stream()
@@ -59,7 +61,8 @@ public class AcceptRecruitmentService {
                             .build();
                 })
                 .collect(Collectors.toList());
-    }
+    }*//*
+
 
     public List<AcceptCVResponseDto> getVolunteerListInRecruitment(int recruitmentIdx) {
 
@@ -85,3 +88,4 @@ public class AcceptRecruitmentService {
                 .collect(Collectors.toList());
     }
 }
+*/
