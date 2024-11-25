@@ -106,4 +106,10 @@ public class MemberReviewController {
         List<MemberCompanyReviewDto> reviews = memberReviewService.getAllReviewsByCompany(companyIdx);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, reviews));
     }
+
+    @GetMapping("/company-review/myReview")
+    public ResponseEntity<BfResponse<?>> getMyReviews(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        List<MemberCompanyReviewDto> reviews = memberReviewService.getMyCompanyReviewList(userDetails);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, reviews));
+    }
 }
