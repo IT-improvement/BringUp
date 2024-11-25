@@ -1,4 +1,4 @@
-
+/*
 package com.bringup.member.resume.controller;
 
 import com.bringup.common.security.service.UserDetailsImpl;
@@ -41,5 +41,5 @@ public class CVController {
         int code = user.getId();
         return cvService.listCv(code);
     }
-}
+}*/
 
