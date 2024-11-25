@@ -48,7 +48,47 @@
     <!--  JS -->
     <!-- <script src="/resources/script/member/user/파일명.js"></script> -->
     <script>
+        document.addEventListener('DOMContentLoaded', function (){
+           const accessToken = localStorage.getItem('accessToken');
+           const urlParams = new URLSearchParams(window.location.search);
+           const boardIndex = urlParams.get('index');
+           console.log('boardIndex : ', boardIndex);
 
+           if (!boardIndex){
+               console.error('boardIndex가 없습니다.');
+               return;
+           }
+
+           const url = `/member/notice/noticeDetail/`+boardIndex;
+           console.log('요청 url : ', url);
+
+           fetch(url, {
+               method: 'GET',
+               headers: {
+                   'Content-Type': 'application/json'
+               }
+           })
+               .then(response => {
+                   if (!response.ok) {
+                       throw new Error(`HTTP error! status: ${response.status}`);
+                   }
+                   return response.json();
+               })
+               .then(data => {
+                   console.log('받은 데이터 : ', data);
+                   const noticeData = data.data;
+
+                   document.getElementById('title').innerText = noticeData.title;
+                   document.getElementById('user_name').innerText = noticeData.user.userEmail;
+                   document.getElementById('notice_img').src = noticeData.boardImage;
+                   document.getElementById('notice_time').innerText = noticeData.updatePostTime;
+                   document.getElementById('content').innerText = noticeData.content;
+               })
+               .catch(error => {
+                   console.error('게시글 상세 정보를 가져오는 중 오류 발생:', error);
+                   alert('게시글 상세 정보를 불러올 수 없습니다. 나중에 다시 시도해주세요.');
+               });
+        });
     </script>
 
 </head>
@@ -61,7 +101,31 @@
 <body class="d-flex flex-column min-vh-100">
 <div class="container" style="max-width: 1260px;">
     <main class="flex-grow-1 m-4">
-
+        <div class="mb-4">
+            <p class="h1" id="title"></p>
+        </div>
+        <div class="d-flex justify-content-between mb-3">
+            <div class="flex-fill m-2">
+                <label class="form-label" for="user_name">작성자</label>
+                <p class="mb-0" id="user_name"></p>
+            </div>
+            <div class="flex-fill m-2">
+                <label class="form-label" for="notice_time">작성일</label>
+                <p class="mb-0" id="notice_time"></p>
+            </div>
+        </div>
+        <div class="carousel-inner rounded-3 border border-1 border-#C2C2C2 mb-4"></div>
+        <div class="container mb-4" style="width: 100%; max-width: 1260px; height: 480px; border-radius: 20px; border: 1px solid #ddd; overflow: hidden;">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <img id="notice_img" src="" alt="게시글 이미지 1" class="d-block w-100" style="height: 100%; object-fit: cover;">
+                </div>
+            </div>
+        </div>
+        <div class="form-floating mb-3">
+            <textarea class="form-control" placeholder="Leave a comment here" id="content" style="height: 100px" disabled></textarea>
+            <label for="content">Comments</label>
+        </div>
     </main>
 </div>
 </body>

@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CandidateResponseDto {
     private int cvIndex;
-    private String cvImage;
     private String userName;
     private String userEmail;
     private String userAddress;

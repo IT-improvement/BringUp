@@ -11,7 +11,10 @@ public class CVInsertRequestDto {
     private boolean mainCv;
     private String skill;
     private int userIndex;
+
+
     private String title;
     private List<Integer> cvAward;
     private List<Integer> cvBlog;
+
 }
