@@ -348,11 +348,11 @@
             <div class="d-flex flex-column">
                 <h5 class="mb-1">${'${career.companyName || "회사명 없음"}'}</h5>
                 <div class="d-flex align-items-center">
-                    <span class="me-3">${'${career.careerPosition || "직무 없음"}'}</span>
-                    <span>${'${career.careerStart || "시작 날짜 없음"}'} ~ ${'${career.careerEnd || "재직 중"}'}</span>
+                    <span class="me-3">${'${career.careerDepartment || "부서 없음"}'} / ${'${career.careerPosition || "직무 없음"}'}</span>
+                    <span>재직 기간 : ${'${career.careerStart || "시작 날짜 없음"}'} ~ ${'${career.careerEnd || "재직 중"}'}</span>
                 </div>
-                <div class="text-muted">${'${career.careerDepartment || "부서 없음"}'}</div>
                 <div class="text-muted">${'${career.careerWork || "업무 내용 없음"}'}</div>
+
             </div>
             <div class="d-flex align-items-center">
                 <i class="bi bi-pencil-square edit-icon me-3" onclick="editCareer(${'${career.careerIndex}'})"></i>

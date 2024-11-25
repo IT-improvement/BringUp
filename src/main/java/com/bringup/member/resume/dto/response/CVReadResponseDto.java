@@ -1,3 +1,4 @@
+/*
 package com.bringup.member.resume.dto.response;
 
 import com.bringup.common.response.ResponseCode;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @Getter
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CVReadResponseDto extends ResponseDto {
     private CVEntity cv;
@@ -35,6 +37,7 @@ public class CVReadResponseDto extends ResponseDto {
         this.cvSchool = cvSchool;
     }
 
+
     public static ResponseEntity<CVReadResponseDto> success(
             CVEntity cv, List<CVAward> cvAward, List<CVBlog> cvBlog, List<CVCareer> cvCareer, List<CVCertificate> cvCertificate, List<CVSchool> cvSchool
     ){
@@ -42,3 +45,4 @@ public class CVReadResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
+*/

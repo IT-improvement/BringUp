@@ -1,6 +1,7 @@
 package com.bringup.member.user.domain.service;
 
 import com.bringup.common.enums.RolesType;
+import com.bringup.common.enums.StatusType;
 import com.bringup.member.portfolio.letter.domain.LetterEntity;
 import com.bringup.member.portfolio.letter.domain.LetterRepository;
 import com.bringup.member.user.domain.entity.MilitaryEntity;
@@ -43,7 +44,7 @@ public class JoinService {
         Boolean isExist = userRepository.existsByUserEmail(email);
 
         if (isExist) {
-            return;
+            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
         }
 
         UserEntity userEntity = new UserEntity();
@@ -54,21 +55,35 @@ public class JoinService {
         userEntity.setUserPhonenumber(joinDTO.getUserPhonenumber());
         userEntity.setUserBirthday(joinDTO.getUserBirthday());
         userEntity.setFreelancer(joinDTO.isFreelancer());
-        userEntity.setStatus(joinDTO.getStatus());
+        userEntity.setStatus(String.valueOf(StatusType.ACTIVE));
         userEntity.setRole(RolesType.ROLE_MEMBER);
 
         userRepository.save(userEntity);
+
+        // Console 출력
+        System.out.println("User 저장 완료: " + userEntity);
+
         Optional<UserEntity> user = userRepository.findByUserEmail(email);
         int userIndex = user.get().getUserIndex();
+
+        // Letter 저장
         LetterEntity letterEntity = new LetterEntity(userIndex);
         letterRepository.save(letterEntity);
 
-        /*military save*/
-        for(MilitaryItem item: joinDTO.getMilitaryList()) {
-            MilitaryEntity militaryEntity = new MilitaryEntity(item,userIndex);
-            militaryRepsitory.save(militaryEntity);
+        // Military 데이터 저장
+        if (joinDTO.getMilitaryList() != null) {
+            for (MilitaryItem item : joinDTO.getMilitaryList()) {
+                MilitaryEntity militaryEntity = new MilitaryEntity(item, userIndex);
+                militaryRepsitory.save(militaryEntity);
+
+                // Console 출력
+                System.out.println("Military 저장 완료: " + militaryEntity);
+            }
+        } else {
+            System.out.println("Military 데이터 없음");
         }
     }
+
 
     /**
      * ID(userEmail) Check

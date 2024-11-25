@@ -15,5 +15,5 @@ public class MilitaryItem {
     private String dischargeReason;
     private Date enlistmentDate;
     private Date dischargeDate;
-    private String exemptionReasons;
+    private String exemptionReason;
 }
