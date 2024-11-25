@@ -7,6 +7,7 @@ import com.bringup.member.resume.dto.response.CVReadResponseDto;
 import org.springframework.http.ResponseEntity;
 
 public interface CVService {
-
     ResponseEntity<? super CVInsertResponseDto> insertCv(CVInsertRequestDto request, int code);
+    ResponseEntity<? super CVReadResponseDto> readCV(String index);
+
 }

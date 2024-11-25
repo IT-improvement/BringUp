@@ -5,9 +5,12 @@ import com.bringup.member.resume.domain.repository.*;
 import com.bringup.member.resume.domain.service.CVService;
 import com.bringup.member.resume.dto.request.CVInsertRequestDto;
 import com.bringup.member.resume.dto.response.CVInsertResponseDto;
+import com.bringup.member.resume.dto.response.CVReadResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -67,6 +70,20 @@ public class CVServiceImpl implements CVService {
             }
         }
         return CVInsertResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super CVReadResponseDto> readCV(String index) {
+        int cvIndex = Integer.parseInt(index);
+
+        CVEntity cvEntity = cvRepository.findByCvIndex(cvIndex);
+        List<CVAward> cvAward = cvawardRepository.findByCvIndex(cvIndex);
+        List<CVBlog> cvBlog = cvBlogRepository.findByCvIndex(cvIndex);
+        List<CVCareer> cvCareer = cvCareerRepository.findByCvIndex(cvIndex);
+        List<CVCertificate> cvCertificate = cvCertificateRepository.findByCvIndex(cvIndex);
+        List<CVSchool> cvSchool = cvSchoolRepository.findByCvIndex(cvIndex);
+
+        return CVReadResponseDto.success(cvEntity,cvAward,cvBlog,cvCareer,cvCertificate,cvSchool);
     }
 
 }
