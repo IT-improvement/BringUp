@@ -25,26 +25,9 @@ public class CVController {
         ResponseEntity<? super CVInsertResponseDto> response = cvService.insertCv(requestBody);
         return response;
     }
-
-    @PostMapping("/cv/portfolio")
-    public ResponseEntity<? super CVInsertResponseDto> insertPortfolio(@RequestParam @Valid CVPortfolioRequestDto requestBody){
-        ResponseEntity<? super CVInsertResponseDto> response = cvService.insertPortfolio(requestBody);
-        return response;
-    }
-
     @GetMapping("/cv")
     public String listCv(@AuthenticationPrincipal String userIndex){
         return "member/resume/list";
     }
 
-    @GetMapping("/cv/{cvindex}")
-    public String readCv(@PathVariable(name = "cvindex") String cvindex, Model model){
-        CVReadResponseDto response = cvService.readCv(cvindex);
-        model.addAttribute("cvImage",response.getCvImage());
-        model.addAttribute("mainCv",response.isMainCv());
-        model.addAttribute("education",response.getEducation());
-        model.addAttribute("skill",response.getSkill());
-        model.addAttribute("userIndex",response.getUserIndex());
-        return "member/resume/cv";
-    }
 }

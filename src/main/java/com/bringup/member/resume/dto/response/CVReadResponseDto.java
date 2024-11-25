@@ -16,9 +16,7 @@ public class CVReadResponseDto {
     private int userIndex;
 
     public CVReadResponseDto(CVEntity cv){
-        this.cvImage = cv.getCvImage();
         this.mainCv = cv.isMainCv();
-        this.education = cv.getEducation();
         this.skill = cv.getSkill();
         this.userIndex = cv.getUserIndex();
     }
