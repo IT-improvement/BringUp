@@ -74,4 +74,20 @@ public class MemberInterviewReviewController {
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         }
     }
+
+
+    @GetMapping("/top-review/{companyIdx}")
+    public ResponseEntity<BfResponse<?>> topReview(@PathVariable("companyIdx") int companyIdx){
+        try{
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, interviewReviewService.getMostStar(companyIdx)));
+        } catch (MemberReviewException e){
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        }
+    }
+
+    @GetMapping("/company/{companyIdx}")
+    public ResponseEntity<BfResponse<?>> getReviewsByCompany(@PathVariable("companyIdx") int companyIdx){
+        List<InterviewReviewResponseDto> reviews = interviewReviewService.getAllReviewsByCompany(companyIdx);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, reviews));
+    }
 }

@@ -151,7 +151,7 @@
 <body class="d-flex flex-column min-vh-100">
 <div class="container">
     <main class="flex-grow-1">
-        <h1>기업 리뷰 작성</h1>
+        <h1>면접 리뷰 작성</h1>
         <form id="createReviewForm">
             <div class="form-group">
                 <label for="companyName">회사 이름</label>
@@ -162,78 +162,33 @@
                 <input type="text" id="companyReviewTitle" name="companyReviewTitle" required>
             </div>
 
-            <!-- 승진 기회 및 가능성 게이지 -->
+            <!-- 면접 분위기 게이지 -->
             <div class="form-group">
-                <span class="rating-label">승진 기회 및 가능성</span>
-                <div class="rating-bar" onclick="updateBar('advancement', event)">
+                <span class="rating-label">면접 분위기</span>
+                <div class="rating-bar" onclick="updateBar('interviewAtmosphere', event)">
                     <div class="bar-container">
-                        <div class="bar-segment" id="advancement-seg-1"></div>
-                        <div class="bar-segment" id="advancement-seg-2"></div>
-                        <div class="bar-segment" id="advancement-seg-3"></div>
-                        <div class="bar-segment" id="advancement-seg-4"></div>
-                        <div class="bar-segment" id="advancement-seg-5"></div>
+                        <div class="bar-segment" id="interviewAtmosphere-seg-1"></div>
+                        <div class="bar-segment" id="interviewAtmosphere-seg-2"></div>
+                        <div class="bar-segment" id="interviewAtmosphere-seg-3"></div>
+                        <div class="bar-segment" id="interviewAtmosphere-seg-4"></div>
+                        <div class="bar-segment" id="interviewAtmosphere-seg-5"></div>
                     </div>
-                    <span id="advancement-value" class="rating-value">0/5</span>
+                    <span id="interviewAtmosphere-value" class="rating-value">0/5</span>
                 </div>
             </div>
 
-            <!-- 복지 및 급여 게이지 -->
+            <!-- 면접 난이도 게이지 -->
             <div class="form-group">
-                <span class="rating-label">복지 및 급여</span>
-                <div class="rating-bar" onclick="updateBar('benefit', event)">
+                <span class="rating-label">면접 난이도</span>
+                <div class="rating-bar" onclick="updateBar('interviewDifficulty', event)">
                     <div class="bar-container">
-                        <div class="bar-segment" id="benefit-seg-1"></div>
-                        <div class="bar-segment" id="benefit-seg-2"></div>
-                        <div class="bar-segment" id="benefit-seg-3"></div>
-                        <div class="bar-segment" id="benefit-seg-4"></div>
-                        <div class="bar-segment" id="benefit-seg-5"></div>
+                        <div class="bar-segment" id="interviewDifficulty-seg-1"></div>
+                        <div class="bar-segment" id="interviewDifficulty-seg-2"></div>
+                        <div class="bar-segment" id="interviewDifficulty-seg-3"></div>
+                        <div class="bar-segment" id="interviewDifficulty-seg-4"></div>
+                        <div class="bar-segment" id="interviewDifficulty-seg-5"></div>
                     </div>
-                    <span id="benefit-value" class="rating-value">0/5</span>
-                </div>
-            </div>
-
-            <!-- 업무와 삶의 균형 게이지 -->
-            <div class="form-group">
-                <span class="rating-label">업무와 삶의 균형</span>
-                <div class="rating-bar" onclick="updateBar('worklife', event)">
-                    <div class="bar-container">
-                        <div class="bar-segment" id="worklife-seg-1"></div>
-                        <div class="bar-segment" id="worklife-seg-2"></div>
-                        <div class="bar-segment" id="worklife-seg-3"></div>
-                        <div class="bar-segment" id="worklife-seg-4"></div>
-                        <div class="bar-segment" id="worklife-seg-5"></div>
-                    </div>
-                    <span id="worklife-value" class="rating-value">0/5</span>
-                </div>
-            </div>
-
-            <!-- 사내 문화 게이지 -->
-            <div class="form-group">
-                <span class="rating-label">사내 문화</span>
-                <div class="rating-bar" onclick="updateBar('culture', event)">
-                    <div class="bar-container">
-                        <div class="bar-segment" id="culture-seg-1"></div>
-                        <div class="bar-segment" id="culture-seg-2"></div>
-                        <div class="bar-segment" id="culture-seg-3"></div>
-                        <div class="bar-segment" id="culture-seg-4"></div>
-                        <div class="bar-segment" id="culture-seg-5"></div>
-                    </div>
-                    <span id="culture-value" class="rating-value">0/5</span>
-                </div>
-            </div>
-
-            <!-- 경영진 게이지 -->
-            <div class="form-group">
-                <span class="rating-label">경영진</span>
-                <div class="rating-bar" onclick="updateBar('management', event)">
-                    <div class="bar-container">
-                        <div class="bar-segment" id="management-seg-1"></div>
-                        <div class="bar-segment" id="management-seg-2"></div>
-                        <div class="bar-segment" id="management-seg-3"></div>
-                        <div class="bar-segment" id="management-seg-4"></div>
-                        <div class="bar-segment" id="management-seg-5"></div>
-                    </div>
-                    <span id="management-value" class="rating-value">0/5</span>
+                    <span id="interviewDifficulty-value" class="rating-value">0/5</span>
                 </div>
             </div>
 
@@ -281,22 +236,19 @@
         }
 
         const companyId = "${companyId}";
-
+        
         // 폼 제출 처리
         document.getElementById('createReviewForm').addEventListener('submit', function (e) {
             e.preventDefault();
             const formData = {
                 companyName: document.getElementById('companyName').value,
-                companyReviewTitle: document.getElementById('companyReviewTitle').value,
-                advancement: window.advancement || 0,
-                benefit: window.benefit || 0,
-                workLife: window.worklife || 0,
-                companyCulture: window.culture || 0,
-                management: window.management || 0,
-                content: document.getElementById('content').value
+                ambience: window.interviewAtmosphere || 0,
+                difficulty: window.interviewDifficulty || 0,
+                interviewReviewTitle: document.getElementById('companyReviewTitle').value,
+                interviewReviewContent: document.getElementById('content').value
             };
-
-            fetch('/member/m_create', {
+            
+            fetch('/member/interview/iv_create', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ` + accessToken,
@@ -314,8 +266,8 @@
                     console.log(data);  // 받은 데이터 확인
                     // 여기서 code가 200인 경우 성공으로 처리
                     if (data.code === 200) {  // data.status 대신 data.code 확인
-                        alert('리뷰가 성공적으로 작성되었습니다.');
-                        window.location.href = '/member/companyReview';
+                        alert('인터뷰 리뷰가 성공적으로 작성되었습니다.');
+                        window.location.href = '/member/interviewReview/' + companyId;
                     } else {
                         alert('리뷰 작성에 실패했습니다. 서버에서 성공 응답을 받지 못했습니다.');
                     }
