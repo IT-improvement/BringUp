@@ -205,21 +205,21 @@
                     <h3>자격증 내역 추가</h3>
                     <div class="row g-3">
                         <div class="col-md-6">
-            <input type="hidden" id="awardType" value="${'${categoryMap[selectedValue]}'}"> <!-- Hidden 필드 유지 -->
+            <input type="hidden" id="certificateType" value="${'${categoryMap[selectedValue]}'}"> <!-- Hidden 필드 유지 -->
 
-                            <input type="text" class="form-control" placeholder="자격증 제목">
-                        </div>
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" placeholder="발급 기관">
-                        </div>
-                        <div class="col-md-6">
-                            <input type="date" class="form-control" placeholder="취득일자">
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-end mt-3">
-                        <button class="btn btn-outline-primary me-2" onclick="hideForm()">취소</button>
-                        <button class="btn btn-primary">저장</button>
-                    </div>
+                                     <input type="text" class="form-control" placeholder="자격증 제목" id="certificateTitle">
+            </div>
+            <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="발급 기관" id="certificateIssueCenter">
+            </div>
+            <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="취득 상태" id="certificateIssueStatus">
+            </div>
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+            <button class="btn btn-outline-primary me-2" onclick="hideForm()">취소</button>
+            <button class="btn btn-primary" onclick="insertCertificate()">저장</button>
+        </div>
                 `;
                     }
                 });
@@ -516,6 +516,117 @@
                         })
                         .catch(error => console.error("Error:", error));
                 }
+
+                //자격증
+                function insertCertificate() {
+                    const accessToken = localStorage.getItem("accessToken");
+                    if (!accessToken) {
+                        alert("로그인이 필요합니다.");
+                        return;
+                    }
+
+                    const certificateTitle = document.getElementById('certificateTitle').value;
+                    const certificateIssueCenter = document.getElementById('certificateIssueCenter').value;
+                    const certificateIssueStatus = document.getElementById('certificateIssueStatus').value;
+                    const certificateType = document.getElementById('certificateType').value;
+
+
+
+                    const certificateData = {
+                        title: certificateTitle,
+                        issueCenter: certificateIssueCenter,
+                        issueStatus: certificateIssueStatus,
+                        certificateType: certificateType
+                    };
+
+                    fetch('/mem/certificate/insert', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ` + accessToken,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(certificateData)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.code === "SU") {
+                                alert("자격증 내역이 저장되었습니다.");
+                                fetchCertificateList();
+                                hideForm();
+                            } else {
+                                alert("자격증 내역 저장에 실패했습니다.");
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
+
+                //자격증 리스트
+                function fetchCertificateList() {
+                    const accessToken = localStorage.getItem("accessToken");
+                    if (!accessToken) {
+                        alert("로그인이 필요합니다.");
+                        return;
+                    }
+
+                    fetch('/mem/certificate/list', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ` + accessToken,
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.code === "SU") {
+                                displayCertificateList(data.list);
+                            } else {
+                                alert("자격증 데이터를 불러오지 못했습니다.");
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
+
+                //자격증 카드
+                function displayCertificateList(certificates) {
+                    const certificateListContainer = document.getElementById('awardListContainer');
+                    certificateListContainer.innerHTML = '';
+
+                    if (certificates.length === 0) {
+                        document.getElementById('initialMessage').style.display = 'block';
+                        return;
+                    }
+
+                    document.getElementById('initialMessage').style.display = 'none';
+
+                    certificates.forEach(certificate => {
+                        const certificateCard = document.createElement('div');
+                        certificateCard.className = 'award-card mb-3 p-3 d-flex align-items-center justify-content-between';
+                        certificateCard.id = `certificate-${'${certificate.certificateIndex}'}`;
+
+                        certificateCard.innerHTML = `
+            <div>
+                <h4>${'${certificate.certificateType}'}</h4>
+                <h5>${'${certificate.title}'}</h5>
+                <div class="text-muted">${'${certificate.issueCenter}'}</div>
+                <div class="text-muted">${'${certificate.issueStatus}'}</div>
+            </div>
+            <div class="d-flex align-items-center">
+                <i class="bi bi-pencil-square edit-icon me-3" onclick="editCertificate(${'${certificate.certificateIndex}'})"></i>
+                <i class="bi bi-trash delete-icon" onclick="deleteCertificate(${'${certificate.certificateIndex}'})"></i>
+            </div>
+        `;
+
+                        certificateListContainer.appendChild(certificateCard);
+                    });
+                }
+                document.addEventListener('DOMContentLoaded', () => {
+                    fetchAwardList();
+                    fetchCertificateList(); // 자격증 리스트도 로드
+                });
+
+
+
+
 
             </script>
         </main>
