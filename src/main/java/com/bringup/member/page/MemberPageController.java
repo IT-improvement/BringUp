@@ -163,5 +163,6 @@ public class MemberPageController {
     @GetMapping("/career")
     public String career() {return "member/user/career/career";}
 
-
+    @GetMapping("/bookmark")
+    public String bookmark() {return "member/user/company/bookmark";}
 }

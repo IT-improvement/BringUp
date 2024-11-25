@@ -71,6 +71,8 @@
                     }
 
                     const recruitmentData = data.data;
+                    document.getElementById('recruitmentTitle').textContent = recruitmentData.r_title;
+
 
                     // 회사 정보와 채용 정보 업데이트
                     document.getElementById('c_logo').src = recruitmentData.c_logo;
@@ -111,8 +113,83 @@
                 })
                 .catch(error => console.error('Error:', error));
         });
+        document.addEventListener('DOMContentLoaded', function () {
+            const bookmarkButton = document.getElementById('bookmarkButton');
+            const bookmarkIcon = document.getElementById('bookmarkIcon');
+
+            let isBookmarked = false;
+
+            // 서버에서 북마크 상태 가져오기
+            fetch('/recruitment/isBookmarked/' + recruitmentId, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    isBookmarked = data.bookmarked;
+                    updateBookmarkIcon();
+                })
+                .catch(error => console.error('Error fetching bookmark status:', error));
+
+            // 북마크 버튼 클릭 이벤트
+            bookmarkButton.addEventListener('click', function () {
+                isBookmarked = !isBookmarked;
+
+                fetch('/recruitment/toggleBookmark', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ recruitmentId: recruitmentId, bookmarked: isBookmarked })
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Failed to toggle bookmark');
+                        return response.json();
+                    })
+                    .then(() => updateBookmarkIcon())
+                    .catch(error => console.error('Error toggling bookmark:', error));
+            });
+
+            // 북마크 아이콘 업데이트
+            function updateBookmarkIcon() {
+                if (isBookmarked) {
+                    bookmarkIcon.classList.add('active');
+                    bookmarkIcon.classList.remove('bi-bookmark');
+                    bookmarkIcon.classList.add('bi-bookmark-fill');
+                } else {
+                    bookmarkIcon.classList.remove('active');
+                    bookmarkIcon.classList.add('bi-bookmark');
+                    bookmarkIcon.classList.remove('bi-bookmark-fill');
+                }
+            }
+        });
+
 
     </script>
+    <style>
+        #bookmarkButton {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+        }
+
+        #bookmarkButton:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        #bookmarkIcon {
+            font-size: 20px;
+            color: #6c757d; /* 기본 색상 */
+        }
+
+        #bookmarkIcon.active {
+            color: #f00; /* 북마크 활성화 상태 색상 */
+        }
+        .w-100{
+            align-items: center;
+        }
+    </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -149,8 +226,12 @@
             <div class="col-md-4">
                 <div class="card border border-1 border-dark align-items-center" style="position: sticky; top: 140px; height: 280px; border-radius: 15px;">
                     <div class="card-body d-flex flex-column justify-content-center w-75">
+
                         <div class="d-flex flex-column align-items-center text-center mt-4">
                             <div class="d-flex justify-content-between w-100 border-bottom pb-2 mb-2">
+                                <button id="bookmarkButton" class="btn btn-outline-secondary rounded-circle border-0">
+                                    <i id="bookmarkIcon" class="bi bi-bookmark"></i>
+                                </button>
                                 <h5 class="card-title mb-0">경력</h5><p id="r_career" class="card-text mb-0"></p>
                             </div>
                             <div class="d-flex justify-content-between w-100 border-bottom pb-2 mb-2">
@@ -161,6 +242,7 @@
                             </div>
                         </div>
                         <a href="#" class="btn btn-primary mt-2 rounded-pill">지원하기</a>
+
                     </div>
                 </div>
             </div>

@@ -1,3 +1,4 @@
+/*
 package com.bringup.member.resume.domain.service;
 
 import com.bringup.member.resume.dto.request.CVInsertRequestDto;
@@ -12,3 +13,4 @@ public interface CVService {
     ResponseEntity<? super CVReadResponseDto> readCV(String index);
     ResponseEntity<? super CVListResponseDto> listCv(int userCode);
 }
+*/

@@ -95,6 +95,7 @@
                             <li><a class="dropdown-item" href="/member/company/list">기업</a></li>
                             <li><a class="dropdown-item" href="/member/companyReview">기업 리뷰</a></li>
                             <li><a class="dropdown-item" href="/member/interviewReview">면접 후기</a></li>
+                            <li><a class="dropdown-item" href="/member/bookmark">기업 북마크</a></li>
                         </ul>
                     </li>
 

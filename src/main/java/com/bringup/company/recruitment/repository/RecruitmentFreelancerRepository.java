@@ -22,4 +22,5 @@ public interface RecruitmentFreelancerRepository extends JpaRepository<Recruitme
     //프로젝트 상세 정보
     RecruitmentFreelancer findByprojectIndex(int projectIndex);
 
+    Optional<RecruitmentFreelancer> findByProjectIndex(int projectIndex);
 }

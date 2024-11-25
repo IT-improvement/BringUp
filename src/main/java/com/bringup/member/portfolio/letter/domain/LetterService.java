@@ -40,6 +40,7 @@ public class LetterService {
 
         if(requestDto.getAnswser1()!=null){
             letterEntity.setAnswer1(requestDto.getAnswser1());
+
         }
         if(requestDto.getAnswser2()!=null) {
             letterEntity.setAnswer2(requestDto.getAnswser2());
@@ -47,6 +48,9 @@ public class LetterService {
         if(requestDto.getAnswser3()!=null) {
             letterEntity.setAnswer3(requestDto.getAnswser3());
         }
+
+
+
         try{
             letterRepository.save(letterEntity);
         }catch (Exception e) {

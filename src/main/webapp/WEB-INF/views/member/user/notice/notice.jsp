@@ -99,7 +99,7 @@
 
 				pageData.forEach((notice, index) => {
 					const row = document.createElement('tr');
-					const number = notice.index;
+					const number = notice.boardIndex;
 
 					row.innerHTML = `
 						<td>${"${start + index + 1}"}</td>
@@ -109,7 +109,7 @@
 					`;
 						row.style.cursor = 'pointer';
 						row.addEventListener('click', () => {
-							window.location.href = `/` + number;
+							window.location.href = `/member/noticeDetail?index=`+number;
 						});
 						noticeListBody.appendChild(row);
 				});
