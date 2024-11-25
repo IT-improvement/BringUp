@@ -36,43 +36,54 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
-        .repository-card {
-            background-color: #f9f9f9; /* 카드 배경색 */
+        .user-info img {
+            border: 2px solid #dee2e6; /* 프로필 이미지 테두리 */
+        }
+
+        .card {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s, box-shadow 0.2s;
-            padding: 20px;
         }
 
-        .repository-card:hover {
-            transform: translateY(-5px); /* 마우스 오버 시 살짝 올라오게 */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 마우스 오버 시 그림자 효과 */
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
-
-        .delete-btn {
-            margin-left: 10px;
-            display: inline-block;
+        .education{
+            border-top: solid 1px #d7dce5;
+            padding-top: 2%;
         }
-
-        .card-body {
+        .experience{
+            border-top: solid 1px #d7dce5;
+            padding-top: 2%;
+        }
+        .career-mt-4{
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            margin-top: 2%;
+            gap: 5%;
+        }
+        .skills{
+            padding-top: 2%;
+            border-top: solid 1px #d7dce5;
+        }
+        #skill-search-container {
+            position: relative;
         }
 
-        .card-body div {
-            flex-grow: 1;
+        #skill-search-results {
+            max-height: 200px;
+            overflow-y: auto;
+            position: absolute;
+            width: 100%;
+            z-index: 1000;
+            background: white;
+            border-radius: 4px;
         }
 
-        .badge, .delete-btn {
-            margin-left: 10px;
-        }
 
-        .d-flex.flex-grow-1 {
-            min-height: calc(100vh - 60px); /* 헤더 높이 제외 */
-        }
 
-        .ms-sidebar {
-            height: calc(100vh - 60px); /* 헤더와 푸터 사이 공간 */
-        }
     </style>
 
 </head>
@@ -86,12 +97,192 @@
 
     <div class="container ms-main-content" style="max-width: 1000px; margin-left: 100px;">
         <main class="flex-grow-1">
-            <h1>이력서</h1>
+
+            <!-- 사용자 기본 정보 -->
+            <section class="user-info">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <img src="/resources/images/default-avatar.png" alt="프로필 이미지" class="rounded-circle border" width="100" height="100">
+                        <div class="ms-3">
+                            <h2>박주혁</h2>
+                            <p class="text-muted">2007 (17세)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="career-mt-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-envelope me-2"></i>
+                        <p class="mb-0">ksi*****@gmail.com</p>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-telephone me-2"></i>
+                        <p class="mb-0">010-****-9815</p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-geo-alt me-2"></i>
+                        <p class="mb-0">서울 용산구 신창동 77-41</p>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-person-badge me-2"></i>
+                        <p class="mb-0">병역: 군필</p> <!-- 병역사항 추가 -->
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- 학력 섹션 -->
+            <section class="education">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>학력 <span class="text-danger">*</span></h4>
+                    <button class="btn btn-outline-primary btn-sm">+ 추가</button>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div>
+                            <h5 class="mb-1">경민대학교 (4년제)</h5>
+                            <p class="text-muted mb-1">컴퓨터소프트웨어과</p>
+                            <p class="text-muted">졸업</p>
+                        </div>
+                        <button class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> 삭제</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="skills">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>스킬 <span class="text-danger">*</span></h4>
+                    <button class="btn btn-outline-primary btn-sm" id="add-skill-btn">+ 스킬 추가</button>
+                </div>
+                <div id="skills-list" class="mb-3">
+                    <p id="default-message" class="text-muted">스킬 추가를 눌러 자신의 스킬을 추가해 주세요!</p>
+
+                    <!-- 스킬이 추가되면 여기에 표시 -->
+                </div>
+                <div id="skill-search-container" class="d-none">
+                    <input type="text" class="form-control mb-2" id="skill-search-input" placeholder="코딩 언어를 검색하세요">
+                    <ul class="list-group" id="skill-search-results">
+                        <!-- 검색 결과가 여기에 표시 -->
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 경력 섹션 -->
+            <section class="experience">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>경력</h4>
+                    <button class="btn btn-outline-primary btn-sm">+ 추가</button>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div>
+                            <h5 class="mb-1">삼성 SDS</h5>
+                            <p class="text-muted mb-1">2020/10 ~ 2024/2</p>
+                            <p class="text-muted">대리</p>
+                        </div>
+                        <button class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> 삭제</button>
+                    </div>
+                </div>
+
+            </section>
+            <!-- 수상/어학/자격증 섹션 -->
+            <section class="experience">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4>수상/어학/자격증</h4>
+                    <button class="btn btn-outline-primary btn-sm">+ 추가</button>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-body d-flex align-items-center justify-content-between">
+                        <div>
+                            <h5 class="mb-1">정보처리기사</h5>
+                            <p class="text-muted mb-1">2020/10</p>
+                            <p class="text-muted">한국산업인력공단</p>
+                        </div>
+                        <button class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> 삭제</button>
+                    </div>
+                </div>
+
+            </section>
 
         </main>
+
+
     </div>
 </div>
+<script>
+    // 샘플 데이터: 코딩 언어 목록
+    const codingLanguages = ["JavaScript", "Python", "Java", "C#", "C++", "Ruby", "Go", "Swift", "PHP", "Kotlin"];
 
+    // DOM 요소
+    const addSkillBtn = document.getElementById("add-skill-btn");
+    const skillSearchContainer = document.getElementById("skill-search-container");
+    const skillSearchInput = document.getElementById("skill-search-input");
+    const skillSearchResults = document.getElementById("skill-search-results");
+    const skillsList = document.getElementById("skills-list");
+    const defaultMessage = document.getElementById("default-message");
+    const saveSkillsBtn = document.getElementById("save-skills-btn");
+
+    // 스킬 추가 버튼 클릭 이벤트
+    addSkillBtn.addEventListener("click", () => {
+        skillSearchContainer.classList.remove("d-none"); // 검색 창 표시
+        skillSearchInput.value = ""; // 검색 창 초기화
+        skillSearchResults.innerHTML = ""; // 결과 목록 초기화
+    });
+
+    // 검색 입력 이벤트
+    skillSearchInput.addEventListener("input", (e) => {
+        const query = e.target.value.toLowerCase();
+        skillSearchResults.innerHTML = ""; // 기존 결과 초기화
+
+        if (query) {
+            const filteredLanguages = codingLanguages.filter((lang) =>
+                lang.toLowerCase().includes(query)
+            );
+
+            filteredLanguages.forEach((lang) => {
+                const li = document.createElement("li");
+                li.textContent = lang;
+                li.className = "list-group-item list-group-item-action";
+                li.addEventListener("click", () => addSkill(lang));
+                skillSearchResults.appendChild(li);
+            });
+        }
+    });
+
+    // 스킬 추가 함수
+    function addSkill(skill) {
+        const skillBadge = document.createElement("span");
+        skillBadge.className = "badge bg-primary me-2";
+        skillBadge.textContent = skill;
+
+        const removeBtn = document.createElement("button");
+        removeBtn.className = "btn btn-sm btn-outline-danger ms-2";
+        removeBtn.textContent = "x";
+        removeBtn.addEventListener("click", () => {
+            skillsList.removeChild(skillBadgeContainer);
+            if (skillsList.children.length === 0) {
+                defaultMessage.style.display = "block"; // 디폴트 메시지 다시 표시
+            }
+        });
+
+        const skillBadgeContainer = document.createElement("div");
+        skillBadgeContainer.className = "d-inline-flex align-items-center mb-2";
+        skillBadgeContainer.appendChild(skillBadge);
+        skillBadgeContainer.appendChild(removeBtn);
+
+        skillsList.appendChild(skillBadgeContainer);
+        skillSearchContainer.classList.add("d-none"); // 검색 창 숨김
+    }
+
+    // 저장 버튼 클릭 이벤트
+    saveSkillsBtn.addEventListener("click", () => {
+        const selectedSkills = [];
+        skillsList.querySelectorAll(".badge").forEach((badge) => {
+            selectedSkills.push(badge.textContent);
+        });
+        alert("저장된 스킬: " + selectedSkills.join(", "));
+    });
+
+</script>
 <!-- Footer -->
 <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
 </body>

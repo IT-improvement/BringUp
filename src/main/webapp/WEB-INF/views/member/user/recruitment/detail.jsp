@@ -44,9 +44,8 @@
     <script src="/resources/script/member/recruitmentDetail.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 현재 URL 경로에서 recruitmentId 추출
             const path = window.location.pathname;
-            const recruitmentId = path.split('/').pop(); // URL에서 마지막 부분 (recruitmentId) 추출
+            const recruitmentId = path.split('/').pop();
 
             if (!recruitmentId) {
                 console.error('recruitmentId is null or undefined');
@@ -55,16 +54,13 @@
 
             const fetchUrl = `/recruitment/detail/` + recruitmentId;
 
-            // 데이터 가져오기
             fetch(fetchUrl, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: { 'Content-Type': 'application/json' }
             })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                        throw new Error(`HTTP error! status: ` + response.status);
                     }
                     return response.json();
                 })
@@ -75,25 +71,26 @@
                     }
 
                     const recruitmentData = data.data;
+                    document.getElementById('recruitmentTitle').textContent = recruitmentData.r_title;
 
-                    // 화면에 데이터 표시
-                    document.getElementById('c_name').textContent = recruitmentData.companyName;
-                    document.getElementById('recruitmentTitle').textContent = recruitmentData.recruitmentTitle;
-                    document.getElementById('c_intro').textContent = recruitmentData.companyContent;
-                    document.getElementById('r_workdetail').textContent = recruitmentData.workDetail;
-                    document.getElementById('r_career').textContent = recruitmentData.career;
-                    document.getElementById('r_salary').textContent = recruitmentData.salary;
-                    document.getElementById('r_period').textContent = recruitmentData.recruitmentPeriod;
-                    document.getElementById('r_requirement').textContent = recruitmentData.requirements;
-                    document.getElementById('r_hospitality').textContent = recruitmentData.hospitality;
-                    document.getElementById('c_welfare').textContent = recruitmentData.companyWelfare;
-                    document.getElementById('c_address').textContent = recruitmentData.companyAddress;
-                    document.getElementById('c_logo').src = recruitmentData.companyImg;
 
-                    // 슬라이드 이미지 처리
+                    // 회사 정보와 채용 정보 업데이트
+                    document.getElementById('c_logo').src = recruitmentData.c_logo;
+                    document.getElementById('c_name').textContent = recruitmentData.c_name;
+                    document.getElementById('c_intro').textContent = recruitmentData.c_intro;
+                    document.getElementById('r_workdetail').textContent = recruitmentData.r_workdetail;
+                    document.getElementById('r_requirement').textContent = recruitmentData.r_requirement;
+                    document.getElementById('r_hospitality').textContent = recruitmentData.r_hospitality;
+                    document.getElementById('r_career').textContent = recruitmentData.r_career;
+                    document.getElementById('r_salary').textContent = recruitmentData.r_salary;
+                    document.getElementById('r_period').textContent = recruitmentData.r_period;
+                    document.getElementById('c_welfare').textContent = recruitmentData.c_welfare;
+                    document.getElementById('c_address').textContent = recruitmentData.c_address;
+
+                    // 캐러셀 이미지 업데이트
                     const carouselInner = document.querySelector('.carousel-inner');
                     const carouselIndicators = document.querySelector('.carousel-indicators');
-                    recruitmentData.companyImgs.forEach((imgSrc, index) => {
+                    recruitmentData.c_img.forEach((imgSrc, index) => {
                         const item = document.createElement('div');
                         item.classList.add('carousel-item', index === 0 ? 'active' : '');
 
@@ -106,7 +103,6 @@
                         item.appendChild(img);
                         carouselInner.appendChild(item);
 
-                        // 인디케이터
                         const indicator = document.createElement('button');
                         indicator.type = 'button';
                         indicator.setAttribute('data-bs-target', '#carouselExampleIndicators');
@@ -117,7 +113,83 @@
                 })
                 .catch(error => console.error('Error:', error));
         });
+        document.addEventListener('DOMContentLoaded', function () {
+            const bookmarkButton = document.getElementById('bookmarkButton');
+            const bookmarkIcon = document.getElementById('bookmarkIcon');
+
+            let isBookmarked = false;
+
+            // 서버에서 북마크 상태 가져오기
+            fetch('/recruitment/isBookmarked/' + recruitmentId, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    isBookmarked = data.bookmarked;
+                    updateBookmarkIcon();
+                })
+                .catch(error => console.error('Error fetching bookmark status:', error));
+
+            // 북마크 버튼 클릭 이벤트
+            bookmarkButton.addEventListener('click', function () {
+                isBookmarked = !isBookmarked;
+
+                fetch('/recruitment/toggleBookmark', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ recruitmentId: recruitmentId, bookmarked: isBookmarked })
+                })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Failed to toggle bookmark');
+                        return response.json();
+                    })
+                    .then(() => updateBookmarkIcon())
+                    .catch(error => console.error('Error toggling bookmark:', error));
+            });
+
+            // 북마크 아이콘 업데이트
+            function updateBookmarkIcon() {
+                if (isBookmarked) {
+                    bookmarkIcon.classList.add('active');
+                    bookmarkIcon.classList.remove('bi-bookmark');
+                    bookmarkIcon.classList.add('bi-bookmark-fill');
+                } else {
+                    bookmarkIcon.classList.remove('active');
+                    bookmarkIcon.classList.add('bi-bookmark');
+                    bookmarkIcon.classList.remove('bi-bookmark-fill');
+                }
+            }
+        });
+
+
     </script>
+    <style>
+        #bookmarkButton {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+        }
+
+        #bookmarkButton:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        #bookmarkIcon {
+            font-size: 20px;
+            color: #6c757d; /* 기본 색상 */
+        }
+
+        #bookmarkIcon.active {
+            color: #f00; /* 북마크 활성화 상태 색상 */
+        }
+        .w-100{
+            align-items: center;
+        }
+    </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -154,8 +226,12 @@
             <div class="col-md-4">
                 <div class="card border border-1 border-dark align-items-center" style="position: sticky; top: 140px; height: 280px; border-radius: 15px;">
                     <div class="card-body d-flex flex-column justify-content-center w-75">
+
                         <div class="d-flex flex-column align-items-center text-center mt-4">
                             <div class="d-flex justify-content-between w-100 border-bottom pb-2 mb-2">
+                                <button id="bookmarkButton" class="btn btn-outline-secondary rounded-circle border-0">
+                                    <i id="bookmarkIcon" class="bi bi-bookmark"></i>
+                                </button>
                                 <h5 class="card-title mb-0">경력</h5><p id="r_career" class="card-text mb-0"></p>
                             </div>
                             <div class="d-flex justify-content-between w-100 border-bottom pb-2 mb-2">
@@ -166,6 +242,7 @@
                             </div>
                         </div>
                         <a href="#" class="btn btn-primary mt-2 rounded-pill">지원하기</a>
+
                     </div>
                 </div>
             </div>

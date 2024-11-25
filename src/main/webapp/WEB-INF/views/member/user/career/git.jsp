@@ -70,7 +70,7 @@
     </div>
 </div>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         const accessToken = localStorage.getItem("accessToken");
 
         if (!accessToken) {
@@ -83,54 +83,105 @@
     });
 
     function checkGitHubToken(accessToken) {
+        const cleanToken = accessToken.replace(/^"|"$/g, ""); // 앞뒤 따옴표 제거
+
         fetch("/github/user", {
             method: "GET",
             headers: {
-                "Authorization": "Bearer " + accessToken
+                "Authorization": "Bearer " + cleanToken
             }
         })
             .then(response => {
-                if (response.status === 401) {
-                    throw new Error("GitHub 토큰이 없습니다.");
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error("GitHub 토큰이 없습니다.");
+                    }
+                    throw new Error("GitHub 요청 실패");
                 }
                 return response.json();
             })
             .then(data => {
-                loadRepositories(data); // GitHub 토큰이 유효한 경우 레포지토리 목록을 로드
+                loadRepositories(cleanToken); // GitHub 사용자 데이터 성공적으로 로드
             })
             .catch(error => {
-                console.error("Error:", error);
-                $('#githubTokenModal').modal('show'); // GitHub 토큰이 없거나 유효하지 않은 경우 모달 표시
+                console.error("Error:", error.message);
+                $('#githubTokenModal').modal('show'); // 토큰이 없거나 유효하지 않을 경우 모달 표시
             });
     }
 
     function saveGitHubToken() {
-        const githubToken = document.getElementById("githubTokenInput").value;
-        if (githubToken) {
-            fetch("/github/insert", {
-                method: "PUT",
-                headers: {
-                    "Authorization": `Bearer ` + localStorage.getItem("accessToken"),
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(githubToken)
-            })
-                .then(response => {
-                    if (response.status === 200) {
-                        alert("GitHub 토큰이 저장되었습니다.");
-                        $('#githubTokenModal').modal('hide');
-                        location.reload(); // 저장 후 페이지 새로고침
-                    } else if (response.status === 401) {
-                        alert("GitHub 토큰이 잘못되었습니다. 다시 입력해 주세요.");
-                    } else {
-                        throw new Error("GitHub 토큰 저장 실패");
-                    }
-                })
-                .catch(error => console.error("Error saving GitHub token:", error));
-        } else {
-            alert("토큰을 입력해 주세요.");
+        let githubToken = $("#githubTokenInput").val().trim();
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!githubToken) {
+            alert("GitHub 토큰을 입력해주세요.");
+            return;
         }
+
+        githubToken = githubToken.replace(/^"|"$/g, ""); // 앞뒤 따옴표 제거
+
+        fetch("/github/insert", {
+            method: "PUT",
+            headers: {
+                "Authorization": "Bearer " + accessToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(githubToken)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        alert("GitHub 토큰 인증 실패. 다시 시도해주세요.");
+                    } else {
+                        alert("GitHub 토큰 저장 중 오류가 발생했습니다.");
+                    }
+                    throw new Error("GitHub 토큰 저장 실패");
+                }
+                alert("GitHub 토큰이 성공적으로 저장되었습니다.");
+                $('#githubTokenModal').modal('hide');
+                location.reload(); // 저장 후 새로고침
+            })
+            .catch(error => console.error("GitHub 토큰 저장 오류:", error.message));
     }
+
+
+    function loadRepositories(accessToken) {
+        const cleanToken = accessToken.replace(/^"|"$/g, ""); // 앞뒤 따옴표 제거
+
+        fetch(`/github/user/repos`, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + cleanToken
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("레포지토리 로드 실패");
+                }
+                return response.json();
+            })
+            .then(repos => {
+                const repositoryList = $(".repository-list");
+                repositoryList.empty();
+
+                if (repos.length > 0) {
+                    repos.forEach(repo => {
+                        const repoCard = `
+                        <div class="repository-card">
+                                   <h5>${'${repo.name}'}</h5>
+                            <p>${'${repo.description || "설명이 없습니다."}'}</p>
+                            <a href="${'${repo.html_url}'}" target="_blank">레포지토리 보기</a>
+                        </div>
+                    `;
+                        repositoryList.append(repoCard);
+                    });
+                } else {
+                    repositoryList.html("<p>레포지토리가 없습니다.</p>");
+                }
+            })
+            .catch(error => console.error("Error loading repositories:", error.message));
+    }
+
 </script>
 
 <!-- Footer -->
