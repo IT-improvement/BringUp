@@ -268,11 +268,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             location.href = "/company/product/management";
                         } else {
                             alert("광고 등록에 실패했습니다.");
+                            location.href = "/company/product/management";
                         }
                     })
                     .catch(error => {
                         console.error('에러 발생:', error);
                         alert("광고 등록 중 오류가 발생했습니다.");
+                        location.href = "/company/product/management";
                     });
 
                 } else if (type === "announce") {
@@ -303,10 +305,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             location.href = "/company/product/management";
                         } else {
                             alert("광고 등록에 실패했습니다.");
+                            location.href = "/company/product/management";
                         }
                     })
                     .catch(error => {
                         console.error('에러 발생:', error);
+                        alert("광고 등록 중 오류가 발생했습니다.");
+                        location.href = "/company/product/management";
                     });
                 }
                 break;

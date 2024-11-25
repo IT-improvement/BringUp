@@ -16,11 +16,21 @@ function updateTable(page) {
             <td>${start + index + 1}</td>
             <td>${ad.recruitmentTitle || '-'}</td>
             <td>${ad.startDate || '-'} ~ ${ad.endDate || '-'}</td>
-            <td>${ad.adTypeKorean || '-'}</td>
+            <td>${ad.adType || '-'}</td>
             <td>${ad.clickCount || 0}</td>
         `;
+        let type = '';
+        if (ad.adType === 'Premium') {
+            type = 'premium';
+        } else if (ad.adType === 'announcement') {
+            type = 'announce';
+        } else if (ad.adType === 'Banner') {
+            type = 'banner';
+        } else if (ad.adType === 'Main') {
+            type = 'main';
+        }
         tr.addEventListener('click', () => {
-            const url = `/company/product/detail?adIdx=${ad.adIdx}&adType=${ad.adType}`;
+            const url = `/company/product/detail?adIdx=${ad.adIdx}&adType=${type}`;
             window.location.href = url;
         });
         tbody.appendChild(tr);

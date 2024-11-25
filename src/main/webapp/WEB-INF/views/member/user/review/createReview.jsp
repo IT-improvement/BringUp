@@ -276,11 +276,13 @@
 
         if (!accessToken) {
             alert('로그인이 필요합니다.');
-            window.location.href = '/company/auth/login';
+            window.location.href = '/member/Login';
             return;
         }
 
         const companyId = "${companyId}";
+
+        
 
         // 폼 제출 처리
         document.getElementById('createReviewForm').addEventListener('submit', function (e) {

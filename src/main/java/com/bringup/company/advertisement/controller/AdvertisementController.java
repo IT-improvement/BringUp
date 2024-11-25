@@ -119,7 +119,7 @@ public class AdvertisementController {
     }
 
     @DeleteMapping("/premium/{premiumAdId}")
-    public ResponseEntity<BfResponse<String>> deletePremiumAd(@PathVariable int premiumAdId) {
+    public ResponseEntity<BfResponse<String>> deletePremiumAd(@PathVariable("premiumAdId") int premiumAdId) {
         premiumAdService.deletePremiumAd(premiumAdId);
         BfResponse<String> response = new BfResponse<>(SUCCESS, "Premium advertisement deleted successfully");
         return ResponseEntity.ok(response);

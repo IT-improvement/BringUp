@@ -114,6 +114,11 @@
 
 				filteredCompanyReviews.forEach((review, index) => {
 					const template = document.querySelector("#companyReviewTemplate");
+					if (!template) {
+						console.error("템플릿 요소를 찾을 수 없습니다. ID가 'companyReviewTemplate'인 요소가 존재하는지 확인하세요.");
+						return;
+					}
+					
 					const row = template.cloneNode(true);
 					row.classList.remove("d-none");
 					row.removeAttribute("id");
@@ -180,7 +185,7 @@
 			const detailRow = document.createElement("tr");
 			detailRow.setAttribute("data-detail-index", reviewIndex);
 			const detailCell = document.createElement("td");
-			detailCell.setAttribute("colspan", 5); // 테이블의 전체 열 수에 맞춰 조정
+			detailCell.setAttribute("colspan", 5); // 테이블의 전체  수에 맞춰 조정
 
 			// 전역 변수에서 리뷰 데이터 가져오기
 			const review = companyReviews[reviewIndex];
@@ -362,7 +367,7 @@
 				.catch(error => {
 					hideLoading();
 					console.error("리뷰를 가져오는 중 오류 발생:", error);
-					alert("리뷰를 가져오는 중 오류 발생했습니다. 다시 시도해 주세요.");
+					alert("리뷰를 가져오는 중 오류 발생했니다. 다시 도해 주세요.");
 				});
 		}
 
