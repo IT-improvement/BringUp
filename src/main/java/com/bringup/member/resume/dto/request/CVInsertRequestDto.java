@@ -3,14 +3,15 @@ package com.bringup.member.resume.dto.request;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class CVInsertRequestDto {
-    private int cvIndex;
-    private String cvimage;
-    private boolean maincv;
-    private String education;
+    private boolean mainCv;
     private String skill;
     private int userIndex;
-    private String status;
+    private String title;
+    private List<Integer> cvAward;
+    private List<Integer> cvBlog;
 }

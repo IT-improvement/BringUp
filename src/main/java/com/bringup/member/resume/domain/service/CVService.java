@@ -1,3 +1,4 @@
+/*
 package com.bringup.member.resume.domain.service;
 
 import com.bringup.member.resume.dto.request.CVInsertRequestDto;
@@ -9,6 +10,5 @@ import org.springframework.http.ResponseEntity;
 public interface CVService {
 
     ResponseEntity<? super CVInsertResponseDto> insertCv(CVInsertRequestDto request);
-    ResponseEntity<? super CVInsertResponseDto> insertPortfolio(CVPortfolioRequestDto request);
-    CVReadResponseDto readCv(String cvIndex);
 }
+*/

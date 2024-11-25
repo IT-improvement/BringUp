@@ -21,6 +21,8 @@ public class CareerEntity {
     private String careerEnd;
     private String companyName;
     private String careerPosition;
+
+    @Column(name = "user_index", nullable = false)
     private int userIndex;
     private String careerDepartment;
     private String careerWork;
