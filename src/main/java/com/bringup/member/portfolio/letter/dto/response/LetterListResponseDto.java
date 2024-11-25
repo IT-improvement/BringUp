@@ -18,9 +18,9 @@ public class LetterListResponseDto extends ResponseDto {
 
     private LetterListResponseDto(LetterEntity letterEntity) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCES);
-        this.answer1=letterEntity.getAnswser1();
-        this.answer2=letterEntity.getAnswser2();
-        this.answer3=letterEntity.getAnswser3();
+        this.answer1=letterEntity.getAnswer1();
+        this.answer2=letterEntity.getAnswer2();
+        this.answer3=letterEntity.getAnswer3();
     }
 
     public static ResponseEntity<LetterListResponseDto> success(LetterEntity letterEntity) {

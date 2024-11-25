@@ -50,7 +50,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function (){
             const accessToken = localStorage.getItem('accessToken');
-            console.log("Access token: " + accessToken);
+            console.log("AccessToken : ", accessToken);
+
             if (!accessToken){
                 window.location.href = "/member/Login";
                 return;
@@ -63,55 +64,67 @@
             let filteredData = [];
 
             function fetchData(){
-                fetch('/member/notice/detail/list', {
+                fetch('/mem/addCompany/list', {
                     method: "GET",
                     headers: {
                         'Authorization': `Bearer ` + accessToken,
                         'Content-Type': 'application/json'
                     }
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${"${response.status}"}`);
+                        }
+                        return response.json();
+                    })
                     .then(data => {
-                        console.log("받은 데이터 : " + data);
-                        allData = data.data;
+                        console.log("받은 데이터 : ", data);
+                        allData = data || [];
                         filteredData = allData;
                         totalItems = allData.length;
                         renderPage(currentPage);
+
+                        if (allData.length === 0) {
+                            const bookmarkListBody = document.getElementById('bookmark-list-body');
+                            bookmarkListBody.innerHTML = `
+                                <tr>
+                                    <td colspan="6" class="text-center">북마크한 기업 데이터가 없습니다.</td>
+                                </tr>`;
+                        }
                     })
                     .catch(error => {
-                        console.error('작성한 게시글 목록을 가져오는 중 오류 발생 : ', error);
-                        const noticeListBody = document.getElementById('notice-list-body');
-                        if (noticeListBody) {
-                            noticeListBody.innerHTML = '<tr><td colspan="6" class="text-center">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>';
+                        console.error('북마크한 기업을 불러오는 중 오류 발생', error)
+                        const bookmarkListBody = document.getElementById('bookmark-list-body');
+                        if (bookmarkListBody) {
+                            bookmarkListBody.innerHTML = '<tr><td colspan="6" class="text-center">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>';
                         }
                     });
             }
 
             function renderPage(page){
-                const noticeListBody = document.getElementById('notice-list-body');
-                noticeListBody.innerHTML = '';
+                const bookmarkListBody = document.getElementById('bookmark-list-body');
+                bookmarkListBody.innerHTML = ``;
 
                 const start = (page - 1) * itemsPerPage;
                 const end = start + itemsPerPage;
                 const pageData = filteredData.slice(start, end);
 
-                pageData.forEach((notice, index) => {
+                pageData.forEach((bookmark, index) => {
                     const row = document.createElement('tr');
-                    const number = notice.index;
+                    const number = bookmark.company.companyId;
 
                     row.innerHTML = `
-						<td>${"${start + index + 1}"}</td>
-						<td>${"${notice.user.userEmail}"}</td>
-						<td>${"${notice.title}"}</td>
-						<td>${"${notice.updatePostTime}"}</td>
+						<td>${'${start + index + 1}'}</td>
+						<td>${'${bookmark.company.companyName}'}</td>
 					`;
                     row.style.cursor = 'pointer';
                     row.addEventListener('click', () => {
-                        window.location.href = `/member/noticeDetail;`
+                        window.location.href = `` + number;
                     });
-                    noticeListBody.appendChild(row);
+                    bookmarkListBody.appendChild(row);
                 });
             }
+
             fetchData();
         });
     </script>
@@ -126,13 +139,13 @@
 <body class="d-flex flex-column min-vh-100">
 <div class="container" style="max-width: 1260px;">
     <main class="flex-grow-1 m-4">
-        <p class="h1">나의 게시글</p>
+        <p class="h1">기업 북마크</p>
         <div class="py-4">
             <div class="card border bg-transparent rounded-3">
                 <div class="card-header bg-transparent border-bottom p-3">
                     <div class="d-sm-flex justify-content-between align-items-center">
-                        <h5 class="mb-2 mb-sm-0">게시글<span id="jobCount" class="badge bg-primary bg-opacity-10 text-primary"></span></h5>
-                        <a href="/member/createNotice" class="btn btn-sm btn-primary mb-0">작성</a>
+                        <h5 class="mb-2 mb-sm-0">목록<span id="jobCount" class="badge bg-primary bg-opacity-10 text-primary"></span></h5>
+                        <a href="/member/company/list" class="btn btn-sm btn-primary mb-0">기업 리스트</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -162,12 +175,11 @@
                             <thead class="table-dark">
                             <tr>
                                 <th scope="col">번호</th>
-                                <th scope="col">작성자</th>
-                                <th scope="col">제목</th>
-                                <th scope="col">작성일</th>
+                                <th scope="col">기업 이름</th>
+                                <th scope="col"></th>
                             </tr>
                             </thead>
-                            <tbody id="notice-list-body" class="border-top-0 text-center">
+                            <tbody id="bookmark-list-body" class="border-top-0 text-center">
                             </tbody>
                         </table>
                     </div>
@@ -193,3 +205,4 @@
 
 </body>
 </html>
+
