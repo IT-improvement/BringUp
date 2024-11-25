@@ -2,6 +2,7 @@ package com.bringup.member.applyRecruitment.domain.entity;
 
 import com.bringup.common.enums.ApplyCVType;
 import com.bringup.member.applyRecruitment.domain.enums.ApplicationType;
+import com.bringup.member.resume.domain.entity.CVEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,11 +23,12 @@ public class ApplyRecruitmentEntity {
     @Column(name = "apply_cv_index")
     private Integer applyCVIndex;
 
-    @Column(name = "cv_index")
-    private int cvIndex;
+    @ManyToOne()
+    @JoinColumn(name = "cv_index", nullable = false)
+    private CVEntity cv;
 
     @Column(name = "recruitment_index", nullable = false)
-    private int recruitmentIndex;
+    private Integer recruitmentIndex;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "application_type", nullable = false)

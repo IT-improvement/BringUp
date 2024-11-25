@@ -66,6 +66,7 @@ public class CompanyBookMarkService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void delCompany(UserDetailsImpl userDetails, int companyIndex){
         UserEntity user = userRepository.findById(userDetails.getId())
                 .orElseThrow(()->new BookmarkException(NOT_FOUND_MEMBER_ID));

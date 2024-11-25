@@ -74,6 +74,7 @@ public class MainService {
         return MemberInfoDto.builder()
                 .userName(userEntity.getUserName())
                 .userEmail(userEntity.getUserEmail())
+
                 .skills(mainCv.getSkill())  // "java, c, c++" 형식으로 가져옴
                 .build();
     }

@@ -140,7 +140,9 @@ public class HeadhuntService {
 
         return new HeadhuntResponseDto(
                 cvEntity.getCvIndex(),
+
                 cvEntity.isMainCv(),
+
                 cvEntity.getSkill(),
                 userAddress, // 가공된 주소
                 cvEntity.getUserIndex(), // 유저 인덱스 추가
@@ -169,6 +171,7 @@ public class HeadhuntService {
                     return new HeadhuntResponseDto(
                             cv.getCvIndex(),         // 이력서 인덱스
                             cv.isMainCv(),           // 메인 이력서 여부
+
                             cv.getSkill(),           // 기술 정보
                             user.getUserAddress(),   // 유저 주소
                             user.getUserIndex(),     // 유저 인덱스

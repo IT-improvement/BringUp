@@ -29,6 +29,4 @@ public class CVEntity {
         this.skill=dto.getSkill();
         this.userIndex=dto.getUserIndex();
     }
-
-
 }
