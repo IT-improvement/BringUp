@@ -1,6 +1,7 @@
 package com.bringup.company.review.repository;
 
 import com.bringup.company.review.entity.CompanyReview;
+import com.bringup.member.user.domain.entity.UserEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,5 +17,7 @@ public interface CompanyReviewRepository extends JpaRepository<CompanyReview, In
     @Query("SELECT r FROM CompanyReview r WHERE r.company.companyId = :companyIdx " +
             "ORDER BY (r.advancement + r.benefit + r.workLife + r.companyCulture + r.management) / 5.0 DESC")
     List<CompanyReview> findTopByCompanyAverageRating(@Param("companyIdx") int companyIdx, Pageable pageable);
+
+    List<CompanyReview> findAllByUser(UserEntity user);
 
 }
