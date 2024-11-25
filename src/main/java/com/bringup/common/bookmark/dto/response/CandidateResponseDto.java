@@ -13,14 +13,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CandidateResponseDto {
     private int cvIndex;
-    private String cvImage;
     private String userName;
     private String userEmail;
     private String userAddress;
 
     public CandidateResponseDto(CVEntity cv, UserEntity user) {
         this.cvIndex = cv.getCvIndex();
-        this.cvImage = cv.getCvImage();
         this.userName = user.getUserName();
         this.userEmail = user.getUserEmail();
         this.userAddress = user.getUserAddress();

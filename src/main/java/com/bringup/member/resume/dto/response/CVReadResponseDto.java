@@ -9,16 +9,16 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CVReadResponseDto {
-    private String cvImage;
+    //private String cvImage;
     private boolean mainCv;
-    private String education;
+    //private String education;
     private String skill;
     private int userIndex;
 
     public CVReadResponseDto(CVEntity cv){
-        this.cvImage = cv.getCvImage();
+        //this.cvImage = cv.getCvImage();
         this.mainCv = cv.isMainCv();
-        this.education = cv.getEducation();
+        //this.education = cv.getEducation();
         this.skill = cv.getSkill();
         this.userIndex = cv.getUserIndex();
     }

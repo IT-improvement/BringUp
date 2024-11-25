@@ -7,9 +7,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class HeadhuntResponseDto {
     private int cvIndex;
-    private String cvImage;
+    //private String cvImage;
     private boolean mainCv;
-    private String education;
+    //private String education;
     private String skill;
     private String userAddress;
     private int userIndex;

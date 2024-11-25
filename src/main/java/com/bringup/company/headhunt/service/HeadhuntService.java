@@ -139,9 +139,9 @@ public class HeadhuntService {
 
         return new HeadhuntResponseDto(
                 cvEntity.getCvIndex(),
-                cvEntity.getCvImage(),
+                //cvEntity.getCvImage(),
                 cvEntity.isMainCv(),
-                cvEntity.getEducation(),
+                //cvEntity.getEducation(),
                 cvEntity.getSkill(),
                 userAddress, // 가공된 주소
                 cvEntity.getUserIndex(), // 유저 인덱스 추가
@@ -169,9 +169,9 @@ public class HeadhuntService {
                     // HeadhuntResponseDto로 변환 (CV와 유저 정보를 사용)
                     return new HeadhuntResponseDto(
                             cv.getCvIndex(),         // 이력서 인덱스
-                            cv.getCvImage(),         // 이력서 이미지
+                            //cv.getCvImage(),         // 이력서 이미지
                             cv.isMainCv(),           // 메인 이력서 여부
-                            cv.getEducation(),       // 학력 정보
+                            //cv.getEducation(),       // 학력 정보
                             cv.getSkill(),           // 기술 정보
                             user.getUserAddress(),   // 유저 주소
                             user.getUserIndex(),     // 유저 인덱스

@@ -3,6 +3,8 @@ package com.bringup.member.applyRecruitment.domain.service;
 import com.bringup.common.enums.ApplyCVType;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.recruitment.entity.Recruitment;
+import com.bringup.company.recruitment.entity.RecruitmentFreelancer;
+import com.bringup.company.recruitment.repository.RecruitmentFreelancerRepository;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
 import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.repository.CompanyRepository;
@@ -32,6 +34,7 @@ public class ApplyRecruitmentService {
     private final ApplyRecruitmentRepository applyRecruitmentRepository;
     private final CVRepository cvRepository;
     private final RecruitmentRepository recruitmentRepository;
+    private final RecruitmentFreelancerRepository freelancerRepository;
     private final CompanyRepository companyRepository;
     private final UserRepository userRepository;
 
@@ -44,21 +47,44 @@ public class ApplyRecruitmentService {
             throw new ApplyRecruitmentException(NOT_FOUND_MEMBER_ID);
         }
 
-        Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(dto.getRecruitmentIndex())
-                .orElseThrow(()->new ApplyRecruitmentException(NOT_FOUND_APPLY_RECRUITMENT));
+        switch (dto.getRecruitmentType()){
+            case RECRUITMENT:
+                Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(dto.getRecruitmentIndex())
+                        .orElseThrow(()->new ApplyRecruitmentException(NOT_FOUND_APPLY_RECRUITMENT));
 
-        boolean isAlreadyApply = applyRecruitmentRepository.existsByCvIndexAndRecruitmentIndex(cv.getCvIndex(), recruitment.getRecruitmentIndex());
-        if (isAlreadyApply){
-            throw new ApplyRecruitmentException(ALREADY_APPLY_RECRUITMENT);
+                if (applyRecruitmentRepository.existsByCv_CvIndexAndRecruitmentIndex(cv.getCvIndex(), recruitment.getRecruitmentIndex())){
+                    throw new ApplyRecruitmentException(ALREADY_APPLY_RECRUITMENT);
+                }
+
+                ApplyRecruitmentEntity applyRecruitment = new ApplyRecruitmentEntity();
+                applyRecruitment.setCv(cv);
+                applyRecruitment.setRecruitmentIndex(recruitment.getRecruitmentIndex());
+                applyRecruitment.setApplicationType(ApplicationType.RECRUITMENT);
+                applyRecruitment.setStatus(ApplyCVType.IN_PROGRESS);
+
+                applyRecruitmentRepository.save(applyRecruitment);
+                break;
+
+            case FREELANCER:
+                RecruitmentFreelancer freelancer = freelancerRepository.findByProjectIndex(dto.getRecruitmentIndex())
+                        .orElseThrow(()->new ApplyRecruitmentException(NOT_FOUND_APPLY_RECRUITMENT));
+
+                if (applyRecruitmentRepository.existsByCv_CvIndexAndRecruitmentIndex(cv.getCvIndex(), freelancer.getProjectIndex())){
+                    throw new ApplyRecruitmentException(ALREADY_APPLY_RECRUITMENT);
+                }
+
+                ApplyRecruitmentEntity applyFreelancer = new ApplyRecruitmentEntity();
+                applyFreelancer.setCv(cv);
+                applyFreelancer.setRecruitmentIndex(freelancer.getProjectIndex());
+                applyFreelancer.setApplicationType(ApplicationType.FREELANCER);
+                applyFreelancer.setStatus(ApplyCVType.IN_PROGRESS);
+
+                applyRecruitmentRepository.save(applyFreelancer);
+                break;
+
+            default:
+                throw new ApplyRecruitmentException(INVALID_REQUEST_FORMAT);
         }
-
-        ApplyRecruitmentEntity applyRecruitment = new ApplyRecruitmentEntity();
-        applyRecruitment.setCvIndex(cv.getCvIndex());
-        applyRecruitment.setRecruitmentIndex(recruitment.getRecruitmentIndex());
-        applyRecruitment.setApplicationType(dto.getApplicationType());
-        applyRecruitment.setStatus(ApplyCVType.IN_PROGRESS);
-
-        applyRecruitmentRepository.save(applyRecruitment);
     }
 
     @Transactional
@@ -72,7 +98,7 @@ public class ApplyRecruitmentService {
         List<ApplyRecruitmentResponseDto> applyList = new ArrayList<>();
 
         for (CVEntity cv : cvList){
-            List<ApplyRecruitmentEntity> applyRecruitments = applyRecruitmentRepository.findAllByCvIndex(cv.getCvIndex());
+            List<ApplyRecruitmentEntity> applyRecruitments = applyRecruitmentRepository.findAllByCv_CvIndex(cv.getCvIndex());
             for (ApplyRecruitmentEntity applyRecruitment : applyRecruitments){
                 if (applyRecruitment.getApplicationType() != ApplicationType.FREELANCER){
                     // 공고 정보 조회
@@ -100,7 +126,7 @@ public class ApplyRecruitmentService {
     private ApplyRecruitmentResponseDto applyDto(ApplyRecruitmentEntity applyRecruitment, String recruitmentTitle, String companyName){
         return ApplyRecruitmentResponseDto.builder()
                 .applyCVIndex(applyRecruitment.getApplyCVIndex())
-                .cvIndex(applyRecruitment.getCvIndex())
+                .cv(applyRecruitment.getCv())
                 .recruitmentIndex(applyRecruitment.getRecruitmentIndex())
                 .applicationType(applyRecruitment.getApplicationType())
                 .status(applyRecruitment.getStatus())
