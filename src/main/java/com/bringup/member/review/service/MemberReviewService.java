@@ -1,5 +1,6 @@
 package com.bringup.member.review.service;
 
+import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.enums.ReviewErrorCode;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.review.entity.CompanyReview;
@@ -13,6 +14,7 @@ import com.bringup.member.review.dto.response.MemberCompanyReviewDto;
 import com.bringup.member.review.dto.response.MemberDetailReviewDto;
 import com.bringup.member.review.exception.MemberReviewException;
 import com.bringup.member.user.domain.entity.UserEntity;
+import com.bringup.member.user.domain.exception.MemberException;
 import com.bringup.member.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -166,7 +168,6 @@ public class MemberReviewService {
     // CompanyReview 엔티티를 MemberCompanyReviewDto로 변환하는 메서드
     private MemberCompanyReviewDto convertToDto(CompanyReview review) {
         MemberCompanyReviewDto dto = new MemberCompanyReviewDto();
-
         dto.setCompanyReviewIndex(review.getCompanyReviewIndex());
         dto.setCompanyName(review.getCompany().getCompanyName()); // 회사 이름 설정
         dto.setUserEmail(review.getUser().getUserEmail()); // 사용자 이메일 설정
@@ -205,6 +206,16 @@ public class MemberReviewService {
         List<CompanyReview> reviews = companyReviewRepository.findAllByCompanyCompanyId(companyIdx);
 
         // DTO 리스트로 변환
+        return reviews.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<MemberCompanyReviewDto> getMyCompanyReviewList(UserDetailsImpl userDetails){
+        UserEntity user = userRepository.findByUserIndex(userDetails.getId())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+        List<CompanyReview> reviews = companyReviewRepository.findAllByUser(user);
+
         return reviews.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());

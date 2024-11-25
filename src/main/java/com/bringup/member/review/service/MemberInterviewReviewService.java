@@ -1,5 +1,6 @@
 package com.bringup.member.review.service;
 
+import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.enums.ReviewErrorCode;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.review.entity.CompanyReview;
@@ -11,6 +12,7 @@ import com.bringup.member.review.dto.request.InterviewReviewRequestDto;
 import com.bringup.member.review.dto.response.InterviewReviewResponseDto;
 import com.bringup.member.review.exception.MemberReviewException;
 import com.bringup.member.user.domain.entity.UserEntity;
+import com.bringup.member.user.domain.exception.MemberException;
 import com.bringup.member.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -122,6 +124,7 @@ public class MemberInterviewReviewService {
         responseDto.setInterviewReviewIndex(review.getInterviewReviewIndex());
         responseDto.setAmbience(review.getAmbience());
         responseDto.setDifficulty(review.getDifficulty());
+        responseDto.setUserEmail(review.getUser().getUserEmail());
         responseDto.setInterviewReviewTitle(review.getInterviewReviewTitle());
         responseDto.setInterviewReviewDate(review.getInterviewReviewDate().toString()); // Assuming it's a LocalDateTime
         responseDto.setInterviewReviewContent(review.getInterviewReviewContent());
@@ -149,6 +152,17 @@ public class MemberInterviewReviewService {
         List<InterviewReview> reviews = interviewReviewRepository.findAllByCompanyCompanyId(companyId);
 
         // DTO 리스트로 변환
+        return reviews.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<InterviewReviewResponseDto> getMyInterviewReview(UserDetailsImpl userDetails){
+        UserEntity user = userRepository.findByUserIndex(userDetails.getId())
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
+        List<InterviewReview> reviews = interviewReviewRepository.findAllByUser(user);
+
         return reviews.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
