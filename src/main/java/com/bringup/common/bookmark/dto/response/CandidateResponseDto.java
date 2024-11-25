@@ -19,6 +19,7 @@ public class CandidateResponseDto {
 
     public CandidateResponseDto(CVEntity cv, UserEntity user) {
         this.cvIndex = cv.getCvIndex();
+
         this.userName = user.getUserName();
         this.userEmail = user.getUserEmail();
         this.userAddress = user.getUserAddress();

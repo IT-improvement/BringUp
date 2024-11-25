@@ -5,6 +5,7 @@ import com.bringup.common.enums.RecruitmentType;
 import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.company.user.entity.Company;
+import com.bringup.member.recruitment.domain.entity.ScrapRecuritmentEntity;
 import com.bringup.member.recruitment.domain.repository.ScrapRecruitmentRepository;
 import com.bringup.member.recruitment.dto.response.UserRecruitmentDetailDto;
 import com.bringup.member.user.domain.entity.UserEntity;
@@ -21,6 +22,7 @@ import com.bringup.company.recruitment.repository.RecruitmentRepository;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,43 +59,57 @@ public class UserRecruitmentService {
     }
 
 
-    public List<UserRecruitmentDto> getBookmarkedRecruitments() {
-        // 현재 인증된 사용자 정보(Principal)를 가져옵니다.
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String userEmail;
+    // 북마크 추가
+    public void addBookmark(Integer userIndex, Integer recruitmentIndex) {
+        UserEntity user = userRepository.findById(Math.toIntExact(userIndex))
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+        Recruitment recruitment = userRecruitmentRepository.findById(Math.toIntExact(recruitmentIndex))
+                .orElseThrow(() -> new IllegalArgumentException("공고가 존재하지 않습니다."));
 
-        if (principal instanceof UserDetails) {
-            userEmail = ((UserDetails) principal).getUsername();  // UserDetails에서 이메일을 가져옵니다.
-        } else {
-            userEmail = principal.toString();  // UserDetails가 아니면 Principal을 문자열로 변환합니다.
+        // 중복 여부 확인
+        Optional<ScrapRecuritmentEntity> existingBookmark =
+                scrapRecruitmentRepository.findByUserIndexAndRecruitmentIndex(user, recruitment);
+
+        if (existingBookmark.isPresent()) {
+            throw new IllegalStateException("이미 북마크된 공고입니다.");
         }
 
-        // 이메일을 사용해 데이터베이스에서 UserEntity를 조회하고, 없으면 예외를 던집니다.
-        UserEntity user = userRepository.findByUserEmail(userEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + userEmail));
+        // 새로운 북마크 생성
+        ScrapRecuritmentEntity bookmark = new ScrapRecuritmentEntity();
+        bookmark.setUserIndex(user);
+        bookmark.setRecruitmentIndex(recruitment);
+        bookmark.setStatus("ACTIVE"); // 여기에서 status 값 설정
 
-        // userIndex를 로그로 출력하여 확인
-        log.info("User Index: {}", user.getUserIndex());
 
-        // userIndex에 해당하는 스크랩 공고 목록을 조회합니다.
-        List<Recruitment> recruitments = scrapRecruitmentRepository.findBookmarkedRecruitmentsByUserIndex(user.getUserIndex());
-
-        // 조회된 스크랩 공고 목록을 로그로 출력
-        log.info("Found {} bookmarked recruitments for User Index: {}", recruitments.size(), user.getUserIndex());
-
-        // 엔티티를 DTO로 변환
-        List<UserRecruitmentDto> dtoList = new ArrayList<>();
-        for (Recruitment recruitment : recruitments) {
-            UserRecruitmentDto dto = convertToDto(recruitment);
-            if(recruitment.getRecruitmentType().equals(RecruitmentType.REGULAR_WORKER)){
-                dto.setRecruitmentType("정규직");
-            }
-            dtoList.add(dto);
-        }
-
-        return dtoList;
+        scrapRecruitmentRepository.save(bookmark);
     }
 
+    // 북마크 삭제
+    public void removeBookmark(Integer userIndex, Integer recruitmentIndex) {
+        UserEntity user = userRepository.findById(userIndex)
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+        Recruitment recruitment = userRecruitmentRepository.findById(recruitmentIndex)
+                .orElseThrow(() -> new IllegalArgumentException("공고가 존재하지 않습니다."));
+
+        ScrapRecuritmentEntity bookmark = scrapRecruitmentRepository.findByUserIndexAndRecruitmentIndex(user, recruitment)
+                .orElseThrow(() -> new IllegalStateException("북마크가 존재하지 않습니다."));
+
+        scrapRecruitmentRepository.delete(bookmark);
+    }
+    // 북마크 상태 확인 로직
+    public boolean isBookmarked(Integer userIndex, Integer recruitmentIndex) {
+        // UserEntity 가져오기
+        UserEntity user = userRepository.findById(userIndex)
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+        Recruitment recruitment = userRecruitmentRepository.findById(recruitmentIndex)
+                .orElseThrow(() -> new IllegalArgumentException("공고가 존재하지 않습니다."));
+
+
+        // 북마크 상태 확인
+        return scrapRecruitmentRepository
+                .findByUserIndexAndRecruitmentIndex(user, recruitment)
+                .isPresent();
+    }
 
 
     public UserRecruitmentDetailDto getRecruitmentDetail(int recruitmentId) {
@@ -103,28 +119,28 @@ public class UserRecruitmentService {
 
         // 회사 정보 가져오기
         Company company = recruitment.getCompany();
-        String[] images = company.getCompanyImg().replaceAll(" ", "").replaceAll("\n", "").split(",");
+        String[] images = company.getCompanyImg() != null
+                ? company.getCompanyImg().replaceAll(" ", "").replaceAll("\n", "").split(",")
+                : new String[0];
 
-
-        // 회사 이미지 및 다른 정보들을 함께 DTO에 담기
+        // 회사 정보 및 채용 정보를 함께 DTO로 변환
         return UserRecruitmentDetailDto.builder()
-                .companyName(company.getCompanyName())
-                .companyImg(images)  // 회사 이미지 가져오기
-                .companyContent(company.getCompanyContent())
-                .companyWelfare(company.getCompanyWelfare())
-                .companyAddress(company.getCompanyAddress())
-                .recruitmentTitle(recruitment.getRecruitmentTitle())
-                .career(recruitment.getCareer())
-                .salary(recruitment.getSalary())
-                .recruitmentPeriod(recruitment.getPeriod())
-                .requirements(recruitment.getRequirement())
-                .hospitality(recruitment.getHospitality())
-                .workDetail(recruitment.getWorkDetail())
-                .applicantCount(recruitment.getViewCount())  // 지원자 수
-                .minimumSalary(Integer.parseInt(recruitment.getSalary()))  // 최소 연봉
-                .deadline(recruitment.getPeriod())  // 마감일
+                .c_logo(company.getCompanyLogo())
+                .c_name(company.getCompanyName())
+                .c_img(images)
+                .c_intro(company.getCompanyContent())
+                .c_welfare(company.getCompanyWelfare())
+                .c_address(company.getCompanyAddress())
+                .r_title(recruitment.getRecruitmentTitle())
+                .r_workdetail(recruitment.getWorkDetail())
+                .r_requirement(recruitment.getRequirement())
+                .r_hospitality(recruitment.getHospitality())
+                .r_career(recruitment.getCareer())
+                .r_salary(recruitment.getSalary())
+                .r_period(recruitment.getPeriod())
                 .build();
     }
+
 
 
     private UserRecruitmentDto convertToDto(Recruitment recruitment) {

@@ -154,6 +154,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/AnnouncementRecruitment"),
                 antMatcher("/member/proposeRecruitment"),
                 antMatcher("/image/**"),
+
                 antMatcher("/main/image/**"),
                 antMatcher("/main/advertisements"),
                 antMatcher("/main/recruitmentImage"),
@@ -166,7 +167,10 @@ public class SpringSecurityConfig {
                 antMatcher("/member/company"),
                 antMatcher("/page/admin/**"),
                 antMatcher("/member/join"),
+
                 antMatcher("/member/bookmark"),
+
+                antMatcher("/member/joinProc"),
                 antMatcher("/main/list"),
                 antMatcher("/member/memberProfile"),
                 antMatcher("/member/interview/iv_list"),
@@ -187,9 +191,10 @@ public class SpringSecurityConfig {
                 antMatcher("/member/record"),
                 antMatcher("/member/awards"),
                 antMatcher("/member/career"),
-                /*antMatcher("/portfolio/**"),*/
+
                 antMatcher("/award/delete/{index}"),
                 antMatcher("/portfolio/blog/delete"),
+                antMatcher("/portfolio/career/delete"),
 
                 antMatcher("/school/delete/{index}"),
 
@@ -209,7 +214,6 @@ public class SpringSecurityConfig {
      */
     private RequestMatcher[] AuthRequestMatchers() {
         List<RequestMatcher> requestMatchers = List.of(
-                antMatcher("/portfolio/**"),
                 antMatcher(POST, "/com/companyName"),               // 기업명 헤더 삽입
                 antMatcher(GET, "/com/companyInfo/post"),           // 회원 정보 조회
                 antMatcher("/com/user/**"),
@@ -227,6 +231,7 @@ public class SpringSecurityConfig {
                 antMatcher("/com/headhunt/**"),
                 antMatcher("/membership/**"), // 사용자 멤버십
                 antMatcher("/member/name"),
+
                 antMatcher("/member/userMain"),
                 antMatcher("/main/memberInfo"),
                 antMatcher("/member/{reviewId}"),
@@ -239,9 +244,11 @@ public class SpringSecurityConfig {
                 antMatcher("/member/notice/postDetail/{boardIndex}"),
                 antMatcher("/admin/**"),
                 antMatcher(GET, "/member/applyList"),
+
                 antMatcher(GET, "/mem/addCompany/list"),
                 antMatcher("/mem/addCompany/{company_index}"),
                 antMatcher(POST,"/mem/applyRecruitment"),
+
                 antMatcher("/member/interview/{reviewId}"),
                 antMatcher("/member/interview/delete/{reviewId}"),
                 antMatcher("/member/interview/iv_create"),
@@ -255,12 +262,15 @@ public class SpringSecurityConfig {
                 antMatcher("/github/**"),
                 antMatcher("/school/info/list"),
                 antMatcher("/school/insert"),
-                antMatcher("/mem/certificate/list"),
-                antMatcher("/mem/certificate/insert"),
+
 
                 antMatcher("/award/insert"),
                 antMatcher("/award/list"),
-
+                antMatcher("/portfolio/career/list"),
+                antMatcher("/portfolio/career/insert"),
+                antMatcher("/recruitment/scrap/{recruitmentIndex}"),
+                antMatcher("/recruitment/scrap/delete/{recruitmentIndex}"),
+                antMatcher("/recruitment/isBookmarked/{recruitmentId}"),
 
 
 

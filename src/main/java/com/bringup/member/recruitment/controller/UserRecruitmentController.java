@@ -9,19 +9,21 @@ import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.member.recruitment.domain.service.UserRecruitmentService;
 import com.bringup.member.recruitment.dto.response.UserRecruitmentDetailDto;
 import com.bringup.member.recruitment.dto.response.UserRecruitmentDto;
+import com.bringup.member.user.domain.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 
-@Controller
+@RestController
 @RequestMapping("/recruitment")
 @RequiredArgsConstructor
 public class UserRecruitmentController {
@@ -38,11 +40,6 @@ public class UserRecruitmentController {
     }
 
 
-    @GetMapping("/scrap")
-    public ResponseEntity<List<UserRecruitmentDto>> getBookmarkedRecruitments() {
-        List<UserRecruitmentDto> recruitments = userRecruitmentService.getBookmarkedRecruitments();
-        return ResponseEntity.ok(recruitments);
-    }
 
     @GetMapping("/detail/{recruitmentId}")
     public ResponseEntity<BfResponse<?>> getRecruitmentDetail(@PathVariable("recruitmentId") int recruitmentId) {
@@ -66,6 +63,42 @@ public class UserRecruitmentController {
             return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+    // 북마크 추가
+    @PostMapping("/scrap/{recruitmentIndex}")
+    public ResponseEntity<String> addBookmark(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                              @PathVariable("recruitmentIndex") Integer recruitmentIndex) {
+        Integer userIndex = userDetails.getId(); // 인증된 유저의 Index 가져오기
+        userRecruitmentService.addBookmark(userIndex, recruitmentIndex);
+        return ResponseEntity.ok("북마크가 추가되었습니다.");
+    }
+    // 북마크 삭제
+    @DeleteMapping("/scrap/delete/{recruitmentIndex}")
+    public ResponseEntity<String> removeBookmark(@AuthenticationPrincipal UserDetailsImpl user,
+                                                 @PathVariable("recruitmentIndex") Integer recruitmentIndex) {
+        Integer userIndex = user.getId(); // 인증된 유저의 Index 가져오기
+        userRecruitmentService.removeBookmark(userIndex, recruitmentIndex);
+        return ResponseEntity.ok("북마크가 삭제되었습니다.");
+    }
+    //북마크 확인
+    @GetMapping("/isBookmarked/{recruitmentId}")
+    public ResponseEntity<Map<String, Boolean>> isBookmarked(
+            @AuthenticationPrincipal UserDetailsImpl user,
+            @PathVariable("recruitmentId") Integer recruitmentId) {
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        boolean isBookmarked = userRecruitmentService.isBookmarked(user.getId(), recruitmentId);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("bookmarked", isBookmarked);
+
+        return ResponseEntity.ok(response);
+    }
+
 
 
 }
