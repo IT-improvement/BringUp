@@ -93,13 +93,13 @@
                 </div>
                 <div id="selectContainer" class="mt-3 p-3 text-center" style="border: 1px solid #ddd; border-radius: 5px; color: #888; display: none;">
                     <div class="row g-3">
-                        <div class="col-md-4">
-                            <select id="categorySelect" class="form-select">
+                            <div class="col-md-4">
+                                <select id="categorySelect" class="form-select">
                                 <option value="" disabled selected>구분 선택 *</option>
                                     <option value="award">수상</option>
                                 <option value="language">어학시험</option>
                                 <option value="certification">자격증</option>
-                            </select>
+                                </select>
                         </div>
                     </div>
                 </div>
@@ -175,6 +175,8 @@
                     <h3>어학 시험 내역 추가</h3>
                     <div class="row g-3">
                         <div class="col-md-4">
+            <input type="hidden" id="awardType" value="${'${categoryMap[selectedValue]}'}"> <!-- Hidden 필드 유지 -->
+
                             <input type="text" class="form-control" placeholder="어학 시험명">
                         </div>
                         <div class="col-md-4">
@@ -194,7 +196,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mt-3">
-                        <button class="btn btn-outline-primary me-2">취소</button>
+                        <button class="btn btn-outline-primary me-2" onclick="hideForm()">취소</button>
                         <button class="btn btn-primary">저장</button>
                     </div>
                 `;
@@ -203,6 +205,8 @@
                     <h3>자격증 내역 추가</h3>
                     <div class="row g-3">
                         <div class="col-md-6">
+            <input type="hidden" id="awardType" value="${'${categoryMap[selectedValue]}'}"> <!-- Hidden 필드 유지 -->
+
                             <input type="text" class="form-control" placeholder="자격증 제목">
                         </div>
                         <div class="col-md-6">
@@ -213,7 +217,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mt-3">
-                        <button class="btn btn-outline-primary me-2">취소</button>
+                        <button class="btn btn-outline-primary me-2" onclick="hideForm()">취소</button>
                         <button class="btn btn-primary">저장</button>
                     </div>
                 `;
@@ -259,9 +263,6 @@
                         organization: awardOrganization,
                         awarDate: awardDate,
                         details: awardDetails,
-
-
-
                     };
 
                     fetch('/award/insert', {
@@ -314,6 +315,7 @@
                         .catch(error => console.error('Error:', error));
                 }
 
+
                 // 수상 내역 리스트 표시
                 function displayAwardList(awards) {
 
@@ -341,7 +343,7 @@
                     <h5 class="me-3 mb-0">${'${award.title}'}</h5>
                     <span>${'${new Date(award.awarDate).toISOString().split(`T`)[0]}'}</span>
                 </div>
-                <div class="text-muted">${'${award.organization}'}</div>
+                <div class="text-muted-content">${'${award.organization}'}</div>
                 <div class="text-muted">${'${award.details}'}</div>
             </div>
             <div class="d-flex align-items-center">
