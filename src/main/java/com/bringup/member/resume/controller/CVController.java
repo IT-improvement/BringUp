@@ -5,6 +5,7 @@ import com.bringup.member.resume.domain.service.CVService;
 import com.bringup.member.resume.dto.request.CVInsertRequestDto;
 import com.bringup.member.resume.dto.request.CVPortfolioRequestDto;
 import com.bringup.member.resume.dto.response.CVInsertResponseDto;
+import com.bringup.member.resume.dto.response.CVListResponseDto;
 import com.bringup.member.resume.dto.response.CVReadResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +33,11 @@ public class CVController {
     @GetMapping("/{cvIndex}")
     public ResponseEntity<? super CVReadResponseDto> readCv(@PathVariable("cvIndex")String index){
         return cvService.readCV(index);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<? super CVListResponseDto> readCvList(@AuthenticationPrincipal UserDetailsImpl user){
+        int code = user.getId();
+        return cvService.listCv(code);
     }
 }

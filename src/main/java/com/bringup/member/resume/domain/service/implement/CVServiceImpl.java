@@ -1,10 +1,12 @@
 package com.bringup.member.resume.domain.service.implement;
 
+import com.bringup.common.response.ResponseDto;
 import com.bringup.member.resume.domain.entity.*;
 import com.bringup.member.resume.domain.repository.*;
 import com.bringup.member.resume.domain.service.CVService;
 import com.bringup.member.resume.dto.request.CVInsertRequestDto;
 import com.bringup.member.resume.dto.response.CVInsertResponseDto;
+import com.bringup.member.resume.dto.response.CVListResponseDto;
 import com.bringup.member.resume.dto.response.CVReadResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -86,4 +88,15 @@ public class CVServiceImpl implements CVService {
         return CVReadResponseDto.success(cvEntity,cvAward,cvBlog,cvCareer,cvCertificate,cvSchool);
     }
 
+    @Override
+    public ResponseEntity<? super CVListResponseDto> listCv(int userCode) {
+        List<CVEntity> list = null;
+        try{
+            list = cvRepository.findAllByUserIndex(userCode);
+        }catch (Exception e){
+            ResponseDto.databaseError();
+        }
+
+        return CVListResponseDto.success(list);
+    }
 }
