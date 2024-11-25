@@ -1,11 +1,14 @@
 package com.bringup.member.review.service;
 
+import com.bringup.common.enums.ReviewErrorCode;
 import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.review.entity.CompanyReview;
+import com.bringup.company.review.entity.InterviewReview;
 import com.bringup.company.review.repository.CompanyReviewRepository;
 import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.repository.CompanyRepository;
 import com.bringup.member.review.dto.request.RequestCompanyReviewDto;
+import com.bringup.member.review.dto.response.InterviewReviewResponseDto;
 import com.bringup.member.review.dto.response.MemberCompanyReviewDto;
 import com.bringup.member.review.dto.response.MemberDetailReviewDto;
 import com.bringup.member.review.exception.MemberReviewException;
@@ -13,12 +16,15 @@ import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -177,5 +183,30 @@ public class MemberReviewService {
         dto.setAverageRating(averageRating); // 평균 점수를 DTO에 설정
 
         return dto;
+    }
+
+    public MemberCompanyReviewDto getMostStar(int companyIdx){
+        // 평균 값 기준으로 가장 높은 리뷰 조회 (첫 번째 리뷰만 가져오기)
+        Pageable pageable = PageRequest.of(0, 1); // 첫 번째 리뷰만 가져오기
+        List<CompanyReview> reviews = companyReviewRepository.findTopByCompanyAverageRating(companyIdx, pageable);
+
+        if (reviews.isEmpty()) {
+            throw new MemberReviewException(ReviewErrorCode.NOT_FOUND_REVIEW);
+        }
+
+        // 첫 번째 리뷰를 DTO로 변환
+        CompanyReview review = reviews.get(0);
+        return convertToDto(review);
+    }
+
+    // 특정 기업의 리뷰 리스트 조회
+    public List<MemberCompanyReviewDto> getAllReviewsByCompany(int companyIdx) {
+        // 특정 기업의 리뷰 조회
+        List<CompanyReview> reviews = companyReviewRepository.findAllByCompanyCompanyId(companyIdx);
+
+        // DTO 리스트로 변환
+        return reviews.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 }

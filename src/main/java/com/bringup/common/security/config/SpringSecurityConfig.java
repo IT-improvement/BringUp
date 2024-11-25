@@ -152,6 +152,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/confirmRecruitment"),
                 antMatcher("/member/AnnouncementRecruitment"),
                 antMatcher("/member/proposeRecruitment"),
+                antMatcher("/member/myReview"),
                 antMatcher("/image/**"),
                 antMatcher("/recruitment/**"),
                 antMatcher("/main/image/**"),
@@ -226,6 +227,7 @@ public class SpringSecurityConfig {
                 antMatcher("/com/advertisement/**"),
                 antMatcher("/com/freelancer/**"),
                 antMatcher("/com/headhunt/**"),
+                antMatcher("/com/volunteers"),
                 antMatcher("/membership/**"), // 사용자 멤버십
                 antMatcher("/member/name"),
                 antMatcher("/member/userMain"),
@@ -244,6 +246,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/interview/{reviewId}"),
                 antMatcher("/member/interview/delete/{reviewId}"),
                 antMatcher("/member/interview/iv_create"),
+                antMatcher("/mem/**"),
 
                 antMatcher("/portfolio/blog/list"),
                 antMatcher("/portfolio/blog/insert"),
