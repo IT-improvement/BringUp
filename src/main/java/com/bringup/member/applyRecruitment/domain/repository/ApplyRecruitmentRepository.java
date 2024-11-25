@@ -20,5 +20,13 @@ public interface ApplyRecruitmentRepository extends JpaRepository<ApplyRecruitme
     
     List<ApplyRecruitmentEntity> findAllByCv_CvIndexAndApplicationType(Integer cvIndex, ApplicationType applicationType);
 
+
     List<ApplyRecruitmentEntity> findAllByCv_CvIndex(Integer cvIndex);
+
+    
+
+    List<ApplyRecruitmentEntity> findAllByRecruitmentIndexIn(List<Integer> recruitmentIndexes);
+
+    List<ApplyRecruitmentEntity> findAllByRecruitmentIndex(Integer recruitmentIdx);
+
 }

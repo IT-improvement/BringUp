@@ -158,7 +158,7 @@
                         <ul class="dropdown-menu" aria-labelledby="jobPostingMenu">
                             <li><a class="dropdown-item" href="/company/jobpost/management">공고 관리</a></li>
                             <li><a class="dropdown-item" href="/company/jobpost/registration">공고 등록</a></li>
-                            <li><a class="dropdown-item" href="/company/jobpost/freelancer">후리랜서 디테일 확인용</a></li>
+                            <li><a class="dropdown-item" href="/company/jobpost/freelancer">프리랜서 공고 등록</a></li>
                         </ul>
                     </li>
 
@@ -175,8 +175,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="reviewMenu" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">리뷰</a>
                         <ul class="dropdown-menu" aria-labelledby="postMenu">
-                            <li><a class="dropdown-item" href="/company/review/corporation">기업 리뷰</a></li>
-                            <li><a class="dropdown-item" href="/company/review/interview">면접 리뷰</a></li>
+                            <li><a class="dropdown-item" href="/company/review/management">리뷰 관리</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">

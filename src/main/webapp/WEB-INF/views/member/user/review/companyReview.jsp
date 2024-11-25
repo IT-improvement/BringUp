@@ -68,15 +68,24 @@
 					fetchReviews(query); // 검색어에 맞는 리뷰를 가져옴
 				}
 			});
+
+			const tableHeaders = document.querySelectorAll("th");
+			tableHeaders.forEach((header, index) => {
+				header.addEventListener("click", () => {
+					sortTable(index);
+				});
+			});
 		});
 
 		function fetchReviews(query = "") {
 			// 로딩 메시지 표시
 			showLoading();
-
-			fetch("/member/m_reviews") // 리뷰를 가져오는 API 엔드포인트
+			
+			const companyId = "${companyId}";
+			fetch("/member/company-review/" + companyId) // 리뷰를 가져오는 API 엔드포인트
 					.then(response => response.json())
 					.then(data => {
+						console.log(data);
 						const reviews = data.data; // 데이터에서 리뷰 목록 추출
 						const reviewTableBody = document.querySelector("tbody");
 						reviewTableBody.innerHTML = ""; // 테이블 초기화
@@ -101,26 +110,25 @@
 						// 검색 결과를 테이블에 추가
 						filteredReviews.forEach(review => {
 							const row = document.createElement("tr");
-
-							// 회사 이름
-							const companyNameCell = document.createElement("td");
-							companyNameCell.textContent = review.companyName;
-							row.appendChild(companyNameCell);
+							row.setAttribute("data-index", review.companyReviewIndex);
+							document.getElementById("companyName").textContent = "기업 리뷰 - " + review.companyName;
 
 							// 사용자 이메일
 							const userEmailCell = document.createElement("td");
 							userEmailCell.textContent = review.userEmail;
+							userEmailCell.classList.add("text-center");
 							row.appendChild(userEmailCell);
 
 							// 제목
 							const titleCell = document.createElement("td");
 							titleCell.textContent = review.companyReviewTitle;
+							titleCell.classList.add("text-center");
 							row.appendChild(titleCell);
 
 							// 평균 별점
 							const ratingCell = document.createElement("td");
 							const starContainer = document.createElement("div");
-							starContainer.className = "m_review-ratings";
+							starContainer.className = "m_review-ratings d-flex justify-content-center";
 
 							for (let i = 1; i <= 5; i++) {
 								const star = document.createElement("i");
@@ -134,16 +142,13 @@
 							// 작성일자
 							const dateCell = document.createElement("td");
 							dateCell.textContent = review.companyReviewDate;
+							dateCell.classList.add("text-center");
 							row.appendChild(dateCell);
 
-							// 자세히 보기 버튼
-							const detailButtonCell = document.createElement("td");
-							const detailButton = document.createElement("a");
-							detailButton.className = "details-button";
-							detailButton.textContent = "자세히 보기";
-							detailButton.href = `/member/m_reviewDetail/` + review.companyReviewIndex; // 각 리뷰에 맞는 상세보기 링크
-							detailButtonCell.appendChild(detailButton);
-							row.appendChild(detailButtonCell);
+							// 행 클릭 시 상세 정보 표시
+							row.addEventListener("click", () => {
+								showReviewDetails(review);
+							});
 
 							// 테이블에 추가
 							reviewTableBody.appendChild(row);
@@ -153,6 +158,42 @@
 						hideLoading(); // 로딩 창 숨기기
 						console.error("리뷰를 가져오는 중 오류 발생:", error);
 					});
+		}
+
+		function showReviewDetails(review) {
+			const existingDetailRow = document.querySelector(`tr[data-detail-index="${"${review.companyReviewIndex}"}"]`);
+
+			if (existingDetailRow) {
+				// 이미 열려 있는 경우 닫기
+				existingDetailRow.remove();
+				return;
+			}
+
+			// 기존에 열려 있는 세부 정보 행을 모두 제거
+			const existingDetailRows = document.querySelectorAll("tr[data-detail-index]");
+			existingDetailRows.forEach(row => row.remove());
+
+			const row = document.querySelector(`tr[data-index="${"${review.companyReviewIndex}"}"]`);
+			if (!row) {
+				console.error("해당 리뷰의 행을 찾을 수 없습니다.");
+				return;
+			}
+
+			const detailRow = document.createElement("tr");
+			detailRow.setAttribute("data-detail-index", review.companyReviewIndex);
+			const detailCell = document.createElement("td");
+			detailCell.setAttribute("colspan", 5); // 테이블의 전체 열 수에 맞춰 조정
+			detailCell.innerHTML = `
+				<div class="card" style="margin: 10px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+					<div class="card-body">
+						<h5 class="card-title">리뷰 내용</h5>
+						<p>${"${review.companyReviewContent}"}</p>
+					</div>
+				</div>
+			`;
+			detailRow.appendChild(detailCell);
+
+			row.insertAdjacentElement("afterend", detailRow);
 		}
 
 		// 로딩 창 표시 함수
@@ -170,6 +211,27 @@
 				loadingElement.remove();
 			}
 		}
+
+		function sortTable(columnIndex) {
+			const table = document.querySelector("table");
+			const tbody = table.querySelector("tbody");
+			const rows = Array.from(tbody.rows);
+			const isAscending = table.getAttribute("data-sort-order") === "asc";
+
+			rows.sort((a, b) => {
+				const cellA = a.cells[columnIndex].textContent.trim();
+				const cellB = b.cells[columnIndex].textContent.trim();
+
+				if (!isNaN(cellA) && !isNaN(cellB)) {
+					return isAscending ? cellA - cellB : cellB - cellA;
+				} else {
+					return isAscending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+				}
+			});
+
+			table.setAttribute("data-sort-order", isAscending ? "desc" : "asc");
+			tbody.append(...rows);
+		}
 	</script>
 
 </head>
@@ -184,7 +246,9 @@
 	<main class="flex-grow-1">
 		<div class="m_review-container">
 			<div class="m_review-header">
-				<h1>전체 기업 리뷰</h1>
+				<a href="/member/company/detail/${companyId}" id="companyName" class="fs-3 fw-bold text-black text-decoration-none position-relative d-inline-block">
+					<span class="position-absolute start-0 bottom-0 w-100 h-100 border-bottom border-3 border-black transition-all"></span>
+				</a>
 				<!-- 리뷰 작성 버튼 -->
 
 				<div class="search-container">
@@ -199,13 +263,11 @@
 
 			<table>
 				<thead>
-				<tr>
-					<th>회사 이름</th>
+				<tr class="text-center">
 					<th>사용자</th>
 					<th>제목</th>
 					<th>평균별점</th>
 					<th>작성일자</th>
-					<th>자세히 보기</th>
 				</tr>
 				</thead>
 				<tbody>

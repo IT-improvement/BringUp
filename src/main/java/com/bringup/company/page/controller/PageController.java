@@ -61,14 +61,9 @@ public class PageController {
         return "company/product/ticket";
     }
 
-    @GetMapping("/review/corporation")
-    public String reviewCorporation(){
-        return "company/review/corporation";
-    }
-
-    @GetMapping("/review/interview")
-    public String reviewInterview(){
-        return "company/review/interview";
+    @GetMapping("/review/management")
+    public String reviewManagement(){
+        return "company/review/management";
     }
 
     @GetMapping("/recommendation")
