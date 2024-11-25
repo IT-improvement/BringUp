@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log("서버 응답:", data);
                 if (data.includes("회원가입이 성공적으로 완료되었습니다.")) {
                     alert('회원가입 성공!');
-                    window.location.href = '/member/login';
+                    window.location.href = '/member/Login';
                 } else {
                     alert('회원가입 실패: ' + data);
                 }
