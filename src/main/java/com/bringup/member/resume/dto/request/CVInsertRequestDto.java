@@ -13,4 +13,5 @@ public class CVInsertRequestDto {
     private String skill;
     private int userIndex;
     private String status;
+    private String title;
 }

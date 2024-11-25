@@ -40,9 +40,9 @@ public class CVController {
     @GetMapping("/cv/{cvindex}")
     public String readCv(@PathVariable(name = "cvindex") String cvindex, Model model){
         CVReadResponseDto response = cvService.readCv(cvindex);
-        model.addAttribute("cvImage",response.getCvImage());
+        //model.addAttribute("cvImage",response.getCvImage());
         model.addAttribute("mainCv",response.isMainCv());
-        model.addAttribute("education",response.getEducation());
+        //model.addAttribute("education",response.getEducation());
         model.addAttribute("skill",response.getSkill());
         model.addAttribute("userIndex",response.getUserIndex());
         return "member/resume/cv";

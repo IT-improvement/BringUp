@@ -167,7 +167,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/company"),
                 antMatcher("/page/admin/**"),
                 antMatcher("/member/join"),
-
+                antMatcher("/member/bookmark"),
                 antMatcher("/main/list"),
                 antMatcher("/member/memberProfile"),
                 antMatcher("/member/interview/iv_list"),
@@ -241,7 +241,9 @@ public class SpringSecurityConfig {
                 antMatcher("/member/notice/postDetail/{boardIndex}"),
                 antMatcher("/admin/**"),
                 antMatcher(GET, "/member/applyList"),
-
+                antMatcher("/mem/addCompany/list"),
+                antMatcher("/mem/addCompany/"),
+                antMatcher(POST,"/mem/applyRecruitment"),
                 antMatcher("/member/interview/{reviewId}"),
                 antMatcher("/member/interview/delete/{reviewId}"),
                 antMatcher("/member/interview/iv_create"),
