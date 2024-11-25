@@ -1,4 +1,3 @@
-/*
 package com.bringup.member.resume.dto.response;
 
 import com.bringup.common.response.ResponseCode;
@@ -45,4 +44,3 @@ public class CVReadResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
-*/
