@@ -1,3 +1,4 @@
+/*
 package com.bringup.member.resume.controller;
 
 import com.bringup.member.resume.domain.service.CVService;
@@ -31,3 +32,4 @@ public class CVController {
     }
 
 }
+*/

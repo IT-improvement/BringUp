@@ -74,6 +74,10 @@ public class MainService {
         return MemberInfoDto.builder()
                 .userName(userEntity.getUserName())
                 .userEmail(userEntity.getUserEmail())
+<<<<<<< Updated upstream
+=======
+                //.cvImage(mainCv.getCvImage())
+>>>>>>> Stashed changes
                 .skills(mainCv.getSkill())  // "java, c, c++" 형식으로 가져옴
                 .build();
     }

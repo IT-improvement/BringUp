@@ -23,4 +23,7 @@ public class ScrapRecuritmentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_index", referencedColumnName = "user_index", nullable = false)
     private UserEntity userIndex;
+
+    @Column(name = "status", nullable = false)
+    private String status; // 기본값 설정
 }

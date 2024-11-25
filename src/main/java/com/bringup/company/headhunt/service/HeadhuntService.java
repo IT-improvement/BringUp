@@ -1,3 +1,4 @@
+/*
 package com.bringup.company.headhunt.service;
 
 import com.bringup.common.bookmark.domain.entity.CompanyBookMarkEntity;
@@ -177,4 +178,4 @@ public class HeadhuntService {
                 .collect(Collectors.toList());
     }
 
-}
+}*/
