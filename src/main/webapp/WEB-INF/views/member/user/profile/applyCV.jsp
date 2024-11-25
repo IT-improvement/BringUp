@@ -60,6 +60,12 @@
             let allData = [];
             let filteredData = [];
 
+            let statusCounts = {
+                IN_PROGRESS: 0,
+                PASSED: 0,
+                FAILED: 0
+            };
+
             function fetchData(){
                 fetch('/member/applyList', {
                     method: 'GET',
@@ -74,6 +80,9 @@
                         allData = data.data;
                         filteredData = allData;
                         totalItems = allData.length;
+
+                        countStatuses(allData);
+                        renderStatusCounts();
                         renderPage(currentPage);
                     })
                     .catch(error => {
@@ -83,6 +92,21 @@
                             recruitmentListBody.innerHTML = '<tr><td colspan="6" class="text-center">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>';
                         }
                     });
+            }
+
+            function countStatuses(data) {
+                statusCounts = { IN_PROGRESS: 0, PASSED: 0, FAILED: 0 };
+                data.forEach(apply => {
+                    if (apply.status in statusCounts) {
+                        statusCounts[apply.status]++;
+                    }
+                });
+            }
+
+            function renderStatusCounts() {
+                document.getElementById('in-progress-count').textContent = `${"${statusCounts.IN_PROGRESS}개"}`;
+                document.getElementById('passed-count').textContent = `${"${statusCounts.PASSED}개"}`;
+                document.getElementById('failed-count').textContent = `${"${statusCounts.FAILED}개"}`;
             }
 
             function renderPage(page){
@@ -95,20 +119,27 @@
 
                 pageData.forEach((apply, index) => {
                     const row = document.createElement('tr');
-                    const number = apply.index;
+                    const number = apply.applyCVIndex;
+
+                    const applicationTypeText = apply.applicationType === 'RECRUITMENT' ? '일반' :
+                        apply.applicationType === 'FREELANCER' ? '프리랜서' : '알 수 없음';
+
+                    const statusText = apply.status === 'IN_PROGRESS' ? '진행 중' :
+                        apply.status === 'PASSED' ? '합격' :
+                            apply.status === 'FAILED' ? '불합격' : '알 수 없음';
 
                     row.innerHTML = `
 						<td>${"${start + index + 1}"}</td>
-						<td>${"${apply.cvIndex}"}</td>
+						<td>${"${apply.cv.cvIndex}"}</td>
 						<td>${"${apply.companyName}"}</td>
 						<td>${"${apply.recruitmentTitle}"}</td>
-						<td>${"${apply.applicationType}"}</td>
-						<td>${"${apply.status}"}</td>
+						<td>${"${applicationTypeText}"}</td>
+						<td>${"${statusText}"}</td>
 						<td>${"${apply.applyCVDate}"}</td>
 					`;
                     row.style.cursor = 'pointer';
                     row.addEventListener('click', () => {
-                        window.location.href = `/` + number;
+                        window.location.href = `/member/recruitment/details/` + number;
                     });
                     applyListBody.appendChild(row);
                 });
@@ -134,8 +165,8 @@
                                     <i class="bi bi-people-fill"></i>
                                 </div>
                                 <div class="ms-3">
-                                    <h3>10개</h3>
-                                    <h6 class="mb-0">지원한 공고</h6>
+                                    <h3 id="in-progress-count">0개</h3>
+                                    <h6 class="mb-0">진행중인 공고</h6>
                                 </div>
                             </div>
                         </div>
@@ -147,8 +178,8 @@
                                     <i class="bi bi-file-earmark-text-fill"></i>
                                 </div>
                                 <div class="ms-3">
-                                    <h3>8개</h3>
-                                    <h6 class="mb-0">진행중인 공고</h6>
+                                    <h3 id="passed-count">0개</h3>
+                                    <h6 class="mb-0">합격</h6>
                                 </div>
                             </div>
                         </div>
@@ -160,8 +191,8 @@
                                     <i class="bi bi-suit-heart-fill"></i>
                                 </div>
                                 <div class="ms-3">
-                                    <h3>2개</h3>
-                                    <h6 class="mb-0">완료된 공고</h6>
+                                    <h3 id="failed-count">0개</h3>
+                                    <h6 class="mb-0">불합격</h6>
                                 </div>
                             </div>
                         </div>
