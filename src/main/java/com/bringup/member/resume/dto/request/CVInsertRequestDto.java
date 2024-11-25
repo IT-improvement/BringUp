@@ -9,9 +9,11 @@ import java.util.List;
 @Setter
 public class CVInsertRequestDto {
     private boolean mainCv;
-    private String skill;
-    private int userIndex;
+    private List<String> skill;
     private String title;
     private List<Integer> cvAward;
     private List<Integer> cvBlog;
+    private List<Integer> cvCareer;
+    private List<Integer> cvCertificate;
+    private List<Integer> cvSchool;
 }

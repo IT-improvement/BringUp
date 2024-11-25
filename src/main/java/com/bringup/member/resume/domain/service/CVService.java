@@ -8,5 +8,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface CVService {
 
-    ResponseEntity<? super CVInsertResponseDto> insertCv(CVInsertRequestDto request);
+    ResponseEntity<? super CVInsertResponseDto> insertCv(CVInsertRequestDto request, int code);
 }
