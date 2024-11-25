@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -44,50 +43,50 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function(){
-            document.body.addEventListener('click', function(event) {
-                if (event.target.id === 'logoutButton' || event.target.closest('#logoutButton')) {
-                    console.log("로그아웃 버튼 클릭");
-                    event.preventDefault();
-                    localStorage.removeItem('accessToken');
-                    window.location.href = '/';
-                }
-            });
+        document.addEventListener('DOMContentLoaded', function() {
+            window.searchByCategory = (category) => {
+                document.getElementById('search-category').value = 'category';
+                document.getElementById('search-keyword').value = category;
+                handleSearch(new Event('submit'));
+            };
+
+            window.searchByScale = (scale) => {
+                document.getElementById('search-category').value = 'scale';
+                document.getElementById('search-keyword').value = scale;
+                handleSearch(new Event('submit'));
+            };
 
             const fetchCompanyLists = async () => {
                 try {
                     const companyResponse = await fetch('/company/list', {
-                        method : 'GET'
+                        method: 'GET'
                     });
                     const companyData = await companyResponse.json();
-                    if (companyData.data && companyData.data.length > 0) {
-                        renderCompanies(companyData.data);
-                    } else {
-                        displayNoCompaniesMessage();
-                    }
-                }catch (error){
+                    console.log(companyData);
+                    return companyData.data;
+                } catch (error) {
                     console.error("Error fetching companies : ", error);
                     displayErrorMessage();
+                    return [];
                 }
             };
 
             const renderCompanies = (allCompanies) => {
                 let html = '';
                 allCompanies.forEach(company => {
-                    console.log(company);
                     html += `
-                        <div class="col-sm-6 col-lg-3 company-card">
+                    <div class="col-sm-6 col-lg-3 company-card">
                         <div class="card bg-transparent">
-                            <!-- Card img -->
                             <img class="card-img rounded" src=${"${company.companyLogo}"} alt="Card image" style="width: 200px; height: 200px;">
                             <div class="card-body px-0 pt-3">
-                                <h6 class="card-title mb-0"><a href="#" class="btn-link text-reset fw-bold">${"${company.companyName}"}</a></h6>
-                                <!-- Card info -->
+                                <h6 class="card-title mb-0"><a href="/member/company/detail/${"${company.companyId}"}" class="btn-link text-reset fw-bold">${"${company.companyName}"}</a></h6>
                                 <ul class="nav nav-divider align-items-center text-uppercase small mt-2">
                                     <li class="nav-item">
-                                        <a href="#" class="text-reset btn-link">${"${company.companyCategory}"}</a>
+                                        <a href="#" class="text-reset btn-link" onclick="event.preventDefault(); searchByCategory('${"${company.companyCategory}"}')">${"${company.companyCategory}"}</a>
                                     </li>
-                                    <li class="nav-item">${"${company.companyScale}"}</li>
+                                    <li class="nav-item">
+                                        <a href="#" class="text-reset btn-link" onclick="event.preventDefault(); searchByScale('${"${company.companyScale}"}')">${"${company.companyScale}"}</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -98,18 +97,56 @@
                 companyListContainer.innerHTML = html;
             };
 
-            const displayErrorMessage = () => {
-                const companyListContainer = document.getElementById('company-list');
-                companyListContainer.innerHTML = "<p>기업 리스트를 불러오는 중 오류가 발생했습니다.</p>";
+            const filterCompanies = (companies, category, keyword) => {
+                return companies.filter(company => {
+                    const matchesCategory = category === 'all' || 
+                        (category === 'category' && company.companyCategory === keyword) ||
+                        (category === 'scale' && company.companyScale === keyword) ||
+                        (category === 'title' && company.companyName.includes(keyword));
+                    return matchesCategory;
+                });
             };
 
-            // 데이터가 없는 경우 표시할 함수
-            const displayNoCompaniesMessage = () => {
-                const companyListContainer = document.getElementById('company-list');
-                companyListContainer.innerHTML = "<p>등록된 기업 정보가 없습니다.</p>";
+            const renderSearchResultMessage = (category, keyword) => {
+                const categoryText = {
+                    'all': '전체',
+                    'title': '기업 이름',
+                    'scale': '기업 규모',
+                    'category': '기업 카테고리'
+                }[category] || '전체';
+
+                const message = keyword 
+                    ? `${"${categoryText}"}에서 "${"${keyword}"}"에 대한 검색 결과`
+                    : `${"${categoryText}"}에서 검색 결과가 없습니다.`;
+                document.getElementById('search-result-message').textContent = message;
+                document.getElementById('search-result-message').classList.add('fw-bold', 'fs-4');
             };
 
-            fetchCompanyLists();
+            const handleSearch = async (event) => {
+                event.preventDefault();
+                const category = document.getElementById('search-category').value;
+                const keyword = document.getElementById('search-keyword').value.trim();
+                const companyData = await fetchCompanyLists();
+                const filteredCompanies = filterCompanies(companyData, category, keyword);
+                renderSearchResultMessage(category, keyword);
+                renderCompanies(filteredCompanies);
+                document.getElementById('search-result-message-container').classList.remove('d-none');
+            };
+
+            window.searchReset = () => {
+                document.getElementById('search-category').value = 'all';
+                document.getElementById('search-keyword').value = '';
+                fetchCompanyLists().then(renderCompanies);
+                document.getElementById('search-result-message').textContent = '';
+                document.getElementById('search-result-message-container').classList.add('d-none');
+            };
+
+
+
+            document.getElementById('search-form').addEventListener('submit', handleSearch);
+
+            fetchCompanyLists().then(renderCompanies);
+
         });
     </script>
 </head>
@@ -134,10 +171,9 @@
                                 <label for="search-category" class="form-label">카테고리</label>
                                 <select class="form-select" id="search-category">
                                     <option value="all">전체</option>
-                                    <option value="title">공고 제목</option>
-                                    <option value="type">공고 타입</option>
-                                    <option value="recruitmentType">채용 형태</option>
-                                    <option value="deadline">마감일</option>
+                                    <option value="title">기업 이름</option>
+                                    <option value="scale">기업 규모</option>
+                                    <option value="category">기업 카테고리</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -152,8 +188,11 @@
                 </div>
             </div>
             <div class="container">
+                <div id="search-result-message-container" class="d-flex justify-content-between align-items-center mb-3 d-none">
+                    <div id="search-result-message" class="mb-3"></div>
+                    <a href="#" class="btn-link text-reset fw-bold" onclick="event.preventDefault(); searchReset()">전체 기업 보기</a>
+                </div>
                 <div class="row g-4 p-3 flex-fill company-list-card" id="company-list">
-
                 </div>
             </div>
         </div>

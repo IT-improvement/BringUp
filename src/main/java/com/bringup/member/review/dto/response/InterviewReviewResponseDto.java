@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class InterviewReviewResponseDto {
     private int interviewReviewIndex;
-    private String ambience;
+    private int ambience;
     private int difficulty;
     private String interviewReviewTitle;
     private String interviewReviewDate;
