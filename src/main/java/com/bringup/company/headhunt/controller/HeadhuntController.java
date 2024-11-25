@@ -1,3 +1,4 @@
+/*
 package com.bringup.company.headhunt.controller;
 
 import com.bringup.common.response.BfResponse;
@@ -41,3 +42,4 @@ public class HeadhuntController {
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, savedCVs));
     }
 }
+*/

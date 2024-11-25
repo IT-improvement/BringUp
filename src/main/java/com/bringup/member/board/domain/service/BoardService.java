@@ -102,6 +102,14 @@ public class BoardService {
     }
 
     @Transactional
+    public BoardResponseDto getNoticeDetails(int boardIndex){
+        BoardEntity board = boardRepository.findById(boardIndex)
+                .orElseThrow(()->new BoardException(NOT_FOUND_WRITING));
+
+        return convertDto(board);
+    }
+
+    @Transactional
     public BoardResponseDto getPostDetails(UserDetailsImpl userDetails, int boardIndex){
         BoardEntity board = boardRepository.findById(boardIndex)
                 .orElseThrow(()->new BoardException(NOT_FOUND_WRITING));
@@ -153,9 +161,11 @@ public class BoardService {
     private BoardResponseDto convertDto(BoardEntity board){
         return BoardResponseDto.builder()
                 .boardIndex(board.getBoardIndex())
+                .user(board.getUser())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .boardImage(board.getBoardImage())
+                .createPostTime(board.getCreatedPostTime())
                 .updatePostTime(board.getUpdatePostTime())
                 .build();
     }

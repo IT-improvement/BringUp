@@ -10,23 +10,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class UserRecruitmentDetailDto {
-    // 회사 관련 정보
-    private String companyName;
-    private String[] companyImg;  // 회사 이미지
-    private String companyContent;  // 회사 소개 내용
-    private String companyWelfare;  // 복지 혜택
-    private String companyAddress;  // 근무 지역
-
-    // 채용 공고 관련 정보
-    private String recruitmentTitle;
-    private String career;
-    private String salary;
-    private String recruitmentPeriod;
-    private String requirements;
-    private String hospitality;  // 우대 사항
-    private String workDetail;   // 업무 소개
-
-    private int applicantCount;  // 지원자 수
-    private int minimumSalary;   // 최소 연봉
-    private String deadline;     // 마감일
+    private String c_logo;
+    private String c_name;
+    private String[] c_img;
+    private String c_intro;
+    private String c_welfare;
+    private String c_address;
+    private String r_title;
+    private String r_workdetail;
+    private String r_requirement;
+    private String r_hospitality;
+    private String r_career;
+    private String r_salary;
+    private String r_period;
 }

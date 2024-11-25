@@ -20,9 +20,9 @@ public class LetterEntity {
     @Id
     private int userIndex;
 
-    private String answser1;
-    private String answser2;
-    private String answser3;
+    private String answer1;
+    private String answer2;
+    private String answer3;
     private String status;
 
     public LetterEntity(int userIndex){
