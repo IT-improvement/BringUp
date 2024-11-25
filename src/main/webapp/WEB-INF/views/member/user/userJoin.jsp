@@ -249,7 +249,7 @@
                     <div>
                         <label class="user-form-label">군필 여부</label>
                         <input type="hidden" id="militaryStatusHidden" name="military_status_hidden" value="">
-                        <select class="user-form-control" id="militaryStatus" name="military_status" required>
+                        <select class="user-form-control" id="militaryStatus" name="military.status" required>
                             <option value="군필">군필</option>
                             <option value="미필">미필</option>
                             <option value="면제">면제</option>

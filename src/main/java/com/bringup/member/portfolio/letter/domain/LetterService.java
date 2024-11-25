@@ -38,25 +38,19 @@ public class LetterService {
             return ResponseDto.databaseError();
         }
 
-<<<<<<< Updated upstream
         if(requestDto.getAnswser1()!=null){
             letterEntity.setAnswer1(requestDto.getAnswser1());
-=======
-      /*  if(requestDto.getAnswser1()!=null){
-            letterEntity.setAnswser1(requestDto.getAnswser1());
->>>>>>> Stashed changes
+
         }
         if(requestDto.getAnswser2()!=null) {
             letterEntity.setAnswer2(requestDto.getAnswser2());
         }
         if(requestDto.getAnswser3()!=null) {
-<<<<<<< Updated upstream
             letterEntity.setAnswer3(requestDto.getAnswser3());
         }
-=======
-            letterEntity.setAnswser3(requestDto.getAnswser3());
-        }*/
->>>>>>> Stashed changes
+
+
+
         try{
             letterRepository.save(letterEntity);
         }catch (Exception e) {

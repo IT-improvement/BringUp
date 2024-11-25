@@ -81,7 +81,7 @@ public class UserRecruitmentController {
         userRecruitmentService.removeBookmark(userIndex, recruitmentIndex);
         return ResponseEntity.ok("북마크가 삭제되었습니다.");
     }
-
+    //북마크 확인
     @GetMapping("/isBookmarked/{recruitmentId}")
     public ResponseEntity<Map<String, Boolean>> isBookmarked(
             @AuthenticationPrincipal UserDetailsImpl user,

@@ -71,6 +71,8 @@
                     }
 
                     const recruitmentData = data.data;
+                    document.getElementById('recruitmentTitle').textContent = recruitmentData.r_title;
+
 
                     // 회사 정보와 채용 정보 업데이트
                     document.getElementById('c_logo').src = recruitmentData.c_logo;

@@ -20,10 +20,7 @@ public class CandidateResponseDto {
 
     public CandidateResponseDto(CVEntity cv, UserEntity user) {
         this.cvIndex = cv.getCvIndex();
-<<<<<<< Updated upstream
-=======
-        /*this.cvImage = cv.getCvImage();*/
->>>>>>> Stashed changes
+
         this.userName = user.getUserName();
         this.userEmail = user.getUserEmail();
         this.userAddress = user.getUserAddress();
