@@ -1,5 +1,6 @@
 package com.bringup.member.resume.controller;
 
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.member.resume.domain.service.CVService;
 import com.bringup.member.resume.dto.request.CVInsertRequestDto;
 import com.bringup.member.resume.dto.request.CVPortfolioRequestDto;
@@ -21,8 +22,9 @@ public class CVController {
     private final CVService cvService;
 
     @PostMapping("/cv/insert")
-    public ResponseEntity<? super CVInsertResponseDto> insertCv(@RequestBody @Valid CVInsertRequestDto requestBody){
-        ResponseEntity<? super CVInsertResponseDto> response = cvService.insertCv(requestBody);
+    public ResponseEntity<? super CVInsertResponseDto> insertCv(@RequestBody @Valid CVInsertRequestDto requestBody, @AuthenticationPrincipal UserDetailsImpl user) {
+        int code = user.getId();
+        ResponseEntity<? super CVInsertResponseDto> response = cvService.insertCv(requestBody, code);
         return response;
     }
     @GetMapping("/cv")

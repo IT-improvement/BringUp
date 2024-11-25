@@ -21,14 +21,11 @@ public class CVEntity {
     private int userIndex;
     private String title;
 
-
-
-
-    public CVEntity(CVInsertRequestDto dto){
+    public CVEntity(CVInsertRequestDto dto,String skill, int userIndex){
         this.mainCv = dto.isMainCv();
-        this.skill=dto.getSkill();
-        this.userIndex=dto.getUserIndex();
+        this.skill=skill;
+        this.title=dto.getTitle();
+        this.userIndex=userIndex;
     }
-
 
 }
