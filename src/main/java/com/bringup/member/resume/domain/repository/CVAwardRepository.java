@@ -11,4 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface CVAwardRepository extends JpaRepository<CVAward, CVAwardPK> {
+    List<CVAward> findByCvIndex(int cvIndex);
 }

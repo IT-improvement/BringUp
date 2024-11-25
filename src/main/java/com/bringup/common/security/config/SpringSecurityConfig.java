@@ -260,7 +260,7 @@ public class SpringSecurityConfig {
                 antMatcher("/award/list"),
                 antMatcher("/portfolio/career/list"),
                 antMatcher("/portfolio/career/insert"),
-
+                antMatcher("/cv/**"),
 
 
 

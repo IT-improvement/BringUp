@@ -15,21 +15,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
 @RequiredArgsConstructor
+@RestController
+@RequestMapping("/cv")
 public class CVController {
 
     private final CVService cvService;
 
-    @PostMapping("/cv/insert")
+    @PostMapping("/insert")
     public ResponseEntity<? super CVInsertResponseDto> insertCv(@RequestBody @Valid CVInsertRequestDto requestBody, @AuthenticationPrincipal UserDetailsImpl user) {
         int code = user.getId();
         ResponseEntity<? super CVInsertResponseDto> response = cvService.insertCv(requestBody, code);
         return response;
     }
-    @GetMapping("/cv")
-    public String listCv(@AuthenticationPrincipal String userIndex){
-        return "member/resume/list";
-    }
 
+    @GetMapping("/{cvIndex}")
+    public ResponseEntity<? super CVReadResponseDto> readCv(@PathVariable("cvIndex")String index){
+        return cvService.readCV(index);
+    }
 }
