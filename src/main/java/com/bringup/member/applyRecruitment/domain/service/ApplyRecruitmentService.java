@@ -97,26 +97,34 @@ public class ApplyRecruitmentService {
 
         List<ApplyRecruitmentResponseDto> applyList = new ArrayList<>();
 
-        for (CVEntity cv : cvList){
+        for (CVEntity cv : cvList) {
+            // 이력서와 연관된 모든 지원 내역 조회
             List<ApplyRecruitmentEntity> applyRecruitments = applyRecruitmentRepository.findAllByCv_CvIndex(cv.getCvIndex());
-            for (ApplyRecruitmentEntity applyRecruitment : applyRecruitments){
-                if (applyRecruitment.getApplicationType() != ApplicationType.FREELANCER){
-                    // 공고 정보 조회
-                    Optional<Recruitment> recruitmentOpt = recruitmentRepository.findByRecruitmentIndex(applyRecruitment.getRecruitmentIndex());
-                    if (recruitmentOpt.isPresent()){
-                        Recruitment recruitment = recruitmentOpt.get();
 
-                        //회사 정보 조회
-                        Optional<Company> companyOpt = companyRepository.findById(recruitment.getCompany().getCompanyId());
-                        String companyName = companyOpt.map(Company::getCompanyName).
-                                orElseThrow(() -> new ApplyRecruitmentException(NOT_FOUND_COMPANY));
+            for (ApplyRecruitmentEntity applyRecruitment : applyRecruitments) {
+                if (applyRecruitment.getApplicationType() == ApplicationType.RECRUITMENT) {
+                    // 일반 공고 정보 조회
+                    Recruitment recruitment = recruitmentRepository.findByRecruitmentIndex(applyRecruitment.getRecruitmentIndex())
+                            .orElseThrow(() -> new ApplyRecruitmentException(NOT_FOUND_APPLY_RECRUITMENT));
 
-                        //Dto 값 설정
-                        ApplyRecruitmentResponseDto dto = applyDto(applyRecruitment, recruitment.getRecruitmentTitle(), companyName);
-                        dto.setRecruitmentTitle(recruitment.getRecruitmentTitle()); // 공고 제목
-                        dto.setCompanyName(companyName); // 회사 이름
-                        applyList.add(dto);
-                    }
+                    // 회사 정보 조회
+                    String companyName = recruitment.getCompany().getCompanyName();
+
+                    // DTO 생성 및 추가
+                    ApplyRecruitmentResponseDto dto = applyDto(applyRecruitment, recruitment.getRecruitmentTitle(), companyName);
+                    applyList.add(dto);
+
+                } else if (applyRecruitment.getApplicationType() == ApplicationType.FREELANCER) {
+                    // 프리랜서 공고 정보 조회
+                    RecruitmentFreelancer freelancer = freelancerRepository.findByProjectIndex(applyRecruitment.getRecruitmentIndex())
+                            .orElseThrow(() -> new ApplyRecruitmentException(NOT_FOUND_APPLY_RECRUITMENT));
+
+                    // 회사 정보 조회 (프리랜서 공고와 연관된 회사)
+                    String companyName = freelancer.getCompany().getCompanyName();
+
+                    // DTO 생성 및 추가
+                    ApplyRecruitmentResponseDto dto = applyDto(applyRecruitment, freelancer.getProjectTitle(), companyName);
+                    applyList.add(dto);
                 }
             }
         }
