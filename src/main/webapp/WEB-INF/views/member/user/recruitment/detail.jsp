@@ -257,9 +257,7 @@
 
                         <div class="d-flex flex-column align-items-center text-center mt-4">
                             <div class="d-flex justify-content-between w-100 border-bottom pb-2 mb-2">
-                                <button id="bookmarkButton" class="btn btn-outline-secondary rounded-circle border-0">
-                                    <i id="bookmarkIcon" class="bi bi-bookmark"></i>
-                                </button>
+
                                 <h5 class="card-title mb-0">경력</h5><p id="r_career" class="card-text mb-0"></p>
                             </div>
                             <div class="d-flex justify-content-between w-100 border-bottom pb-2 mb-2">
