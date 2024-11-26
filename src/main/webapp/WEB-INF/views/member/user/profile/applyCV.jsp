@@ -119,7 +119,7 @@
 
                 pageData.forEach((apply, index) => {
                     const row = document.createElement('tr');
-                    const number = apply.applyCVIndex;
+                    const number = apply.recruitmentIndex;
 
                     const applicationTypeText = apply.applicationType === 'RECRUITMENT' ? '일반' :
                         apply.applicationType === 'FREELANCER' ? '프리랜서' : '알 수 없음';
