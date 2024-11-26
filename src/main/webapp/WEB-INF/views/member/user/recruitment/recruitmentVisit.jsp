@@ -42,13 +42,16 @@
     <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <!-- 메인 스타일시트 -->
     <!-- <link rel="stylesheet" type="text/css" href="/resources/style/member/user/파일명.css"> -->
 
     <!--  JS -->
     <!-- <script src="/resources/script/member/user/파일명.js"></script> -->
     <script>
-        document.addEventListener('DOMContentLoaded', function (){
+        document.addEventListener('DOMContentLoaded', function(){
             const accessToken = localStorage.getItem('accessToken');
             console.log("Access token: " + accessToken);
             if (!accessToken){
@@ -63,8 +66,8 @@
             let filteredData = [];
 
             function fetchData(){
-                fetch('/member/notice/detail/list', {
-                    method: "GET",
+                fetch('/recruitment/visitList', {
+                    method: 'GET',
                     headers: {
                         'Authorization': `Bearer ` + accessToken,
                         'Content-Type': 'application/json'
@@ -76,40 +79,42 @@
                         allData = data.data;
                         filteredData = allData;
                         totalItems = allData.length;
+
                         renderPage(currentPage);
                     })
                     .catch(error => {
-                        console.error('작성한 게시글 목록을 가져오는 중 오류 발생 : ', error);
-                        const noticeListBody = document.getElementById('notice-list-body');
-                        if (noticeListBody) {
-                            noticeListBody.innerHTML = '<tr><td colspan="6" class="text-center">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>';
+                        console.error('방문 목록을 가져오는 중 오류 발생 : ', error);
+                        const recruitmentListBody = document.getElementById('visit-list-body');
+                        if (recruitmentListBody) {
+                            recruitmentListBody.innerHTML = '<tr><td colspan="6" class="text-center">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>';
                         }
                     });
             }
 
             function renderPage(page){
-                const noticeListBody = document.getElementById('notice-list-body');
-                noticeListBody.innerHTML = '';
+                const visitListBody = document.getElementById('visit-list-body');
+                visitListBody.innerHTML = '';
 
                 const start = (page - 1) * itemsPerPage;
                 const end = start + itemsPerPage;
                 const pageData = filteredData.slice(start, end);
 
-                pageData.forEach((notice, index) => {
+                pageData.forEach((visit, index) => {
                     const row = document.createElement('tr');
-                    const number = notice.boardIndex;
+                    const number = visit.recruitmentIndex;
 
                     row.innerHTML = `
 						<td>${"${start + index + 1}"}</td>
-						<td>${"${notice.user.userEmail}"}</td>
-						<td>${"${notice.title}"}</td>
-						<td>${"${notice.updatePostTime}"}</td>
+						<td>${"${visit.user.userEmail}"}</td>
+						<td>${"${visit.recruitmentTitle}"}</td>
+						<td>${"${visit.companyName}"}</td>
+						<td>${"${visit.visitDate}"}</td>
 					`;
                     row.style.cursor = 'pointer';
                     row.addEventListener('click', () => {
-                        window.location.href = `/member/noticeDetail?index=`+number;
+                        window.location.href = `/member/recruitment/details/`+number;
                     });
-                    noticeListBody.appendChild(row);
+                    visitListBody.appendChild(row);
                 });
             }
             fetchData();
@@ -126,12 +131,12 @@
 <body class="d-flex flex-column min-vh-100">
 <div class="container" style="max-width: 1260px;">
     <main class="flex-grow-1 m-4">
-        <p class="h1">나의 게시글</p>
+        <p class="h1">내가 본 공고</p>
         <div class="py-4">
             <div class="card border bg-transparent rounded-3">
                 <div class="card-header bg-transparent border-bottom p-3">
                     <div class="d-sm-flex justify-content-between align-items-center">
-                        <h5 class="mb-2 mb-sm-0">게시글<span id="jobCount" class="badge bg-primary bg-opacity-10 text-primary"></span></h5>
+                        <h5 class="mb-2 mb-sm-0">공고<span id="jobCount" class="badge bg-primary bg-opacity-10 text-primary"></span></h5>
                         <a href="/member/createNotice" class="btn btn-sm btn-primary mb-0">작성</a>
                     </div>
                 </div>
@@ -162,12 +167,13 @@
                             <thead class="table-dark">
                             <tr>
                                 <th scope="col">번호</th>
-                                <th scope="col">작성자</th>
-                                <th scope="col">제목</th>
-                                <th scope="col">작성일</th>
+                                <th scope="col">이메일</th>
+                                <th scope="col">공고 제목</th>
+                                <th scope="col">기업</th>
+                                <th scope="col">본 날짜</th>
                             </tr>
                             </thead>
-                            <tbody id="notice-list-body" class="border-top-0 text-center">
+                            <tbody id="visit-list-body" class="border-top-0 text-center">
                             </tbody>
                         </table>
                     </div>
