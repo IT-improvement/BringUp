@@ -1,14 +1,20 @@
 package com.bringup.member.recruitment.domain.service;
 
+import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.enums.RecruitmentErrorCode;
 import com.bringup.common.enums.RecruitmentType;
+import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.company.user.entity.Company;
+import com.bringup.member.recruitment.domain.entity.RecruitmentVisit;
 import com.bringup.member.recruitment.domain.entity.ScrapRecuritmentEntity;
+import com.bringup.member.recruitment.domain.repository.RecruitmentVisitRepository;
 import com.bringup.member.recruitment.domain.repository.ScrapRecruitmentRepository;
+import com.bringup.member.recruitment.dto.response.RecruitmentVisitResponseDto;
 import com.bringup.member.recruitment.dto.response.UserRecruitmentDetailDto;
 import com.bringup.member.user.domain.entity.UserEntity;
+import com.bringup.member.user.domain.exception.MemberException;
 import com.bringup.member.user.domain.repository.UserRepository;
 import com.bringup.member.recruitment.dto.response.UserRecruitmentDto;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -32,6 +39,7 @@ public class UserRecruitmentService {
     private final RecruitmentRepository userRecruitmentRepository;
     private final UserRepository userRepository;
     private final ScrapRecruitmentRepository scrapRecruitmentRepository;
+    private final RecruitmentVisitRepository recruitmentVisitRepository;
 
     // 모든 UserRecruitmentEntity를 조회하는 메서드
     public List<UserRecruitmentDto> getAllRecruitments() {
@@ -141,7 +149,64 @@ public class UserRecruitmentService {
                 .build();
     }
 
+    @Transactional
+    public void addRecruitmentVisit(UserDetailsImpl userDetails, int recruitmentIndex){
+        UserEntity user = userRepository.findById(userDetails.getId())
+                .orElseThrow(()->new RecruitmentException(RecruitmentErrorCode.NOT_FOUND_MEMBER_ID));
 
+        Recruitment recruitment = userRecruitmentRepository.findByRecruitmentIndex(recruitmentIndex)
+                .orElseThrow(()->new RecruitmentException(RecruitmentErrorCode.NOT_FOUND_RECRUITMENT));
+
+        boolean exists = recruitmentVisitRepository.existsByUserAndRecruitmentIndex(user, recruitment.getRecruitmentIndex());
+        if (exists){
+            throw new RecruitmentException(RecruitmentErrorCode.DUPLICATED_RECRUITMENT);
+        }
+
+        RecruitmentVisit recruitmentVisit = RecruitmentVisit.builder()
+                .user(user)
+                .recruitmentIndex(recruitment.getRecruitmentIndex())
+                .build();
+
+        recruitmentVisitRepository.save(recruitmentVisit);
+    }
+
+    public List<RecruitmentVisitResponseDto> getVisitRecruitment(UserDetailsImpl userDetails){
+        UserEntity user = userRepository.findById(userDetails.getId())
+                .orElseThrow(()->new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
+
+        List<RecruitmentVisit> visitList = recruitmentVisitRepository.findByUser(user);
+
+        if (visitList.isEmpty()){
+            throw new RecruitmentException(RecruitmentErrorCode.NOT_FOUND_VISIT);
+        }
+
+        List<RecruitmentVisitResponseDto> visitDto = new ArrayList<>();
+
+        for (RecruitmentVisit recruitmentVisit : visitList) {
+            int recruitmentIndex = recruitmentVisit.getRecruitmentIndex();
+
+            // 공고 조회
+            Recruitment recruitment = userRecruitmentRepository.findByRecruitmentIndex(recruitmentIndex)
+                    .orElseThrow(() -> new RecruitmentException(RecruitmentErrorCode.NOT_FOUND_RECRUITMENT));
+
+            // 회사 이름 가져오기
+            String companyName = recruitment.getCompany().getCompanyName();
+
+            // DTO 변환
+            RecruitmentVisitResponseDto dto = new RecruitmentVisitResponseDto(
+                    recruitmentVisit.getVisitIndex(),
+                    recruitmentVisit.getUser(),
+                    recruitmentVisit.getRecruitmentIndex(),
+                    recruitmentVisit.getVisitDate(),
+                    recruitment.getRecruitmentTitle(),
+                    companyName
+            );
+
+            visitDto.add(dto);
+        }
+
+        return visitDto;
+    }
 
     private UserRecruitmentDto convertToDto(Recruitment recruitment) {
         UserRecruitmentDto dto = new UserRecruitmentDto();
@@ -151,6 +216,15 @@ public class UserRecruitmentService {
         dto.setCategory(recruitment.getCategory());
         dto.setSkill(recruitment.getSkill());
         dto.setPeriod(recruitment.getPeriod());
+        return dto;
+    }
+
+    private RecruitmentVisitResponseDto convertToDto(RecruitmentVisit recruitmentVisit){
+        RecruitmentVisitResponseDto dto = new RecruitmentVisitResponseDto();
+        dto.setVisitIndex(recruitmentVisit.getVisitIndex());
+        dto.setUser(recruitmentVisit.getUser());
+        dto.setRecruitmentIndex(recruitmentVisit.getRecruitmentIndex());
+        dto.setVisitDate(recruitmentVisit.getVisitDate());
         return dto;
     }
 }

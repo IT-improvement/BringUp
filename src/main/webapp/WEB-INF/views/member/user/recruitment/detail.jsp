@@ -41,18 +41,19 @@
     <script src="/resources/script/common/function/functions.js"></script>
 
     <!-- 메인 JS -->
-    <script src="/resources/script/member/recruitmentDetail.js"></script>
+    <!--<script src="/resources/script/member/recruitmentDetail.js"></script>-->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const path = window.location.pathname;
-            const recruitmentId = path.split('/').pop();
+            const recruitmentIndex = path.split('/').pop();
+            console.log("공고 번호 : ", recruitmentIndex)
 
-            if (!recruitmentId) {
+            if (!recruitmentIndex) {
                 console.error('recruitmentId is null or undefined');
                 return;
             }
 
-            const fetchUrl = `/recruitment/detail/` + recruitmentId;
+            const fetchUrl = `/recruitment/detail/` + recruitmentIndex;
 
             fetch(fetchUrl, {
                 method: 'GET',
@@ -110,19 +111,43 @@
                         if (index === 0) indicator.classList.add('active');
                         carouselIndicators.appendChild(indicator);
                     });
+
+                    fetch(`/recruitment/visit/`+recruitmentIndex, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Failed to save visit record: ${'${response.status}'}`);
+                            }
+                            console.log('Visit record saved successfully');
+                        })
+                        .catch(error => console.error('Error saving visit record:', error));
                 })
                 .catch(error => console.error('Error:', error));
         });
         document.addEventListener('DOMContentLoaded', function () {
             const bookmarkButton = document.getElementById('bookmarkButton');
             const bookmarkIcon = document.getElementById('bookmarkIcon');
+            const path = window.location.pathname;
+            const recruitmentIndex = path.split('/').pop();
+            const accessToken = localStorage.getItem('accessToken');
+            console.log("Access token: " + accessToken);
+
+            if (!recruitmentIndex) {
+                console.error('recruitmentId is null or undefined');
+                return;
+            }
 
             let isBookmarked = false;
 
             // 서버에서 북마크 상태 가져오기
-            fetch('/recruitment/isBookmarked/' + recruitmentId, {
+            fetch('/recruitment/isBookmarked/' + recruitmentIndex, {
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                    'Authorization': `Bearer ` + accessToken,
+                    'Content-Type': 'application/json'
+                }
             })
                 .then(response => response.json())
                 .then(data => {
@@ -137,8 +162,11 @@
 
                 fetch('/recruitment/toggleBookmark', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ recruitmentId: recruitmentId, bookmarked: isBookmarked })
+                    headers: {
+                        'Authorization': `Bearer ` + accessToken,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ recruitmentId: recruitmentIndex, bookmarked: isBookmarked })
                 })
                     .then(response => {
                         if (!response.ok) throw new Error('Failed to toggle bookmark');
