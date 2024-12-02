@@ -1,4 +1,3 @@
-/*
 package com.bringup.company.headhunt.service;
 
 import com.bringup.common.bookmark.domain.entity.CompanyBookMarkEntity;
@@ -7,6 +6,7 @@ import com.bringup.common.bookmark.exception.BookmarkException;
 import com.bringup.common.enums.BookmarkType;
 import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.security.service.UserDetailsImpl;
+import com.bringup.company.headhunt.dto.response.HeadhuntDetailResponseDto;
 import com.bringup.company.headhunt.dto.response.HeadhuntResponseDto;
 import com.bringup.company.recruitment.entity.Recruitment;
 import com.bringup.company.recruitment.repository.RecruitmentRepository;
@@ -14,8 +14,9 @@ import com.bringup.company.user.entity.Company;
 import com.bringup.company.user.exception.CompanyException;
 import com.bringup.company.user.repository.CompanyRepository;
 import com.bringup.member.membership.domain.repository.UserMembershipRepository;
+import com.bringup.member.resume.domain.entity.CVAward;
 import com.bringup.member.resume.domain.entity.CVEntity;
-import com.bringup.member.resume.domain.repository.CVRepository;
+import com.bringup.member.resume.domain.repository.*;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.repository.UserRepository;
 import com.bringup.member.membership.domain.entity.UserMembership;
@@ -37,6 +38,12 @@ public class HeadhuntService {
     private final CompanyBookMarkRepository companyBookMarkRepository;
     private final UserRepository userRepository;
     private final UserMembershipRepository userMembershipRepository;
+    private final CVAwardRepository cvAwardRepository;
+    private final CVBlogRepository cvBlogRepository;
+    private final CVCareerRepository cvCareerRepository;
+    private final CVCertificateRepository cvCertificateRepository;
+    private final CVFreeRepository cvFreeRepository;
+    private final CVSchoolRepository cvSchoolRepository;
 
     // 멤버십 유저 중 스킬이 일치하는 5명의 유저를 랜덤으로 추천하는 메서드 (mainCv가 true인 경우만 포함)
     public List<HeadhuntResponseDto> recommendMembershipCVsBasedOnCompanySkills(UserDetailsImpl userDetails) {
@@ -140,9 +147,7 @@ public class HeadhuntService {
 
         return new HeadhuntResponseDto(
                 cvEntity.getCvIndex(),
-
                 cvEntity.isMainCv(),
-
                 cvEntity.getSkill(),
                 userAddress, // 가공된 주소
                 cvEntity.getUserIndex(), // 유저 인덱스 추가
@@ -171,7 +176,6 @@ public class HeadhuntService {
                     return new HeadhuntResponseDto(
                             cv.getCvIndex(),         // 이력서 인덱스
                             cv.isMainCv(),           // 메인 이력서 여부
-
                             cv.getSkill(),           // 기술 정보
                             user.getUserAddress(),   // 유저 주소
                             user.getUserIndex(),     // 유저 인덱스
@@ -181,4 +185,9 @@ public class HeadhuntService {
                 .collect(Collectors.toList());
     }
 
-}*/
+    public HeadhuntDetailResponseDto getHeadhuntDetail(int cvIdx){
+        return null;
+
+    }
+
+}
