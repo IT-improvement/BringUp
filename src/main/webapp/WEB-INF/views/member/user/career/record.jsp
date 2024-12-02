@@ -116,8 +116,6 @@
     </div>
 
     <script>
-
-
         // 학력 정보 표시 및 메시지 상태 조정
         function fetchSchoolInfo() {
             const accessToken = localStorage.getItem("accessToken");
