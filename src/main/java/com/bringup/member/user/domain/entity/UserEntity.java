@@ -50,6 +50,7 @@ public class UserEntity {
 
     private String githubToken;
 
+
     public UserEntity(JoinDTO joinDTO){
         this.userEmail = joinDTO.getUserEmail();
         this.userName = joinDTO.getUserName();
