@@ -240,6 +240,7 @@ public class SpringSecurityConfig {
                 antMatcher("/member/{reviewId}"),
                 antMatcher("/member/delete/{reviewId}"),
                 antMatcher(GET, "/member/info"),
+                antMatcher(GET, "/member/careerInfo"),
                 antMatcher("/member/m_create"),
                 antMatcher("/member/userNotice"),
                 antMatcher("/member/notice/createPost"),
