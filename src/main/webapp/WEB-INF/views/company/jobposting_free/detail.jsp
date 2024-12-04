@@ -33,7 +33,7 @@
     <script src="/resources/script/common/function/functions.js"></script>
 
     <!-- 프리랜서 프로젝트 JS -->
-    <script src="/resources/script/company/freelancer.js"></script>
+    <script src="/resources/script/company/jobposting_free/detail.js"></script>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
