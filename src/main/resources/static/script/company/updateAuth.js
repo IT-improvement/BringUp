@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     const accessToken = localStorage.getItem("accessToken");
     const url = "/com/companyInfo/post"
+    // 초기 이미지 데이터를 저장할 전역 객체
+    window.initialImageData = {
+        companyLogo: '',
+        companyImgs: []
+    };
 
     if (accessToken) {
         fetch(url, {
@@ -13,6 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             console.log(data);
             console.log(data.data);
+
+            // 초기 데이터 저장
+            window.initialImageData.companyLogo = data.data.companyLogo || '';
+            
+            const companyImg = data.data.companyImg;
+            window.initialImageData.companyImgs = companyImg ? companyImg.split(",").map(img => img.trim()) : [];
 
             // 회사 로고 처리
             if (data.data.companyLogo) {
@@ -34,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function() {
             companyLogoRemoveButton.addEventListener('click', removeCompanyLogo);
 
             // 회사 대표 이미지 처리
-            const companyImg = data.data.companyImg;
             const companyImgArray = companyImg ? companyImg.split(",") : [];
             
             companyImgArray.forEach((imgSrc, index) => {
@@ -97,14 +107,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 companyImgValues.forEach((imgSrc, index) => {
                     let currentValue = imgSrc.trim();
+                    const initialValue = window.initialImageData.companyImgs[index] || '';
                     
                     result[`c_img${index}`] = currentValue;
                     
-                    // base64 코드인지 확인하여 상태 설정
-                    if (currentValue.startsWith('data:image')) {
-                        result[`img${index}_status`] = "modify";
-                    } else {
-                        result[`img${index}_status`] = '유지';
+                    // 초기값과 현재값을 비교하여 상태 설정
+                    if (currentValue === initialValue) {
+                        result[`img${index}_status`] = "유지";
+                    } else if (currentValue === '') {
+                        result[`img${index}_status`] = "삭제";
+                    } else if (currentValue.startsWith('data:image')) {
+                        result[`img${index}_status`] = "수정";
                     }
                 });
 
