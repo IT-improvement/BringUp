@@ -43,12 +43,7 @@ public class PageController {
 
     @GetMapping("/jobpost_free/registration")
     public String freelancerRegistration(){
-        return "coSmpany/jobposting_free/registration";
-    }
-
-    @GetMapping("/jobpost_free/management")
-    public String freelancerManagement(){
-        return "company/jobposting_free/management";
+        return "company/jobposting_free/registration";
     }
 
     @GetMapping("/product/management")
