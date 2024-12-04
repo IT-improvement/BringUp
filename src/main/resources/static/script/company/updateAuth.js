@@ -95,19 +95,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     companyLogo: companyLogoHiddenInput
                 };
 
-                companyImgArray.forEach((imgSrc, index) => {
-                    const imgSrcValue = imgSrc.trim();
-                    let currentValue = index < companyImgValues.length ? companyImgValues[index] : null;
+                companyImgValues.forEach((imgSrc, index) => {
+                    let currentValue = imgSrc.trim();
                     
                     result[`c_img${index}`] = currentValue;
-                    result[`img${index}_status`] = '유지'; // 회사 대표 이미지는 현상 유지
+                    
+                    // base64 코드인지 확인하여 상태 설정
+                    if (currentValue.startsWith('data:image')) {
+                        result[`img${index}_status`] = "modify";
+                    } else {
+                        result[`img${index}_status`] = '유지';
+                    }
                 });
 
                 console.log(JSON.stringify(result, null, 2));
 
                 // /com/user/image로 요청 보내기
                 fetch('/com/user/image', {
-                    method: 'POST',
+                    method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ` + localStorage.getItem("accessToken")
@@ -217,6 +222,7 @@ function handleFileInputChange(e, index) {
             hiddenInput.value = e.target.result; // 바이너리 데이터를 저장합니다.
         };
         reader.readAsDataURL(fileInput.files[0]);
+        console.log(hiddenInput.value);
     } else {
         fileNameSpan.textContent = '파일을 선택하세요';
         hiddenInput.value = '';
