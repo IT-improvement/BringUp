@@ -82,7 +82,7 @@ public class FreelancerRecruitmentController {
 
     @GetMapping("/detail/{projectId}")
     public ResponseEntity<BfResponse<?>> getFreelancerProjectDetail(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                                    @PathVariable Integer projectId) {
+                                                                    @PathVariable("projectId") Integer projectId) {
         try {
             FreelancerProjectDetailResponseDto projectDetail = freelancerProjectService.getFreelancerProjectDetail(userDetails, projectId);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, projectDetail));

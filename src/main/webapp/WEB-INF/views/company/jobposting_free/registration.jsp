@@ -103,60 +103,33 @@
 			</div>
 			<div class="card-body">
 				<form action="/com/recruitment/register" method="post" id="recruitmentForm">
-					<div class="d-flex align-items-center mb-1">
-						<h2 id="projectTitle" class="fs-1 fw-bold">프로젝트 제목</h2>
+					<div class="mb-3">
+						<label for="recruitmentTitle" class="form-label">프로젝트 제목</label>
+						<input type="text" class="form-control" id="recruitmentTitle" name="recruitmentTitle" required>
 					</div>
-					<div class="row">
-						<div class="col-md-8">
-							<div class="mb-4">
-								<h3>프로젝트 설명</h3>
-								<textarea class="form-control" id="projectDescription" name="projectDescription" rows="5" required></textarea>
-							</div>
-							<div class="mb-4">
-								<h3>예상 개발 기간</h3>
-								<input type="text" class="form-control" id="expectedDuration" name="expectedDuration" required>
-							</div>
-							<div class="mb-4">
-								<h3>필수 기술</h3>
-								<input type="text" class="form-control" id="requiredSkills" name="requiredSkills" required>
-							</div>
-							<div class="mb-4">
-								<h3>우대 기술</h3>
-								<input type="text" class="form-control" id="preferredSkills" name="preferredSkills">
-							</div>
-							<div class="mb-4">
-								<h3>근무 조건</h3>
-								<textarea class="form-control" id="workConditions" name="workConditions" rows="5" required></textarea>
-							</div>
-							<div class="mb-4">
-								<h3>예상 비용</h3>
-								<input type="number" class="form-control" id="expectedCost" name="expectedCost" required>
-							</div>
-							<div class="mb-4">
-								<h3>프로젝트 상태</h3>
-								<input type="text" class="form-control" id="status" name="status" required>
-							</div>
-						</div>
-						<div class="col-md-4">
-							<div class="card border border-1 align-items-center" style="position: sticky; top: 140px; height: 280px; border-radius: 15px;">
-								<div class="card-body d-flex flex-column justify-content-center w-75" style="height: 100%; position: relative;">
-									<div class="d-flex flex-column align-items-center text-center mt-4">
-										<div class="d-flex justify-content-between w-100 border-bottom mb-2">
-											<h6 class="card-title mb-0">마감일</h6>
-											<input type="date" class="form-control" id="projectPeriod" name="projectPeriod" required>
-										</div>
-										<div class="d-flex justify-content-between w-100 border-bottom mb-2">
-											<h6 class="card-title mb-0">지원자 수</h6>
-											<input type="number" class="form-control" id="projectApplicantCount" name="projectApplicantCount" required>
-										</div>
-										<div class="d-flex justify-content-between w-100 border-bottom mb-2">
-											<h6 class="card-title mb-0">생성 날짜</h6>
-											<input type="date" class="form-control" id="createDay" name="createDay" required>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+					<div class="mb-3">
+						<label for="workDetail" class="form-label">프로젝트 설명</label>
+						<textarea class="form-control" id="workDetail" name="workDetail" rows="10" required></textarea>
+					</div>
+					<div class="mb-3">
+						<label for="skill" class="form-label">필요 기술</label>
+						<input type="text" class="form-control" id="skill" name="skill" required>
+					</div>
+					<div class="mb-3">
+						<label for="hospitality" class="form-label">우대 사항</label>
+						<textarea class="form-control" id="hospitality" name="hospitality" rows="10" required></textarea>
+					</div>
+					<div class="mb-3">
+						<label for="career" class="form-label">경력</label>
+						<input type="text" class="form-control" id="career" name="career" required>
+					</div>
+					<div class="mb-3">
+						<label for="salary" class="form-label">최소 연봉</label>
+						<input type="number" class="form-control" id="salary" name="salary" required>
+					</div>
+					<div class="mb-3">
+						<label for="period" class="form-label">모집 기간</label>
+						<input type="date" class="form-control" id="period" name="period" required min="<%= java.time.LocalDate.now() %>">
 					</div>
 					<button type="button" class="btn btn-secondary" onclick="location.href='/company/jobpost/management'">돌아가기</button>
 					<button type="submit" class="btn btn-primary" style="float: right;">등록</button>
