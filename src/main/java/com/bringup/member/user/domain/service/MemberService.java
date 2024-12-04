@@ -44,6 +44,7 @@ public class MemberService{
         user.setUserEmail(dto.getUserEmail());
         user.setUserPassword(passwordEncoder.encode(dto.getUserPassword()));
         user.setUserName(dto.getUserName());
+        user.setUserPhonenumber(dto.getUserPhoneNumber());
         user.setUserAddress(dto.getUserAddress());
         user.setUserBirthday(dto.getUserBirthday());
         user.setFreelancer(dto.isFreelancer());
