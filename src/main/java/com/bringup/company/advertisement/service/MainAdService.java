@@ -57,6 +57,7 @@ public class MainAdService {
         // 광고 등록
         Advertisement advertisement = new Advertisement();
         advertisement.setRecruitment(recruitment);
+        advertisement.setStringListFromList(mainAdDto.getExposureDays());
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
         advertisement.setStatus(StatusType.ACTIVE); // 초기 상태
