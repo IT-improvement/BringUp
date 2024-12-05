@@ -59,6 +59,9 @@ public class MemberPageController {
         return "member/user/recruitment/proposeRecruitment";
     }
 
+    @GetMapping("/visitRecruitment")
+    public String visitRecruitment() { return "member/user/recruitment/recruitmentVisit"; }
+
     @GetMapping("/potofolio")
     public String potofolio()
     {
@@ -106,8 +109,8 @@ public class MemberPageController {
         return "member/user/profile/memberProfile";
     }
 
-    @GetMapping("/recruitment/details/{recruitmentId}")
-    public String recruitmentDetails(@PathVariable("recruitmentId") int recruitmentId) {
+    @GetMapping("/recruitment/details/{recruitmentIndex}")
+    public String recruitmentDetails(@PathVariable("recruitmentIndex") int recruitmentId) {
         return "member/user/recruitment/detail";
     }
 
