@@ -287,6 +287,7 @@ public class SpringSecurityConfig {
 
                 antMatcher("/cv/insert"),
                 antMatcher("/cv/list"),
+                antMatcher("/cv/delete/**"),
 
 
 

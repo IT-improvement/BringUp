@@ -41,7 +41,7 @@ public class CVController {
         return cvService.listCv(code);
     }
 
-    @DeleteMapping("/delete/{cv}")
+    @DeleteMapping("/delete/{cvIndex}")
     public ResponseEntity<?> deleteCv(@PathVariable("cvIndex")String index){
         return cvService.deleteCv(index);
     }
