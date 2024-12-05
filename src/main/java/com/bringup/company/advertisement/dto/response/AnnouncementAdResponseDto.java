@@ -15,4 +15,6 @@ public class AnnouncementAdResponseDto {
     private StatusType status; // 광고 상태
     private LocalDate startDate; // 시작 날짜
     private LocalDate endDate; // 종료 날짜
+    private int viewCount; // 출력 수
+    private int clickCount; // 클릭 수
 }

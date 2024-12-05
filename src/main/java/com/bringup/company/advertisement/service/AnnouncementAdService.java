@@ -135,6 +135,8 @@ public class AnnouncementAdService {
                 .startDate(announcementAd.getAdvertisement().getStartDate())
                 .endDate(announcementAd.getAdvertisement().getEndDate())
                 .status(announcementAd.getAdvertisement().getStatus())
+                .clickCount(announcementAd.getAdvertisement().getC_count())
+                .viewCount(announcementAd.getAdvertisement().getV_count())
                 .build();
     }
 }
