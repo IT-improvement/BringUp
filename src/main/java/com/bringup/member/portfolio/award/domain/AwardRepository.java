@@ -11,4 +11,5 @@ public interface AwardRepository extends JpaRepository<AwardEntity, Integer> {
 
     boolean existsByOrganizationAndTitleAndAwarDate(String organization, String title, Date awardDate);
     List<AwardEntity> findByUserIndex(int userIndex);
+    AwardEntity findById(int id);
 }
