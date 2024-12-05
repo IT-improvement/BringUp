@@ -240,7 +240,8 @@
                 <div class="user-gender-selection">
                     <button type="button" class="user-gender-button active" data-gender="남" id="maleButton">남</button>
                     <button type="button" class="user-gender-button" data-gender="여" id="femaleButton">여</button>
-                    <input type="hidden" id="userGender" name="user_gender" value="남">
+                    <input type="hidden" id="gender" name="gender" value="">
+
                 </div>
 
                 <!-- 병역 영역 -->

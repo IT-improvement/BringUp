@@ -31,6 +31,9 @@ public class GithubController {
     @PutMapping("/github/insert")
     public ResponseEntity<? super GithubResponseDto> insertToken(@AuthenticationPrincipal UserDetailsImpl user, @RequestBody String token){
         int userCode = user.getId();
+        System.out.println("Authorization Header: token " + token);
         return gitHubService.insertGithubToken(userCode ,token);
+
+
     }
 }

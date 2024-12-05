@@ -55,6 +55,7 @@ public class JoinService {
         userEntity.setUserPhonenumber(joinDTO.getUserPhonenumber());
         userEntity.setUserBirthday(joinDTO.getUserBirthday());
         userEntity.setFreelancer(joinDTO.isFreelancer());
+        userEntity.setGender(joinDTO.getGender());
         userEntity.setStatus(String.valueOf(StatusType.ACTIVE));
         userEntity.setRole(RolesType.ROLE_MEMBER);
 

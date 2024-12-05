@@ -48,7 +48,12 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private RolesType role = RolesType.ROLE_MEMBER;
 
+    @Column(name = "github_token")
     private String githubToken;
+
+    @Column(name = "gender")
+    private String gender;
+
 
 
     public UserEntity(JoinDTO joinDTO){
