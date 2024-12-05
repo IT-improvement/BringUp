@@ -133,8 +133,11 @@ public class SpringSecurityConfig {
                 antMatcher("/"),
 /*
                 antMatcher("/member/**"),
+
+
 */
                 antMatcher("/ws/**"),
+                antMatcher("/openai/generate/{questionNumber}"),
               /*  antMatcher("/github/**"),// 정적 리소스*/
                 antMatcher("/member/potofolio"),
                 antMatcher("/member/letter"),//이력서
@@ -193,6 +196,8 @@ public class SpringSecurityConfig {
                 antMatcher("/member/record"),
                 antMatcher("/member/awards"),
                 antMatcher("/member/career"),
+                antMatcher("/member/careerDetail"),
+                antMatcher("/member/careerList"),
 
                 antMatcher("/award/delete/{index}"),
                 antMatcher("/portfolio/blog/delete"),
@@ -269,6 +274,7 @@ public class SpringSecurityConfig {
                 antMatcher("/school/insert"),
 
 
+
                 antMatcher("/award/insert"),
                 antMatcher("/award/list"),
                 antMatcher("/portfolio/career/list"),
@@ -280,6 +286,7 @@ public class SpringSecurityConfig {
                 antMatcher("/recruitment/scrap/delete/{recruitmentIndex}"),
 
                 antMatcher("/cv/insert"),
+                antMatcher("/cv/list"),
 
 
 

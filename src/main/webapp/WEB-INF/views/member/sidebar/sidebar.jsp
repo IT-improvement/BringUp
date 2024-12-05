@@ -6,7 +6,7 @@
         <nav>
             <ul class="ms-nav ms-flex-column">
                 <li class="ms-nav-item">
-                    <a class="ms-nav-link" href="/member/myCareer"><i class="bi bi-file-earmark-person"></i> 이력서</a>
+                    <a class="ms-nav-link" href="/member/careerList"><i class="bi bi-file-earmark-person"></i> 이력서</a>
                 </li>
                 <li class="ms-nav-item">
                     <a class="ms-nav-link" data-bs-toggle="collapse" href="#portfolioCollapse" role="button" aria-expanded="false" aria-controls="portfolioCollapse">

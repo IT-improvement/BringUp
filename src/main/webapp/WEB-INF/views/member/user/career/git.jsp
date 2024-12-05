@@ -83,12 +83,12 @@
     });
 
     function checkGitHubToken(accessToken) {
-        const cleanToken = accessToken.replace(/^"|"$/g, ""); // 앞뒤 따옴표 제거
+
 
         fetch("/github/user", {
             method: "GET",
             headers: {
-                "Authorization": "Bearer " + cleanToken
+                "Authorization": "Bearer " + accessToken
             }
         })
             .then(response => {
@@ -101,7 +101,7 @@
                 return response.json();
             })
             .then(data => {
-                loadRepositories(cleanToken); // GitHub 사용자 데이터 성공적으로 로드
+                loadRepositories(githubTokens); // GitHub 사용자 데이터 성공적으로 로드
             })
             .catch(error => {
                 console.error("Error:", error.message);
@@ -118,7 +118,7 @@
             return;
         }
 
-        githubToken = githubToken.replace(/^"|"$/g, ""); // 앞뒤 따옴표 제거
+        githubToken = githubToken.replace(/^"|"$/g, " "); // 앞뒤 따옴표 제거
 
         fetch("/github/insert", {
             method: "PUT",
@@ -139,7 +139,7 @@
                 }
                 alert("GitHub 토큰이 성공적으로 저장되었습니다.");
                 $('#githubTokenModal').modal('hide');
-                location.reload(); // 저장 후 새로고침
+                location.reload(); // 저장 후 페이지 리로드
             })
             .catch(error => console.error("GitHub 토큰 저장 오류:", error.message));
     }

@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
             userAddress: document.getElementById('userAddress').value,
             userPhonenumber: document.getElementById('userPhoneNumber').value,
             userBirthday: document.getElementById('userBirthday').value,
-            userGender: document.getElementById('userGender').value,
+            gender: document.getElementById('gender').value,
             militaryList: militaryList // Military 리스트 포함
         };
 
@@ -131,13 +131,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const femaleButton = document.getElementById('femaleButton');
     const militaryServiceCard = document.getElementById('militaryServiceCard');
     const closeMilitaryCard = document.getElementById('closeMilitaryCard');
+    const genderInput = document.getElementById('gender'); // hidden input
+
+    // 초기화: hidden 필드 값 비우기
+    genderInput.value = "";
+
+    maleButton.addEventListener('click', function() {
+        // 남성 버튼 활성화
+        maleButton.classList.add('active');
+        femaleButton.classList.remove('active');
+
+        // hidden 필드에 '남' 값 설정
+        genderInput.value = "남";
+    });
+
+    femaleButton.addEventListener('click', function() {
+        // 여성 버튼 활성화
+        femaleButton.classList.add('active');
+        maleButton.classList.remove('active');
+
+        // hidden 필드에 '여' 값 설정
+        genderInput.value = "여";
+    });
+
 
     // 요소가 제대로 로드되었는지 확인
     if (maleButton && femaleButton && militaryServiceCard && closeMilitaryCard) {
         maleButton.addEventListener('click', function() {
             maleButton.classList.add('active');
             femaleButton.classList.remove('active');
-            document.getElementById('userGender').value = '남';
+            document.getElementById('gender').value = '남';
 
             // Show military service card by sliding in from the right
             militaryServiceCard.style.display = 'block';
@@ -149,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
         femaleButton.addEventListener('click', function() {
             femaleButton.classList.add('active');
             maleButton.classList.remove('active');
-            document.getElementById('userGender').value = '여';
+            document.getElementById('gender').value = '여';
 
             // Hide military service card by sliding out to the right
             militaryServiceCard.classList.remove('visible');

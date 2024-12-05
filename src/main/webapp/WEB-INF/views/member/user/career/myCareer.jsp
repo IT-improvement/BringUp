@@ -97,6 +97,10 @@
                     margin-top: 3%;
 
                 }
+                .form-check-label{
+                    color: blue;
+
+                }
 
 
             </style>
@@ -131,7 +135,7 @@
                             <div class="d-flex align-items-center">
                                 <img src="" alt="프로필 이미지" class="rounded-circle border" width="100" height="100">
                                 <div class="ms-3">
-                                    <h2 id="user-name">사용자 이름</h2>
+                                    <h4 id="user-name">사용자 이름</h4>
                                     <p class="text-muted" id="user-birthday">생년월일</p>
                                 </div>
                             </div>
@@ -179,6 +183,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <div id="educationList" class="list-group">
+                                        <p id="educationList-default-message" class="text-muted">추가를 눌러 자신의 학력을 추가해 주세요!</p>
                                         <!-- 학력 리스트가 여기에 동적으로 추가됩니다 -->
                                     </div>
                                 </div>

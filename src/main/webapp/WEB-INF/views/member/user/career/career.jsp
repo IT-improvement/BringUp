@@ -146,10 +146,11 @@
 
     <div class="container ms-main-content" style="max-width: 1000px; margin-left: 100px;">
         <main class="flex-grow-1">
+            <h2>경력</h2>
             <div class="container p-4">
                 <!-- 경력 섹션 헤더 -->
                 <div class="header d-flex justify-content-between align-items-center mb-4">
-                    <h3>경력</h3>
+                    <div></div>
                     <div>
                         <span class="btn-add" onclick="toggleCareerForm()">+ 추가</span>
                     </div>

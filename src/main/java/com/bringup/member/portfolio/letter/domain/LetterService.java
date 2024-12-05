@@ -38,15 +38,15 @@ public class LetterService {
             return ResponseDto.databaseError();
         }
 
-        if(requestDto.getAnswser1()!=null){
-            letterEntity.setAnswer1(requestDto.getAnswser1());
+        if(requestDto.getAnswer1()!=null){
+            letterEntity.setAnswer1(requestDto.getAnswer1());
 
         }
-        if(requestDto.getAnswser2()!=null) {
-            letterEntity.setAnswer2(requestDto.getAnswser2());
+        if(requestDto.getAnswer2()!=null) {
+            letterEntity.setAnswer2(requestDto.getAnswer2());
         }
-        if(requestDto.getAnswser3()!=null) {
-            letterEntity.setAnswer3(requestDto.getAnswser3());
+        if(requestDto.getAnswer3()!=null) {
+            letterEntity.setAnswer3(requestDto.getAnswer3());
         }
 
 

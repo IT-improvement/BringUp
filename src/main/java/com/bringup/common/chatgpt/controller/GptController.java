@@ -20,7 +20,7 @@ public class GptController {
 
     @PostMapping("/generate/{questionNumber}")
     public ResponseEntity<BfResponse<PromptResponseDto>> generateTextForQuestion(
-            @PathVariable int questionNumber,
+            @PathVariable("questionNumber") int questionNumber,
             @RequestBody PromptRequestDto requestDto) {
         try {
             // OpenAIService를 사용해 해당 질문에 대한 응답 생성
