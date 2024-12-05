@@ -9,4 +9,5 @@ public class CertificateRequestDto {
     private String title;
     private String issueStatus;
     private String issueCenter;
+    private String certificateType;
 }

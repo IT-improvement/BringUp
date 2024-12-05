@@ -1,4 +1,3 @@
-/*
 package com.bringup.company.headhunt.controller;
 
 import com.bringup.common.response.BfResponse;
@@ -6,6 +5,7 @@ import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.headhunt.dto.response.HeadhuntResponseDto;
 import com.bringup.company.headhunt.service.HeadhuntService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +22,7 @@ import static com.bringup.common.enums.GlobalSuccessCode.SUCCESS;
 @RequestMapping("/com/headhunt")
 public class HeadhuntController {
 
+    @Autowired
     private final HeadhuntService headHuntService;
 
     @GetMapping("/recommend")
@@ -42,4 +43,3 @@ public class HeadhuntController {
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, savedCVs));
     }
 }
-*/

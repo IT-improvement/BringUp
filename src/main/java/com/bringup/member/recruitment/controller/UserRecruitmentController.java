@@ -7,6 +7,7 @@ import com.bringup.common.security.service.UserDetailsImpl;
 import com.bringup.company.recruitment.dto.response.RecruitmentDetailResponseDto;
 import com.bringup.company.recruitment.exception.RecruitmentException;
 import com.bringup.member.recruitment.domain.service.UserRecruitmentService;
+import com.bringup.member.recruitment.dto.response.RecruitmentVisitResponseDto;
 import com.bringup.member.recruitment.dto.response.UserRecruitmentDetailDto;
 import com.bringup.member.recruitment.dto.response.UserRecruitmentDto;
 import com.bringup.member.user.domain.entity.UserEntity;
@@ -41,8 +42,8 @@ public class UserRecruitmentController {
 
 
 
-    @GetMapping("/detail/{recruitmentId}")
-    public ResponseEntity<BfResponse<?>> getRecruitmentDetail(@PathVariable("recruitmentId") int recruitmentId) {
+    @GetMapping("/detail/{recruitmentIndex}")
+    public ResponseEntity<BfResponse<?>> getRecruitmentDetail(@PathVariable("recruitmentIndex") int recruitmentId) {
         try {
             UserRecruitmentDetailDto recruitmentDetail = userRecruitmentService.getRecruitmentDetail(recruitmentId);
             return ResponseEntity.ok(new BfResponse<>(SUCCESS, recruitmentDetail));
@@ -82,10 +83,10 @@ public class UserRecruitmentController {
         return ResponseEntity.ok("북마크가 삭제되었습니다.");
     }
     //북마크 확인
-    @GetMapping("/isBookmarked/{recruitmentId}")
+    @GetMapping("/isBookmarked/{recruitmentIndex}")
     public ResponseEntity<Map<String, Boolean>> isBookmarked(
             @AuthenticationPrincipal UserDetailsImpl user,
-            @PathVariable("recruitmentId") Integer recruitmentId) {
+            @PathVariable("recruitmentIndex") Integer recruitmentId) {
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -99,6 +100,24 @@ public class UserRecruitmentController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/visit/{recruitmentIndex}")
+    public ResponseEntity<BfResponse<?>> addRecruitmentVisit(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable("recruitmentIndex") int recruitmentIndex){
+        try {
+            userRecruitmentService.addRecruitmentVisit(userDetails, recruitmentIndex);
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, "save visit recruitment"));
+        }catch (Exception e){
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
 
+    @GetMapping("/visitList")
+    public ResponseEntity<BfResponse<?>> getVisitRecruitment(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        try {
+            List<RecruitmentVisitResponseDto> visitDto = userRecruitmentService.getVisitRecruitment(userDetails);
+            return ResponseEntity.ok(new BfResponse<>(visitDto));
+        }catch (Exception e){
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }

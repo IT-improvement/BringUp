@@ -88,7 +88,7 @@
             $('#addBlogBtn').click(function() {
                 blogCount++;
                 const newBlog = $(`
-                    <div class="blog-item" id="blog-${blogCount}">
+                    <div class="blog-item" id="blog-${'${blogCount}'}">
 
                         <input type="text" placeholder="블로그 URL" class="form-control">
                         <button class="btn btn-danger btn-sm">삭제</button>
