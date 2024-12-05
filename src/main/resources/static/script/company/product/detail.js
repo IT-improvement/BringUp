@@ -109,6 +109,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const adTypeElement = document.getElementById('adType');
                 if (adTypeElement) adTypeElement.innerText = adType;
 
+                const adImageContainer = document.getElementById('adImageContainer');
+                if (adImageContainer) adImageContainer.style.display = 'block';
+
             } else if (adType === 'main') {
                 const mainIdElement = document.getElementById('mainId');
                 if (mainIdElement) mainIdElement.innerText = ad.mainId;
@@ -145,6 +148,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const adTypeElement = document.getElementById('adType');
                 if (adTypeElement) adTypeElement.innerText = adType;
+
+                const adImageContainer = document.getElementById('adImageContainer');
+                if (adImageContainer) adImageContainer.style.display = 'block';
                 
             } else if (adType === 'banner') {
                 const bannerAdIndexElement = document.getElementById('bannerAdIndex');
@@ -170,7 +176,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const adTypeElement = document.getElementById('adType');
                 if (adTypeElement) adTypeElement.innerText = adType;
-            } else if (adType === 'announcement') {
+
+                const adImageContainer = document.getElementById('adImageContainer');
+                if (adImageContainer) adImageContainer.style.display = 'block';
+            } else if (adType === 'announce') {
                 const announcementIdElement = document.getElementById('announcementId');
                 if (announcementIdElement) announcementIdElement.innerText = ad.announcementId;
 
@@ -183,8 +192,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 const adPeriodElement = document.getElementById('adPeriod');
                 if (adPeriodElement) adPeriodElement.innerText = `${ad.startDate} ~ ${ad.endDate}`;
 
+                const viewCountElement = document.getElementById('viewCount');
+                if (viewCountElement) viewCountElement.innerText = ad.viewCount;
+
+                const clickCountElement = document.getElementById('clickCount');
+                if (clickCountElement) clickCountElement.innerText = ad.clickCount;
+
                 const adTypeElement = document.getElementById('adType');
                 if (adTypeElement) adTypeElement.innerText = adType;
+
+                const adImageContainer = document.getElementById('adImageContainer');
+                if (adImageContainer) adImageContainer.style.display = 'none';
             }
         })
         .catch(error => console.error('Error fetching recruitment details:', error));
