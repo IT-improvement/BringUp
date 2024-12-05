@@ -52,7 +52,7 @@
 	<script>
 		// 전역 변수 선언
 		let companyReviews = [];
-		let interviewReviews = []; // 면 한 새로운 변수
+		let interviewReviews = []; // 면 ���한 새로운 변수
 
 		document.addEventListener("DOMContentLoaded", function() {
 			const content = document.querySelector("#companyReviewContent");
@@ -96,26 +96,26 @@
 			const interviewSearchInput = document.querySelector("#interviewReviewContent input[type='text']");
 			const interviewSearchButton = document.querySelector("#interviewReviewContent .btn-primary");
 			
-			if (interviewSearchInput && interviewSearchButton) {
-				interviewSearchInput.addEventListener("keypress", function(e) {
-					if (e.key === "Enter") {
-						e.preventDefault(); // 폼 제출 방지
-						fetchInterviewReviews(this.value);
-					}
-				});
-				
-				interviewSearchButton.addEventListener("click", function() {
-					fetchInterviewReviews(interviewSearchInput.value);
-				});
-			} else {
-				console.error("면접 리뷰 검색 요소를 찾을 수 없습니다.");
-			}
-
-			// 탭 전환 시 검색창 초기화 수정
-			interviewTab.addEventListener("click", () => {
-				if (interviewSearchInput) {
-					interviewSearchInput.value = "";
+			interviewSearchInput.addEventListener("keypress", function(e) {
+				if (e.key === "Enter") {
+					fetchInterviewReviews(this.value);
 				}
+			});
+			
+			interviewSearchButton.addEventListener("click", function() {
+				fetchInterviewReviews(interviewSearchInput.value);
+			});
+
+			// 검색창 초기화 기능
+			companyTab.addEventListener("click", () => {
+				companySearchInput.value = "";
+				companyReviewContent.classList.remove("d-none");
+				interviewReviewContent.classList.add("d-none");
+				fetchCompanyReviews();
+			});
+
+			interviewTab.addEventListener("click", () => {
+				interviewSearchInput.value = "";
 				companyReviewContent.classList.add("d-none");
 				interviewReviewContent.classList.remove("d-none");
 				fetchInterviewReviews();
@@ -336,7 +336,6 @@
 
 		function fetchInterviewReviews(query = "") {
 			showLoading();
-			console.log("검색어:", query); // 디버깅용 로그 추가
 			
 			const endpoint = "/com/i_reviews";
 

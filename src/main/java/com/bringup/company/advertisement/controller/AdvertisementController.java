@@ -89,7 +89,7 @@ public class AdvertisementController {
      * @param img
      * @return
      */
-    @PostMapping("/premium")
+    @PostMapping("/premium/registration")
     public ResponseEntity<BfResponse<?>> createPremiumAd(
             @RequestPart("premiumAdDto") String premiumAdDtoJson,
             @RequestPart("image") MultipartFile img,
@@ -162,7 +162,7 @@ public class AdvertisementController {
      * @param img
      * @return
      */
-    @PostMapping("/main")
+    @PostMapping("/main/registration")
     public ResponseEntity<BfResponse<?>> createMainAd(@RequestPart("mainAdDto") String mainAdDtoJson,
                                                          @RequestPart("image") MultipartFile img,
                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -223,7 +223,7 @@ public class AdvertisementController {
 
     //-------------배너 라인----------------------------------------------\
 
-    @PostMapping("/banner")
+    @PostMapping("/banner/registration")
     public ResponseEntity<BfResponse<String>> createBannerAd(
             @RequestPart("bannerAdDto") String bannerAdDtoJson,
             @RequestPart("image") MultipartFile img,
@@ -278,7 +278,7 @@ public class AdvertisementController {
 
     //-------------기타 라인----------------------------------------------
 
-    @PostMapping("/announce")
+    @PostMapping("/announce/registration")
     public ResponseEntity<BfResponse<?>> createAnnouncementAd(
             @RequestBody AnnouncementAdRequestDto announcementAdDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
