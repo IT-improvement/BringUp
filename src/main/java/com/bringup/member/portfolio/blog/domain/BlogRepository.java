@@ -10,4 +10,6 @@ public interface BlogRepository extends JpaRepository<BlogEntity,Integer> {
     List<BlogEntity> findByUserIndex(int userIndex);
 
     Boolean existsByUrlAndUserIndex(String url, int userIndex);
+    BlogEntity findByBlogIndex(int blogIndex);
+
 }
