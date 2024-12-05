@@ -325,6 +325,36 @@
                             </div>
                         </div>
                     </div>
+
+                    <section class="experience">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4>Git 레파지토리</h4>
+                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#gitModal">+ 추가</button>
+                        </div>
+                        <div id="gitRepoList" class="list-group">
+                            <!-- 추가된 Git 레파지토리가 여기에 표시됩니다 -->
+                        </div>
+                    </section>
+
+                    <!-- Git 레파지토리 모달 -->
+                    <div class="modal fade" id="gitModal" tabindex="-1" aria-labelledby="gitModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="gitModalLabel">Git 레파지토리 추가</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="gitRepoListModal" class="list-group">
+                                        <!-- Git 레파지토리 리스트가 동적으로 추가됩니다 -->
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="text-center my-4">
                         <button id="saveResumeButton" class="btn btn-primary btn-lg">저장</button>
                     </div>
@@ -342,6 +372,9 @@
 
             let blogData = []; // 블로그 데이터를 저장할 배열
             console.log(blogData);
+
+            let gitRepoData = [];
+
 
             document.addEventListener("DOMContentLoaded", () => {
                 const saveResumeButton = document.getElementById("saveResumeButton");
@@ -404,6 +437,13 @@
                     const skillBadges = document.querySelectorAll("#skills-list .badge");
                     const skill = Array.from(skillBadges).map(badge => badge.textContent);
 
+                    // GitHub 레포지토리 정보
+                    const gitRepoCards = document.querySelectorAll("#gitRepoList .card");
+                    const github = Array.from(gitRepoCards).map(card => {
+                        const urlElement = card.querySelector("a");
+                        return urlElement ? urlElement.href : "";
+                    });
+
                     // 데이터 준비
                     const requestBody = {
                         mainCv,
@@ -413,7 +453,8 @@
                         cvCertificate,
                         cvCareer,
                         cvBlog,
-                        cvSchool
+                        cvSchool,
+                        github
                     };
 
                     console.log("Request Body:", requestBody);
@@ -489,7 +530,115 @@
                     });
             });
 
+            // Git 레파지토리 데이터를 가져오는 함수
+            function fetchGitRepoList() {
+                const accessToken = localStorage.getItem("accessToken");
 
+                if (!accessToken) {
+                    alert("로그인이 필요합니다.");
+                    return;
+                }
+
+                fetch("/github/user/repos", {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ` + accessToken,
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Git 레파지토리를 불러오는 데 실패했습니다.");
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Git 레파지토리 데이터:", data);
+                        gitRepoData = data; // 데이터를 전역 변수에 저장
+                        displayGitRepoList(gitRepoData); // 데이터를 모달에 표시
+                    })
+                    .catch(error => {
+                        console.error("Git 레파지토리 정보 불러오기 중 오류 발생:", error);
+                        alert("Git 레파지토리 정보를 불러오는 중 문제가 발생했습니다.");
+                    });
+            }
+
+            // Git 레파지토리 정보를 모달에 표시
+            function displayGitRepoList(data) {
+                const gitRepoListModal = document.getElementById("gitRepoListModal");
+                gitRepoListModal.innerHTML = ""; // 기존 내용을 초기화
+
+                if (!data || data.length === 0) {
+                    gitRepoListModal.innerHTML =
+                        "<p class='text-center text-muted'>등록된 Git 레파지토리가 없습니다.</p>";
+                    return;
+                }
+
+                data.forEach(repo => {
+                    const repoCard = createGitRepoCard(repo);
+                    gitRepoListModal.appendChild(repoCard);
+                });
+            }
+
+            // Git 레파지토리 카드를 생성하는 함수
+            function createGitRepoCard(repo) {
+                const card = document.createElement("div");
+                card.className = "list-group-item d-flex justify-content-between align-items-center";
+                const safeUrl = encodeURIComponent(repo.html_url);
+                card.innerHTML = `
+            <div>
+                <h6>${'${repo.name}'}</h6>
+                <p class="mb-0 text-muted">URL: <a href="${'${repo.html_url}'}" target="_blank">${'${repo.html_url}'}</a></p>
+            </div>
+            <button class="btn btn-outline-primary btn-sm" onclick="addGitRepoToResume('${'${safeUrl}'}')">추가</button>
+        `;
+                return card;
+            }
+
+            // Git 레파지토리를 이력서 카드 영역에 추가
+            function addGitRepoToResume(encodedUrl) {
+                // URL 디코딩
+                const url = decodeURIComponent(encodedUrl);
+                console.log(url);
+
+                const gitRepoList = document.getElementById("gitRepoList");
+
+                // 이미 추가된 레파지토리인지 확인
+                if (document.getElementById(`git-repo-card-"${'${url}'}"`)) {
+                    alert("이미 추가된 Git 레파지토리입니다.");
+                    return;
+                }
+
+                // Git 레파지토리 카드 생성
+                const card = document.createElement("div");
+                card.className = "card mb-3";
+                card.id = `git-repo-card-${'${url}'}`;
+                card.innerHTML = `
+            <div class="card-body">
+                <h5>${'${name}'}</h5>
+                <p>URL: <a href="${'${url}'}" target="_blank">${'${url}'}</a></p>
+                <button class="btn btn-sm btn-danger" onclick="removeGitRepo('${'${url}'}')">삭제</button>
+            </div>
+        `;
+
+                gitRepoList.appendChild(card);
+            }
+
+            // 선택된 Git 레파지토리를 삭제
+            function removeGitRepo(name) {
+                const card = document.getElementById(`git-repo-card-${'${name}'}`);
+                if (card) {
+                    card.remove();
+                }
+            }
+
+            // 모달이 열릴 때 Git 레파지토리 데이터를 가져오기
+            document.addEventListener("DOMContentLoaded", () => {
+                const gitModal = document.getElementById("gitModal");
+                gitModal.addEventListener("shown.bs.modal", () => {
+                    fetchGitRepoList();
+                });
+            });
 
 
             // 블로그 데이터를 가져오는 함수
