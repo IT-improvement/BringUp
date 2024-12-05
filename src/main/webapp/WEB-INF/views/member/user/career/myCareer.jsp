@@ -128,15 +128,16 @@
                     <!-- 사용자 기본 정보 -->
                     <section class="user-info-section">
                         <div class="form-check-mt-3">
-                            <input class="form-check-input" type="checkbox" id="main-cv-checkbox">
-                            <label class="form-check-label" for="main-cv-checkbox">대표 이력서로 설정</label>
+
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img src="" alt="프로필 이미지" class="rounded-circle border" width="100" height="100">
                                 <div class="ms-3">
+
                                     <h4 id="user-name">사용자 이름</h4>
                                     <p class="text-muted" id="user-birthday">생년월일</p>
+                                    <input class="form-check-input" type="checkbox" id="main-cv-checkbox">
+                                    <label class="form-check-label" for="main-cv-checkbox">대표 이력서로 설정</label>
                                 </div>
                             </div>
                         </div>
@@ -444,7 +445,6 @@
                             const urlElement = card.querySelector("a");
                             return urlElement ? urlElement.href : "";
                         })
-                        .join(","); // URL을 ','로 구분된 문자열로 변환
 
                     // 데이터 준비
                     const requestBody = {
@@ -474,7 +474,7 @@
                         .then(data => {
                             if (data.code === "SU") {
                                 alert("이력서가 성공적으로 저장되었습니다.");
-                                window.location.reload();
+                                window.location.href = "/member/careerList";
                             } else {
                                 console.error("이력서 저장 실패:", data);
                                 alert("이력서 저장에 실패했습니다.");
