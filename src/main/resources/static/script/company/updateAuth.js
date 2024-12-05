@@ -135,6 +135,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(data => {
                     console.log('서버 응답:', data);
+                    if(data.code === 200) {
+                        alert("회사 정보 수정이 완료되었습니다.");
+                        location.href = "/company/auth/profile";
+                    }
                 })
                 .catch(error => {
                     console.error('요청 중 오류 발생:', error);
