@@ -17,5 +17,6 @@ public class JoinDTO {
     private String userBirthday;
     private boolean freelancer;
     private String status;
+    private String gender;
     private List<MilitaryItem> militaryList;
 }

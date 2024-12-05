@@ -71,9 +71,11 @@
 
         <div class="container ms-main-content" style="max-width: 1000px; margin-left: 100px;">
             <main class="flex-grow-1">
+                <h2>학력</h2>
                 <div class="container p-4">
+                    <div></div>
                     <div class="education-header">
-                        학력
+
                         <span class="btn-add" onclick="toggleEducationForm()">+ 추가</span>
                     </div>
                     <div id="initialMessage" class="mt-3 p-3 text-center" style="border: 1px solid #ddd; border-radius: 5px; color: #888;">

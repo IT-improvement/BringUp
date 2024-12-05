@@ -31,6 +31,55 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+        /* 레파지토리 카드 스타일 */
+        .repository-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .repository-card {
+            flex: 1 1 calc(33.333% - 15px); /* 카드 3열 배치 */
+            max-width: calc(33.333% - 15px);
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .repository-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .repository-card h5 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .repository-card p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .repository-card a {
+            font-size: 0.9rem;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .repository-card a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -83,25 +132,22 @@
     });
 
     function checkGitHubToken(accessToken) {
-        const cleanToken = accessToken.replace(/^"|"$/g, ""); // 앞뒤 따옴표 제거
+
 
         fetch("/github/user", {
             method: "GET",
             headers: {
-                "Authorization": "Bearer " + cleanToken
+                "Authorization": "Bearer " + accessToken
             }
         })
             .then(response => {
                 if (!response.ok) {
-                    if (response.status === 401) {
-                        throw new Error("GitHub 토큰이 없습니다.");
-                    }
                     throw new Error("GitHub 요청 실패");
                 }
                 return response.json();
             })
             .then(data => {
-                loadRepositories(cleanToken); // GitHub 사용자 데이터 성공적으로 로드
+                loadRepositories(accessToken); // GitHub 사용자 데이터 성공적으로 로드
             })
             .catch(error => {
                 console.error("Error:", error.message);
@@ -118,15 +164,12 @@
             return;
         }
 
-        githubToken = githubToken.replace(/^"|"$/g, ""); // 앞뒤 따옴표 제거
-
-        fetch("/github/insert", {
-            method: "PUT",
+        fetch(`/github/insert/` + githubToken, {
+            method: "POST",
             headers: {
                 "Authorization": "Bearer " + accessToken,
                 "Content-Type": "application/json"
-            },
-            body: JSON.stringify(githubToken)
+            }
         })
             .then(response => {
                 if (!response.ok) {
@@ -139,7 +182,7 @@
                 }
                 alert("GitHub 토큰이 성공적으로 저장되었습니다.");
                 $('#githubTokenModal').modal('hide');
-                location.reload(); // 저장 후 새로고침
+                location.reload(); // 저장 후 페이지 리로드
             })
             .catch(error => console.error("GitHub 토큰 저장 오류:", error.message));
     }
