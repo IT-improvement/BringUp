@@ -54,7 +54,7 @@ public class MainService {
                 .orElseThrow(() -> new IllegalArgumentException("User not found for email: " + userDetails.getUsername()));
 
         // 유저의 인덱스(userIndex)를 기반으로 이력서 정보 가져오기
-        List<CVEntity> cvList = cvRepository.findAllByUserIndex(userEntity.getUserIndex());
+        List<CVEntity> cvList = cvRepository.findAllByUserIndexAndStatus(userEntity.getUserIndex(),"생성");
 
         // 메인 이력서 찾기 (mainCv == true)
         CVEntity mainCv = null;

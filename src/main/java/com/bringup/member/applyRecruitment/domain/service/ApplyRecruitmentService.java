@@ -89,7 +89,7 @@ public class ApplyRecruitmentService {
 
     @Transactional
     public List<ApplyRecruitmentResponseDto> getApplyCVList(UserDetailsImpl userDetails){
-        List<CVEntity> cvList = cvRepository.findAllByUserIndex(userDetails.getId());
+        List<CVEntity> cvList = cvRepository.findAllByUserIndexAndStatus(userDetails.getId(),"생성");
 
         if (cvList.isEmpty()){
             throw new ApplyRecruitmentException(NOT_FOUND_MEMBER_CV);

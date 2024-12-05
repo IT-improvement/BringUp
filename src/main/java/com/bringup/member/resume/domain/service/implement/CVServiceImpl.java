@@ -152,11 +152,20 @@ public class CVServiceImpl implements CVService {
     public ResponseEntity<? super CVListResponseDto> listCv(int userCode) {
         List<CVEntity> list = null;
         try{
-            list = cvRepository.findAllByUserIndex(userCode);
+            list = cvRepository.findAllByUserIndexAndStatus(userCode,"생성");
         }catch (Exception e){
             ResponseDto.databaseError();
         }
 
         return CVListResponseDto.success(list);
+    }
+
+    @Override
+    public ResponseEntity<?> deleteCv(String index) {
+        int cvIndex = Integer.parseInt(index);
+        CVEntity cvEntity = cvRepository.findByCvIndex(cvIndex);
+        cvEntity.setStatus("삭제");
+        cvRepository.save(cvEntity);
+        return null;
     }
 }

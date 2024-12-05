@@ -105,7 +105,7 @@ public class HeadhuntService {
 
         for (UserEntity user : allUsers) {
             if (!membershipUserIds.contains(user.getUserIndex())) { // 멤버십 유저가 아닌 일반 유저들만 필터링
-                List<CVEntity> userCVs = cvRepository.findAllByUserIndex(user.getUserIndex());
+                List<CVEntity> userCVs = cvRepository.findAllByUserIndexAndStatus(user.getUserIndex(),"생성");
                 for (CVEntity cvEntity : userCVs) {
                     if (cvEntity.isMainCv()) {  // mainCv가 true인 경우만 추가
                         allCVs.add(convertToDto(cvEntity));
