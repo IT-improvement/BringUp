@@ -123,7 +123,7 @@ public class ImageService {
         }
 
         // 저장된 파일 경로 반환
-        return savePath.toString();
+        return savedPath + saveFileName;
     }
 
 }

@@ -80,8 +80,8 @@ public class CertificateService {
     }
 
     // 인증 코드 검증 (이메일 또는 전화번호)
-    public boolean verifyCertificateNumber(String identifier, String token) {
-        Optional<EmailVerificationToken> optionalToken = emailVerificationTokenRepository.findByEmail(identifier);
+    public boolean verifyCertificateNumber(String token) {
+        Optional<EmailVerificationToken> optionalToken = emailVerificationTokenRepository.findByToken(token);
 
         if (optionalToken.isEmpty()) {
             throw new CertificateException(INVALID_CERTIFCATE_NUMBER);

@@ -187,7 +187,7 @@
 				<div class="card" style="margin: 10px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
 					<div class="card-body">
 						<h5 class="card-title">리뷰 내용</h5>
-						<p>${"${review.companyReviewContent}"}</p>
+						<p>${"${review.content}"}</p>
 					</div>
 				</div>
 			`;

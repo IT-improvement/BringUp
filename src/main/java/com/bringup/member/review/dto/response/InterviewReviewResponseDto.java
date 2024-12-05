@@ -12,6 +12,7 @@ public class InterviewReviewResponseDto {
     private int interviewReviewIndex;
     private int ambience;
     private int difficulty;
+    private String userEmail;
     private String interviewReviewTitle;
     private String interviewReviewDate;
     private String interviewReviewContent;

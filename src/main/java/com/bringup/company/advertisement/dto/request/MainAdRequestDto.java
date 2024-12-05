@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 public class MainAdRequestDto {
     private int recruitmentIndex; // 채용공고 인덱스
-    private int exposureDays; // 노출 일수
+    private List<String> exposureDays; // 노출 일수
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private String startDate; // 시작 날짜
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

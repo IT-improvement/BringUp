@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     const accessToken = localStorage.getItem("accessToken");
     const url = "/com/companyInfo/post"
+    // 초기 이미지 데이터를 저장할 전역 객체
+    window.initialImageData = {
+        companyLogo: '',
+        companyImgs: []
+    };
 
     if (accessToken) {
         fetch(url, {
@@ -13,6 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             console.log(data);
             console.log(data.data);
+
+            // 초기 데이터 저장
+            window.initialImageData.companyLogo = data.data.companyLogo || '';
+            
+            const companyImg = data.data.companyImg;
+            window.initialImageData.companyImgs = companyImg ? companyImg.split(",").map(img => img.trim()) : [];
 
             // 회사 로고 처리
             if (data.data.companyLogo) {
@@ -34,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function() {
             companyLogoRemoveButton.addEventListener('click', removeCompanyLogo);
 
             // 회사 대표 이미지 처리
-            const companyImg = data.data.companyImg;
             const companyImgArray = companyImg ? companyImg.split(",") : [];
             
             companyImgArray.forEach((imgSrc, index) => {
@@ -95,19 +105,27 @@ document.addEventListener('DOMContentLoaded', function() {
                     companyLogo: companyLogoHiddenInput
                 };
 
-                companyImgArray.forEach((imgSrc, index) => {
-                    const imgSrcValue = imgSrc.trim();
-                    let currentValue = index < companyImgValues.length ? companyImgValues[index] : null;
+                companyImgValues.forEach((imgSrc, index) => {
+                    let currentValue = imgSrc.trim();
+                    const initialValue = window.initialImageData.companyImgs[index] || '';
                     
                     result[`c_img${index}`] = currentValue;
-                    result[`img${index}_status`] = '유지'; // 회사 대표 이미지는 현상 유지
+                    
+                    // 초기값과 현재값을 비교하여 상태 설정
+                    if (currentValue === initialValue) {
+                        result[`img${index}_status`] = "유지";
+                    } else if (currentValue === '') {
+                        result[`img${index}_status`] = "삭제";
+                    } else if (currentValue.startsWith('data:image')) {
+                        result[`img${index}_status`] = "수정";
+                    }
                 });
 
                 console.log(JSON.stringify(result, null, 2));
 
                 // /com/user/image로 요청 보내기
                 fetch('/com/user/image', {
-                    method: 'POST',
+                    method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ` + localStorage.getItem("accessToken")
@@ -117,6 +135,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(data => {
                     console.log('서버 응답:', data);
+                    if(data.code === 200) {
+                        alert("회사 정보 수정이 완료되었습니다.");
+                        location.href = "/company/auth/profile";
+                    }
                 })
                 .catch(error => {
                     console.error('요청 중 오류 발생:', error);
@@ -217,6 +239,7 @@ function handleFileInputChange(e, index) {
             hiddenInput.value = e.target.result; // 바이너리 데이터를 저장합니다.
         };
         reader.readAsDataURL(fileInput.files[0]);
+        console.log(hiddenInput.value);
     } else {
         fileNameSpan.textContent = '파일을 선택하세요';
         hiddenInput.value = '';

@@ -89,7 +89,7 @@ public class AdvertisementController {
      * @param img
      * @return
      */
-    @PostMapping("/premium")
+    @PostMapping("/premium/registration")
     public ResponseEntity<BfResponse<?>> createPremiumAd(
             @RequestPart("premiumAdDto") String premiumAdDtoJson,
             @RequestPart("image") MultipartFile img,
@@ -107,19 +107,26 @@ public class AdvertisementController {
     }
 
     @PutMapping("/premium/{premiumAdId}")
-    public ResponseEntity<BfResponse<String>> updatePremiumAd(
+    public ResponseEntity<BfResponse<?>> updatePremiumAd(
             @PathVariable int premiumAdId,
-            @RequestBody PremiumAdRequestDto premiumAdDto,
+            @RequestPart("premiumAdDto") String premiumAdDtoJson,
             @RequestPart("image") MultipartFile img,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        premiumAdService.updatePremiumAd(premiumAdId, premiumAdDto, img, userDetails);
-        BfResponse<String> response = new BfResponse<>(SUCCESS,"Premium advertisement updated successfully");
-        return ResponseEntity.ok(response);
+        try {
+            PremiumAdRequestDto premiumAdDto = objectMapper.readValue(premiumAdDtoJson, PremiumAdRequestDto.class);
+            premiumAdService.updatePremiumAd(premiumAdId, premiumAdDto, img, userDetails);
+            BfResponse<String> response = new BfResponse<>(SUCCESS,"Premium advertisement updated successfully");
+            return ResponseEntity.ok(response);
+        } catch (AdvertisementException e) {
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @DeleteMapping("/premium/{premiumAdId}")
-    public ResponseEntity<BfResponse<String>> deletePremiumAd(@PathVariable int premiumAdId) {
+    public ResponseEntity<BfResponse<String>> deletePremiumAd(@PathVariable("premiumAdId") int premiumAdId) {
         premiumAdService.deletePremiumAd(premiumAdId);
         BfResponse<String> response = new BfResponse<>(SUCCESS, "Premium advertisement deleted successfully");
         return ResponseEntity.ok(response);
@@ -162,7 +169,7 @@ public class AdvertisementController {
      * @param img
      * @return
      */
-    @PostMapping("/main")
+    @PostMapping("/main/registration")
     public ResponseEntity<BfResponse<?>> createMainAd(@RequestPart("mainAdDto") String mainAdDtoJson,
                                                          @RequestPart("image") MultipartFile img,
                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -223,7 +230,7 @@ public class AdvertisementController {
 
     //-------------배너 라인----------------------------------------------\
 
-    @PostMapping("/banner")
+    @PostMapping("/banner/registration")
     public ResponseEntity<BfResponse<String>> createBannerAd(
             @RequestPart("bannerAdDto") String bannerAdDtoJson,
             @RequestPart("image") MultipartFile img,
@@ -278,7 +285,7 @@ public class AdvertisementController {
 
     //-------------기타 라인----------------------------------------------
 
-    @PostMapping("/announce")
+    @PostMapping("/announce/registration")
     public ResponseEntity<BfResponse<?>> createAnnouncementAd(
             @RequestBody AnnouncementAdRequestDto announcementAdDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {

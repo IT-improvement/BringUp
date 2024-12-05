@@ -17,8 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.bringup.common.enums.RecruitmentErrorCode.BAD_REQUEST;
-import static com.bringup.common.enums.RecruitmentErrorCode.NOT_FOUND_RECRUITMENT;
+import static com.bringup.common.enums.RecruitmentErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -114,11 +113,16 @@ public class FreelancerRecruitmentService {
         RecruitmentFreelancer project = recruitmentFreelancerRepository.findById(projectId)
                 .orElseThrow(() -> new RecruitmentException(NOT_FOUND_RECRUITMENT));
 
-        if (!project.getCompany().getCompanyId().equals(userDetails.getId())) {
-            throw new RecruitmentException(BAD_REQUEST);
-        }
+        Company company = companyRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new RecruitmentException(NOT_FOUND_MEMBER_ID));
+
+        String[] images = company.getCompanyImg().replaceAll(" ", "").replaceAll("\n", "").split(",");
 
         return FreelancerProjectDetailResponseDto.builder()
+                .c_logo(company.getCompanyLogo())
+                .c_img(images)
+                .c_name(company.getCompanyName())
+                .c_address(company.getCompanyAddress())
                 .projectTitle(project.getProjectTitle())
                 .projectDescription(project.getProjectDescription())
                 .expectedDuration(project.getExpectedDuration())

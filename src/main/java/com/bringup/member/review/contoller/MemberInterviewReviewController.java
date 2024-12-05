@@ -85,9 +85,15 @@ public class MemberInterviewReviewController {
         }
     }
 
-    @GetMapping("/company/{companyIdx}")
+    @GetMapping("/interview-review/{companyIdx}")
     public ResponseEntity<BfResponse<?>> getReviewsByCompany(@PathVariable("companyIdx") int companyIdx){
         List<InterviewReviewResponseDto> reviews = interviewReviewService.getAllReviewsByCompany(companyIdx);
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, reviews));
+    }
+
+    @GetMapping("/interview-review/myReview")
+    public ResponseEntity<BfResponse<?>> getMyReview(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        List<InterviewReviewResponseDto> reviews = interviewReviewService.getMyInterviewReview(userDetails);
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, reviews));
     }
 }

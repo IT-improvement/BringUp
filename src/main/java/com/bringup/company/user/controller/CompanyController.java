@@ -185,6 +185,11 @@ public class CompanyController {
         }
     }
 
+    @GetMapping("/getCompanyName/{companyIdx}")
+    public ResponseEntity<BfResponse<?>> getCompanyName(@PathVariable("companyIdx") int companyIdx){
+        return ResponseEntity.ok(new BfResponse<>(SUCCESS, companyService.getCompanyName(companyIdx)));
+    }
+
     // 로그아웃
     /*@PostMapping("/logout")
     public ResponseEntity<BfResponse<?>> logout(

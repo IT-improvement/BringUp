@@ -25,9 +25,6 @@
 
     <!-- 테마 CSS -->
     <link rel="stylesheet" type="text/css" href="/resources/style/common/css/style.css">
-
-    <link rel="stylesheet" type="text/css" href="/resources/style/company/signup/signupsecond.css">
-
     
 <!-- Bootstrap JS -->
 <script src="/resources/style/common/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

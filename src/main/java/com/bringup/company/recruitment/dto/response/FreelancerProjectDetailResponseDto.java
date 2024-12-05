@@ -11,6 +11,10 @@ import java.time.LocalDate;
 @Setter
 @Builder
 public class FreelancerProjectDetailResponseDto {
+    private String c_logo;
+    private String c_name;
+    private String[] c_img;
+    private String c_address;
     private Integer projectIndex;
     private String projectTitle;            // 프로젝트 제목
     private String projectDescription;      // 프로젝트 설명
