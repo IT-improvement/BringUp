@@ -107,15 +107,22 @@ public class AdvertisementController {
     }
 
     @PutMapping("/premium/{premiumAdId}")
-    public ResponseEntity<BfResponse<String>> updatePremiumAd(
+    public ResponseEntity<BfResponse<?>> updatePremiumAd(
             @PathVariable int premiumAdId,
-            @RequestBody PremiumAdRequestDto premiumAdDto,
+            @RequestPart("premiumAdDto") String premiumAdDtoJson,
             @RequestPart("image") MultipartFile img,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        premiumAdService.updatePremiumAd(premiumAdId, premiumAdDto, img, userDetails);
-        BfResponse<String> response = new BfResponse<>(SUCCESS,"Premium advertisement updated successfully");
-        return ResponseEntity.ok(response);
+        try {
+            PremiumAdRequestDto premiumAdDto = objectMapper.readValue(premiumAdDtoJson, PremiumAdRequestDto.class);
+            premiumAdService.updatePremiumAd(premiumAdId, premiumAdDto, img, userDetails);
+            BfResponse<String> response = new BfResponse<>(SUCCESS,"Premium advertisement updated successfully");
+            return ResponseEntity.ok(response);
+        } catch (AdvertisementException e) {
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @DeleteMapping("/premium/{premiumAdId}")

@@ -114,7 +114,10 @@ public class AnnouncementAdService {
     }
 
     public AnnouncementAdResponseDto getAnnouncementAdDetail(int announcementId, UserDetailsImpl userDetails) {
-        AnnouncementAdvertisement announcementAd = announcementAdvertisementRepository.findById(announcementId)
+        Advertisement advertisement = advertisementRepository.findByAdvertisementIndex(announcementId)
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
+        AnnouncementAdvertisement announcementAd = announcementAdvertisementRepository.findById(advertisement.getAdvertisementIndex())
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         if (!announcementAd.getAdvertisement().getRecruitment().getCompany().getCompanyId().equals(userDetails.getId())) {
