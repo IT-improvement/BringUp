@@ -9,6 +9,8 @@ import com.bringup.member.portfolio.career.domain.CareerEntity;
 import com.bringup.member.portfolio.career.domain.CareerRepository;
 import com.bringup.member.portfolio.certificate.domain.CertificateEntity;
 import com.bringup.member.portfolio.certificate.domain.CertificateRepository;
+import com.bringup.member.portfolio.github.domain.GithubEntity;
+import com.bringup.member.portfolio.github.domain.GithubRepository;
 import com.bringup.member.portfolio.school.domain.SchoolEntity;
 import com.bringup.member.portfolio.school.domain.SchoolRepository;
 import com.bringup.member.resume.domain.entity.*;
@@ -41,6 +43,7 @@ public class CVServiceImpl implements CVService {
     private final CertificateRepository certificateRepository;
     private final CareerRepository careerRepository;
     private final SchoolRepository schoolRepository;
+    private final GithubRepository githubRepository;
 
     @Override
     public ResponseEntity<? super CVInsertResponseDto> insertCv(CVInsertRequestDto request, int userCode) {
@@ -88,6 +91,12 @@ public class CVServiceImpl implements CVService {
                 cvSchoolRepository.save(cvSchool);
             }
         }
+        if(request.getGithub() != null) {
+            for(String n: request.getGithub()){
+                GithubEntity githubEntity = new GithubEntity(n,cvIndex);
+                githubRepository.save(githubEntity);
+            }
+        }
         return CVInsertResponseDto.success();
     }
 
@@ -126,6 +135,7 @@ public class CVServiceImpl implements CVService {
             SchoolEntity school = schoolRepository.findBySchoolIndex(cvSchoolEntity.getSchoolIndex());
             schoollist.add(school);
         }
+        List<GithubEntity> github = githubRepository.findByCvIndex(cvIndex);
         return CVReadResponseDto.success(cvEntity,awardlist,bloglist,careerlist,certificatelist,schoollist);
     }
 
