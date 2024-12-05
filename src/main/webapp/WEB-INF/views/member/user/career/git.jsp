@@ -31,6 +31,55 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+        /* 레파지토리 카드 스타일 */
+        .repository-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .repository-card {
+            flex: 1 1 calc(33.333% - 15px); /* 카드 3열 배치 */
+            max-width: calc(33.333% - 15px);
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .repository-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .repository-card h5 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .repository-card p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .repository-card a {
+            font-size: 0.9rem;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .repository-card a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
