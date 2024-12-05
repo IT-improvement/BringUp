@@ -437,12 +437,14 @@
                     const skillBadges = document.querySelectorAll("#skills-list .badge");
                     const skill = Array.from(skillBadges).map(badge => badge.textContent);
 
-                    // GitHub 레포지토리 정보
+                    // GitHub 레포지토리 정보 (단일 문자열로 연결)
                     const gitRepoCards = document.querySelectorAll("#gitRepoList .card");
-                    const github = Array.from(gitRepoCards).map(card => {
-                        const urlElement = card.querySelector("a");
-                        return urlElement ? urlElement.href : "";
-                    });
+                    const github = Array.from(gitRepoCards)
+                        .map(card => {
+                            const urlElement = card.querySelector("a");
+                            return urlElement ? urlElement.href : "";
+                        })
+                        .join(","); // URL을 ','로 구분된 문자열로 변환
 
                     // 데이터 준비
                     const requestBody = {
@@ -454,7 +456,7 @@
                         cvCareer,
                         cvBlog,
                         cvSchool,
-                        github
+                        github // 단일 문자열
                     };
 
                     console.log("Request Body:", requestBody);
