@@ -74,7 +74,6 @@
                             <li><a class="dropdown-item" href="/member/topRecruitment">인기 공고 TOP 100</a></li>
                             <li><a class="dropdown-item" href="/member/visitRecruitment">내가 본 공고</a></li>
                             <li><a class="dropdown-item" href="/member/AnnouncementRecruitment">내가 지원한 공고</a></li>
-                            <li><a class="dropdown-item" href="/member/proposeRecruitment">제안 받은 공고</a></li>
                         </ul>
                     </li>
 
