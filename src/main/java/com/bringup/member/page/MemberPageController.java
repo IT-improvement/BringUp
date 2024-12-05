@@ -109,6 +109,9 @@ public class MemberPageController {
         return "member/user/profile/memberProfile";
     }
 
+    @GetMapping("/updateProfile")
+    public String updateProfile(){ return "member/user/profile/updateProfile"; }
+
     @GetMapping("/recruitment/details/{recruitmentIndex}")
     public String recruitmentDetails(@PathVariable("recruitmentIndex") int recruitmentId) {
         return "member/user/recruitment/detail";

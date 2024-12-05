@@ -12,13 +12,6 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @Setter
 public class MemberUpdateDto {
-    @NotBlank(message = "이메일을 입력해주세요.")
-    @Email(message = "올바른 이메일 주소를 입력해주세요.")
-    private String userEmail;
-
-    @NotEmpty(message = "비밀번호는 필수 입력 사항입니다.")
-    @Length(min = 8, message = "비밀번호는 8자 이상으로 입력해주세요.")
-    private String userPassword;
 
     @NotBlank(message = "이름을 입력해주세요.")
     private String userName;
@@ -30,7 +23,4 @@ public class MemberUpdateDto {
     private String userPhoneNumber;
 
     private String userBirthday;
-    private boolean freelancer;
-    private String status;
-
 }

@@ -46,13 +46,10 @@ public class MemberService{
         UserEntity user = userRepository.findById(userDetails.getId())
                 .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_ID));
 
-        user.setUserEmail(dto.getUserEmail());
-        user.setUserPassword(passwordEncoder.encode(dto.getUserPassword()));
         user.setUserName(dto.getUserName());
         user.setUserPhonenumber(dto.getUserPhoneNumber());
         user.setUserAddress(dto.getUserAddress());
         user.setUserBirthday(dto.getUserBirthday());
-        user.setFreelancer(dto.isFreelancer());
 
         userRepository.save(user);
     }

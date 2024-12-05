@@ -50,7 +50,7 @@ public class MemberController {
         return ResponseEntity.ok(new BfResponse<>(SUCCESS, userName));
     }
 
-    @PutMapping("/update")
+    @PostMapping("/update")
     public ResponseEntity<BfResponse<?>> updateMember(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody MemberUpdateDto dto){
         try {
             memberService.updateMember(userDetails, dto);

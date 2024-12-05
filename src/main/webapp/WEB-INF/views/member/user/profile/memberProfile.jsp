@@ -111,6 +111,7 @@
                 <p class="h5">생년월일</p>
                 <div class="alert alert-light p-3 mb-5" role="alert" id="userBirthday"></div>
             </div>
+            <button type="submit" class="btn btn-primary" style="float: right;" onclick="location.href='/member/updateProfile'">수정</button>
         </div>
     </div>
 </main>
