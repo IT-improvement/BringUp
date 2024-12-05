@@ -32,6 +32,7 @@ public class GithubService {
         Optional<UserEntity> user = userRepository.findByUserIndex(userCode);
         UserEntity userEntity = user.get();
         String githubToken = userEntity.getGithubToken();
+        System.out.println("toke:" + githubToken);
         String url = "https://api.github.com/user";
 
         HttpHeaders headers = new HttpHeaders();
