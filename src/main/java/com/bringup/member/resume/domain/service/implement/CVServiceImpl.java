@@ -48,6 +48,7 @@ public class CVServiceImpl implements CVService {
     @Override
     public ResponseEntity<? super CVInsertResponseDto> insertCv(CVInsertRequestDto request, int userCode) {
         String skill = "";
+        System.out.println("github:"+request.getGithub());
         if(request.getSkill() !=null){
             for(int i = 0; i<request.getSkill().size();i++){
                 skill += request.getSkill().get(i);
@@ -136,7 +137,7 @@ public class CVServiceImpl implements CVService {
             schoollist.add(school);
         }
         List<GithubEntity> github = githubRepository.findByCvIndex(cvIndex);
-        return CVReadResponseDto.success(cvEntity,awardlist,bloglist,careerlist,certificatelist,schoollist);
+        return CVReadResponseDto.success(cvEntity,awardlist,bloglist,careerlist,certificatelist,schoollist,github);
     }
 
     @Override
