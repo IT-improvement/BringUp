@@ -77,7 +77,7 @@
                             <p class="card-text">조회수: <span id="viewCount"></span></p>
                             <p class="card-text">상태: <span id="status"></span></p>
                         </div>
-                        <div class="col-md-6">
+                        <div id="adImageContainer" class="col-md-6" style="display: none;">
                             <h5 class="mb-3">광고 이미지</h5>
                             <img id="adImage" alt="광고 이미지" class="img-fluid rounded">
                         </div>
