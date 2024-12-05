@@ -27,9 +27,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static com.bringup.common.enums.AdvertisementErrorCode.ALREADY_ACTIVE;
-import static com.bringup.common.enums.AdvertisementErrorCode.NOT_FOUND_ADVERTISEMENT;
+import static com.bringup.common.enums.AdvertisementErrorCode.*;
 import static com.bringup.common.enums.MemberErrorCode.*;
+import static com.bringup.common.enums.MemberErrorCode.NOT_FOUND_RECRUITMENT;
 
 @Service
 @RequiredArgsConstructor
@@ -59,7 +59,7 @@ public class MainAdService {
         advertisement.setRecruitment(recruitment);
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
-        advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
+        advertisement.setStatus(StatusType.ACTIVE); // 초기 상태
         advertisement.setStartDate(LocalDate.parse(mainAdDto.getStartDate()));
         advertisement.setOrder(order);
         advertisement.setEndDate(LocalDate.parse(mainAdDto.getEndDate()));
@@ -69,7 +69,11 @@ public class MainAdService {
         // 메인 광고 등록
         MainAdvertisement mainAd = new MainAdvertisement();
         mainAd.setAdvertisement(advertisement);
+        if(img.isEmpty()){
+            throw new AdvertisementException(NOT_FOUND_IMG_AND_DATE);
+        }
         mainAd.setMain_Image(imageService.saveImage(img));
+
 
         mainAdvertisementRepository.save(mainAd);
     }
@@ -86,7 +90,7 @@ public class MainAdService {
         // 광고 정보 업데이트
         Advertisement ad = mainAd.getAdvertisement();
         ad.setStringListFromList(mainAdDto.getUseDate());
-        ad.setStatus(StatusType.CRT_WAIT); // 수정 시에도 초기 상태로 변경
+        ad.setStatus(StatusType.ACTIVE); // 수정 시에도 초기 상태로 변경
         mainAd.getAdvertisement().setStartDate(LocalDate.parse(mainAdDto.getStartDate()));
         mainAd.getAdvertisement().setEndDate(LocalDate.parse(mainAdDto.getEndDate()));
 
@@ -171,6 +175,7 @@ public class MainAdService {
                 .startDate(mainAd.getAdvertisement().getStartDate())
                 .endDate(mainAd.getAdvertisement().getEndDate())
                 .discountRate(mainAd.getDiscountRate())
+                .imageUrl(mainAd.getMain_Image())
                 .viewCount(ad.getV_count())
                 .clickCount(ad.getC_count())
                 .status(ad.getStatus())
