@@ -22,7 +22,7 @@ function updateTable(page) {
         let type = '';
         if (ad.adType === 'Premium') {
             type = 'premium';
-        } else if (ad.adType === 'announcement') {
+        } else if (ad.adType === 'Announcement') {
             type = 'announce';
         } else if (ad.adType === 'Banner') {
             type = 'banner';
