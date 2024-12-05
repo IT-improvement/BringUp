@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const buttonText = isSaved ? '저장된 후보자' : '후보자 저장';
 
             html += `
-                <div class="user-card">
+                <div class="user-card" data-cvindex="${cv.cvIndex}">
                     <div class="user-card-content">
                         <img src="${imgSrc}" alt="CV Image" class="user-image">
                         <div class="user-info">
@@ -85,6 +85,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // 이벤트 바인딩
         document.querySelectorAll('.save-candidate').forEach(button => {
             button.addEventListener('click', handleSaveButtonClick);
+        });
+
+        document.querySelectorAll('.user-card').forEach(card => {
+            card.addEventListener('click', handleUserCardClick);
         });
     };
 
@@ -117,6 +121,15 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error("Error:", error);
             alert('작업 중 오류가 발생했습니다.');
         }
+    };
+
+    // 유저 카드 클릭 핸들러
+    const handleUserCardClick = (event) => {
+        const cvIndex = event.currentTarget.getAttribute('data-cvindex');
+        if (cvIndex) {
+            window.location.href = `/member/careerDetail?cvIndex=` + cvIndex;
+        }
+
     };
 
     // CV 및 저장 상태 가져오기
