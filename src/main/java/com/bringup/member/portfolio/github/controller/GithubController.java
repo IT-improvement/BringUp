@@ -28,12 +28,9 @@ public class GithubController {
         return gitHubService.getOrgRepos(userLogin, userCode);
     }
 
-    @PutMapping("/github/insert")
-    public ResponseEntity<? super GithubResponseDto> insertToken(@AuthenticationPrincipal UserDetailsImpl user, @RequestBody String token){
+    @PostMapping("/github/insert/{token}")
+    public ResponseEntity<? super GithubResponseDto> insertToken(@AuthenticationPrincipal UserDetailsImpl user,@PathVariable String token){
         int userCode = user.getId();
-        System.out.println("Authorization Header: token " + token);
         return gitHubService.insertGithubToken(userCode ,token);
-
-
     }
 }

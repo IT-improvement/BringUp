@@ -93,15 +93,12 @@
         })
             .then(response => {
                 if (!response.ok) {
-                    if (response.status === 401) {
-                        throw new Error("GitHub 토큰이 없습니다.");
-                    }
                     throw new Error("GitHub 요청 실패");
                 }
                 return response.json();
             })
             .then(data => {
-                loadRepositories(githubTokens); // GitHub 사용자 데이터 성공적으로 로드
+                loadRepositories(accessToken); // GitHub 사용자 데이터 성공적으로 로드
             })
             .catch(error => {
                 console.error("Error:", error.message);
@@ -118,15 +115,12 @@
             return;
         }
 
-        githubToken = githubToken.replace(/^"|"$/g, " "); // 앞뒤 따옴표 제거
-
-        fetch("/github/insert", {
-            method: "PUT",
+        fetch(`/github/insert/` + githubToken, {
+            method: "POST",
             headers: {
                 "Authorization": "Bearer " + accessToken,
                 "Content-Type": "application/json"
-            },
-            body: JSON.stringify(githubToken)
+            }
         })
             .then(response => {
                 if (!response.ok) {
