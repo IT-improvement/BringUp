@@ -370,8 +370,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify(announceData)
             })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Response status:', response.status);
+                        console.error('Response status text:', response.statusText);
+                        console.error('Response body:', text);
+                        throw new Error(`HTTP error! status: ${response.status}, message: ${text}`);
+                    });
+                }
+                return response.json();  // JSON으로 한 번만 파싱
+            })
             .then(handleResponse)
-            .catch(handleError);
+            .catch(error => {
+                console.error('Request failed:', error);
+                handleError(error);
+            });
         }
 
         // 요청 전송 함수
@@ -435,14 +449,17 @@ document.addEventListener('DOMContentLoaded', function() {
         } 
         // response가 Response 객체인 경우 (아직 JSON으로 파싱되지 않은 경우)
         else {
-            return response.json().then(responseData => {
-                if(responseData.code === 200) {
+            return response.json().then(response => {
+                if(response.code === 200) {
                     alert("광고 등록이 완료되었습니다.");
                     sessionStorage.clear();
                     location.href = "/company/product/management";
                 } else {
-                    throw new Error(responseData.message || "광고 등록에 실패했습니다.");
+                    throw new Error(response.message || "광고 등록에 실패했습니다.");
                 }
+            }).catch(error => {
+                console.error('JSON 파싱 에러:', error);
+                throw new Error("응답 처리 중 오류가 발생했습니다.");
             });
         }
     }
@@ -753,7 +770,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 img.onload = function() {
                     // let valid = img.width === 1228 && img.height === 80;
                     // if (!valid) {
-                    //     alert('이미지 크기가 바르지 않습니다. 올바�� 크기를 업로드하세요.');
+                    //     alert('이미지 크기가 바르지 않습니다. 올바 크기를 업로드하세요.');
                     //     event.target.value = '';
                     // }
                 };
