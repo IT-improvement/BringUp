@@ -38,7 +38,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const row = document.createElement('tr');
         row.style.cursor = 'pointer';
         row.addEventListener('click', () => {
-            window.location.href = `/company/jobpost/detail?index=${item.index}`;
+            if (item.type == "RECRUITMENT") {
+                window.location.href = `/company/jobpost/detail?index=${item.index}`;
+            } else {
+                window.location.href = `/company/jobpost_free/detail?index=${item.index}`;
+            }
         });
         
         const type = item.type == "RECRUITMENT" ? "정규채용" : "프리랜서";

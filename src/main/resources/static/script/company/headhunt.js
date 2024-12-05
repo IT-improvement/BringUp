@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <img src="${imgSrc}" alt="CV Image" class="user-image">
                         <div class="user-info">
                             <p class="user-name">${cv.userName}</p>
-                            <p class="user-education">최종학력: ${cv.education}</p>
+<!--                            <p class="user-education">최종학력: ${cv.education}</p>-->
                             <p class="user-address">주소: ${cv.userAddress}</p>
                             <p class="user-skill">기술 스택: ${cv.skill}</p>
                         </div>

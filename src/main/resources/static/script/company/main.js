@@ -100,7 +100,11 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             row.style.cursor = 'pointer';
             row.addEventListener('click', () => {
-                window.location.href = `/company/jobpost/detail?index=`+number;
+                if (recruitment.type == "RECRUITMENT") {
+                    window.location.href = `/company/jobpost/detail?index=${recruitment.index}`;
+                } else {
+                    window.location.href = `/company/jobpost_free/detail?index=${recruitment.index}`;
+                }
             });
             recruitmentListBody.appendChild(row);
         });

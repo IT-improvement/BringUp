@@ -75,7 +75,7 @@ public class BannerAdService {
         advertisement.setStartDate(LocalDate.parse(bannerAdDto.getStartDate()));
         advertisement.setEndDate(LocalDate.parse(bannerAdDto.getEndDate()));
         advertisement.setOrder(order);
-        advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
+        advertisement.setStatus(StatusType.ACTIVE); // 초기 상태
         advertisementRepository.save(advertisement);
 
 
@@ -111,7 +111,7 @@ public class BannerAdService {
             throw new CompanyException(NOT_FOUND_MEMBER_ID);
         }
 
-        bannerAd.getAdvertisement().setStatus(StatusType.CRT_WAIT);
+        bannerAd.getAdvertisement().setStatus(StatusType.ACTIVE);
         bannerAd.setBannerImage(imageService.saveImage(img));
         bannerAd.getAdvertisement().setStartDate(LocalDate.parse(bannerAdDto.getStartDate()));
         bannerAd.getAdvertisement().setEndDate(LocalDate.parse(bannerAdDto.getEndDate()));
@@ -137,6 +137,7 @@ public class BannerAdService {
                 .recruitmentIndex(bannerAd.getAdvertisement().getRecruitment().getRecruitmentIndex())
                 .startDate(bannerAd.getAdvertisement().getStartDate())
                 .endDate(bannerAd.getAdvertisement().getEndDate())
+                .imageUrl(bannerAd.getBannerImage())
                 .viewCount(bannerAd.getAdvertisement().getV_count())
                 .clickCount(bannerAd.getAdvertisement().getC_count())
                 .status(bannerAd.getAdvertisement().getStatus())

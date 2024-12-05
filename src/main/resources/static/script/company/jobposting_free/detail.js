@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const accessToken = localStorage.getItem('accessToken');
     const urlParams = new URLSearchParams(window.location.search);
-    const projectIndex = urlParams.get('project_index');
+    const projectIndex = urlParams.get('index');
 
     if (!accessToken) {
         window.location.href = '/company/auth/login';

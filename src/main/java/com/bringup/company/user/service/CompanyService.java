@@ -275,11 +275,11 @@ public class CompanyService {
             String status = imageStatuses.get(i);
 
             // 클라이언트에서 보낸 값이 없고 상태가 delete라면 기존 이미지 삭제
-            if (newImage == null && "deleted".equals(status) && i < existingImages.size()) {
+            if (newImage == null && "삭제".equals(status) && i < existingImages.size()) {
                 existingImages.set(i, null);  // 삭제된 이미지를 null로 설정
             }
             // status가 "수정"일 때, 이미지 순서가 바뀌거나 새 이미지가 추가된 경우 처리
-            else if ("modify".equals(status)) {
+            else if ("수정".equals(status)) {
                 if (newImage != null && isBase64Image(newImage)) {
                     // 새 이미지가 Base64로 인코딩된 경우 처리
                     String imagePath = saveBase64Image(newImage, i);
@@ -293,7 +293,7 @@ public class CompanyService {
                 }
             }
             // 새 이미지가 없고 삭제된 이미지가 아닌 경우 기존 이미지를 유지
-            else if (newImage == null && i < existingImages.size() && existingImages.get(i) != null) {
+            else if (newImage == null && i < existingImages.size() && "유지".equals(status)) {
                 finalImageList.add(existingImages.get(i));
             }
         }
@@ -355,5 +355,12 @@ public class CompanyService {
         } else {
             throw new CompanyException(NOT_FOUND_MEMBER_EMAIL);
         }
+    }
+
+    public String getCompanyName(int companyIdx){
+        Company company = companyRepository.findBycompanyId(companyIdx)
+                .orElseThrow(() -> new CompanyException(NOT_FOUND_MEMBER_EMAIL));
+
+        return company.getCompanyName();
     }
 }

@@ -12,6 +12,7 @@ import com.bringup.company.advertisement.dto.response.AnnouncementAdResponseDto;
 import com.bringup.company.advertisement.dto.response.ItemInfoResponseDto;
 import com.bringup.company.advertisement.entity.Advertisement;
 import com.bringup.company.advertisement.entity.AnnouncementAdvertisement;
+import com.bringup.company.advertisement.entity.BannerAdvertisement;
 import com.bringup.company.advertisement.exception.AdvertisementException;
 import com.bringup.company.advertisement.repository.AdvertisementRepository;
 import com.bringup.company.advertisement.repository.AnnouncementAdvertisementRepository;
@@ -114,7 +115,10 @@ public class AnnouncementAdService {
     }
 
     public AnnouncementAdResponseDto getAnnouncementAdDetail(int announcementId, UserDetailsImpl userDetails) {
-        AnnouncementAdvertisement announcementAd = announcementAdvertisementRepository.findById(announcementId)
+        Advertisement ad = advertisementRepository.findByAdvertisementIndex(announcementId)
+                .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
+
+        AnnouncementAdvertisement announcementAd = announcementAdvertisementRepository.findById(ad.getAnnouncementAdvertisement().getAnnouncementId())
                 .orElseThrow(() -> new AdvertisementException(NOT_FOUND_ADVERTISEMENT));
 
         if (!announcementAd.getAdvertisement().getRecruitment().getCompany().getCompanyId().equals(userDetails.getId())) {
@@ -131,6 +135,8 @@ public class AnnouncementAdService {
                 .startDate(announcementAd.getAdvertisement().getStartDate())
                 .endDate(announcementAd.getAdvertisement().getEndDate())
                 .status(announcementAd.getAdvertisement().getStatus())
+                .clickCount(announcementAd.getAdvertisement().getC_count())
+                .viewCount(announcementAd.getAdvertisement().getV_count())
                 .build();
     }
 }

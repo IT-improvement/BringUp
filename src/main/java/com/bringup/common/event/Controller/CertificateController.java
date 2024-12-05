@@ -58,10 +58,9 @@ public class CertificateController {
     public ResponseEntity<BfResponse<?>> verifyCertificate(
             @RequestBody Map<String, String> requestBody) {
         try{
-            String identifier = requestBody.get("identifier");  // 이메일 또는 전화번호
             String certificationNumber = requestBody.get("certificationNumber");
 
-            boolean isValid = certificateService.verifyCertificateNumber(identifier, certificationNumber);
+            boolean isValid = certificateService.verifyCertificateNumber(certificationNumber);
 
             if (isValid) {
                 return ResponseEntity.ok(new BfResponse<>(SUCCESS, Map.of("isValid", true)));

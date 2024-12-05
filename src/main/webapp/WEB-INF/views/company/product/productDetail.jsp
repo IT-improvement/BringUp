@@ -55,17 +55,17 @@
     <!-- 메인 콘텐츠 -->
     <main class="flex-grow-1 mt-5">
         <div class="container">
+            <a href="/company/product/management" class="mb-3"><i class="bi bi-arrow-left"></i>돌아가기</a>
             <div class="card border-1 border-secondary rounded-3">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <h2 class="card-title mb-0">상품 상세 정보</h2>
                         <div>
-                            <button class="btn btn-primary" id="editButton">수정</button>
                             <button class="btn btn-danger" id="deleteButton">삭제</button>
                         </div>
                     </div>
                     <% String adType = (String)request.getAttribute("adType");%>
-                    <div class="row">
+                    <div class="row" id="adInfo">
                         <div class="col-md-6">
                             <p class="card-text">상품 이름: <span id="adType"></span> 광고</p>
                             <p class="card-text">공고 제목: <span id="recruitmentTitle"></span></p>
@@ -73,14 +73,13 @@
                             <% if (adType != null && adType.equals("premium")) { %>
                                 <p class="card-text">광고 시간: <span id="timeSlot"></span></p>
                             <% } %>
-                            <p class="card-text">결제 금액: <span id="paymentAmount"></span></p>
                             <p class="card-text">클릭 수: <span id="clickCount"></span></p>
                             <p class="card-text">조회수: <span id="viewCount"></span></p>
                             <p class="card-text">상태: <span id="status"></span></p>
                         </div>
-                        <div class="col-md-6">
+                        <div id="adImageContainer" class="col-md-6" style="display: none;">
                             <h5 class="mb-3">광고 이미지</h5>
-                            <img id="adImage" src="" alt="광고 이미지" class="img-fluid rounded">
+                            <img id="adImage" alt="광고 이미지" class="img-fluid rounded">
                         </div>
                     </div>
                 </div>

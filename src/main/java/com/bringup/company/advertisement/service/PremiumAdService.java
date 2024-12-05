@@ -195,7 +195,7 @@ public class PremiumAdService {
         advertisement.setStringListFromList(premiumAdDto.getDisplayDate());
         advertisement.setV_count(0); // 초기 조회 수
         advertisement.setC_count(0); // 초기 클릭 수
-        advertisement.setStatus(StatusType.CRT_WAIT); // 초기 상태
+        advertisement.setStatus(StatusType.ACTIVE); // 초기 상태
         advertisement.setOrder(order);
         advertisement.setStartDate(LocalDate.parse(premiumAdDto.getStartDate()));
         advertisement.setEndDate(LocalDate.parse(premiumAdDto.getEndDate()));
@@ -209,7 +209,6 @@ public class PremiumAdService {
         premiumAd.setImage(imageService.saveImage(img));
 
         premiumAdvertisementRepository.save(premiumAd);
-        // TODO: 웹소켓으로 어드민소통 & 결제를 구성해야함 일단 그냥 CRT_WAIT으로 생성
     }
 
     public void updatePremiumAd(int premiumAdId, PremiumAdRequestDto premiumAdDto, MultipartFile img, UserDetailsImpl userDetails) {
