@@ -1,5 +1,6 @@
 package com.bringup.member.resume.domain.service.implement;
 
+import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.response.ResponseDto;
 import com.bringup.member.portfolio.award.domain.AwardEntity;
 import com.bringup.member.portfolio.award.domain.AwardRepository;
@@ -20,6 +21,10 @@ import com.bringup.member.resume.dto.request.CVInsertRequestDto;
 import com.bringup.member.resume.dto.response.CVInsertResponseDto;
 import com.bringup.member.resume.dto.response.CVListResponseDto;
 import com.bringup.member.resume.dto.response.CVReadResponseDto;
+import com.bringup.member.user.domain.entity.MilitaryEntity;
+import com.bringup.member.user.domain.entity.UserEntity;
+import com.bringup.member.user.domain.exception.MemberException;
+import com.bringup.member.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -44,7 +49,7 @@ public class CVServiceImpl implements CVService {
     private final CareerRepository careerRepository;
     private final SchoolRepository schoolRepository;
     private final GithubRepository githubRepository;
-
+    private final UserRepository userRepository;
     @Override
     public ResponseEntity<? super CVInsertResponseDto> insertCv(CVInsertRequestDto request, int userCode) {
         String skill = "";
@@ -106,6 +111,9 @@ public class CVServiceImpl implements CVService {
         int cvIndex = Integer.parseInt(index);
 
         CVEntity cvEntity = cvRepository.findByCvIndex(cvIndex);
+        int userCode = cvEntity.getUserIndex();
+        UserEntity user = userRepository.findByUserIndex(userCode)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
         List<CVAward> cvAward = cvawardRepository.findByCvIndex(cvIndex);
         List<AwardEntity> awardlist  = new ArrayList<>();
         for(CVAward cvAwardEntity : cvAward){
@@ -137,7 +145,7 @@ public class CVServiceImpl implements CVService {
             schoollist.add(school);
         }
         List<GithubEntity> github = githubRepository.findByCvIndex(cvIndex);
-        return CVReadResponseDto.success(cvEntity,awardlist,bloglist,careerlist,certificatelist,schoollist,github);
+        return CVReadResponseDto.success(user, cvEntity,awardlist,bloglist,careerlist,certificatelist,schoollist,github);
     }
 
     @Override
