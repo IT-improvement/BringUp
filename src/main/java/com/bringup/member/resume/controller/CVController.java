@@ -40,5 +40,10 @@ public class CVController {
         int code = user.getId();
         return cvService.listCv(code);
     }
+
+    @DeleteMapping("/delete/{cv}")
+    public ResponseEntity<?> deleteCv(@PathVariable("cvIndex")String index){
+        return cvService.deleteCv(index);
+    }
 }
 
