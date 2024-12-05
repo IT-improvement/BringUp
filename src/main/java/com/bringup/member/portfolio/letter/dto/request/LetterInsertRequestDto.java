@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LetterInsertRequestDto {
-    private String answser1;
-    private String answser2;
-    private String answser3;
+    private String answer1;
+    private String answer2;
+    private String answer3;
 }

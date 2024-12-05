@@ -1,6 +1,16 @@
 package com.bringup.member.resume.domain.service.implement;
 
 import com.bringup.common.response.ResponseDto;
+import com.bringup.member.portfolio.award.domain.AwardEntity;
+import com.bringup.member.portfolio.award.domain.AwardRepository;
+import com.bringup.member.portfolio.blog.domain.BlogEntity;
+import com.bringup.member.portfolio.blog.domain.BlogRepository;
+import com.bringup.member.portfolio.career.domain.CareerEntity;
+import com.bringup.member.portfolio.career.domain.CareerRepository;
+import com.bringup.member.portfolio.certificate.domain.CertificateEntity;
+import com.bringup.member.portfolio.certificate.domain.CertificateRepository;
+import com.bringup.member.portfolio.school.domain.SchoolEntity;
+import com.bringup.member.portfolio.school.domain.SchoolRepository;
 import com.bringup.member.resume.domain.entity.*;
 import com.bringup.member.resume.domain.repository.*;
 import com.bringup.member.resume.domain.service.CVService;
@@ -12,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,6 +35,12 @@ public class CVServiceImpl implements CVService {
     private final CVCertificateRepository cvCertificateRepository;
     private final CVCareerRepository cvCareerRepository;
     private final CVSchoolRepository cvSchoolRepository;
+
+    private final AwardRepository awardRepository;
+    private final BlogRepository blogRepository;
+    private final CertificateRepository certificateRepository;
+    private final CareerRepository careerRepository;
+    private final SchoolRepository schoolRepository;
 
     @Override
     public ResponseEntity<? super CVInsertResponseDto> insertCv(CVInsertRequestDto request, int userCode) {
@@ -80,12 +97,36 @@ public class CVServiceImpl implements CVService {
 
         CVEntity cvEntity = cvRepository.findByCvIndex(cvIndex);
         List<CVAward> cvAward = cvawardRepository.findByCvIndex(cvIndex);
+        List<AwardEntity> awardlist  = new ArrayList<>();
+        for(CVAward cvAwardEntity : cvAward){
+            AwardEntity award = awardRepository.findById(cvAwardEntity.getId());
+            awardlist.add(award);
+        }
         List<CVBlog> cvBlog = cvBlogRepository.findByCvIndex(cvIndex);
+        List<BlogEntity> bloglist  = new ArrayList<>();
+        for(CVBlog cvBlogEntity : cvBlog){
+            BlogEntity blog = blogRepository.findByBlogIndex(cvBlogEntity.getBlogIndex());
+            bloglist.add(blog);
+        }
         List<CVCareer> cvCareer = cvCareerRepository.findByCvIndex(cvIndex);
+        List<CareerEntity> careerlist  = new ArrayList<>();
+        for(CVCareer cvCareerEntity : cvCareer){
+            CareerEntity career = careerRepository.findByCareerIndex(cvCareerEntity.getCareerIndex());
+            careerlist.add(career);
+        }
         List<CVCertificate> cvCertificate = cvCertificateRepository.findByCvIndex(cvIndex);
+        List<CertificateEntity> certificatelist  = new ArrayList<>();
+        for (CVCertificate certificateEntity : cvCertificate){
+            CertificateEntity certificate = certificateRepository.findByCertificateIndex(certificateEntity.getCertificateIndex());
+            certificatelist.add(certificate);
+        }
         List<CVSchool> cvSchool = cvSchoolRepository.findByCvIndex(cvIndex);
-
-        return CVReadResponseDto.success(cvEntity,cvAward,cvBlog,cvCareer,cvCertificate,cvSchool);
+        List<SchoolEntity> schoollist  = new ArrayList<>();
+        for(CVSchool cvSchoolEntity : cvSchool){
+            SchoolEntity school = schoolRepository.findBySchoolIndex(cvSchoolEntity.getSchoolIndex());
+            schoollist.add(school);
+        }
+        return CVReadResponseDto.success(cvEntity,awardlist,bloglist,careerlist,certificatelist,schoollist);
     }
 
     @Override

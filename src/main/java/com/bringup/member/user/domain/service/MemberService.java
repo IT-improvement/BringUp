@@ -2,11 +2,14 @@ package com.bringup.member.user.domain.service;
 
 import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.security.service.UserDetailsImpl;
+import com.bringup.member.user.domain.entity.MilitaryEntity;
 import com.bringup.member.user.domain.entity.UserEntity;
 import com.bringup.member.user.domain.exception.MemberException;
+import com.bringup.member.user.domain.repository.MilitaryRepsitory;
 import com.bringup.member.user.domain.repository.UserRepository;
 import com.bringup.member.user.dto.JoinDTO;
 import com.bringup.member.user.dto.MemberUpdateDto;
+import com.bringup.member.user.dto.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 //import lombok.extern.log4j.Log4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +38,8 @@ public class MemberService{
     private final JoinService joinService;
     private final UserLoginService userLoginService;
     private final PasswordEncoder passwordEncoder;
+    private final MilitaryRepsitory militaryRepository;
+
 
     @Transactional
     public void updateMember(UserDetailsImpl userDetails, MemberUpdateDto dto){
@@ -62,6 +67,19 @@ public class MemberService{
         return userRepository.findById(userDetails.getId())
                 .orElseThrow(()->new MemberException(NOT_FOUND_MEMBER_EMAIL));
     }
+
+
+    public UserResponseDTO getUserAndMilitaryInfo(Integer userId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER_EMAIL));
+
+        MilitaryEntity military = militaryRepository.findByUserIndex(user.getUserIndex())
+                .orElse(null);
+
+        return new UserResponseDTO(user, military);
+    }
+
+
 
     public String getUserName(UserDetailsImpl userDetails) {
         Optional<UserEntity> userOptional = userRepository.findByUserEmail(userDetails.getUsername());

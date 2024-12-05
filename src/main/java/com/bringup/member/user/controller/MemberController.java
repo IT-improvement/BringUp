@@ -13,10 +13,7 @@ import com.bringup.member.user.domain.repository.UserRepository;
 import com.bringup.member.user.domain.service.JoinService;
 import com.bringup.member.user.domain.service.MemberService;
 import com.bringup.member.user.domain.service.UserLoginService;
-import com.bringup.member.user.dto.JoinDTO;
-import com.bringup.member.user.dto.MemberUpdateDto;
-import com.bringup.member.user.dto.UserLoginDTO;
-import com.bringup.member.user.dto.UserLoginTokenDTO;
+import com.bringup.member.user.dto.*;
 import jakarta.persistence.criteria.Join;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -85,6 +82,17 @@ public class MemberController {
         }catch (MemberException e){
             return errorResponseHandler.handleErrorResponse(e.getErrorCode());
         }catch (Exception e){
+            return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/careerInfo")
+    public ResponseEntity<?> getUserAndMilitaryInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        try {
+            UserResponseDTO responseDTO = memberService.getUserAndMilitaryInfo(userDetails.getId());
+            return ResponseEntity.ok(new BfResponse<>(SUCCESS, responseDTO));
+        } catch (MemberException e) {
+            return errorResponseHandler.handleErrorResponse(e.getErrorCode());
+        } catch (Exception e) {
             return errorResponseHandler.handleErrorResponse(GlobalErrorCode.INTERNAL_SERVER_ERROR);
         }
     }
