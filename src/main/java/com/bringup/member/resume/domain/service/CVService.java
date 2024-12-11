@@ -11,4 +11,5 @@ public interface CVService {
     ResponseEntity<? super CVInsertResponseDto> insertCv(CVInsertRequestDto request, int code);
     ResponseEntity<? super CVReadResponseDto> readCV(String index);
     ResponseEntity<? super CVListResponseDto> listCv(int userCode);
+    ResponseEntity<?> deleteCv(String index);
 }

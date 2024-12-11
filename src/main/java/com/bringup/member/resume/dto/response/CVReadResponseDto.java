@@ -7,8 +7,10 @@ import com.bringup.member.portfolio.award.domain.AwardEntity;
 import com.bringup.member.portfolio.blog.domain.BlogEntity;
 import com.bringup.member.portfolio.career.domain.CareerEntity;
 import com.bringup.member.portfolio.certificate.domain.CertificateEntity;
+import com.bringup.member.portfolio.github.domain.GithubEntity;
 import com.bringup.member.portfolio.school.domain.SchoolEntity;
 import com.bringup.member.resume.domain.entity.*;
+import com.bringup.member.user.domain.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,15 +25,16 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CVReadResponseDto extends ResponseDto {
+    private UserEntity user;
     private CVEntity cv;
     private List<AwardEntity> cvAward;
     private List<BlogEntity> cvBlog;
     private List<CareerEntity> cvCareer;
     private List<CertificateEntity> cvCertificate;
     private List<SchoolEntity> cvSchool;
-
+    private List<GithubEntity> github;
     private CVReadResponseDto(
-            CVEntity cv, List<AwardEntity> cvAward, List<BlogEntity> cvBlog, List<CareerEntity> cvCareer, List<CertificateEntity> cvCertificate, List<SchoolEntity> cvSchool) {
+            UserEntity user,  CVEntity cv, List<AwardEntity> cvAward, List<BlogEntity> cvBlog, List<CareerEntity> cvCareer, List<CertificateEntity> cvCertificate, List<SchoolEntity> cvSchool, List<GithubEntity> github) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCES);
         this.cv = cv;
         this.cvAward = cvAward;
@@ -39,13 +42,14 @@ public class CVReadResponseDto extends ResponseDto {
         this.cvCareer = cvCareer;
         this.cvCertificate = cvCertificate;
         this.cvSchool = cvSchool;
+        this.github = github;
     }
 
 
     public static ResponseEntity<CVReadResponseDto> success(
-            CVEntity cv, List<AwardEntity> cvAward, List<BlogEntity> cvBlog, List<CareerEntity> cvCareer, List<CertificateEntity> cvCertificate, List<SchoolEntity> cvSchool
+            UserEntity user, CVEntity cv, List<AwardEntity> cvAward, List<BlogEntity> cvBlog, List<CareerEntity> cvCareer, List<CertificateEntity> cvCertificate, List<SchoolEntity> cvSchool, List<GithubEntity> github
     ){
-        CVReadResponseDto response = new CVReadResponseDto(cv, cvAward, cvBlog, cvCareer, cvCertificate, cvSchool);
+        CVReadResponseDto response = new CVReadResponseDto(user, cv, cvAward, cvBlog, cvCareer, cvCertificate, cvSchool, github);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

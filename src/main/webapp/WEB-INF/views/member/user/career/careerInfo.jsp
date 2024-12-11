@@ -67,12 +67,10 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // URL에서 cvIndex 추출
         const urlParams = new URLSearchParams(window.location.search);
         const cvIndex = urlParams.get("cvIndex");
+        const accessToken = localStorage.getItem("accessToken");
 
-        // cvIndex 로그로 확인
-        console.log("Received cvIndex:", cvIndex);
 
         if (!cvIndex) {
             alert("유효하지 않은 이력서입니다.");
@@ -81,7 +79,6 @@
 
         const apiUrl = `/cv/` + cvIndex;
 
-        // 이력서 데이터 가져오기
         fetch(apiUrl, {
             method: "GET",
             headers: {
@@ -96,102 +93,155 @@
             })
             .then(data => {
                 if (data.code === "SU") {
-                    console.log("Fetched CV data:", data);
                     renderCvData(data);
                 } else {
-                    console.error("Failed to fetch CV data:", data.message);
-                    alert("이력서 데이터를 불러오는데 실패했습니다.");
+
                 }
             })
             .catch(error => {
-                console.error("Error fetching CV data:", error);
-                alert("이력서를 불러오는 중 오류가 발생했습니다.");
+
             });
 
-        // 데이터 렌더링 함수
         function renderCvData(data) {
-            const { cv, cvSchool, cvCareer } = data;
+            const { cv, cvSchool, cvCareer, cvAward, cvCertificate } = data;
+            const careerStatus = cvCareer && cvCareer.length > 0 ? "경력" : "신입";
 
-            // 프로필 정보 렌더링
+            // 프로필 정보
             document.getElementById("profileInfo").innerHTML = `
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h2 class="mb-2">${'${cv.name}'} <span class="badge bg-primary">${'${cv.mainCv ? "신입" : "경력"}'}</span></h2>
-                    <p class="mb-0 text-muted">${'${cv.birthYear}'} (${'${new Date().getFullYear() - cv.birthYear}'}세)</p>
-                    <small class="text-muted">기업이 이력서 열람/제안시 개인정보는 정상 노출됩니다.</small>
-                </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="mb-2">${'${cv.title}'} <span class="badge bg-primary">${'${careerStatus}'}</span></h2>
             </div>
-            <hr>
-            <div class="d-flex flex-wrap">
-                <div class="me-3">
-                    <i class="bi bi-envelope-fill"></i> ${'${cv.email || "-"}'}
-                </div>
-                <div class="me-3">
-                    <i class="bi bi-phone-fill"></i> ${'${cv.phone || "-"}'}
-                </div>
-                <div>
-                    <i class="bi bi-geo-alt-fill"></i> ${'{cv.address || "-"}'}
-                </div>
-            </div>
-        `;
+        </div>
+        <hr>
+      `;
 
-            // 요약 정보 렌더링
+            // 요약 정보
             document.getElementById("summaryInfo").innerHTML = `
-            <div class="d-flex justify-content-around text-center">
+        <div class="d-flex justify-content-around text-center">
+            <div>
+                <i class="bi bi-mortarboard-fill fs-4"></i>
+                <p class="mb-0">학력</p>
+                <strong>${'${cvSchool.length > 0 ? cvSchool[0].schoolName : "-"}'}</strong>
+            </div>
+            <div>
+                <i class="bi bi-briefcase-fill fs-4"></i>
+                <p class="mb-0">경력</p>
+                <strong>${'${cvCareer.length > 0 ? cvCareer[0].companyName : "-"}'}</strong>
+            </div>
+            <div>
+                <i class="bi bi-trophy-fill fs-4"></i>
+                <p class="mb-0">수상</p>
+                <strong>${'${cvAward.length > 0 ? cvAward[0].title : "-"}'}</strong>
+            </div>
+            <div>
+                <i class="bi bi-award-fill fs-4"></i>
+                <p class="mb-0">자격증</p>
+                <strong>${'${cvCertificate.length > 0 ? cvCertificate[0].title : "-"}'}</strong>
+            </div>
+        </div>`;
+
+            // 학력 정보
+            const educationList = document.getElementById("educationList");
+            educationList.innerHTML = cvSchool.length
+                ? cvSchool
+                    .map(school => {
+                        const startDate = formatDate(school.startDate);
+                        const endDate = school.endDate ? formatDate(school.endDate) : "현재";
+
+                        return `
+                <li>
+                    <strong>${'${school.schoolName}'} (${'${startDate}'} ~ ${'${endDate}'})</strong>
+                    <p class="mb-0">${'${school.major ? school.major : ""}'} ${'${school.department ? school.department : ""}'}</p>
+                    <small class="text-muted">${'${school.location ? school.location : ""}'}</small>
+                </li>`;
+                    })
+                    .join("")
+                : `<p class="text-muted">학력 정보가 없습니다.</p>`;
+
+            // 경력 정보
+            const careerList = document.getElementById("careerList");
+            careerList.innerHTML = cvCareer.length
+                ? cvCareer
+                    .map(career => {
+                        const startDate = formatDate(career.careerStart);
+                        const endDate = career.careerEnd ? formatDate(career.careerEnd) : "현재";
+
+                        return `
+                <li class="mb-3">
+                    <strong>${'${career.companyName}'}</strong> <span class="badge bg-secondary">${'${career.careerPosition}'}</span>
+                    <p class="mb-1 text-muted">${'${startDate} ~ ${endDate}'}</p>
+                    <p class="mb-0">${'${career.careerDepartment ? career.careerDepartment : ""}'}</p>
+                    <small class="text-muted">${'${career.careerWork ? career.careerWork : ""}'}</small>
+                </li>`;
+                    })
+                    .join("")
+                : `<p class="text-muted">경력 정보가 없습니다.</p>`;
+        }
+
+        fetch("/portfolio/letter/info", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ` + accessToken,
+                "Content-Type": "application/json",
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch Letter data.");
+                }
+                return response.json();
+            })
+            .then(letterData => {
+                if (letterData.code === "SU") {
+                    renderLetterData(letterData);
+                } else {
+                    document.getElementById("careerInfo").insertAdjacentHTML(
+                        "beforeend",
+                        `<p class="text-muted">자소서 정보가 없습니다.</p>`
+                    );
+                }
+            })
+            .catch(error => {
+                alert("자소서를 불러오는 중 오류가 발생했습니다.");
+            });
+
+        // 자소서 정보 렌더링
+        function renderLetterData(letterData) {
+            const { answer1, answer2, answer3 } = letterData;
+            console.log(letterData);
+            const careerInfoSection = document.getElementById("careerInfo");
+            careerInfoSection.insertAdjacentHTML(
+                "beforeend",
+                `
+            <hr>
+            <h4>자소서</h4>
+            <div class="card shadow-sm p-4 mb-4">
                 <div>
-                    <i class="bi bi-mortarboard-fill fs-4"></i>
-                    <p class="mb-0">학력</p>
-                    <strong>${'${cvSchool[0]?.schoolName || "-"}'}</strong>
+                    <h5>질문 1</h5>
+                    <p>${'${answer1 ? answer1 : "내용 없음"}'}</p>
                 </div>
                 <div>
-                    <i class="bi bi-book-fill fs-4"></i>
-                    <p class="mb-0">전공</p>
-                    <strong>${'${cvSchool[0]?.major || "-"}'}</strong>
+                    <h5>질문 2</h5>
+                    <p>${'${answer2 ? answer2 : "내용 없음"}'}</p>
                 </div>
                 <div>
-                    <i class="bi bi-briefcase-fill fs-4"></i>
-                    <p class="mb-0">경력</p>
-                    <strong>${'${cvCareer.length > 0 ? `${cvCareer[0].company} (${cvCareer[0].duration})` : "-"}'}</strong>
-                </div>
-                <div>
-                    <i class="bi bi-handbag-fill fs-4"></i>
-                    <p class="mb-0">희망연봉</p>
-                    <strong>${'${cv.expectedSalary || "-"}'}</strong>
-                </div>
-                <div>
-                    <i class="bi bi-folder-fill fs-4"></i>
-                    <p class="mb-0">포트폴리오</p>
-                    <strong>${'${cv.portfolio || "-"}'}</strong>
+                    <h5>질문 3</h5>
+                    <p>${'${answer3 ? answer3 : "내용 없음"}'}</p>
                 </div>
             </div>
-        `;
+        `
+            );
+        }
 
-            // 학력 정보 렌더링
-            const educationList = document.getElementById("educationList");
-            educationList.innerHTML = cvSchool
-                .map(
-                    school => `
-                <li>
-                    <strong>${'${school.schoolName}'} (${'${school.degree}'})</strong>
-                    <p class="mb-0">${'${school.major}'}</p>
-                </li>
-            `
-                )
-                .join("");
-
-            // 경력 정보 렌더링
-            const careerList = document.getElementById("careerList");
-            careerList.innerHTML = cvCareer
-                .map(
-                    career => `
-                <li>
-                    <strong>${'${career.company}'}</strong>
-                    <p class="mb-0">${'${career.startDate}'} - ${'${career.endDate}'} (${'${career.duration}'})</p>
-                    <small class="text-muted">${'${career.position}'}</small>
-                </li>
-            `
-                )
-                .join("");
+// 날짜 포맷 함수
+        function formatDate(dateString) {
+            if (!dateString) return "";
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, "0");
+            const day = String(date.getDate()).padStart(2, "0");
+            return `${'${year}'}-${'${month}'}-${'${day}'}`;
         }
     });
 

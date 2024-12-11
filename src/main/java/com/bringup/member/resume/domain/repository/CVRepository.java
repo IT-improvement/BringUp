@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface CVRepository extends JpaRepository<CVEntity, Integer> {
     CVEntity findByCvIndex(int cvIndex);
 
-    List<CVEntity> findAllByUserIndex(int index);
+    List<CVEntity> findAllByUserIndexAndStatus(int index,String status);
     
     Optional<CVEntity> findByUserIndex(int userIndex);
 
