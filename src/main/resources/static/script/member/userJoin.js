@@ -1,16 +1,16 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const checkEmailBtn = document.getElementById('checkEmailBtn');
     const emailCheckResult = document.getElementById('emailCheckResult');
     let isEmailChecked = false; // 이메일 중복 체크 여부를 추적
     let isEmailAvailable = false; // 이메일이 사용 가능한지 여부를 추적
 
     // 이메일 입력 필드에 입력이 변경되면 중복 체크를 다시 해야 함을 표시
-    document.getElementById('userEmail').addEventListener('input', function() {
+    document.getElementById('userEmail').addEventListener('input', function () {
         isEmailChecked = false; // 이메일이 변경되면 중복 체크 상태를 초기화
         emailCheckResult.textContent = ''; // 이전 결과 메시지를 초기화
     });
 
-    checkEmailBtn.addEventListener('click', function() {
+    checkEmailBtn.addEventListener('click', function () {
         const userEmail = document.getElementById('userEmail').value;
 
         // 이메일 형식 확인
@@ -55,14 +55,51 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('userSignupForm');
     const militaryStatusSelect = document.getElementById('militaryStatus');
     const militaryStatusHidden = document.getElementById('militaryStatusHidden');
-
+    const militaryTypeInput = document.getElementById('militaryType');
+    const specialtyInput = document.getElementById('specialty');
+    const rankNameInput = document.getElementById('rankName');
+    const dischargeReasonInput = document.getElementById('dischargeReason');
+    const exemptionReasonInput = document.getElementById('exemptionReason');
 
     // 페이지 로드 시 기본 값을 히든 필드에 설정
     militaryStatusHidden.value = militaryStatusSelect.value;
-    militaryStatusSelect.addEventListener('change', function() {
 
+    militaryStatusSelect.addEventListener('change', function () {
         militaryStatusHidden.value = militaryStatusSelect.value;
+
+        const selectedStatus = militaryStatusSelect.value;
+        if (selectedStatus === "군필") {
+            // 군필인 경우 필드를 활성화하고 required 추가
+            militaryTypeInput.disabled = false;
+            militaryTypeInput.required = true;
+
+            specialtyInput.disabled = false;
+            rankNameInput.disabled = false;
+            dischargeReasonInput.disabled = false;
+
+            exemptionReasonInput.disabled = true; // 면제사유는 비활성화
+            exemptionReasonInput.required = false;
+        } else if (selectedStatus === "미필" || selectedStatus === "면제") {
+            // 미필 또는 면제인 경우 필드를 비활성화하고 required 제거
+            militaryTypeInput.disabled = true;
+            militaryTypeInput.required = false;
+
+            specialtyInput.disabled = true;
+            rankNameInput.disabled = true;
+            dischargeReasonInput.disabled = true;
+
+            if (selectedStatus === "면제") {
+                exemptionReasonInput.disabled = false; // 면제사유 활성화
+                exemptionReasonInput.required = true;
+            } else {
+                exemptionReasonInput.disabled = true;
+                exemptionReasonInput.required = false;
+            }
+        }
     });
+
+    // 페이지 로드 시 초기 상태 설정
+    militaryStatusSelect.dispatchEvent(new Event('change'));
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -124,9 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('회원가입 중 오류가 발생했습니다.');
             });
     });
-});
 
-document.addEventListener('DOMContentLoaded', function() {
     const maleButton = document.getElementById('maleButton');
     const femaleButton = document.getElementById('femaleButton');
     const militaryServiceCard = document.getElementById('militaryServiceCard');
@@ -136,59 +171,34 @@ document.addEventListener('DOMContentLoaded', function() {
     // 초기화: hidden 필드 값 비우기
     genderInput.value = "";
 
-    maleButton.addEventListener('click', function() {
-        // 남성 버튼 활성화
+    maleButton.addEventListener('click', function () {
         maleButton.classList.add('active');
         femaleButton.classList.remove('active');
-
-        // hidden 필드에 '남' 값 설정
         genderInput.value = "남";
+
+        // Show military service card by sliding in from the right
+        militaryServiceCard.style.display = 'block';
+        setTimeout(() => {
+            militaryServiceCard.classList.add('visible');
+        }, 0);
     });
 
-    femaleButton.addEventListener('click', function() {
-        // 여성 버튼 활성화
+    femaleButton.addEventListener('click', function () {
         femaleButton.classList.add('active');
         maleButton.classList.remove('active');
-
-        // hidden 필드에 '여' 값 설정
         genderInput.value = "여";
+
+        // Hide military service card by sliding out to the right
+        militaryServiceCard.classList.remove('visible');
+        setTimeout(() => {
+            militaryServiceCard.style.display = 'none';
+        }, 300);
     });
 
-
-    // 요소가 제대로 로드되었는지 확인
-    if (maleButton && femaleButton && militaryServiceCard && closeMilitaryCard) {
-        maleButton.addEventListener('click', function() {
-            maleButton.classList.add('active');
-            femaleButton.classList.remove('active');
-            document.getElementById('gender').value = '남';
-
-            // Show military service card by sliding in from the right
-            militaryServiceCard.style.display = 'block';
-            setTimeout(() => {
-                militaryServiceCard.classList.add('visible');
-            }, 0);
-        });
-
-        femaleButton.addEventListener('click', function() {
-            femaleButton.classList.add('active');
-            maleButton.classList.remove('active');
-            document.getElementById('gender').value = '여';
-
-            // Hide military service card by sliding out to the right
-            militaryServiceCard.classList.remove('visible');
-            setTimeout(() => {
-                militaryServiceCard.style.display = 'none';
-            }, 0);
-        });
-
-        // Close button to hide the military service card
-        closeMilitaryCard.addEventListener('click', function() {
-            militaryServiceCard.classList.remove('visible');
-            setTimeout(() => {
-                militaryServiceCard.style.display = 'none';
-            }, 300);
-        });
-    } else {
-        console.error("필수 요소 중 하나를 찾을 수 없습니다. ID 값을 확인하세요.");
-    }
+    closeMilitaryCard.addEventListener('click', function () {
+        militaryServiceCard.classList.remove('visible');
+        setTimeout(() => {
+            militaryServiceCard.style.display = 'none';
+        }, 300);
+    });
 });

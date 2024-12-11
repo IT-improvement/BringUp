@@ -16,5 +16,5 @@ public class CVInsertRequestDto {
     private List<Integer> cvCareer;
     private List<Integer> cvCertificate;
     private List<Integer> cvSchool;
-
+    private List<String> github;
 }

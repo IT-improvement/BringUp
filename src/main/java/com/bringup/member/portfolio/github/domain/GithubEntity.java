@@ -13,4 +13,11 @@ import lombok.NoArgsConstructor;
 public class GithubEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int githubIndex;
+    private String githubUrl;
+    private int cvIndex;
+
+    public GithubEntity(String githubUrl, int cvIndex) {
+        this.githubUrl = githubUrl;
+        this.cvIndex = cvIndex;
+    }
 }

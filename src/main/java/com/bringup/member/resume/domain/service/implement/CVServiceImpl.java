@@ -1,5 +1,6 @@
 package com.bringup.member.resume.domain.service.implement;
 
+import com.bringup.common.enums.MemberErrorCode;
 import com.bringup.common.response.ResponseDto;
 import com.bringup.member.portfolio.award.domain.AwardEntity;
 import com.bringup.member.portfolio.award.domain.AwardRepository;
@@ -9,6 +10,8 @@ import com.bringup.member.portfolio.career.domain.CareerEntity;
 import com.bringup.member.portfolio.career.domain.CareerRepository;
 import com.bringup.member.portfolio.certificate.domain.CertificateEntity;
 import com.bringup.member.portfolio.certificate.domain.CertificateRepository;
+import com.bringup.member.portfolio.github.domain.GithubEntity;
+import com.bringup.member.portfolio.github.domain.GithubRepository;
 import com.bringup.member.portfolio.school.domain.SchoolEntity;
 import com.bringup.member.portfolio.school.domain.SchoolRepository;
 import com.bringup.member.resume.domain.entity.*;
@@ -18,6 +21,10 @@ import com.bringup.member.resume.dto.request.CVInsertRequestDto;
 import com.bringup.member.resume.dto.response.CVInsertResponseDto;
 import com.bringup.member.resume.dto.response.CVListResponseDto;
 import com.bringup.member.resume.dto.response.CVReadResponseDto;
+import com.bringup.member.user.domain.entity.MilitaryEntity;
+import com.bringup.member.user.domain.entity.UserEntity;
+import com.bringup.member.user.domain.exception.MemberException;
+import com.bringup.member.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -41,10 +48,12 @@ public class CVServiceImpl implements CVService {
     private final CertificateRepository certificateRepository;
     private final CareerRepository careerRepository;
     private final SchoolRepository schoolRepository;
-
+    private final GithubRepository githubRepository;
+    private final UserRepository userRepository;
     @Override
     public ResponseEntity<? super CVInsertResponseDto> insertCv(CVInsertRequestDto request, int userCode) {
         String skill = "";
+        System.out.println("github:"+request.getGithub());
         if(request.getSkill() !=null){
             for(int i = 0; i<request.getSkill().size();i++){
                 skill += request.getSkill().get(i);
@@ -88,6 +97,12 @@ public class CVServiceImpl implements CVService {
                 cvSchoolRepository.save(cvSchool);
             }
         }
+        if(request.getGithub() != null) {
+            for(String n: request.getGithub()){
+                GithubEntity githubEntity = new GithubEntity(n,cvIndex);
+                githubRepository.save(githubEntity);
+            }
+        }
         return CVInsertResponseDto.success();
     }
 
@@ -96,6 +111,9 @@ public class CVServiceImpl implements CVService {
         int cvIndex = Integer.parseInt(index);
 
         CVEntity cvEntity = cvRepository.findByCvIndex(cvIndex);
+        int userCode = cvEntity.getUserIndex();
+        UserEntity user = userRepository.findByUserIndex(userCode)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND_MEMBER_ID));
         List<CVAward> cvAward = cvawardRepository.findByCvIndex(cvIndex);
         List<AwardEntity> awardlist  = new ArrayList<>();
         for(CVAward cvAwardEntity : cvAward){
@@ -126,18 +144,28 @@ public class CVServiceImpl implements CVService {
             SchoolEntity school = schoolRepository.findBySchoolIndex(cvSchoolEntity.getSchoolIndex());
             schoollist.add(school);
         }
-        return CVReadResponseDto.success(cvEntity,awardlist,bloglist,careerlist,certificatelist,schoollist);
+        List<GithubEntity> github = githubRepository.findByCvIndex(cvIndex);
+        return CVReadResponseDto.success(user, cvEntity,awardlist,bloglist,careerlist,certificatelist,schoollist,github);
     }
 
     @Override
     public ResponseEntity<? super CVListResponseDto> listCv(int userCode) {
         List<CVEntity> list = null;
         try{
-            list = cvRepository.findAllByUserIndex(userCode);
+            list = cvRepository.findAllByUserIndexAndStatus(userCode,"생성");
         }catch (Exception e){
             ResponseDto.databaseError();
         }
 
         return CVListResponseDto.success(list);
+    }
+
+    @Override
+    public ResponseEntity<?> deleteCv(String index) {
+        int cvIndex = Integer.parseInt(index);
+        CVEntity cvEntity = cvRepository.findByCvIndex(cvIndex);
+        cvEntity.setStatus("삭제");
+        cvRepository.save(cvEntity);
+        return null;
     }
 }

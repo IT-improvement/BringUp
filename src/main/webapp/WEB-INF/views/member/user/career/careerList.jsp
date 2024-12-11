@@ -119,6 +119,7 @@
 </div>
 
 <script>
+
     document.addEventListener("DOMContentLoaded", () => {
         const accessToken = localStorage.getItem("accessToken");
 
@@ -167,7 +168,7 @@
                                 <div class="badge bg-primary text-white">대표 이력서</div>
                             </div>
                             <div class="btn-group">
-                                <button class="btn btn-outline-danger btn-sm">삭제하기</button>
+                                <button class="btn btn-outline-danger btn-sm onclick="careerDelete(${'${cv.cvIndex}'}">삭제하기</button>
                         <button class="btn btn-outline-primary btn-sm" onclick="redirectToDetail(${'${cv.cvIndex}'})">상세보기</button>
 
                             </div>
@@ -187,21 +188,49 @@
                             <div>${'${skills}'}</div>
                         </div>
                         <div class="btn-group">
-                            <button class="btn btn-outline-danger btn-sm">삭제하기</button>
+                                <button class="btn btn-outline-danger btn-sm" onclick="careerDelete(${'${cv.cvIndex}'})">삭제하기</button>
                         <button class="btn btn-outline-primary btn-sm" onclick="redirectToDetail(${'${cv.cvIndex}'})">상세보기</button>
 
                         </div>
                     </div>
                 `;
                 generalCvContainer.appendChild(generalCvCard);
+
+
             }
         });
     }
-
     // 상세보기 페이지로 이동하는 함수
         function redirectToDetail(cvIndex) {
         window.location.href = `/member/careerDetail?cvIndex=` + cvIndex;
     }
+    // 삭제 요청 처리 함수
+    function careerDelete(cvIndex) {
+        console.log(cvIndex);
+        const accessToken = localStorage.getItem("accessToken");
+
+
+            fetch(`/cv/delete/` + cvIndex, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ` + accessToken,
+                    "Content-Type": "application/json",
+                },
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("이력서가 성공적으로 삭제되었습니다.");
+                        window.location.redirect();
+                    } else {
+                        alert("이력서를 삭제하는 데 실패했습니다.");
+                    }
+                })
+                .catch(error => {
+
+                });
+    }
+
+
 </script>
 
 <jsp:include page="/WEB-INF/views/common/footer/footer.jsp" flush="true" />
