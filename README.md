@@ -35,6 +35,63 @@
 ---
 
 ## 주요 기능
-- ****: 
+### 개인
+
+---
+### 기업
+![기업회원 로그인](https://github.com/user-attachments/assets/a322b21d-62fd-4ed4-82de-6937a0373318)
+- **로그인** :  
+권한 별 로그인 분할  
+개인 회원, 기업 회원으로 구분해서 로그인 되도록 구현  
+
+![내 회사 정보](https://github.com/user-attachments/assets/2379fe6f-745f-4d10-9527-b446534b2a09)
+- **프로필** :    
+  기업이 등록한 기업 정보를 자체 폼에 출력  
+  기업 로고 이미지 출력, 기업 대표 이미지 슬라이드 형태로 출력  
+  기업 정보에 저장된 내용을 입력폼에 출력  
+  이미지 수정 기능 분할  
+
+![기업메인](https://github.com/user-attachments/assets/b87c576d-b341-47ca-a8ef-375a49c41d1c)
+- **메인화면** :  
+  등록한 공고의 개수와 모든 공고에 지원한 총 지원자 수, 기업을 관심 혹은 스크랩한 회원의 수를 출력  
+  등록한 공고를 10개씩 묶어 페이지 형태로 구현  
+  리스트 내에서 검색 기능 구현  
+
+
+![공고 등록](https://github.com/user-attachments/assets/2bb6cc3f-848d-47f1-b174-395edcf5c13a)
+- **공고 등록** :   
+기업 회원으로 로그인 된 회원의 공고를 등록할 수 있는 기능
+
+![공고 리스트](https://github.com/user-attachments/assets/6db88ac6-d9f2-4144-ae00-cb423d939e8a)
+- **공고 목록 보기** :  
+  로그인 된 기업 회원의 공고 리스트를 제공  
+  리스트 내에서 검색 기능 구현  
+
+![공고 디테일](https://github.com/user-attachments/assets/7f0e90c4-7550-466f-8a30-3f2822ec7d06)
+- **공고상세 보기**:  
+  리스트업 된 공고 리스트에서 하나를 선택해 해당 기업의 이미지와 함께 화면에 출력
+
+![결제 전체](https://github.com/user-attachments/assets/d6f3447c-c51c-42a8-a743-29c99604efe0)
+- **광고 신청**:  
+  광고 종류 선택 이후 광고에 관한 정보 입력  
+  부트페이 api를 활용해 상품 결제 구현  
+  결제 진행 후 광고 등록  
+
+![상품관리 개](https://github.com/user-attachments/assets/7c500e4f-92f1-4c95-afe9-7d947066c66c)
+- **등록 광고 상세보기**:  
+  로그인 된 기업 회원이 등록한 광고 상품을 리스트업  
+  리스트 내에서 검색 기능 구현  
+  회원이 등록한 광고 상품 정보 및 이미지 출력  
+
+![리뷰 관리](https://github.com/user-attachments/assets/13044541-0d58-467f-a4dc-33a787c43a73)
+- **리뷰 관리**:  
+  개인 회원이 입력한 리뷰를 리스트로 구현  
+  리뷰를 선택하면 해당 리뷰에 대한 상세 정보가 출력되도록 구현  
+
+![인재추천](https://github.com/user-attachments/assets/30e915a4-5ee7-4cea-91ed-9b8b49999e76)
+- **인재 추천**:  
+  개인 회원 중 메인 이력서를 설정한 사람들의 정보가 리스트업 되도록 구현  
+  추천된 인재 저장 기능 구현
+
 ---
 
