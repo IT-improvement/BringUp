@@ -42,7 +42,7 @@
 개인 회원, 기업 회원으로 구분해서 로그인 되도록 구현
 
 - **전체 공고** :  
-![전체 공고](https://github.com/user-attachments/assets/3dd5fd4d-4db0-43ec-8e33-2e77767ad486)
+![전체 공고](https://github.com/user-attachments/assets/c3eae698-008b-427d-8a9f-99eeaae8cf7a)
 사이트 내 모든 공고를 출력
 리스트 내에서 직종, 경력, 지역, 별 공고 검색 기능 구현
 
