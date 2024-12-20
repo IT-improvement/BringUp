@@ -53,10 +53,7 @@
 리스트 내에서 직종, 경력, 지역, 별 공고 검색 기능 구현
 상세보기 선택 시 해당 공고의 상세페이지로 이동
 
-![TOP 100 공고](https://github.com/user-attachments/assets/7d925661-f8ce-42de-872c-4017573a5f07)
-- **TOP 100 공고** :  
-현재 사이트 내 가장 인기가 많은 공고들 100가지를 출력
-상세보기 선택 시 해당 공고의 상세페이지로 이동
+![TOP 100 공고](https://g력
 
 ![이력서 목록](https://github.com/user-attachments/assets/cbf64377-28b0-4042-adda-ecbd0eb4164b)
 - **이력서 목록** :  
@@ -68,7 +65,7 @@
 이력서 제목, 자신의 정보, 학력, 스킬, 경력, 수상/어학/자격증, 블로그, 깃 레파지토리를 선택해 자신의 이력서를 등록 할 수 있는 기능 
 이력서 등록 중 대표 이력서 선택 가능
 
-![이력서 상세보기](https://github.com/user-attachments/assets/ffd0bde3-0452-49fb-9be4-1ed33390fcec)
+![이력서 상세보기](https://github.com/user-attachments/assets/57978cd9-038d-42a1-a626-f1117eb73992)
 - **이력서 상세보기** :  
 자신이 등록한 이력서를 출력
 
@@ -151,7 +148,7 @@
   부트페이 api를 활용해 상품 결제 구현  
   결제 진행 후 광고 등록  
 
-![상품관리 개](https://github.com/user-attachments/assets/7c500e4f-92f1-4c95-afe9-7d947066c66c)
+![상품관리](https://github.com/user-attachments/assets/7c500e4f-92f1-4c95-afe9-7d947066c66c)
 - **등록 광고 상세보기**:  
   로그인 된 기업 회원이 등록한 광고 상품을 리스트업  
   리스트 내에서 검색 기능 구현  
