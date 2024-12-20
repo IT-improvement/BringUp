@@ -36,6 +36,9 @@
 
 ## 주요 기능
 ### 개인
+![개인회원 로그인](https://github.com/user-attachments/assets/0a71e4e7-dce8-4040-b47a-a4058072d513)
+
+
 
 ---
 ### 기업
