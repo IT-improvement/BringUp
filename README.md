@@ -59,7 +59,7 @@
 
 ![공고 상세보기](https://github.com/user-attachments/assets/2fa3e41c-2fbf-46b0-a496-ee8ac1685083)
 - **공고 상세보기** :  
-자신이 선택한 공고의 상세  
+자신이 선택한 공고의 상세정보 출력  
 
 ![이력서 목록](https://github.com/user-attachments/assets/cbf64377-28b0-4042-adda-ecbd0eb4164b)
 - **이력서 목록** :  
@@ -85,7 +85,7 @@
 - **파일 업로드** :  
 자신의 다른 형태의 이력서를 업로드 가능  
 
-![블로그](https://github.com/user-attachments/assets/11ef6b7d-a825-41b1-842d-1012e55cff10)
+![블로그](https://github.com/user-attachments/assets/2d7d395d-77b0-4ede-a825-9f0ac3e1b54b)
 - **블로그** :  
 로그인한 유저 자신이 만든 블로그를 추가 및 삭제가 가능한 기능  
 자신의 블로그를 리스트로 출력  
