@@ -42,73 +42,72 @@
 개인 회원, 기업 회원으로 구분해서 로그인 되도록 구현
 
 ![메인 화면](https://github.com/user-attachments/assets/6e50a039-5db4-4269-999b-65a433f1fe2b)
-- **메인 화면** : 
+- **메인 화면** :  
 현재 사이트에서 추천중인 공고 출력
 공고를 선택 시 해당하는 공고 상세페이지로 이동
 자신의 정보를 카드로 출력
 카드 내 톱니바퀴 아이콘 선택 시 프로필 페이지로 이동
   
 ![전체 공고](https://github.com/user-attachments/assets/e726b03b-33ad-4a2c-83de-11e6445052db)
-- **전체 공고** :
-사이트 내 모든 공고를 출력
+- **전체 공고** :  
 리스트 내에서 직종, 경력, 지역, 별 공고 검색 기능 구현
 상세보기 선택 시 해당 공고의 상세페이지로 이동
 
 ![TOP 100 공고](https://github.com/user-attachments/assets/7d925661-f8ce-42de-872c-4017573a5f07)
-- **TOP 100 공고** :
+- **TOP 100 공고** :  
 현재 사이트 내 가장 인기가 많은 공고들 100가지를 출력
 상세보기 선택 시 해당 공고의 상세페이지로 이동
 
-![이력서 목록](https://github.com/IT-improvement/BringUp/issues/new)
-- **이력서 목록** :
+![이력서 목록](https://github.com/user-attachments/assets/cbf64377-28b0-4042-adda-ecbd0eb4164b)
+- **이력서 목록** :  
 현재 로그인한 자신의 이력서 목록을 출력
 자신의 대표 이력서 출력
 
 ![이력서 등록](https://github.com/user-attachments/assets/c5d92425-99c8-4188-8bc4-98c17bd9570f)
-- **이력서 등록** :
+- **이력서 등록** :  
 이력서 제목, 자신의 정보, 학력, 스킬, 경력, 수상/어학/자격증, 블로그, 깃 레파지토리를 선택해 자신의 이력서를 등록 할 수 있는 기능 
 이력서 등록 중 대표 이력서 선택 가능
 
 ![이력서 상세보기](https://github.com/user-attachments/assets/ffd0bde3-0452-49fb-9be4-1ed33390fcec)
-- **이력서 상세보기** :
+- **이력서 상세보기** :  
 자신이 등록한 이력서를 출력
 
 ![깃 레파지토리](https://github.com/user-attachments/assets/7d925661-f8ce-42de-872c-4017573a5f07)
-- **깃 레파지토리** :
+- **깃 레파지토리** :  
 현재 깃 토큰을 가지고 있지 않으면 깃 토큰을 입력해 달라는 모달 출력
 자신의 깃 토큰을 입력하면 깃 레파지토리 리스트 출력
 레파지토리 선택 시 자신의 레파지토리로 이동
 
 ![파일 업로드](https://github.com/user-attachments/assets/44952401-1a3a-4369-8c16-a253cf536b99)
-- **파일 업로드** :
+- **파일 업로드** :  
 자신의 다른 형태의 이력서를 업로드 가능
 
 ![블로그](https://github.com/user-attachments/assets/11ef6b7d-a825-41b1-842d-1012e55cff10)
-- **블로그** :
+- **블로그** :  
 로그인한 유저 자신이 만든 블로그를 추가 및 삭제가 가능한 기능
 자신의 블로그를 리스트로 출력
 
 ![자소서](https://github.com/user-attachments/assets/cfac9f4d-e6e5-4dd7-a7ef-58d9a758befc)
-- **자소서** :
+- **자소서** :  
 로그인한 유저의 자소서를 작성 할 수 있음
 3가지의 질문으로 자소서를 쉽게 작성 할 수 있음
 
 ![자소서 Ai 문항 생성](https://github.com/user-attachments/assets/c0756a34-3dc1-4a61-915a-f5e938497d2d)
-- **자소서 Ai 문항 생성** :
+- **자소서 Ai 문항 생성** :  
 자소서 문항에 대답하기 어려울 경우 각 문항의 키워드 입력 후 Ai 문항 생성하기 선택 시 Ai가 자동으로 문항 생성
 
 ![학력 관리](https://github.com/user-attachments/assets/bc95b727-22f2-4b39-9a96-602afa4e6c56)
-- **학력 관리** :
+- **학력 관리** :  
 로그인한 유저의 학력을 추가, 수정, 삭제 기능 구현
 학력의 정보는 카드형태로 리스트로 출력
 
 ![경력 관리](https://github.com/user-attachments/assets/830c78c7-6338-4c14-a2cf-1f14a1a0cad3)
-- **경력 관리** :
+- **경력 관리** :  
 로그인한 유저의 경력을 추가, 수정, 삭제 기능 구현
 경력 별 리스트로 출력
 
 ![수상/어학/자격증 관리](https://github.com/user-attachments/assets/36e26f0f-4002-4a4e-bda9-f6b6bd4055c8)
-- **수상/어학/자격증 관리** :
+- **수상/어학/자격증 관리** :  
 로그인한 유저의 수상/어학/자격증을 추가, 수정, 삭제 기능 구현
 각 카테고리별 리스트로 출력
 
