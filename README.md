@@ -14,23 +14,22 @@
 
 ---
 
-## 프로젝트 목적
-1. ****: 
-
----
-
-
 ## 팀원
-- **주승재**:
-- **박주혁**:
-- **송준성**:
-- **이병준**:
-- **이정무**:
+- **주승재**
+- **박주혁**
+- **송준성**
+- **이병준**
+- **이정무**
 
 ---
+## 제안서
+[프로젝트 제안서](https://drive.google.com/file/d/1cg7ujQTFTTolZFLQgwKBDKnkD-lWGTKh/view?usp=sharing)
 
-## 사용법
-1. 
+---
+## 개요
+
+- [요구사항 정의서](https://docs.google.com/spreadsheets/d/1pPnnZW1ZRa2zqTSb8P_RFSvv6wKjcSNquxi5rCOzAmw/edit?usp=sharing)
+- [인터페이스 정의서](https://docs.google.com/spreadsheets/d/1y_5-q8Jt4GROm1Ju1cUGVk21mCYAY9sXavQ7ipunsrs/edit?usp=sharing)
 
 ---
 
